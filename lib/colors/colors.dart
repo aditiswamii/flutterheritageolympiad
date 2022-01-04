@@ -13,5 +13,12 @@ class ColorConstants {
   //Quiz color
   static const red = Color(0xFFED313B);
   static const verdigris= Color(0xFF47B8AC);
-
+//Your Account Screen Font Color Code
+static const title_paragraph=Color(0xFF707070);
+static const menu_text=Color(0xFFA0A0A0);
+//Image Based MCQ Screen
+static const verd_dark=Color(0xFF15B0A5);
+static const truefalsescreen=Color(0xFFE7B643);
+static const mcqscreen=Color(0xFFEE5858);
+static const Omnes_font=Color(0xFF707070);
 }
