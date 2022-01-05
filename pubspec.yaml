@@ -58,6 +58,51 @@ flutter:
   uses-material-design: true
   assets:
     - assets/splash_heritage.jpg
+    - assets/arrow1.png
+    - assets/arrow2.png
+    - assets/arrowup.png
+    - assets/artwork1.png
+    - assets/artwork2.png
+    - assets/artwork3.png
+    - assets/about.png
+    - assets/address.png
+    - assets/calender.png
+    - assets/change_password.png
+    - assets/check_box.png
+    - assets/check_box_filled.png
+    - assets/check_box_with_tick.png
+    - assets/checkbox.png
+    - assets/checkboxfilled.png
+    - assets/clock_green.png
+    - assets/clock_grey.png
+    - assets/clock_red.png
+    - assets/clock_yellow.png
+    - assets/collections.png
+    - assets/collections2.png
+    - assets/comment.png
+    - assets/component.png
+    - assets/delete.png
+    - assets/down_arrow.png
+    - assets/down_arrow_small.png
+    - assets/edit.png
+    - assets/email.png
+    - assets/emoji1.png
+    - assets/emoji2.png
+    - assets/emoji3.png
+    - assets/emoji4.png
+    - assets/export.png
+    - assets/eye.png
+    - assets/facebook_512.png
+    - assets/flower1.png
+    - assets/flower2.png
+    - assets/flower3.png
+    - assets/flower4.png
+  fonts:
+    - family: Omnes
+      fonts:
+            - asset: fonts/Omnes-Regular.ttf
+            - asset: fonts/Omnes-Light.ttf
+            - asset: fonts/Omnes-Medium.ttf
 
 
   # To add assets to your application, add an assets section, like this:
