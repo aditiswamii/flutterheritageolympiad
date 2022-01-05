@@ -34,6 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  awesome_package:
 
 dev_dependencies:
   flutter_test:
@@ -140,15 +141,29 @@ flutter:
     - assets/reverse.png
     - assets/right_arrow.png
     - assets/rightarrow2.png
-    - assets/sample_images.png
+    - assets/sample_image.png
     - assets/search.png
     - assets/setting.png
+    - assets/share.png
+    - assets/share1.png
+    - assets/side_menu_2.png
+    - assets/side_menu_3.png
+    - assets/single.png
+    - assets/single_posts.png
+    - assets/specials_calendar.png
+    - assets/specials_calendar_1.png
+    - assets/sponsor.png
+    - assets/tangible.png
+    - assets/thematic_collections.png
+    - assets/tho_logo.png
   fonts:
     - family: Omnes
       fonts:
-            - asset: fonts/Omnes-Regular.ttf
-            - asset: fonts/Omnes-Light.ttf
-            - asset: fonts/Omnes-Medium.ttf
+        - asset: fonts/Omnes-Regular.ttf
+        - asset: fonts/Omnes-Light.ttf
+        - asset: fonts/Omnes-Medium.ttf
+        - asset: fonts/Omnes-Bold.ttf
+        - asset: fonts/Omnes-Italic.ttf
 
 
   # To add assets to your application, add an assets section, like this:
