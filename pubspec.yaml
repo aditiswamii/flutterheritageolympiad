@@ -156,6 +156,10 @@ flutter:
     - assets/tangible.png
     - assets/thematic_collections.png
     - assets/tho_logo.png
+    - assets/facebook.png
+    - assets/google_plus.png
+    - assets/twitter.png
+    - assets/whitebg.png
   fonts:
     - family: Omnes
       fonts:
