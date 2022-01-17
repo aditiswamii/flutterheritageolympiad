@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutterheritageolympiad/signup/signup_page.dart';
 
 import 'dart:async';
 
@@ -30,6 +32,10 @@ class _State extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -82,8 +88,8 @@ class _State extends State<MyApp> {
                       //////// HERE
                     ),
                     onPressed: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (context) => const SignUpPage()));
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => const SignupPage()));
                     },
                     child: const Text(
                       'SIGN UP',

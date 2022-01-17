@@ -29,7 +29,12 @@ class _State extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
      body:Container(
         decoration: const BoxDecoration(
         image: DecorationImage(
@@ -38,21 +43,22 @@ class _State extends State<LoginPage> {
     ),
     ),
     child: Container(
-    margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
+    margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
      child:Column(
         children: [
           Container(
-              margin: const EdgeInsets.fromLTRB(20, 50, 20, 10),
+              alignment: Alignment.centerLeft,
+              margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
               child: const Text("LOG IN",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
           Flexible(child:
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
             child: TextField(
               obscureText: false,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 labelText: 'Username or Email ID',
-                hintText: 'abc@gmail.com',
+                hintText: 'Username or Email ID',
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.singleLineFormatter
@@ -61,9 +67,10 @@ class _State extends State<LoginPage> {
           ),),
           Flexible(child:
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
           child:TextFormField(
               obscureText: !_passwordVisible,
+               obscuringCharacter: "*",
                decoration: InputDecoration(
                 // hasFloatingPlaceholder: true,
              filled: true,
@@ -95,7 +102,7 @@ class _State extends State<LoginPage> {
     ),),),
 
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -118,7 +125,7 @@ class _State extends State<LoginPage> {
                   },
                   child: const Text(
                     "LET'S GO",
-                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -133,12 +140,12 @@ class _State extends State<LoginPage> {
             ),
           ),
           Container(
-              margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: Text("I don't have an account",style: TextStyle(decoration: TextDecoration.underline),)),
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text("I don't have an account",style: TextStyle(decoration: TextDecoration.underline,color: ColorConstants.Omnes_font),)),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: const Divider(
-              color: Colors.black,
+              color: ColorConstants.Omnes_font,
               height: 2,
               indent: 10,
               endIndent: 10,
@@ -146,7 +153,7 @@ class _State extends State<LoginPage> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
                 color: Colors.white),
              child: Card(
@@ -171,7 +178,7 @@ class _State extends State<LoginPage> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
                 color: Colors.white),
             child: Card(
@@ -196,7 +203,7 @@ class _State extends State<LoginPage> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
                 color: Colors.white),
             child: Card(
