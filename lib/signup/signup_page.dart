@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/almostthere/almostthere_page.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/login/login_page.dart';
 
 void main() {
 

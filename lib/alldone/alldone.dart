@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/emailresend/emailresend_dialog.dart';
 import 'package:flutterheritageolympiad/signup/signup_page.dart';
+import 'package:flutterheritageolympiad/welcomeback/welcomeback_page.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -69,7 +70,7 @@ class _State extends State<AllDonePage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SignupPage()));
+                            builder: (context) => const Welcomepage()));
                   },
                   child: const Text(
                     "NEXT",

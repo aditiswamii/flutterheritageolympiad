@@ -35,6 +35,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   awesome_package:
+  staggered_grid_view_flutter:
+  items_list_view:
+  reorderable_griditem_view:
 
 dev_dependencies:
   flutter_test:
