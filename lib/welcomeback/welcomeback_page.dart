@@ -1,39 +1,194 @@
+
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(
-      const Welcomepage(
+import 'package:flutter/services.dart';
+import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
+void main() {
+
+  runApp(const MaterialApp(
+
+    debugShowCheckedModeBanner: false,
+    home: WelcomePage(),
   ));
 }
+class WelcomePage extends StatefulWidget{
 
-class Welcomepage extends StatelessWidget {
-  const Welcomepage({Key? key}) : super(key: key);
+  const WelcomePage({Key? key}) : super(key: key);
+
+  @override
+  _State createState() => _State();
+}
+
+
+class _State extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const title = 'Grid List';
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body:Container(
+        decoration: const BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage("assets/whitebg.png"),
+          fit: BoxFit.cover,
+    ),
+    ),
+    child:Container(
+        margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+    child: ListView(
+    children: [
+      Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
+          child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+      Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
 
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(title),
+      Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.fromLTRB(10, 30, 10, 30),
+        child:Column(
+
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    height: 150,
+                    width: 150,
+                  decoration: const BoxDecoration(
+                  color: ColorConstants.myaccount
+                    ),
+                    child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    height: 150,
+                    width: 150,
+                     decoration: const BoxDecoration(
+                     color: ColorConstants.myfeed
+                       ),
+                     child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                      ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    height: 150,
+                    width: 150,
+                    decoration: const BoxDecoration(
+                        color: ColorConstants.to_the_quizzes
+                    ),
+                    child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                  ),
+                ),
+               Flexible(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    height: 150,
+                    width: 150,
+                    decoration: const BoxDecoration(
+                        color: ColorConstants.to_the_shop
+                    ),
+                    child: Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,),
+                  ),
+                )
+              ],
+            ),
+          ],
         ),
-        body: GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 2,
-          // Generate 100 widgets that display their index in the List.
-          children: List.generate(4, (index) {
-            return Center(
-              child: Text(
-                'Item $index',
-                style: Theme.of(context).textTheme.headline5,
+      ),
+      Flexible(
+        child: Container(
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+                color: Colors.white),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                // if you need this
+                side: BorderSide(
+                  color: Colors.grey.withOpacity(0.3),
+                  width: 1,
+                ),
               ),
-            );
-          }),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.Omnes_font),),
+              ),
+              Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: GFProgressBar(
+                    percentage: 0.5,
+                    lineHeight: 30,
+                    alignment: MainAxisAlignment.spaceBetween,
+                    child: const Text('10 out of 20', textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                    backgroundColor: Colors.black12,
+                    progressBarColor: Colors.blue,
+                  )
+              ),
+              Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: GFProgressBar(
+                    percentage: 0.6,
+                    lineHeight: 30,
+                    alignment: MainAxisAlignment.spaceBetween,
+                    child: const Text('12000 XP out of 20000XP', textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                    backgroundColor: Colors.black12,
+                    progressBarColor: Colors.blue,
+                  )
+              ),
+              Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                  child: GFProgressBar(
+
+                    percentage: 0.7,
+                    lineHeight: 30,
+                    alignment: MainAxisAlignment.spaceBetween,
+                    // child: const Text('70%', textAlign: TextAlign.center,
+                    //   style: TextStyle(fontSize: 18, color: Colors.white),
+                    // ),
+                    //linearGradient: LinearGradient.lerp(ColorConstants.quiz_grad1, ColorConstants.quiz_grad2, ColorConstants.quiz_grad3),
+                    backgroundColor: Colors.black12,
+                    progressBarColor: Colors.blue,
+                  )
+              ),
+            ],
+          ),
         ),
+        ),
+      ),
+      ]
+    ),
+      ),
       ),
     );
   }

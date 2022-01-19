@@ -70,7 +70,7 @@ class _State extends State<AllDonePage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Welcomepage()));
+                            builder: (context) => const WelcomePage()));
                   },
                   child: const Text(
                     "NEXT",

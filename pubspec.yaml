@@ -38,6 +38,7 @@ dependencies:
   staggered_grid_view_flutter:
   items_list_view:
   reorderable_griditem_view:
+  getwidget: ^2.0.4
 
 dev_dependencies:
   flutter_test:
