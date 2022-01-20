@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
@@ -34,7 +35,7 @@ class _State extends State<WelcomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySidemenuDrawer(),
+      endDrawer: MySideMenuDrawer(),
       body:Container(
         decoration: const BoxDecoration(
         image: DecorationImage(
@@ -46,14 +47,14 @@ class _State extends State<WelcomePage> {
         margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
     child: ListView(
     children: [
+
       Container(
         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: 5.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                 MaterialPageRoute(builder: (context) => const MySidemenuDrawer()));
+            Scaffold.of(context).openEndDrawer();
           },
           child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
         ),
@@ -86,7 +87,14 @@ class _State extends State<WelcomePage> {
                   decoration: const BoxDecoration(
                   color: ColorConstants.myaccount
                     ),
-                    child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                    child: GestureDetector(
+                        onTap: () {
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const AlmostTherePage()));
+                        },
+                        child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
                   ),
                 ),
                 Flexible(
@@ -98,7 +106,14 @@ class _State extends State<WelcomePage> {
                      decoration: const BoxDecoration(
                      color: ColorConstants.myfeed
                        ),
-                     child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                     child: GestureDetector(
+                         onTap: () {
+                           // Navigator.pushReplacement(
+                           //     context,
+                           //     MaterialPageRoute(
+                           //         builder: (context) => const AlmostTherePage()));
+                         },
+                         child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
                       ),
                 ),
               ],
@@ -115,7 +130,14 @@ class _State extends State<WelcomePage> {
                     decoration: const BoxDecoration(
                         color: ColorConstants.to_the_quizzes
                     ),
-                    child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const QuizPage()));
+                        },
+                        child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
                   ),
                 ),
                Flexible(
@@ -127,7 +149,15 @@ class _State extends State<WelcomePage> {
                     decoration: const BoxDecoration(
                         color: ColorConstants.to_the_shop
                     ),
-                    child: Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,),
+                    child: GestureDetector(
+                        onTap: () {
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const AlmostTherePage()));
+                        },
+
+                        child: Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,)),
                   ),
                 )
               ],
