@@ -39,6 +39,7 @@ dependencies:
   items_list_view:
   reorderable_griditem_view:
   getwidget: ^2.0.4
+  expandable_group: ^0.0.5
 
 dev_dependencies:
   flutter_test:

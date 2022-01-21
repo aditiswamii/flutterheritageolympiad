@@ -24,20 +24,16 @@ class DuelModeMain extends StatefulWidget {
 }
 
 class _State extends State<DuelModeMain> {
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
-  List<CheckBoxListTileModel> checkBoxListTileModel =
-  CheckBoxListTileModel.getUsers();
-  List dropList = [
-    "Select all",
-    "knowledge Traditions",
-    "Literature and Languages"
-  ];
+
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
@@ -51,7 +47,7 @@ class _State extends State<DuelModeMain> {
         child: Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
-            children: [
+            children:<Widget> [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -76,7 +72,7 @@ class _State extends State<DuelModeMain> {
                     padding: EdgeInsets.only(right: 5.0),
                     child: GestureDetector(
                       onTap: () {
-                        Scaffold.of(context).openEndDrawer();
+                        _scaffoldKey.currentState!.openEndDrawer();
                       },
                       child: Image.asset("assets/side_menu_2.png",
                           height: 40, width: 40),
@@ -129,64 +125,53 @@ class _State extends State<DuelModeMain> {
                         width: 1,
                       ),
                     ),
-                    child: ListView.builder(
-                        itemCount: checkBoxListTileModel.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                children: <Widget>[
-                                  CheckboxListTile(
-                                      activeColor: Colors.pink[300],
-                                      dense: true,
-                                      //font change
-                                      title: Text(
-                                        checkBoxListTileModel[index].title,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 0.5),
-                                      ),
-                                      value: checkBoxListTileModel[index]
-                                          .isCheck,
-                                      onChanged: (val) {
-                                        itemChange(val!, index);
-                                      })
-                                ],
+                    child:
+                    Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Select all",
+                                style: TextStyle(
+                                    color: ColorConstants.Omnes_font,
+                                    fontSize: 15),
                               ),
-                            ),
-                          );
-                        }),
-                    // Column(
-                    //   children: [
-                    //     Container(
-                    //       margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Text(
-                    //             "Select all",
-                    //             style: TextStyle(
-                    //                 color: ColorConstants.Omnes_font,
-                    //                 fontSize: 15),
-                    //           ),
-                    //           Checkbox(
-                    //             value: this.value,
-                    //             onChanged: (value) {
-                    //               setState(() {
-                    //                 this.value = true;
-                    //               });
-                    //             },
-                    //           )
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+                              Checkbox(
+                                value: this.value,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.value = true;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+
+                      ],
+                    ),
                   ),
                 ),
               ),
+              // Flexible(
+              //   child: ExpandableListView(
+              //     title: Text('Expansion tile'),
+              //     children: [
+              //       Flexible(
+              //         child: ListView(
+              //           shrinkWrap: true,
+              //           children: [
+              //             for (var i = 0; i < 10; ++i)
+              //               ListTile(title: Text('Tile $i',style: TextStyle(color: ColorConstants.Omnes_font),)),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -194,44 +179,7 @@ class _State extends State<DuelModeMain> {
     );
   }
 
-  void itemChange(bool val, int index) {
-    setState(() {
-      checkBoxListTileModel[index].isCheck = val;
-    });
-  }
+
 
 }
 
-class CheckBoxListTileModel {
-  int userId;
-  String title;
-  bool isCheck;
-
-  CheckBoxListTileModel(
-      {required this.userId, required this.title, required this.isCheck});
-
-  static List<CheckBoxListTileModel> getUsers() {
-    return <CheckBoxListTileModel>[
-      CheckBoxListTileModel(
-          userId: 1,
-          title: "Android",
-          isCheck: true),
-      CheckBoxListTileModel(
-          userId: 2,
-          title: "Flutter",
-          isCheck: false),
-      CheckBoxListTileModel(
-          userId: 3,
-          title: "IOS",
-          isCheck: false),
-      CheckBoxListTileModel(
-          userId: 4,
-          title: "PHP",
-          isCheck: false),
-      CheckBoxListTileModel(
-          userId: 5,
-          title: "Node",
-          isCheck: false),
-    ];
-  }
-}
