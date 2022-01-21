@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/duelquiz/duel_quiz.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/tournamentquiz/tournament_quiz.dart';
 import 'package:flutterheritageolympiad/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
@@ -14,19 +12,19 @@ void main() {
   runApp(const MaterialApp(
 
     debugShowCheckedModeBanner: false,
-    home: QuizPage(),
+    home: TournamentQuizSelected(),
   ));
 }
-class QuizPage extends StatefulWidget{
+class TournamentQuizSelected extends StatefulWidget{
 
-  const QuizPage({Key? key}) : super(key: key);
+  const TournamentQuizSelected({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
 
-class _State extends State<QuizPage> {
+class _State extends State<TournamentQuizSelected> {
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +137,10 @@ class _State extends State<QuizPage> {
                               ),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const DuelQuizSelected()));
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => const AlmostTherePage()));
                                 },
                                 child: Column(
                                   children: [
@@ -196,10 +194,10 @@ class _State extends State<QuizPage> {
                               ),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const TournamentQuizSelected()));
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => const AlmostTherePage()));
                                 },
                                 child: Column(
                                   children: [
@@ -216,112 +214,29 @@ class _State extends State<QuizPage> {
                     ],
                   ),
                 ),
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white),
-                    child: Card(
+                Container(
+                  margin: EdgeInsets.fromLTRB(90, 10, 90, 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.white,
+                      elevation: 3,
+                      alignment: Alignment.center,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        // if you need this
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.Omnes_font),),
-                          ),
-                          Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                              child: GFProgressBar(
-                                percentage: 0.5,
-                                lineHeight: 30,
-                                alignment: MainAxisAlignment.spaceBetween,
-                                child: const Text('10 out of 20', textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 18, color: Colors.white),
-                                ),
-                                backgroundColor: Colors.black12,
-                                progressBarColor: Colors.blue,
-                              )
-                          ),
-                          Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: GFProgressBar(
-                                percentage: 0.6,
-                                lineHeight: 30,
-                                alignment: MainAxisAlignment.spaceBetween,
-                                child: const Text('12000 XP out of 20000XP', textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 18, color: Colors.white),
-                                ),
-                                backgroundColor: Colors.black12,
-                                progressBarColor: Colors.blue,
-                              )
-                          ),
-                          // Container(
-                          //     margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                          //
-                          //     child: GFProgressBar(
-                          //       //   linearGradient:  LinearGradient(begin: Alignment.centerLeft,
-                          //       //   end: Alignment.centerRight,colors: [ColorConstants.quiz_grad1, ColorConstants.quiz_grad2, ColorConstants.quiz_grad3].toList(growable: true)),
-                          //       percentage: 0.9,
-                          //       lineHeight: 30,
-                          //       alignment: MainAxisAlignment.spaceBetween,
-                          //       // child: const Text('70%', textAlign: TextAlign.center,
-                          //       //   style: TextStyle(fontSize: 18, color: Colors.white),
-                          //       // ),
-                          //       backgroundColor: Colors.black12,
-                          //       progressBarColor: ColorConstants.quiz_grad1,
-                          //       child: Container(
-                          //         decoration: BoxDecoration(
-                          //           gradient: LinearGradient(
-                          //             colors: [
-                          //               ColorConstants.quiz_grad1,
-                          //               ColorConstants.quiz_grad2,
-                          //               ColorConstants.quiz_grad3
-                          //             ],
-                          //             stops: [
-                          //               0.0,
-                          //               0.5,
-                          //               0.9,
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     )
-                          // ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                onPrimary: Colors.white,
-                                elevation: 3,
-                                alignment: Alignment.center,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                fixedSize: const Size(190, 50),
-                                //////// HERE
-                              ),
-                              onPressed: () {
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => const AlmostTherePage()));
-                              },
-                              child: const Text(
-                                "SEE PERFORMANCE",
-                                style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          borderRadius: BorderRadius.circular(30.0)),
+                      fixedSize: const Size(150, 50),
+                      //////// HERE
+                    ),
+                    onPressed: () {
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const AlmostTherePage()));
+                    },
+                    child: const Text(
+                      "NEXT",
+                      style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
