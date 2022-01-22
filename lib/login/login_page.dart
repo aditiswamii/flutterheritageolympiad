@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/splashscreen/main.dart';
 
 
 void main() {
@@ -121,7 +122,7 @@ class _State extends State<LoginPage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginPage()));
+                            builder: (context) => const MyApp()));
                   },
                   child: const Text(
                     "LET'S GO",

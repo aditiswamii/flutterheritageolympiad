@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -106,8 +107,8 @@ class _State extends State<DuelModeMain> {
                     ),
                     Image.asset(
                       "assets/about.png",
-                      height: 30,
-                      width: 30,
+                      height: 20,
+                      width: 20,
                     )
                   ],
                 ),
@@ -149,29 +150,260 @@ class _State extends State<DuelModeMain> {
                               )
                             ],
                           ),
-                        ),
 
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Knowledge Traditions",
+                                style: TextStyle(
+                                    color: ColorConstants.Omnes_font,
+                                    fontSize: 15),
+                              ),
+                              Checkbox(
+                                value: this.value,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.value = true;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Literature and Languages",
+                                style: TextStyle(
+                                    color: ColorConstants.Omnes_font,
+                                    fontSize: 15),
+                              ),
+                              Checkbox(
+                                value: this.value,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.value = true;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
+
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              // Flexible(
-              //   child: ExpandableListView(
-              //     title: Text('Expansion tile'),
-              //     children: [
-              //       Flexible(
-              //         child: ListView(
-              //           shrinkWrap: true,
-              //           children: [
-              //             for (var i = 0; i < 10; ++i)
-              //               ListTile(title: Text('Tile $i',style: TextStyle(color: ColorConstants.Omnes_font),)),
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "DIFFICULTY",
+                      style: TextStyle(
+                          color: ColorConstants.Omnes_font, fontSize: 15),
+                    ),
+                    Image.asset(
+                      "assets/about.png",
+                      height: 20,
+                      width: 20,
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                alignment: Alignment.centerLeft,
+                height: 30,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
+                  ),
+                  borderRadius: BorderRadius.circular(30)
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                  ],
+                ),
+
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AlmostTherePage()));
+                      },
+                      child: Text("Hard",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AlmostTherePage()));
+                      },
+                      child: Text("Intermediate",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AlmostTherePage()));
+                      },
+                      child: Text("Easy",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                ],
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "QUIZ SPEED",
+                      style: TextStyle(
+                          color: ColorConstants.Omnes_font, fontSize: 15),
+                    ),
+                    Image.asset(
+                      "assets/about.png",
+                      height: 20,
+                      width: 20,
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                alignment: Alignment.centerLeft,
+                height: 30,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
+                    ),
+                    borderRadius: BorderRadius.circular(30)
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                  ],
+                ),
+
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AlmostTherePage()));
+                      },
+                      child: Text("Quickfire",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AlmostTherePage()));
+                      },
+                      child: Text("Regular",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AlmostTherePage()));
+                      },
+                      child: Text("Olympiad",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: ColorConstants.red,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const WelcomePage()));
+                      },
+                      child: const Text(
+                        "GO BACK",
+                        style: TextStyle(
+                            color: ColorConstants.to_the_shop, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: ColorConstants.verdigris,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const WelcomePage()));
+                      },
+                      child: const Text(
+                        "LET'S GO!",
+                        style: TextStyle(
+                            color: ColorConstants.to_the_shop, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

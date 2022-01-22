@@ -1,8 +1,10 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
@@ -89,10 +91,10 @@ class _State extends State<WelcomePage> {
                     ),
                     child: GestureDetector(
                         onTap: () {
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const AlmostTherePage()));
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyAccountPage()));
                         },
                         child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
                   ),
@@ -186,6 +188,12 @@ class _State extends State<WelcomePage> {
                 child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.Omnes_font),),
               ),
               Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: ColorConstants.gradient
+                      ),
+                      borderRadius: BorderRadius.circular(30)
+                  ),
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: GFProgressBar(
                     percentage: 0.5,
@@ -194,11 +202,21 @@ class _State extends State<WelcomePage> {
                     child: const Text('10 out of 20', textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
-                    backgroundColor: Colors.black12,
-                    progressBarColor: Colors.blue,
+                    backgroundColor: Colors.transparent,
+                    progressBarColor: Colors.transparent,
                   )
               ),
               Container(
+                child: Text("Quizzes done this week",
+                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
+              ),
+              Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: ColorConstants.gradient,
+                      ),
+                      borderRadius: BorderRadius.circular(30)
+                  ),
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: GFProgressBar(
                     percentage: 0.6,
@@ -207,41 +225,116 @@ class _State extends State<WelcomePage> {
                     child: const Text('12000 XP out of 20000XP', textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
-                    backgroundColor: Colors.black12,
-                    progressBarColor: Colors.blue,
+                    backgroundColor: Colors.transparent,
+                    progressBarColor: Colors.transparent,
                   )
               ),
               Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                child: Text("Next Achievement",
+                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
+              ),
+              // Container(
+              //   margin: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+              //   alignment: Alignment.centerLeft,
+              //   height: 30,
+              //   decoration: BoxDecoration(
+              //       // gradient: LinearGradient(
+              //       //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
+              //       // ),
+              //       borderRadius: BorderRadius.circular(30)
+              //   ),
+              //   child: Row(
+              //      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //     children: [
+              //
+              //       Container(
+              //           width: 60,
+              //           decoration: BoxDecoration(
+              //             color: Colors.red,
+              //               borderRadius: BorderRadius.circular(30)
+              //           ),
+              //           child: TextButton( onPressed: () {  },
+              //           child: Text("",style: TextStyle(color: Colors.red,)))),
+              //       Container(
+              //           width: 60,
+              //           decoration: BoxDecoration(
+              //           color: Colors.deepOrangeAccent,
+              //           borderRadius: BorderRadius.circular(30)
+              //       ),
+              //
+              //           child:  TextButton( onPressed: () {  },
+              //             child: Text("",style: TextStyle(color: Colors.red),),)),
+              //       Container(
+              //           width: 60,
+              //           decoration: BoxDecoration(
+              //           color: Colors.orange,
+              //           // gradient: LinearGradient(
+              //           //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
+              //           // ),
+              //           borderRadius: BorderRadius.circular(30)
+              //       ),
+              //           child:  TextButton( onPressed: () {  },
+              //             child: Text("",style: TextStyle(color: Colors.red),),)),
+              //       Container(
+              //         width: 60,
+              //           decoration: BoxDecoration(
+              //               color: Colors.green,
+              //               // gradient: LinearGradient(
+              //               //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
+              //               // ),
+              //               borderRadius: BorderRadius.circular(30)
+              //           ),
+              //           child:  TextButton( onPressed: () {  },
+              //             child: Text("",style: TextStyle(color: Colors.red),),)),
+              //       Container(
+              //         width: 60,
+              //           decoration: BoxDecoration(
+              //               color: Colors.lightBlue,
+              //               // gradient: LinearGradient(
+              //               //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
+              //               // ),
+              //               borderRadius: BorderRadius.circular(30)
+              //           ),
+              //           child:  TextButton( onPressed: () {  },
+              //             child: Text("",style: TextStyle(color: Colors.red,),),)),
+              //     ],
+              //   ),
+              //
+              // ),
+              Container(
+                  margin: EdgeInsets.fromLTRB(5, 10, 5, 20),
 
                   child: GFProgressBar(
                   //   linearGradient:  LinearGradient(begin: Alignment.centerLeft,
                     //   end: Alignment.centerRight,colors: [ColorConstants.quiz_grad1, ColorConstants.quiz_grad2, ColorConstants.quiz_grad3].toList(growable: true)),
-                     percentage: 0.9,
+                     percentage: 1.0,
                     lineHeight: 30,
                     alignment: MainAxisAlignment.spaceBetween,
                     // child: const Text('70%', textAlign: TextAlign.center,
                     //   style: TextStyle(fontSize: 18, color: Colors.white),
                     // ),
-                    backgroundColor: Colors.black12,
-                    progressBarColor: ColorConstants.quiz_grad1,
+                    backgroundColor: Colors.transparent,
+                    progressBarColor: Colors.transparent,
                     child: Container(
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
                         gradient: LinearGradient(
-                          colors: [
-                            ColorConstants.quiz_grad1,
-                            ColorConstants.quiz_grad2,
-                            ColorConstants.quiz_grad3
-                          ],
+                          colors: [Colors.red,Colors.deepOrangeAccent,Colors.orange,Colors.green,Colors.lightBlue],
                           stops: [
-                            0.0,
+                            0.1,
+                            0.3,
                             0.5,
+                            0.7,
                             0.9,
                           ],
                         ),
                       ),
                     ),
                   )
+              ),
+              Container(
+                child: Text("Leagues",
+                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
               ),
             ],
           ),
