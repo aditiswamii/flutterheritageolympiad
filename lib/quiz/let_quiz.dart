@@ -1,8 +1,10 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/duelquiz/duel_quiz.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/tournamentquiz/tournament_quiz.dart';
@@ -170,7 +172,20 @@ class _State extends State<QuizPage> {
                               ),
                               child: GestureDetector(
                                 onTap: () {
-                                  // Navigator.pushReplacement(
+                                  // Dialog errorDialog = Dialog(
+                                  //     shape: RoundedRectangleBorder(
+                                  //         borderRadius: BorderRadius.circular(
+                                  //             20.0)), //this right here
+                                  //
+                                  //         child: Container(
+                                  //           height: 500,
+                                  //             width: 350,
+                                  //             margin: EdgeInsets.all(10),
+                                  //             child: DialogDuelInviteReceive()));
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (BuildContext context) => errorDialog);
+                                  // // Navigator.pushReplacement(
                                   //     context,
                                   //     MaterialPageRoute(
                                   //         builder: (context) => const AlmostTherePage()));

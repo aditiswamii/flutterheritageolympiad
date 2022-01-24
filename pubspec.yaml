@@ -40,7 +40,11 @@ dependencies:
   reorderable_griditem_view:
   getwidget: ^2.0.4
   expandable_group: ^0.0.5
-
+  clipboard:
+  flutter_share: ^2.0.0
+  shared_preferences:
+  shared_preferences_android:
+  share_plus: ^3.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

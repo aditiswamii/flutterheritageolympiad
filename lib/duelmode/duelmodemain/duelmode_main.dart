@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/duelmode/duelmodeinvite/steptwoinvite.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/colors/gf_color.dart';
@@ -27,6 +28,14 @@ class DuelModeMain extends StatefulWidget {
 class _State extends State<DuelModeMain> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
+  List<String> _locations = ['Built Spaces',
+    'Visual and Material',
+    'Cultural Practices and Rituals',
+    'Histories',
+  'People',
+  'Institutions',
+  'Natural Environments']; // Option 2
+   String? _selectedLocation; // Option 2
 
 
   @override
@@ -198,11 +207,45 @@ class _State extends State<DuelModeMain> {
                           ),
 
                         ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: DropdownButton(
+                      icon: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
+                     // hint: Text(''), // Not necessary for Option 1
+                      value: _selectedLocation,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedLocation = newValue as String?;
+                        });
+                      },
+                      items: _locations.map((location) {
+                        return DropdownMenuItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              new Text(location,
+                                style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 15),),
+                              Checkbox(
+                                value: this.value,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.value = true;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                          value: location,
+                        );
+                      }).toList(),
+                    ),
+                  ),
 
-                        ),
+                        // Container(
+                        //   margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        //   child: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
+                        //
+                        // ),
                       ],
                     ),
                   ),
@@ -392,7 +435,7 @@ class _State extends State<DuelModeMain> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
+                                builder: (context) => const DuelModeInvite()));
                       },
                       child: const Text(
                         "LET'S GO!",
