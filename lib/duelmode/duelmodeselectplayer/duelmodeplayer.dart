@@ -5,6 +5,8 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.dart';
 import 'package:flutterheritageolympiad/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:flutterheritageolympiad/duelmode/duelmoderesult/duelmode_result.dart';
+import 'package:flutterheritageolympiad/recycleview/recyckeview.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/colors/gf_color.dart';
@@ -458,7 +460,7 @@ class _State extends State<DuelModeSelectPlayer> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DuelModeMain()));
+                                builder: (context) => Recycleview()));
                       },
                       child: const Text(
                         "EDIT QUIZ",
@@ -482,7 +484,7 @@ class _State extends State<DuelModeSelectPlayer> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
+                                builder: (context) => DuelModeResult()));
                       },
                       child: const Text(
                         "LET'S GO!",

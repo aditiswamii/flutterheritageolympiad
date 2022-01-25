@@ -45,6 +45,12 @@ dependencies:
   shared_preferences:
   shared_preferences_android:
   share_plus: ^3.0.4
+  mvp:
+  firebase_core:
+  image_picker:
+  firebase_storage:
+  http:
+  aws_s3_upload:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -170,6 +176,8 @@ flutter:
     - assets/google_plus.png
     - assets/twitter.png
     - assets/whitebg.png
+    - assets/cat1.png
+    - assets/cat2.png
   fonts:
     - family: Omnes
       fonts:
