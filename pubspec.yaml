@@ -46,7 +46,6 @@ dependencies:
   shared_preferences_android:
   share_plus: ^3.0.4
   mvp:
-  firebase_core:
   image_picker:
   firebase_storage:
   http:
@@ -178,6 +177,9 @@ flutter:
     - assets/whitebg.png
     - assets/cat1.png
     - assets/cat2.png
+    - assets/debackground.jpg
+    - assets/login_bg.jpg
+    - assets/signup_bg.jpg
   fonts:
     - family: Omnes
       fonts:
