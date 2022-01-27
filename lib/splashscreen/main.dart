@@ -88,7 +88,7 @@ class _State extends State<MyApp> {
                       //////// HERE
                     ),
                     onPressed: () {
-                      Navigator.pushReplacement(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) => const SignupPage()));
                     },
                     child: const Text(

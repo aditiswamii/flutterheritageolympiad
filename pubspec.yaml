@@ -183,11 +183,8 @@ flutter:
   fonts:
     - family: Omnes
       fonts:
-        - asset: assets/fonts/Omnes-Regular.ttf
-        - asset: assets/fonts/Omnes-Light.ttf
-        - asset: assets/fonts/Omnes-Medium.ttf
-        - asset: assets/fonts/Omnes-Bold.ttf
-        - asset: assets/fonts/Omnes-Italic.ttf
+        - asset: assets/fonts/Omnes.ttf
+
 
 
   # To add assets to your application, add an assets section, like this:

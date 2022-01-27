@@ -34,17 +34,17 @@ class _State extends State<SignupPage> {
         body: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/whitebg.png"),
+                image: AssetImage("assets/signup_bg.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
             child: Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+              margin: EdgeInsets.fromLTRB(20, 100, 20, 10),
               child: Column(
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: const Text("SIGN UP",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
                     Flexible(child:
                     Container(
