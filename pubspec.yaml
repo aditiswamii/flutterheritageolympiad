@@ -180,6 +180,7 @@ flutter:
     - assets/debackground.jpg
     - assets/login_bg.jpg
     - assets/signup_bg.jpg
+    - assets/img.png
   fonts:
     - family: Omnes
       fonts:

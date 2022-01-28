@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:flutterheritageolympiad/classicquiz/questionpageview/questions.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/duelquiz/duel_quiz.dart';
@@ -115,10 +116,10 @@ class _State extends State<QuizPage> {
                               ),
                               child: GestureDetector(
                                 onTap: () {
-                                  // Navigator.pushReplacement(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => const AlmostTherePage()));
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const ClassicQuestion()));
                                 },
                                 child: Column(
                                   children: [

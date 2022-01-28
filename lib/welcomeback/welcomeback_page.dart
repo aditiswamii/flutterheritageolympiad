@@ -7,6 +7,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/rightdrawer/right_drawer.dart';
+import 'package:flutterheritageolympiad/shopproduct/shopproducts_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 void main() {
@@ -113,7 +114,7 @@ class _State extends State<WelcomePage> {
                            // Navigator.pushReplacement(
                            //     context,
                            //     MaterialPageRoute(
-                           //         builder: (context) => const AlmostTherePage()));
+                           //         builder: (context) =>  ReadContacts()));
                          },
                          child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
                       ),
@@ -153,10 +154,10 @@ class _State extends State<WelcomePage> {
                     ),
                     child: GestureDetector(
                         onTap: () {
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const AlmostTherePage()));
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ShopProduct()));
                         },
 
                         child: Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,)),
