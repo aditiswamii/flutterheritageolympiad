@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/signup/signup_page.dart';
+import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+
 
 import 'dart:async';
 
-import '../login/login_page.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -24,10 +24,10 @@ class _State extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Timer(
-    // const Duration(seconds: 3),
-    //     () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-    //     builder: (BuildContext context) =>const LoginPage())));
+    Timer(
+    const Duration(seconds: 3),
+        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>const LoginPage())));
   }
 
   @override
@@ -44,64 +44,7 @@ class _State extends State<MyApp> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
-          // alignment: FractionalOffset.bottomCenter,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.white,
-                      elevation: 3,
-                      alignment: Alignment.center,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0)),
-                      fixedSize: const Size(150, 50),
-                      //////// HERE
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()));
-                    },
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.white,
-                      elevation: 3,
-                      alignment: Alignment.center,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0)),
-                      fixedSize: const Size(150, 50),
-                      //////// HERE
-                    ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const SignupPage()));
-                    },
-                    child: const Text(
-                      'SIGN UP',
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+
       ),
     );
   }
