@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
+import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
+import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 
 void main() {
 
@@ -31,6 +35,7 @@ class _State extends State<MySideMenuDrawer> {
     ]);
     return Drawer(
         child: Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
           alignment: Alignment.centerRight,
           padding: EdgeInsets.only(right: 5.0),
           decoration: BoxDecoration(
@@ -40,8 +45,8 @@ class _State extends State<MySideMenuDrawer> {
 
             children: [
               ListTile(
-                visualDensity: VisualDensity(horizontal: 0, vertical: 1),
-                 trailing: Image.asset("assets/side_menu.png",height: 40,width: 40),
+                visualDensity: VisualDensity(horizontal: 0, vertical: 4),
+                 trailing: Image.asset("assets/cross.png",height: 20,width: 20),
                  onTap: () {
                   // Update the state of the app
                   // ...
@@ -49,45 +54,31 @@ class _State extends State<MySideMenuDrawer> {
                   Navigator.pop(context);
                 },
               ),
-              ListTile(
-                visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                   title: const Text('SUBSCRIPTION PLANS\nMENTIONED HERE',style:TextStyle(fontSize: 15,color:ColorConstants.menu_text),textAlign: TextAlign.end,),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
+
 
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                 title: const Text('My Account',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                 title: const Text('My Account',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  MyAccountPage()));
 
                   //Navigator.pop(context);
                 },
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                  title: const Text('My Feed',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                  title: const Text('My Feed',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
                   //Navigator.pop(context);
 
                 },
               ),
               ListTile(
-                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                title: const Text('SAVED POSTS',style:TextStyle(fontSize: 12,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
-                onTap: () {
-                  Navigator.pop(context);
-
-                },
-              ),
-              ListTile(
-                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                title: const Text('NEWS AND NOTICES',style:TextStyle(fontSize: 12,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                visualDensity: VisualDensity(horizontal: 0, vertical: -2),
+                title: const Text('Saved Posts',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
                   Navigator.pop(context);
 
@@ -95,27 +86,30 @@ class _State extends State<MySideMenuDrawer> {
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                   title: const Text('Quizzes',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                   title: const Text('Quizzes',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const QuizPage()));
                 },
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                    title: const Text('Shop',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                    title: const Text('Shop',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ShopProduct()));
                 },
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                   title: const Text('Plans',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                   title: const Text('About Us',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
                   Navigator.pop(context);
 
@@ -123,33 +117,15 @@ class _State extends State<MySideMenuDrawer> {
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                    title: const Text('Performance',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                title: const Text('FAQ',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
+
                 },
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-                   title: const Text('About us',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
-                onTap: () {
-
-                 // Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                title: const Text('FAQ',style:TextStyle(fontSize: 12,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
-                onTap: () {
-                  Navigator.pop(context);
-
-                },
-              ),
-              ListTile(
-                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                title: const Text('HELP AND SUPPORT',style:TextStyle(fontSize: 12,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
+                title: const Text('HELP AND SUPPORT',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
                   Navigator.pop(context);
 
@@ -157,12 +133,12 @@ class _State extends State<MySideMenuDrawer> {
               ),
 
               ListTile(
-                   title: const Text('Log Out',style:TextStyle(fontSize: 15,color: ColorConstants.menu_text,decoration: TextDecoration.underline),textAlign: TextAlign.end,),
+                   title: const Text('Log Out',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text,decoration: TextDecoration.underline),textAlign: TextAlign.end,),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()));
                 },
               ),
             ],

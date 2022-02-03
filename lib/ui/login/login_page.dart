@@ -35,7 +35,8 @@ class _State extends State<LoginPage> implements LoginViewModal{
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
    late LoginScreenPresenter  _presenter;
-
+  bool isLoggedIn = false;
+  String name = '';
   @override
   void initState() {
     super.initState();
@@ -49,12 +50,35 @@ class _State extends State<LoginPage> implements LoginViewModal{
     print(userId);
     if (userId != null) {
       setState(() {
-        // isLoggedIn = true;
-        // name = userId;
+        isLoggedIn = true;
+        _presenter = LoginScreenPresenter(this);
+        name = userId;
       });
       //Navigator.of(context).pushReplacementNamed("/home");
       return;
     }
+  }
+  Future<Null> logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', "");
+
+    setState(() {
+      name = '';
+      isLoggedIn = false;
+    });
+  }
+
+  Future<Null> loginUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', emailController.text);
+
+    setState(() {
+
+      name = emailController.text;
+      isLoggedIn = true;
+    });
+
+    emailController.clear();
   }
     @override
     Widget build(BuildContext context) {
@@ -84,7 +108,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                 Container(
                   height: 60,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: TextFormField(
+                  child:TextFormField(
                     controller: emailController,
                     obscureText: false,
                     keyboardType: TextInputType.text,
@@ -96,7 +120,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.singleLineFormatter
                     ],
-                  ),
+                  ) ,
                 ),),
                 Flexible(child:
                 Container(
@@ -155,15 +179,22 @@ class _State extends State<LoginPage> implements LoginViewModal{
                           //////// HERE
                         ),
                         onPressed: () {
+
                           if(emailController.text.isNotEmpty) {
                             if (passwordController.text.isNotEmpty) {
                               _presenter.login(emailController.text.toString(),
                                   passwordController.text.toString());
                             }else{
-
+                              const snackBar = SnackBar(
+                                content: Text('Please fill password'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
                           }else{
-
+                            const snackBar = SnackBar(
+                              content: Text('Please fill email'),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
                              }
                           },
                         child: const Text(
@@ -208,12 +239,23 @@ class _State extends State<LoginPage> implements LoginViewModal{
     }
 
   @override
-  void onLoginSuccess() {
+  Future<void> onLoginSuccess() async {
+    isLoggedIn ? logout() : loginUser();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (BuildContext context) => WelcomePage(),
         ),
-            (Route<dynamic> route) => false);
+            (Route<dynamic> route) => true);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', emailController.text);
+
+    setState(() {
+
+      name = emailController.text;
+      isLoggedIn = true;
+    });
+
+    emailController.clear();
   }
   }
 

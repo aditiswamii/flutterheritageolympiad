@@ -26,7 +26,7 @@ class MyAccountPage extends StatefulWidget{
 
 
 class _State extends State<MyAccountPage> {
-
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -34,13 +34,14 @@ class _State extends State<MyAccountPage> {
       DeviceOrientation.portraitDown
     ]);
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/whitebg.png"),
+            image: AssetImage("assets/login_bg.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -71,7 +72,7 @@ class _State extends State<MyAccountPage> {
                       padding: EdgeInsets.only(right: 5.0),
                       child: GestureDetector(
                         onTap: () {
-                          Scaffold.of(context).openEndDrawer();
+                          _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
                       ),
@@ -104,7 +105,7 @@ class _State extends State<MyAccountPage> {
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: ListTile(
                           leading: Image.asset("assets/setting.png",height: 30,width: 30,),
-                          title: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.Omnes_font),),
+                          title: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.Omnes_font),),
                         )
 
                       ),
@@ -154,7 +155,7 @@ class _State extends State<MyAccountPage> {
                           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: ListTile(
                             leading: Image.asset("assets/setting.png",height: 30,width: 30,),
-                            title: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.Omnes_font),),
+                            title: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.Omnes_font),),
                           )
 
                       ),
@@ -179,7 +180,7 @@ class _State extends State<MyAccountPage> {
                           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: ListTile(
                             leading: Image.asset("assets/setting.png",height: 30,width: 30,),
-                            title: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.Omnes_font),),
+                            title: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.Omnes_font),),
                           )
 
                       ),
@@ -204,7 +205,132 @@ class _State extends State<MyAccountPage> {
                           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: ListTile(
                             leading: Image.asset("assets/setting.png",height: 30,width: 30,),
-                            title: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.Omnes_font),),
+                            title: Text("PRIVACY",style: TextStyle(color:ColorConstants.Omnes_font),),
+                          )
+
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child:
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: ListTile(
+                            leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                            title: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.Omnes_font),),
+                          )
+
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child:
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: ListTile(
+                            leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                            title: Text("PAYMENTS",style: TextStyle(color:ColorConstants.Omnes_font),),
+                          )
+
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child:
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: ListTile(
+                            leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                            title: Text("HELP",style: TextStyle(color:ColorConstants.Omnes_font),),
+                          )
+
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child:
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: ListTile(
+                            leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                            title: Text("ABOUT",style: TextStyle(color:ColorConstants.Omnes_font),),
+                          )
+
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child:
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: ListTile(
+                            leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                            title: Text("SHARE",style: TextStyle(color:ColorConstants.Omnes_font),),
                           )
 
                       ),

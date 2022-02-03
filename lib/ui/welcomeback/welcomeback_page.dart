@@ -28,7 +28,7 @@ class WelcomePage extends StatefulWidget{
 
 
 class _State extends State<WelcomePage> {
-
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -36,6 +36,7 @@ class _State extends State<WelcomePage> {
       DeviceOrientation.portraitDown
     ]);
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
@@ -57,7 +58,7 @@ class _State extends State<WelcomePage> {
         padding: EdgeInsets.only(right: 5.0),
         child: GestureDetector(
           onTap: () {
-            Scaffold.of(context).openEndDrawer();
+            _scaffoldKey.currentState!.openEndDrawer();
           },
           child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
         ),

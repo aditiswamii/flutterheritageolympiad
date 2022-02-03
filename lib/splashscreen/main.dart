@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
 
 import 'dart:async';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
@@ -21,15 +24,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _State extends State<MyApp> {
+  bool isLoggedIn = false;
+  String name = '';
+
   @override
   void initState() {
     super.initState();
-    Timer(
+    autoLogIn();
+    !isLoggedIn ? Timer(
     const Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>const LoginPage())));
+        builder: (BuildContext context) =>const LoginPage()))):Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>const WelcomePage()));
   }
-
+  void autoLogIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('username');
+    print(userId);
+    if (userId != null) {
+      setState(() {
+        isLoggedIn = true;
+        name = userId;
+      });
+      //Navigator.of(context).pushReplacementNamed("/home");
+      return;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

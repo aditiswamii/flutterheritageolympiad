@@ -181,6 +181,7 @@ flutter:
     - assets/login_bg.jpg
     - assets/signup_bg.jpg
     - assets/img.png
+    - assets/cross.png
   fonts:
     - family: Omnes
       fonts:
