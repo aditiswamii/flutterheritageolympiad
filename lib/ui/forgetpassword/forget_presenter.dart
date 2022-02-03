@@ -21,14 +21,14 @@ class ForgetPasswordPresenter {
   //
   //     if (response.statusCode == 200) {
   //       var data = jsonDecode(response.body.toString());
-  //       print(data['token']);
-  //       print('Login successfully');
+  //       log(data['token']);
+  //       log('Login successfully');
   //       _view.onLoginSuccess();// for Printing the token
   //     } else {
-  //       print("Error message like email or password wrong!!!!"); // Toast
+  //       log("Error message like email or password wrong!!!!"); // Toast
   //     }
   //   } catch (e) {
-  //     print(e.toString());
+  //     log(e.toString());
   //   }
   // }
 }

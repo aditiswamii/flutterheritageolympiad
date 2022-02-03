@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:flutterheritageolympiad/ui/shopproduct/product/product.dart';
+import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
 void main() {
@@ -21,7 +23,7 @@ class ShopProduct extends StatefulWidget{
 }
 
 
-class _State extends State<ShopProduct> {
+class _State extends State<ShopProduct> implements ShopProductsView {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -88,10 +90,21 @@ class _State extends State<ShopProduct> {
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: const Text("scroll down see all updates,search by\nkeywords,or filter updates by type.", style: TextStyle(
                         fontSize: 18, color: ColorConstants.Omnes_font))),
+
+                 // ProductList()
+
+              //
               ]
           ),
         ),
       ),
     );
   }
+
+  @override
+  void onSuccess() {
+    // TODO: implement onSuccess
+  }
+
+
 }

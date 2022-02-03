@@ -37,7 +37,7 @@ class _State extends State<AlmostTherePage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/whitebg.png"),
+            image: AssetImage("assets/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),

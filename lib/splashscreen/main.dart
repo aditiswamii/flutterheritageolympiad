@@ -34,7 +34,8 @@ class _State extends State<MyApp> {
     !isLoggedIn ? Timer(
     const Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>const LoginPage()))):Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>const LoginPage()))):
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (BuildContext context) =>const WelcomePage()));
   }
   void autoLogIn() async {
@@ -46,7 +47,8 @@ class _State extends State<MyApp> {
         isLoggedIn = true;
         name = userId;
       });
-      //Navigator.of(context).pushReplacementNamed("/home");
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) =>const WelcomePage()));
       return;
     }
   }

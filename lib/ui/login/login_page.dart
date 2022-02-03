@@ -54,7 +54,8 @@ class _State extends State<LoginPage> implements LoginViewModal{
         _presenter = LoginScreenPresenter(this);
         name = userId;
       });
-      //Navigator.of(context).pushReplacementNamed("/home");
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) =>const WelcomePage()));
       return;
     }
   }

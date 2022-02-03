@@ -50,6 +50,7 @@ dependencies:
   firebase_storage:
   http:
   aws_s3_upload:
+  file_picker: ^1.9.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

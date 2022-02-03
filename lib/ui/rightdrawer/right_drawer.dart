@@ -7,6 +7,7 @@ import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
 
@@ -26,7 +27,17 @@ class MySideMenuDrawer extends StatefulWidget{
 
 
 class _State extends State<MySideMenuDrawer> {
+  bool isLoggedIn = false;
+  String name = '';
+  Future<Null> logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', "");
 
+    setState(() {
+      name = '';
+      isLoggedIn = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -135,10 +146,7 @@ class _State extends State<MySideMenuDrawer> {
               ListTile(
                    title: const Text('Log Out',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text,decoration: TextDecoration.underline),textAlign: TextAlign.end,),
                 onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()));
+                     logout();
                 },
               ),
             ],

@@ -1,7 +1,9 @@
 
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutterheritageolympiad/ui/login/login_viewmodal.dart';
+import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:http/http.dart';
 
 class LoginScreenPresenter {
@@ -10,23 +12,23 @@ class LoginScreenPresenter {
   void login(String email, password) async {
     try {
       Response response = await post(
-          Uri.parse('http://3.108.183.42/api/login'),
+          Uri.parse(StringConstants.BASE_URL+'login'),
           body: {
-            'email': 'huricane@mailsac.com',
-            'password': 'huricane123'
+            'email': email.toString(),
+            'password': password.toString()
           }
       );
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data['token']);
-        print('Login successfully');
+        log(data['token']);
+        log('Login successfully');
         _view.onLoginSuccess();// for Printing the token
       } else {
-        print("Error message like email or password wrong!!!!"); // Toast
+        log("Error message like email or password wrong!!!!"); // Toast
       }
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
   }
 }
