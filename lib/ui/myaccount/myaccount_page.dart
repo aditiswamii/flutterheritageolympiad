@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:flutterheritageolympiad/ui/phonebook/phonebook_screen.dart';
 import 'package:flutterheritageolympiad/ui/privacy/privacy_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -265,7 +266,10 @@ class _State extends State<MyAccountPage> {
                             leading: Image.asset("assets/interval.png",height: 30,width: 30,),
                             title: GestureDetector(
                                 onTap: (){
-
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PhonebookScreen()));
                                 },
                                 child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.Omnes_font),)),
                           )
