@@ -7,28 +7,25 @@ import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.d
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
-
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../invitecontact.dart';
 
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: DuelModeLink(),
+    home: ContactInviteLink(),
   ));
 }
 
-class DuelModeLink extends StatefulWidget {
-  const DuelModeLink({Key? key}) : super(key: key);
+class ContactInviteLink extends StatefulWidget {
+  const ContactInviteLink({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<DuelModeLink> {
+class _State extends State<ContactInviteLink> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String link="cul.tre/ejojkx";
@@ -95,14 +92,14 @@ class _State extends State<DuelModeLink> {
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                  child: const Text("DUEL MODE",
+                  child: const Text("INVITE CONTACTS",
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.Omnes_font))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
-                      "You may invite minimum 2 other player in\nyour contact list to quiz with.",
+                      "This invite link is valid for 24 hours.",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.Omnes_font))),
               Container(
@@ -224,10 +221,10 @@ class _State extends State<DuelModeLink> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DuelModeMain()));
+                                builder: (context) => InviteContactScreen()));
                       },
                       child: const Text(
-                        "EDIT QUIZ",
+                        "GO BACK",
                         style: TextStyle(
                             color: ColorConstants.to_the_shop, fontSize: 14),
                         textAlign: TextAlign.center,
@@ -245,10 +242,10 @@ class _State extends State<DuelModeLink> {
                         //////// HERE
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DuelModeSelectPlayer()));
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const DuelModeSelectPlayer()));
                       },
                       child: const Text(
                         "LET'S GO!",

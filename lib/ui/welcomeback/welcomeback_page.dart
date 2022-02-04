@@ -43,7 +43,7 @@ class _State extends State<WelcomePage> {
       body:Container(
         decoration: const BoxDecoration(
         image: DecorationImage(
-        image: AssetImage("assets/whitebg.png"),
+        image: AssetImage("assets/login_bg.jpg"),
           fit: BoxFit.cover,
     ),
     ),
@@ -65,11 +65,11 @@ class _State extends State<WelcomePage> {
       ),
       Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
+          margin: const EdgeInsets.fromLTRB(0, 60, 0, 5),
           child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
       Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
           child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
 
       Container(
@@ -85,7 +85,7 @@ class _State extends State<WelcomePage> {
                 Flexible(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     height: 150,
                     width: 150,
                   decoration: const BoxDecoration(
@@ -98,7 +98,26 @@ class _State extends State<WelcomePage> {
                               MaterialPageRoute(
                                   builder: (context) => const MyAccountPage()));
                         },
-                        child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
+                        child: Column(
+
+                          children: [
+                            Flexible(
+                                child:Container(
+                                  alignment: Alignment.topRight,
+                                  child: Image.asset("assets/mcq_pattern2.png",
+                                  height: 20,width: 20,alignment: Alignment.topRight),
+                                )),
+                            Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+
+
+                            Flexible(child:Container(
+                              alignment: Alignment.bottomCenter,
+                              child: Image.asset("assets/mcq_pattern2.png",
+                                height: 20,width: 20,),
+                            )),
+                         
+                          ],
+                        )),
                   ),
                 ),
                 Flexible(
@@ -117,7 +136,22 @@ class _State extends State<WelcomePage> {
                            //     MaterialPageRoute(
                            //         builder: (context) =>  ReadContacts()));
                          },
-                         child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
+                         child: Column(
+                           children: [
+                             Flexible(
+                                 child:Container(
+                                   alignment: Alignment.topRight,
+                                   child: Image.asset("assets/mcq_pattern2.png",
+                                       height: 20,width: 20,alignment: Alignment.topRight),
+                                 )),
+                             Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                             Flexible(child:Container(
+                               alignment: Alignment.bottomCenter,
+                               child: Image.asset("assets/mcq_pattern2.png",
+                                 height: 20,width: 20,),
+                             )),
+                           ],
+                         )),
                       ),
                 ),
               ],
@@ -141,7 +175,22 @@ class _State extends State<WelcomePage> {
                               MaterialPageRoute(
                                   builder: (context) => const QuizPage()));
                         },
-                        child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,)),
+                        child: Column(
+                          children: [
+                            Flexible(
+                                child:Container(
+                                  alignment: Alignment.topLeft,
+                                  child: Image.asset("assets/mcq_pattern2.png",
+                                      height: 20,width: 20,alignment: Alignment.topRight),
+                                )),
+                            Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                            Flexible(child:Container(
+                              alignment: Alignment.bottomRight,
+                              child: Image.asset("assets/mcq_pattern2.png",
+                                height: 20,width: 20,),
+                            )),
+                          ],
+                        )),
                   ),
                 ),
                Flexible(
@@ -161,7 +210,22 @@ class _State extends State<WelcomePage> {
                                   builder: (context) => const ShopProduct()));
                         },
 
-                        child: Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,)),
+                        child: Column(
+                          children: [
+                            Flexible(
+                                child:Container(
+                                  alignment: Alignment.topRight,
+                                  child: Image.asset("assets/mcq_pattern2.png",
+                                      height: 20,width: 20,alignment: Alignment.topRight),
+                                )),
+                            Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,),
+                            Flexible(child:Container(
+                              alignment: Alignment.bottomLeft,
+                              child: Image.asset("assets/mcq_pattern2.png",
+                                height: 20,width: 20,),
+                            )),
+                          ],
+                        )),
                   ),
                 )
               ],

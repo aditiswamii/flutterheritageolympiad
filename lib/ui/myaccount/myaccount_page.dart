@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 import 'package:flutterheritageolympiad/ui/invitecontact/invitecontact.dart';
-import 'package:flutterheritageolympiad/ui/phonebook/phonebook_screen.dart';
+import 'package:flutterheritageolympiad/ui/notification/notification_screen.dart';
+import 'package:flutterheritageolympiad/ui/payment/payment_screen.dart';
+
 import 'package:flutterheritageolympiad/ui/privacy/privacy_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -113,7 +115,10 @@ class _State extends State<MyAccountPage> {
                           leading: Image.asset("assets/setting.png",height: 30,width: 30,),
                           title: GestureDetector(
                               onTap: (){
-
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const NotificationScreen()));
                               },
 
                               child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.Omnes_font),)),
@@ -300,12 +305,15 @@ class _State extends State<MyAccountPage> {
                             leading: Image.asset("assets/payment_setting.png",height: 30,width: 30,),
                             title:GestureDetector(
                                 onTap: (){
-
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PaymentScreen()));
                                 },
                                 child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.Omnes_font),)),
                           )
-
                       ),
+
                     ),
                   ),
                 ),

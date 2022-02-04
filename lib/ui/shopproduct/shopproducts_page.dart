@@ -88,7 +88,7 @@ class _State extends State<ShopProduct> implements ShopProductsView {
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: const Text("scroll down see all updates,search by\nkeywords,or filter updates by type.", style: TextStyle(
+                    child: const Text("Scroll down see all updates,search by\nkeywords,or filter updates by type.", style: TextStyle(
                         fontSize: 18, color: ColorConstants.Omnes_font))),
                Expanded(child: ProductList())
                  // ProductList()
