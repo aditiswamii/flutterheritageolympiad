@@ -8,6 +8,7 @@ import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/question
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/ui/duelquiz/duel_quiz.dart';
+import 'package:flutterheritageolympiad/ui/invitecontact/invitecontact.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -113,72 +114,142 @@ bool add =true;
                 //Build a list view of all contacts, displaying their avatar and
                 // display name
                     ?Expanded(
-                      child: ListView.builder(
+                      child: Flexible(
+                          child: Container(
+                              margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              decoration: const BoxDecoration(color: Colors.white),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  // if you need this
+                                  side: BorderSide(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    width: 1,
+                                  ),
+                                ),
+                                child:ListView.builder(
                        shrinkWrap:true,
                        itemCount: _contacts!.length,
                        itemBuilder: (BuildContext context, int index) {
-                      Contact? contact = _contacts!.elementAt(index);
-                      return Flexible(
-                        child: Container(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          decoration: const BoxDecoration(color: Colors.white),
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              // if you need this
-                              side: BorderSide(
-                                color: Colors.grey.withOpacity(0.3),
-                                width: 1,
-                              ),
-                            ),
-                            child: Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child:ListTile(
-                                contentPadding:
-                                const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                                leading: (contact.avatar != null && contact.avatar!.isNotEmpty)
-                                    ? CircleAvatar(
-                                  backgroundImage: MemoryImage(contact.avatar!),
-                                )
-                                    : CircleAvatar(
-                                  child: Text(contact.initials(),style: TextStyle(color: Colors.white),),
-                                  backgroundColor: ColorConstants.myfeed,
-                                ),
-                                title: Text(contact.displayName ?? ''),
-                                trailing: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.red,
-                                    onPrimary: Colors.white,
-                                    elevation: 3,
-                                    alignment: Alignment.center,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0)),
-                                    fixedSize: const Size(60, 20),
-                                    //////// HERE
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const WelcomePage()));
-                                  },
-                                  child: const Text(
-                                    "Add",
-                                    style: TextStyle(color: Colors.white, fontSize: 16),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                //This can be further expanded to showing contacts detail
-                                // onPressed().
-                              ),
-                            ),
+                         Contact? contact = _contacts!.elementAt(index);
+                         return Container(
+                             decoration:
+                              BoxDecoration(
+                                 border:  Border(
+                                     bottom:  BorderSide(color: Colors.grey)
+                                 )
+                             ),
+                           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                           child: ListTile(
+                             contentPadding:
+                             const EdgeInsets.symmetric(
+                                 vertical: 2, horizontal: 18),
+                             leading: (contact.avatar != null &&
+                                 contact.avatar!.isNotEmpty)
+                                 ? CircleAvatar(
+                               backgroundImage: MemoryImage(contact.avatar!),
+                             )
+                                 : CircleAvatar(
+                               child: Text(contact.initials(),
+                                 style: TextStyle(color: Colors.white),),
+                               backgroundColor: ColorConstants.myfeed,
+                             ),
+                             title: Text(contact.displayName ?? ''),
+                             trailing: ElevatedButton(
+                               style: ElevatedButton.styleFrom(
+                                 primary: Colors.red,
+                                 onPrimary: Colors.white,
+                                 elevation: 3,
+                                 alignment: Alignment.center,
+                                 shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.circular(30.0)),
+                                 fixedSize: const Size(60, 20),
+                                 //////// HERE
+                               ),
+                               onPressed: () {
+                                 Navigator.pushReplacement(
+                                     context,
+                                     MaterialPageRoute(
+                                         builder: (
+                                             context) => const WelcomePage()));
+                               },
+                               child: const Text(
+                                 "Add",
+                                 style: TextStyle(
+                                     color: Colors.white, fontSize: 16),
+                                 textAlign: TextAlign.center,
+                               ),
+                             ),
+                             //This can be further expanded to showing contacts detail
+                             // onPressed().
+                           ),
+
+                         );
+                       }
                           ),
                         ),
-                      );
-                  },
+                      )
+                      ),
+                    ): Center(child: const CircularProgressIndicator()),
+
+                Container(
+                  alignment: FractionalOffset.bottomCenter,
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.red,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InviteContactScreen()));
+                        },
+                        child: const Text(
+                          "GO BACK",
+                          style: TextStyle(
+                              color: ColorConstants.to_the_shop, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.verdigris,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (
+                                      context) => const PhonebookScreen()));
+                        },
+                        child: const Text(
+                          "LET'S GO!",
+                          style: TextStyle(
+                              color: ColorConstants.to_the_shop, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                    )
-                    : Center(child: const CircularProgressIndicator()),
               ]
           ),
         ),

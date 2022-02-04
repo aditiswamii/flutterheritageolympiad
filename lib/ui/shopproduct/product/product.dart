@@ -31,13 +31,13 @@ class _State extends State<ProductList> implements ProductsView{
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-            child: ListView(
-              children: [
-                _presenter.getproduct("", "")
-              ],
+            child:FutureBuilder<Object>(
+              builder: (context, snapshot) {
+                return
+                    _presenter.getproduct("", "") ;
+              }
             )
         ),
-
     );
   }
 
@@ -45,6 +45,7 @@ class _State extends State<ProductList> implements ProductsView{
   void onSuccess(List jsonResponse) {
     ListView _jobsListView(data) {
       return ListView.builder(
+        shrinkWrap: true,
           itemCount: data.length,
           itemBuilder: (context, index) {
             return (data[index].position);
