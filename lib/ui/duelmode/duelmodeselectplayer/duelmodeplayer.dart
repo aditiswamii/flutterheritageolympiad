@@ -7,6 +7,7 @@ import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmoderesult/duelmode_result.dart';
 import 'package:flutterheritageolympiad/recycleview/recyckeview.dart';
+import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/colors/gf_color.dart';
@@ -45,7 +46,7 @@ class _State extends State<DuelModeSelectPlayer> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/whitebg.png"),
+            image: AssetImage("assets/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -156,7 +157,7 @@ class _State extends State<DuelModeSelectPlayer> {
                               child: CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    AssetImage("assets/profile.png"),
+                                    AssetImage("assets/cat1.png"),
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
@@ -259,7 +260,7 @@ class _State extends State<DuelModeSelectPlayer> {
                               child: CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    AssetImage("assets/profile.png"),
+                                    AssetImage("assets/cat1.png"),
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
@@ -362,7 +363,7 @@ class _State extends State<DuelModeSelectPlayer> {
                               child: CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    AssetImage("assets/profile.png"),
+                                    AssetImage("assets/cat1.png"),
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
@@ -460,7 +461,7 @@ class _State extends State<DuelModeSelectPlayer> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Recycleview()));
+                                builder: (context) => QuizPage()));
                       },
                       child: const Text(
                         "EDIT QUIZ",

@@ -188,6 +188,7 @@ flutter:
     - assets/cross.png
     - assets/yellowbg.png
     - assets/yellowbackground.png
+    - assets/notifications.png
   fonts:
     - family: Omnes
       fonts:

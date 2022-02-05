@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
@@ -45,7 +46,7 @@ class _State extends State<DuelModeInvite> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/whitebg.png"),
+            image: AssetImage("assets/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -121,7 +122,7 @@ class _State extends State<DuelModeInvite> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const DuelModeLink()));
+                                      builder: (context) => const DuelModeSelectPlayer()));
                             },
                             child: Text("INVITE",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
                       ),
@@ -139,6 +140,10 @@ class _State extends State<DuelModeInvite> {
                         ),
                         child: GestureDetector(
                             onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const DuelModeLink()));
                               // Navigator.pushReplacement(
                               //     context,
                               //     MaterialPageRoute(

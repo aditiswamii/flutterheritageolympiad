@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 import 'package:flutterheritageolympiad/ui/invitecontact/invitecontact.dart';
+import 'package:flutterheritageolympiad/ui/managecontacts/managecontacts.dart';
 import 'package:flutterheritageolympiad/ui/notification/notification_screen.dart';
 import 'package:flutterheritageolympiad/ui/payment/payment_screen.dart';
 
@@ -112,7 +113,7 @@ class _State extends State<MyAccountPage> {
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: ListTile(
                           visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                          leading: Image.asset("assets/notifications.png",height: 30,width: 30,),
                           title: GestureDetector(
                               onTap: (){
                                 Navigator.pushReplacement(
@@ -149,7 +150,10 @@ class _State extends State<MyAccountPage> {
                             leading: Image.asset("assets/setting.png",height: 30,width: 30,),
                             title:GestureDetector(
                               onTap: (){
-
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const ManageContactScreen()));
                               },
                                 child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.Omnes_font),)),
                           )
