@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/dialog/cancelplan/cancelplan_dialog.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -204,6 +205,21 @@ class _State extends State<PaymentScreen> {
                           ),
                           child: GestureDetector(
                               onTap: () {
+                                AlertDialog errorDialog = AlertDialog(
+                                  backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            20.0)), //this right here
+                                    title: Container(
+                                        height: 200,
+                                        width: 150,
+                                        alignment: Alignment.center,
+                                        child: DialogCancelPlan()));
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                    errorDialog);
                                 // Navigator.pushReplacement(
                                 //     context,
                                 //     MaterialPageRoute(
@@ -257,6 +273,20 @@ class _State extends State<PaymentScreen> {
                           //////// HERE
                         ),
                         onPressed: () {
+                          // AlertDialog errorDialog = AlertDialog(
+                          //     shape: RoundedRectangleBorder(
+                          //         borderRadius:
+                          //         BorderRadius.circular(
+                          //             20.0)), //this right here
+                          //     title: Container(
+                          //         height: 250,
+                          //         width: 250,
+                          //         alignment: Alignment.center,
+                          //         child: DialogCancelPlan()));
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (BuildContext context) =>
+                          //     errorDialog);
                           // Navigator.pushReplacement(
                           //     context,
                           //     MaterialPageRoute(
