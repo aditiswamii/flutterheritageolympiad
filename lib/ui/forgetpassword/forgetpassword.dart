@@ -116,10 +116,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
                     //////// HERE
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()));
+                   _presenter.forgetpassword(emailController.text.toString());
                     // _presenter.login(emailController.text.toString(),
                     //     passwordController.text.toString());
                   },
@@ -135,6 +132,14 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
           ),
         ),),
     );
+  }
+
+  @override
+  void forget() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const LoginPage()));
   }
 
   // @override

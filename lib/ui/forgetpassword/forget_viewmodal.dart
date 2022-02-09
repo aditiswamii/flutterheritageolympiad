@@ -1,6 +1,6 @@
 
 
 abstract class ForgetPasswordView{
-   //void onLoginSuccess();
+   void forget();
 
 }
