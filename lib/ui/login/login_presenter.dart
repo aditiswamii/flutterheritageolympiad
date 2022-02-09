@@ -20,8 +20,8 @@ class LoginScreenPresenter {
       );
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        log(data['token']);
+        // var data = jsonDecode(response.body.toString());
+        // log(data['token']);
         log('Login successfully');
         _view.onLoginSuccess();// for Printing the token
       } else {

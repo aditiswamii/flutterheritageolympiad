@@ -5,6 +5,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/signup/signup_presenter.dart';
 import 'package:flutterheritageolympiad/ui/signup/signup_viewmodal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -28,13 +29,25 @@ class _State extends State<SignupPage> implements SignUpView {
   late SignUpPresenter _presenter;
   bool value = false;
 
+
   @override
   void initState() {
     super.initState();
     _presenter = SignUpPresenter(this);
     //autoLogIn();
   }
-
+  Future<Null> SignUp() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email=prefs.setString('username', emailController.text);
+    var password=prefs.setString('password', passwordController.text);
+    var user=prefs.setString('user', usernameController.text);
+    prefs.setString('is_social', "0");
+    _presenter = SignUpPresenter(this);
+    _presenter.register(
+        email.toString(),
+        user.toString(),
+        password.toString());
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -164,20 +177,27 @@ class _State extends State<SignupPage> implements SignUpView {
                 //////// HERE
               ),
               onPressed: () {
-    if (emailController.text.isNotEmpty) {
-    if(usernameController.text.isNotEmpty)
-    if (passwordController == repeatpasswordController) {
-    _presenter.register(
-    emailController.text.toString(),
-    usernameController.text.toString(),
-    passwordController.text.toString());
-    } else {
-    const snackBar = SnackBar(
-    content: Text('Please check password'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-    } else{
+                if (emailController.text.isNotEmpty) {
+                  if (usernameController.text.isNotEmpty) {
+                    if (passwordController.text.toString() == repeatpasswordController.text.toString()) {
+                      SignUp();
+                      // _presenter.register(
+                      //     emailController.text.toString(),
+                      //     usernameController.text.toString(),
+                      //     passwordController.text.toString());
+                    } else {
+                      const snackBar = SnackBar(
+                        content: Text('Please check password'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  } else {
+                    const snackBar = SnackBar(
+                      content: Text('Please fill username'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                } else {
                   const snackBar = SnackBar(
                     content: Text('Please fill email address'),
                   );
@@ -199,7 +219,8 @@ class _State extends State<SignupPage> implements SignUpView {
 
   @override
   void onsuccess() {
+
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+        context, MaterialPageRoute(builder: (context) => AlmostTherePage()));
   }
 }

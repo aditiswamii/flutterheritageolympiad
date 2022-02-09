@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:http/http.dart';
 
@@ -16,15 +17,18 @@ class SignUpPresenter {
       Response response = await post(
           Uri.parse(StringConstants.BASE_URL+'stepone'),
           body: {
-            'email':email,
-            'username':username,
-            'password':password,
+            'email':email.toString(),
+            'username':username.toString(),
+            'password':password.toString(),
           }
       );
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        log(data['token']);
-        log(data.toString());
+        // var data = jsonDecode(response.body.toString());
+        // if (data != null) {
+        //   throw HttpException(data['error']['message']);
+        // }
+        // log(data['token']);
+        // log(data.toString());
         log('Account Registered');
         _view.onsuccess();// for Printing the token
       } else {

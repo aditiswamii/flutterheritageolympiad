@@ -31,12 +31,11 @@ class _State extends State<MySideMenuDrawer> {
   String name = '';
   Future<Null> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', "");
-
-    setState(() {
-      name = '';
-      isLoggedIn = false;
-    });
+    prefs.remove('username');
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoginPage()));
   }
   @override
   Widget build(BuildContext context) {

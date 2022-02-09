@@ -21,8 +21,8 @@ class ForgetPasswordPresenter {
           }
       );
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        log(data['token']);
+        // var data = jsonDecode(response.body.toString());
+        // log(data['token']);
         log('Change password link has been sent to your email. Please check your email!');
         _view.forget();// for Printing the token
       } else {

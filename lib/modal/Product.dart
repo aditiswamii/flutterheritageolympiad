@@ -3,6 +3,9 @@
 /// data : []
 
 class Product {
+  late int _status;
+  late String _message;
+  late List<dynamic> _data;
   Product({
       required int status,
       required String message,
@@ -22,9 +25,7 @@ class Product {
       });
     }
   }
-  late int _status;
-  late String _message;
-  late List<dynamic> _data;
+
 
   int get status => _status;
   String get message => _message;

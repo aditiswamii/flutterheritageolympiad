@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/emailresend/emailresend_dialog.dart';
+import 'package:flutterheritageolympiad/ui/alldone/alldone_presenter.dart';
+import 'package:flutterheritageolympiad/ui/alldone/alldone_viewmodal.dart';
+import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
@@ -19,9 +23,26 @@ class AllDonePage extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<AllDonePage> {
+class _State extends State<AllDonePage> implements AllDoneView {
+  late AllDonePresenter _presenter;
   bool value = false;
 
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _presenter = AllDonePresenter(this);
+    //autoLogIn();
+  }
+  Future<Null> Preference() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email=prefs.getString('username');
+    var issocial=prefs.get('is_social');
+    _presenter = AllDonePresenter(this);
+    _presenter.verifyemail(email.toString(), "", issocial.toString());
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -67,10 +88,7 @@ class _State extends State<AllDonePage> {
                     //////// HERE
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const WelcomePage()));
+                    Preference();
                   },
                   child: const Text(
                     "NEXT",
@@ -174,5 +192,13 @@ class _State extends State<AllDonePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void onsuccess() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const LoginPage()));
   }
 }

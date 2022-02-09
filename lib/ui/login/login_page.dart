@@ -59,7 +59,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
       return;
     }
   }
-  Future<Null> logout() async {
+  Future<void> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username', "");
 
@@ -67,19 +67,24 @@ class _State extends State<LoginPage> implements LoginViewModal{
       name = '';
       isLoggedIn = false;
     });
+
   }
 
-  Future<Null> loginUser() async {
+  Future<void> loginUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', emailController.text);
-
+    var email=prefs.getString('username');
+    var password=prefs.getString('password');
+    prefs.setString('is_social', "0");
     setState(() {
 
       name = emailController.text;
       isLoggedIn = true;
     });
-
-    emailController.clear();
+    if(emailController.text.toString()==email.toString() &&passwordController.text.toString()==password.toString()) {
+      _presenter.login(emailController.text.toString(),
+          passwordController.text.toString());
+      //emailController.clear();
+    }
   }
     @override
     Widget build(BuildContext context) {
@@ -183,8 +188,9 @@ class _State extends State<LoginPage> implements LoginViewModal{
 
                           if(emailController.text.isNotEmpty) {
                             if (passwordController.text.isNotEmpty) {
-                              _presenter.login(emailController.text.toString(),
-                                  passwordController.text.toString());
+                              loginUser();
+                              // _presenter.login(emailController.text.toString(),
+                              //     passwordController.text.toString());
                             }else{
                               const snackBar = SnackBar(
                                 content: Text('Please fill password'),
@@ -248,7 +254,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
         ),
             (Route<dynamic> route) => true);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', emailController.text);
+    prefs.getString('username');
 
     setState(() {
 

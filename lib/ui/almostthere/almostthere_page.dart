@@ -3,7 +3,11 @@ import 'package:flutter/services.dart';
 
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/alldone/alldone.dart';
+import 'package:flutterheritageolympiad/ui/almostthere/almostthere_presenter.dart';
+import 'package:flutterheritageolympiad/ui/almostthere/almostthere_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/signup/signup_page.dart';
+import 'package:flutterheritageolympiad/utils/apppreference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
@@ -23,11 +27,36 @@ class AlmostTherePage extends StatefulWidget{
 }
 
 
-class _State extends State<AlmostTherePage> {
+class _State extends State<AlmostTherePage> implements AlmostThereView{
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  TextEditingController gender = TextEditingController();
+  TextEditingController newsletter = TextEditingController();
+  late AlmostTherePresenter _presenter;
   bool value = false;
 
+  //final prefs = SharedPreferences.getInstance();
+  Future<Null> Preference() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString('username');
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _presenter = AlmostTherePresenter(this);
+    //autoLogIn();
+  }
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown
@@ -53,6 +82,7 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: TextField(
+                    controller: firstnameController,
                     obscureText: false,
                     keyboardType: TextInputType.text,
                     decoration:  InputDecoration(
@@ -67,10 +97,11 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: TextField(
+                    controller: lastnameController,
                     obscureText: false,
                     keyboardType: TextInputType.text,
                     decoration:  InputDecoration(
-                      labelText: 'Second Name*',
+                      labelText: 'Last Name*',
                     ),
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.singleLineFormatter
@@ -81,6 +112,7 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: TextField(
+                    controller: countryController,
                     obscureText: false,
                     keyboardType: TextInputType.text,
                     decoration:  InputDecoration(
@@ -95,6 +127,7 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: TextField(
+                    controller: stateController,
                     obscureText: false,
                     keyboardType: TextInputType.text,
                     decoration:  InputDecoration(
@@ -109,6 +142,7 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: TextField(
+                    controller: cityController,
                     obscureText: false,
                     keyboardType: TextInputType.text,
                     decoration:  InputDecoration(
@@ -123,6 +157,7 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                   child: TextField(
+                    controller: dobController,
                     obscureText: false,
                     keyboardType: TextInputType.datetime,
                     decoration:  InputDecoration(
@@ -137,6 +172,7 @@ class _State extends State<AlmostTherePage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: TextField(
+                    controller: gender,
                     obscureText: false,
                     keyboardType: TextInputType.text,
                     decoration:  InputDecoration(
@@ -202,10 +238,16 @@ class _State extends State<AlmostTherePage> {
                             //////// HERE
                           ),
                           onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const AllDonePage()));
+                            if(firstnameController.text.isNotEmpty)
+                              if(lastnameController.text.isNotEmpty)
+                                if(dobController.text.isNotEmpty)
+                                  if(stateController.text.isNotEmpty)
+                            _presenter.register(firstnameController.text.toString(),
+                                dobController.text.toString(),
+                                "", lastnameController.text.toString(), stateController.text.toString(),
+                                cityController.text.toString(),
+                                gender.text.toString(), newsletter.text.toString(),"");
+                           // AppPreference().preference.
                           },
                           child: const Text(
                             "NEXT",
@@ -222,5 +264,13 @@ class _State extends State<AlmostTherePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void onsuccess(data) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const AllDonePage()));
   }
 }
