@@ -46,7 +46,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
 
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('username');
+    final String? userId = prefs.getString('email');
     print(userId);
     if (userId != null) {
       setState(() {
@@ -61,7 +61,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
   }
   Future<void> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', "");
+    prefs.setString('email', "");
 
     setState(() {
       name = '';
@@ -72,11 +72,11 @@ class _State extends State<LoginPage> implements LoginViewModal{
 
   Future<void> loginUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email=prefs.setString('username', emailController.text.toString());
-    var password=prefs.setString('password', passwordController.text.toString());
-    // var email=prefs.getString('username');
-    // var password=prefs.getString('password');
-    prefs.setString('is_social', "0");
+    // var email=prefs.setString('email', emailController.text.toString());
+    // var password=prefs.setString('password', passwordController.text.toString());
+    var email=prefs.getString('email');
+    var password=prefs.getString('password');
+    prefs.getString('issocial');
     setState(() {
 
       name = emailController.text;
@@ -84,11 +84,11 @@ class _State extends State<LoginPage> implements LoginViewModal{
     });
       _presenter.login(emailController.text.toString(),
           passwordController.text.toString());
-    // if(emailController.text.toString()==email.toString() &&passwordController.text.toString()==password.toString()) {
-    //   _presenter.login(emailController.text.toString(),
-    //       passwordController.text.toString());
-    //   //emailController.clear();
-    // }
+    if(emailController.text.toString()==email.toString() &&passwordController.text.toString()==password.toString()) {
+      _presenter.login(emailController.text.toString(),
+          passwordController.text.toString());
+      //emailController.clear();
+    }
   }
     @override
     Widget build(BuildContext context) {
@@ -258,7 +258,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
         ),
             (Route<dynamic> route) => true);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getString('username');
+    prefs.getString('email');
 
     setState(() {
 

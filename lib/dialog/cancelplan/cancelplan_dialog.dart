@@ -5,7 +5,8 @@ import 'package:flutterheritageolympiad/dialog/cancelplansuccess/cancelplan_succ
 import 'package:flutterheritageolympiad/ui/payment/payment_screen.dart';
 
 void main() {
-  runApp(const MaterialApp(
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: DialogCancelPlan(),
   ));

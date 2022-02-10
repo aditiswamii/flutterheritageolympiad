@@ -42,7 +42,7 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
   //final prefs = SharedPreferences.getInstance();
   Future<Null> Preference() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getString('username');
+    prefs.getString('email');
   }
 
 
@@ -245,13 +245,14 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
                                     _presenter.register(
                                         firstnameController.text.toString(),
                                         dobController.text.toString(),
-                                        "",
+                                        "",//mobile
                                         lastnameController.text.toString(),
                                         stateController.text.toString(),
                                         cityController.text.toString(),
                                         gender.text.toString(),
                                         newsletter.text.toString(),
-                                        "");
+                                        ""//userid
+                                    );
                                   } else {
                                     const snackBar = SnackBar(
                                       content: Text('Please fill state'),
@@ -298,7 +299,7 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
 
 
   @override
-  void onsuccess(List jsonResponse) {
+  void onsuccess() {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(

@@ -4,7 +4,8 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/payment/payment_screen.dart';
 
 void main() {
-  runApp(const MaterialApp(
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: DialogCancelPlanSuccess(),
   ));

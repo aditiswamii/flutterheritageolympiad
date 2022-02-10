@@ -8,8 +8,8 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 void main() {
 
-  runApp(const MaterialApp(
-
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: NotificationScreen(),
   ));

@@ -40,7 +40,7 @@ class _State extends State<SplashScreen> {
   }
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('username');
+    final String? userId = prefs.getString('email');
     print(userId);
     if (userId != null) {
       setState(() {

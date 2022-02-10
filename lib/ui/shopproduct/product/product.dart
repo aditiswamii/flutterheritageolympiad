@@ -4,8 +4,8 @@ import 'package:flutterheritageolympiad/ui/shopproduct/product/products_viewmoda
 
 void main() {
 
-  runApp(const MaterialApp(
-
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: ProductList(),
   ));
@@ -25,7 +25,7 @@ class _State extends State<ProductList> implements ProductsView{
   void initState() {
     super.initState();
     _presenter = ProductsPresenter(this);
-
+    _presenter.getproduct("", "") ;
   }
   @override
   Widget build(BuildContext context) {

@@ -11,8 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
 
-  runApp(const MaterialApp(
-
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: MySideMenuDrawer(),
   ));
@@ -31,7 +31,7 @@ class _State extends State<MySideMenuDrawer> {
   String name = '';
   Future<Null> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('username');
+    prefs.remove('email');
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(

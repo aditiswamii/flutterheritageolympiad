@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
@@ -8,12 +9,14 @@ import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
+import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
 
-  runApp(const MaterialApp(
-
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: WelcomePage(),
   ));
@@ -66,11 +69,11 @@ class _State extends State<WelcomePage> {
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 60, 0, 5),
-          child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+          child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-          child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+          child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
 
       Container(
         alignment: Alignment.center,
@@ -107,7 +110,7 @@ class _State extends State<WelcomePage> {
                                   child: Image.asset("assets/mcq_pattern2.png",
                                   height: 20,width: 20,alignment: Alignment.topRight),
                                 )),
-                            Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                            Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
 
 
                             Flexible(child:Container(
@@ -144,7 +147,7 @@ class _State extends State<WelcomePage> {
                                    child: Image.asset("assets/mcq_pattern2.png",
                                        height: 20,width: 20,alignment: Alignment.topRight),
                                  )),
-                             Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                             Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
                              Flexible(child:Container(
                                alignment: Alignment.bottomCenter,
                                child: Image.asset("assets/mcq_pattern2.png",
@@ -183,7 +186,7 @@ class _State extends State<WelcomePage> {
                                   child: Image.asset("assets/mcq_pattern2.png",
                                       height: 20,width: 20,alignment: Alignment.topRight),
                                 )),
-                            Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 24),textAlign: TextAlign.center,),
+                            Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
                             Flexible(child:Container(
                               alignment: Alignment.bottomRight,
                               child: Image.asset("assets/mcq_pattern2.png",
@@ -218,7 +221,7 @@ class _State extends State<WelcomePage> {
                                   child: Image.asset("assets/mcq_pattern2.png",
                                       height: 20,width: 20,alignment: Alignment.topRight),
                                 )),
-                            Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 24),textAlign: TextAlign.center,),
+                            Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
                             Flexible(child:Container(
                               alignment: Alignment.bottomLeft,
                               child: Image.asset("assets/mcq_pattern2.png",
@@ -250,167 +253,102 @@ class _State extends State<WelcomePage> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.Omnes_font),),
-              ),
-              Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: ColorConstants.gradient
-                      ),
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: GFProgressBar(
-                    percentage: 0.5,
-                    lineHeight: 30,
-                    alignment: MainAxisAlignment.spaceBetween,
-                    child: const Text('10 out of 20', textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    progressBarColor: Colors.transparent,
-                  )
-              ),
-              Container(
-                child: Text("Quizzes done this week",
+                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Text("Your Activity Summary",
                   style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
               ),
               Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: ColorConstants.gradient,
-                      ),
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: GFProgressBar(
-                    percentage: 0.6,
-                    lineHeight: 30,
-                    alignment: MainAxisAlignment.spaceBetween,
-                    child: const Text('12000 XP out of 20000XP', textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    progressBarColor: Colors.transparent,
-                  )
-              ),
-              Container(
-                child: Text("Next Achievement",
-                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
-              ),
-              // Container(
-              //   margin: const EdgeInsets.fromLTRB(5, 10, 5, 10),
-              //   alignment: Alignment.centerLeft,
-              //   height: 30,
-              //   decoration: BoxDecoration(
-              //       // gradient: LinearGradient(
-              //       //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
-              //       // ),
-              //       borderRadius: BorderRadius.circular(30)
-              //   ),
-              //   child: Row(
-              //      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //     children: [
-              //
-              //       Container(
-              //           width: 60,
-              //           decoration: BoxDecoration(
-              //             color: Colors.red,
-              //               borderRadius: BorderRadius.circular(30)
-              //           ),
-              //           child: TextButton( onPressed: () {  },
-              //           child: Text("",style: TextStyle(color: Colors.red,)))),
-              //       Container(
-              //           width: 60,
-              //           decoration: BoxDecoration(
-              //           color: Colors.deepOrangeAccent,
-              //           borderRadius: BorderRadius.circular(30)
-              //       ),
-              //
-              //           child:  TextButton( onPressed: () {  },
-              //             child: Text("",style: TextStyle(color: Colors.red),),)),
-              //       Container(
-              //           width: 60,
-              //           decoration: BoxDecoration(
-              //           color: Colors.orange,
-              //           // gradient: LinearGradient(
-              //           //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
-              //           // ),
-              //           borderRadius: BorderRadius.circular(30)
-              //       ),
-              //           child:  TextButton( onPressed: () {  },
-              //             child: Text("",style: TextStyle(color: Colors.red),),)),
-              //       Container(
-              //         width: 60,
-              //           decoration: BoxDecoration(
-              //               color: Colors.green,
-              //               // gradient: LinearGradient(
-              //               //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
-              //               // ),
-              //               borderRadius: BorderRadius.circular(30)
-              //           ),
-              //           child:  TextButton( onPressed: () {  },
-              //             child: Text("",style: TextStyle(color: Colors.red),),)),
-              //       Container(
-              //         width: 60,
-              //           decoration: BoxDecoration(
-              //               color: Colors.lightBlue,
-              //               // gradient: LinearGradient(
-              //               //     colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
-              //               // ),
-              //               borderRadius: BorderRadius.circular(30)
-              //           ),
-              //           child:  TextButton( onPressed: () {  },
-              //             child: Text("",style: TextStyle(color: Colors.red,),),)),
-              //     ],
-              //   ),
-              //
-              // ),
-              Container(
-                  margin: EdgeInsets.fromLTRB(5, 10, 5, 20),
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
 
-                  child: GFProgressBar(
-                  //   linearGradient:  LinearGradient(begin: Alignment.centerLeft,
-                    //   end: Alignment.centerRight,colors: [ColorConstants.quiz_grad1, ColorConstants.quiz_grad2, ColorConstants.quiz_grad3].toList(growable: true)),
-                     percentage: 1.0,
-                    lineHeight: 30,
-                    alignment: MainAxisAlignment.spaceBetween,
-                    // child: const Text('70%', textAlign: TextAlign.center,
-                    //   style: TextStyle(fontSize: 18, color: Colors.white),
-                    // ),
-                    backgroundColor: Colors.transparent,
-                    progressBarColor: Colors.transparent,
-                    child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                  RotatedBox(
+                  quarterTurns: 3,
+                  child: new Container(
+                      width: 20,
+                      height: 50,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        gradient: LinearGradient(
-                          colors: [Colors.red,Colors.deepOrangeAccent,Colors.orange,Colors.green,Colors.lightBlue],
-                          stops: [
-                            0.1,
-                            0.3,
-                            0.5,
-                            0.7,
-                            0.9,
-                          ],
-                        ),
-                      ),
-                    ),
+                        color: ColorConstants.red,
+                      borderRadius: new BorderRadius.only(
+                        topLeft: new Radius.circular(10),
+                        topRight: new Radius.circular(10),
+                ),
+              ),
                   )
               ),
+                    RotatedBox(
+                        quarterTurns: 3,
+                        child: new Container(
+                          width: 20,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.deepOrange,
+                            borderRadius: new BorderRadius.only(
+                              topLeft: new Radius.circular(2),
+                              topRight: new Radius.circular(2),
+                            ),
+                          ),
+                        )
+                    ),
+                    RotatedBox(
+                        quarterTurns: 3,
+                        child: new Container(
+                          width: 20,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: ColorConstants.myfeed,
+                            borderRadius: new BorderRadius.only(
+                              topLeft: new Radius.circular(2),
+                              topRight: new Radius.circular(2),
+                            ),
+                          ),
+                        )
+                    ),
+                    RotatedBox(
+                        quarterTurns: 3,
+                        child: new Container(
+                          width: 20,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: new BorderRadius.only(
+                              topLeft: new Radius.circular(2),
+                              topRight: new Radius.circular(2),
+                            ),
+                          ),
+                        )
+                    ),
+                    RotatedBox(
+                        quarterTurns: 3,
+                        child: new Container(
+                          width: 20,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: ColorConstants.verdigris,
+                            borderRadius: new BorderRadius.only(
+                              bottomLeft: new Radius.circular(10),
+                              bottomRight: new Radius.circular(10),
+                            ),
+                          ),
+                        )
+                    ),
+            ],
+          ),
+      ),
               Container(
                 child: Text("Leagues",
                   style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
               ),
-            ],
-          ),
-        ),
-        ),
-      ),
       ]
     ),
       ),
+    ),
+    ),
+      ]
       ),
+      ),
+    ),
     );
   }
 }

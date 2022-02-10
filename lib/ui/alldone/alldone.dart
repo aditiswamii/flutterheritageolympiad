@@ -38,8 +38,8 @@ class _State extends State<AllDonePage> implements AllDoneView {
   }
   Future<Null> Preference() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email=prefs.getString('username');
-    var issocial=prefs.get('is_social');
+    var email=prefs.getString('email');
+    var issocial=prefs.get('issocial');
     _presenter = AllDonePresenter(this);
     _presenter.verifyemail(email.toString(), "", issocial.toString());
   }

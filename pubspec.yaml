@@ -193,6 +193,11 @@ flutter:
     - family: Omnes
       fonts:
         - asset: assets/fonts/Omnes.ttf
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito-Bold.ttf
+        - asset: assets/fonts/Nunito-Light.ttf
 
 
 

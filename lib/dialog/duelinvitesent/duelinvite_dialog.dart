@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
 void main() {
-  runApp(const MaterialApp(
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: DialogDuelInviteSent(),
   ));

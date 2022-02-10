@@ -10,7 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
-  runApp(const MaterialApp(
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: MyApp(),
   ));
@@ -40,7 +41,7 @@ class _State extends State<MyApp> {
   }
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('username');
+    final String? userId = prefs.getString('email');
     print(userId);
     if (userId != null) {
       setState(() {

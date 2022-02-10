@@ -38,14 +38,14 @@ class _State extends State<SignupPage> implements SignUpView {
   }
   Future<Null> SignUp() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email=prefs.setString('username', emailController.text);
+    var email=prefs.setString('email', emailController.text);
     var password=prefs.setString('password', passwordController.text);
-    var user=prefs.setString('user', usernameController.text);
-    prefs.setString('is_social', "0");
+    var username=prefs.setString('username', usernameController.text);
+    prefs.getString('issocial');
     _presenter = SignUpPresenter(this);
     _presenter.register(
         email.toString(),
-        user.toString(),
+        username.toString(),
         password.toString());
   }
   @override
