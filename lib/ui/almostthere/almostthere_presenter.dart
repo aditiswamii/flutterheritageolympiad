@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutterheritageolympiad/modal/SignUpModal.dart';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,10 +36,13 @@ class AlmostTherePresenter {
       if (response.statusCode == 200) {
 
          var data = jsonDecode(response.body.toString());
+         List jsonResponse = json.decode(response.body);
+         jsonResponse.map((data) => SignUpModal.fromJson(data)).toList();
+         //jsonResponse.map((signup) => SignUpModal.fromJson(jsonDecode(response.body))).toList();
         // log(data['token']);
         // log(data.toString());
         log('User updated successfully');
-        _view.onsuccess(data);// for Printing the token
+        _view.onsuccess(jsonResponse);// for Printing the token
       } else {
         log("The email or username has already been taken."); // Toast
       }

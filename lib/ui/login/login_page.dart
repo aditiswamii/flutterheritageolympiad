@@ -72,19 +72,23 @@ class _State extends State<LoginPage> implements LoginViewModal{
 
   Future<void> loginUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email=prefs.getString('username');
-    var password=prefs.getString('password');
+    var email=prefs.setString('username', emailController.text.toString());
+    var password=prefs.setString('password', passwordController.text.toString());
+    // var email=prefs.getString('username');
+    // var password=prefs.getString('password');
     prefs.setString('is_social', "0");
     setState(() {
 
       name = emailController.text;
       isLoggedIn = true;
     });
-    if(emailController.text.toString()==email.toString() &&passwordController.text.toString()==password.toString()) {
       _presenter.login(emailController.text.toString(),
           passwordController.text.toString());
-      //emailController.clear();
-    }
+    // if(emailController.text.toString()==email.toString() &&passwordController.text.toString()==password.toString()) {
+    //   _presenter.login(emailController.text.toString(),
+    //       passwordController.text.toString());
+    //   //emailController.clear();
+    // }
   }
     @override
     Widget build(BuildContext context) {

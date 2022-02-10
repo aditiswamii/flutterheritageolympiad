@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/questions.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
@@ -119,7 +120,7 @@ class _State extends State<QuizPage> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const ClassicQuestion()));
+                                          builder: (context) => const ClassicQuizMain()));
                                 },
                                 child: Column(
                                   children: [

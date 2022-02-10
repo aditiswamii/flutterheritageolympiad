@@ -238,17 +238,47 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
                             //////// HERE
                           ),
                           onPressed: () {
-                            if(firstnameController.text.isNotEmpty)
-                              if(lastnameController.text.isNotEmpty)
-                                if(dobController.text.isNotEmpty)
-                                  if(stateController.text.isNotEmpty)
-                            _presenter.register(firstnameController.text.toString(),
-                                dobController.text.toString(),
-                                "", lastnameController.text.toString(), stateController.text.toString(),
-                                cityController.text.toString(),
-                                gender.text.toString(), newsletter.text.toString(),"");
+                            if(firstnameController.text.isNotEmpty){
+                              if(lastnameController.text.isNotEmpty) {
+                                if(dobController.text.isNotEmpty) {
+                                  if (stateController.text.isNotEmpty) {
+                                    _presenter.register(
+                                        firstnameController.text.toString(),
+                                        dobController.text.toString(),
+                                        "",
+                                        lastnameController.text.toString(),
+                                        stateController.text.toString(),
+                                        cityController.text.toString(),
+                                        gender.text.toString(),
+                                        newsletter.text.toString(),
+                                        "");
+                                  } else {
+                                    const snackBar = SnackBar(
+                                      content: Text('Please fill state'),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        snackBar);
+                                  }
+                                }else{
+                                  const snackBar = SnackBar(
+                                    content: Text('Please fill DOB'),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
+                              }else{
+                                const snackBar = SnackBar(
+                                  content: Text('Please fill lastname'),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }
                            // AppPreference().preference.
-                          },
+                          }else{
+                              const snackBar = SnackBar(
+                                content: Text('Please fill firstname'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+                            },
                           child: const Text(
                             "NEXT",
                             style: TextStyle(color: Colors.black, fontSize: 16),
@@ -266,11 +296,14 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
     );
   }
 
+
   @override
-  void onsuccess(data) {
+  void onsuccess(List jsonResponse) {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => const AllDonePage()));
   }
+
+
 }

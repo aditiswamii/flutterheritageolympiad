@@ -1,6 +1,6 @@
 
 
 abstract class AlmostThereView{
-   void onsuccess(data);
+   void onsuccess(List jsonResponse);
 
 }

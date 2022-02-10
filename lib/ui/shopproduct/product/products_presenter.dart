@@ -30,7 +30,7 @@ class ProductsPresenter {
         log("Error message!!!!"); // Toast
       }
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
   }
 }
