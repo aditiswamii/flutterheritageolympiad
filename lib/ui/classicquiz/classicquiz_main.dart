@@ -35,17 +35,20 @@ class ClassicQuizMain extends StatefulWidget {
 class _State extends State<ClassicQuizMain> implements ClassicQuizView{
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   late ClassicQuizPresenter _presenter;
+  late List<Data>? _Domains = [];
   bool value = false;
-   //List<String> _locations =Domains.fromJson(json).data.cast<String>();
+
   @override
   void initState() {
     super.initState();
    // _locations ;
     _presenter =ClassicQuizPresenter(this);
-    _presenter.domains();
-    //autoLogIn();
+    _getData();
   }
-  List<String> _locations = Data.fromJson(json).name.toString() as List<String>;
+  void _getData() async {
+    _Domains = (await _presenter.getdomains())!;
+    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+  }
   // List<String> _locations = ['Built Spaces',
   //   'Visual and Material',
   //   'Cultural Practices and Rituals',
@@ -157,46 +160,31 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                     Expanded(
                       child: Column(
                         children: [
-                     Container(
-                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: DropdownButton(
-                        icon: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
-                       // hint: Text(''), // Not necessary for Option 1
-                        value: _selectedLocation,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedLocation = newValue as String?;
-                          });
-                        },
-                         items:
-                          _locations.map((location) {
-                          return DropdownMenuItem(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                new Text(location,
-                                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 15),),
-                                Checkbox(
-                                  value: value,
-                                  onChanged: (newvalue) {
-                                    setState(() {
-                                      value = newvalue!;
-                                    });
-                                  },
-                                )
-                              ],
-                             )
-                            ,value: location,
-                          );
-                        }).toList(),
-                      ),
-                  ),
-
-                          // Container(
-                          //   margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          //   child: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
-                          //
-                          // ),
+                          _Domains == null || _Domains!.isEmpty
+                              ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                              :ListView.builder(
+                            itemCount: _Domains!.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(_Domains![index].name),
+                                        Text(_Domains![index].status),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20.0,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -406,17 +394,17 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
     );
   }
 
-  @override
-   onSuccess(List data) {
-    log(data.length.toString());
-    log(Data.fromJson(json).name);
-    ListView.builder(
-          shrinkWrap: true,
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return (data[index].position);
-          });
-  }
+  // @override
+  //  onSuccess(List data) {
+  //   log(data.length.toString());
+  //   log(Data.fromJson(json).name);
+  //   ListView.builder(
+  //         shrinkWrap: true,
+  //         itemCount: data.length,
+  //         itemBuilder: (context, index) {
+  //           return (data[index].position);
+  //         });
+  // }
 
 
 }

@@ -12,15 +12,19 @@ class ClassicQuizPresenter {
   ClassicQuizView _view;
   ClassicQuizPresenter(this._view);
 
-  domains() async {
+  Future<List<Data>?> getdomains() async {
     try {
       Response response = await get(
           Uri.parse(StringConstants.BASE_URL+"domains"),
       );
 
       if (response.statusCode == 200) {
-       var data= Domains.fromJson(json).data ;
-         _view.onSuccess(data);// for Printing the token
+        List<Data> _model = DataFromJson(response.body);
+        log(_model.join());
+        return _model;
+
+        // for Printing the tokenvar data= Domains.fromJson(json).data ;
+        // _view.onSuccess(data);//
       } else {
         log("Error message!!!!"); // Toast
       }

@@ -1,6 +1,14 @@
+import 'dart:convert';
+
 /// status : 200
 /// message : "Domain data"
 /// data : [{"id":10,"name":"natural environment","status":"1","created_at":"2021-10-13T09:24:06.000000Z","updated_at":"2021-11-02T11:00:56.000000Z","deleted_at":null,"themes_id":"2"},{"id":9,"name":"built spaces","status":"1","created_at":"2021-10-13T09:23:59.000000Z","updated_at":"2021-11-02T11:01:26.000000Z","deleted_at":null,"themes_id":"3"},{"id":8,"name":"people","status":"1","created_at":"2021-10-13T09:23:52.000000Z","updated_at":"2021-10-13T09:23:52.000000Z","deleted_at":null,"themes_id":"1"},{"id":7,"name":"institutions","status":"1","created_at":"2021-10-13T09:23:45.000000Z","updated_at":"2021-10-13T09:23:45.000000Z","deleted_at":null,"themes_id":"1"},{"id":6,"name":"histories","status":"1","created_at":"2021-10-13T09:23:37.000000Z","updated_at":"2021-10-13T09:23:37.000000Z","deleted_at":null,"themes_id":"1"},{"id":5,"name":"visual & material arts","status":"1","created_at":"2021-10-13T09:23:31.000000Z","updated_at":"2021-11-02T11:01:39.000000Z","deleted_at":null,"themes_id":"3"},{"id":4,"name":"practices & rituals","status":"1","created_at":"2021-10-13T09:23:18.000000Z","updated_at":"2021-10-13T09:23:18.000000Z","deleted_at":null,"themes_id":"1"},{"id":3,"name":"performing arts","status":"1","created_at":"2021-10-13T09:23:10.000000Z","updated_at":"2021-10-13T09:23:10.000000Z","deleted_at":null,"themes_id":"1"},{"id":2,"name":"languages & literature","status":"1","created_at":"2021-10-13T09:23:02.000000Z","updated_at":"2021-10-13T09:23:02.000000Z","deleted_at":null,"themes_id":"1"},{"id":1,"name":"knowledge traditions","status":"1","created_at":"2021-10-13T09:22:43.000000Z","updated_at":"2021-10-13T09:22:43.000000Z","deleted_at":null,"themes_id":"1"}]
+
+List<Data> DataFromJson(String str) =>
+    List<Data>.from(json.decode(str).map((x) => Data.fromJson(x)));
+
+String DataToJson(List<Data> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Domains {
   late  int _status;
