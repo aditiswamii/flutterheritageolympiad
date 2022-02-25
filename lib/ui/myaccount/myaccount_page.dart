@@ -8,6 +8,7 @@ import 'package:flutterheritageolympiad/ui/invitecontact/invitecontact.dart';
 import 'package:flutterheritageolympiad/ui/managecontacts/managecontacts.dart';
 import 'package:flutterheritageolympiad/ui/notification/notification_screen.dart';
 import 'package:flutterheritageolympiad/ui/payment/payment_screen.dart';
+import 'package:flutterheritageolympiad/ui/personalinfo/personalinfo.dart';
 
 import 'package:flutterheritageolympiad/ui/privacy/privacy_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
@@ -183,7 +184,10 @@ class _State extends State<MyAccountPage> {
                             leading: Image.asset("assets/interval.png",height: 30,width: 30,),
                             title: GestureDetector(
                                 onTap: (){
-
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PersonalInfoScreen()));
                                 },
                                 child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.Omnes_font),)),
                           )

@@ -15,8 +15,8 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 void main() {
 
-  runApp(const MaterialApp(
-
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: QuizPage(),
   ));
@@ -124,7 +124,7 @@ class _State extends State<QuizPage> {
                                 },
                                 child: Column(
                                   children: [
-                                    Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 22),textAlign: TextAlign.center,),
+                                    Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
                                     Text("you are your own standard!",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,),
 
                                   ],
@@ -150,7 +150,7 @@ class _State extends State<QuizPage> {
                                 },
                                 child: Column(
                                   children: [
-                                    Text("DUEL",style: TextStyle(color: Colors.white,fontSize: 22),textAlign: TextAlign.center,),
+                                    Text("DUEL",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
                                     Text("[v],real-time match",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,),
 
                                   ],
@@ -194,7 +194,7 @@ class _State extends State<QuizPage> {
                                 },
                                 child: Column(
                                   children: [
-                                    Text("QUIZ ROOM",style: TextStyle(color: Colors.white,fontSize: 22),textAlign: TextAlign.center,),
+                                    Text("QUIZ ROOM",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
                                     Text("Custom group quizzes",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,),
 
                                   ],
@@ -220,7 +220,7 @@ class _State extends State<QuizPage> {
                                 },
                                 child: Column(
                                   children: [
-                                    Text("TOURNAMENT",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 22),textAlign: TextAlign.center,),
+                                    Text("TOURNAMENT",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 20),textAlign: TextAlign.center,),
                                     Text("The leagues beckon!",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
 
                                   ],

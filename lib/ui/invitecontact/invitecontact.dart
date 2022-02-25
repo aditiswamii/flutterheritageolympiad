@@ -30,12 +30,11 @@ class _State extends State<InviteContactScreen> {
   Color textcolor=ColorConstants.Omnes_font;
   Color _colorContainer1 = Colors.white;
   Color textcolor1=ColorConstants.Omnes_font;
-  bool click=false;
-  bool click1=false;
+ var selected='';
+ // int click=0;
+
   @override
   void initState() {
-    click=false;
-    click1=false;
   // click;
     super.initState();
   }
@@ -44,6 +43,8 @@ class _State extends State<InviteContactScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool click=false;
+    bool click1=false;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown
@@ -113,14 +114,127 @@ class _State extends State<InviteContactScreen> {
                                   color: ColorConstants.Omnes_font)
                           ),
                       ),
-                         Ink(
-                           child: InkWell(
-                              child:
-                              Container(
+                     //     Ink(
+                     //       child: InkWell(
+                     //          child:
+                     //          Container(
+                     //      height: 150,
+                     //      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                     //      child: Card(
+                     //        color: _colorContainer,
+                     //        shape: RoundedRectangleBorder(
+                     //          borderRadius: BorderRadius.circular(5),
+                     //          // if you need this
+                     //          side: BorderSide(
+                     //            color: Colors.grey.withOpacity(0.3),
+                     //            width: 1,
+                     //          ),
+                     //        ),
+                     //              child: Column(
+                     //                mainAxisAlignment: MainAxisAlignment.center,
+                     //                children: [
+                     //                  Text("IMPORT FROM...",style: TextStyle(color: textcolor,fontSize: 18),textAlign: TextAlign.center,),
+                     //                  Text("your phonebook,email",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                     //                  Text("address,or social media",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                     //                  Text("accounts",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                     //
+                     //                ],
+                     //              ),
+                     //            ),
+                     //          ),
+                     //         onTap: () {
+                     //           setState(() {
+                     //               click=1;
+                     //               textcolor = Colors.white;
+                     //               _colorContainer = ColorConstants.myfeed;
+                     //               if(click==1){
+                     //
+                     //               }
+                     //             // }else{
+                     //             //
+                     //             //   textcolor = ColorConstants.Omnes_font;
+                     //             //   _colorContainer = Colors.white;
+                     //             //   textcolor1 = Colors.white;
+                     //             //   _colorContainer1 = ColorConstants.myfeed;
+                     //             // }
+                     //
+                     //           });
+                     //         }
+                     //   ),
+                     // ),
+                     //  Ink(
+                     //    child: InkWell(
+                     //        child:
+                     //        Container(
+                     //          height: 150,
+                     //          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                     //          child: Card(
+                     //            color: _colorContainer1,
+                     //            shape: RoundedRectangleBorder(
+                     //              borderRadius: BorderRadius.circular(5),
+                     //              // if you need this
+                     //              side: BorderSide(
+                     //                color: Colors.grey.withOpacity(0.3),
+                     //                width: 1,
+                     //              ),
+                     //            ),
+                     //            child: Column(
+                     //              mainAxisAlignment: MainAxisAlignment.center,
+                     //              children: [
+                     //                Text("INVITE LINK...",style: TextStyle(color: textcolor1,fontSize: 18),textAlign: TextAlign.center,),
+                     //                Text("Share a link that will allow",style: TextStyle(color: textcolor1,fontSize: 16),textAlign: TextAlign.center,),
+                     //                Text("your invites to join directly",style: TextStyle(color: textcolor1,fontSize: 16),textAlign: TextAlign.center,),
+                     //              ],
+                     //            ),
+                     //          ),
+                     //        ),
+                     //        onTap: () {
+                     //            // if(textcolor != Colors.white&&_colorContainer != ColorConstants.myfeed) {
+                     //              textcolor1 = Colors.white;
+                     //              _colorContainer1 = ColorConstants.myfeed;
+                     //              click=2;
+                     //
+                     //              if(click==2){
+                     //                textcolor1 = Colors.white;
+                     //                _colorContainer1 = ColorConstants.myfeed;
+                     //              }else{
+                     //                  textcolor1 = ColorConstants.Omnes_font;
+                     //                  _colorContainer1 = Colors.white;
+                     //                  textcolor == Colors.white;
+                     //                  _colorContainer == ColorConstants.myfeed;
+                     //              }
+                     //            // }else{
+                     //            //   textcolor1 = ColorConstants.Omnes_font;
+                     //            //   _colorContainer1 = Colors.white;
+                     //            //   textcolor == Colors.white;
+                     //            //   _colorContainer == ColorConstants.myfeed;
+                     //            // }
+                     //
+                     //
+                     //        }
+                     //    ),
+                     //  ),
+
+                    GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selected = 'first';
+                          });
+                          // click=true;
+                          // setState(() {
+                          //   if(click==true) {
+                          //     textcolor =Colors.white ;
+                          //     _colorContainer = ColorConstants.myfeed;
+                          //   }
+                          //   click=false;
+                          // });
+
+                        },
+                        child: Container(
                           height: 150,
                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                           child: Card(
-                            color: _colorContainer,
+                            color: selected == 'first' ? ColorConstants.myfeed : Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                               // if you need this
@@ -132,158 +246,61 @@ class _State extends State<InviteContactScreen> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text("IMPORT FROM...",style: TextStyle(color: textcolor,fontSize: 18),textAlign: TextAlign.center,),
-                                      Text("your phonebook,email",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                                      Text("address,or social media",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                                      Text("accounts",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                                      Text("IMPORT FROM...",style: TextStyle(color:selected == 'first'?Colors.white: textcolor,fontSize: 18),textAlign: TextAlign.center,),
+                                      Text("your phonebook,email",style: TextStyle(color: selected == 'first'?Colors.white: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                                      Text("address,or social media",style: TextStyle(color: selected == 'first'?Colors.white: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                                      Text("accounts",style: TextStyle(color: selected == 'first'?Colors.white: textcolor,fontSize: 16),textAlign: TextAlign.center,),
 
                                     ],
                                   ),
                                 ),
                               ),
-                             onTap: () {
-                               setState(() {
-                                 if(textcolor1 != Colors.white&&_colorContainer1 != ColorConstants.myfeed) {
-                                   click=true;
-                                   textcolor = Colors.white;
-                                   _colorContainer = ColorConstants.myfeed;
-                                 }else{
-
-                                   textcolor = ColorConstants.Omnes_font;
-                                   _colorContainer = Colors.white;
-                                   textcolor1 = Colors.white;
-                                   _colorContainer1 = ColorConstants.myfeed;
-                                 }
-
-                               });
-                             }
-                       ),
-                     ),
-                      Ink(
-                        child: InkWell(
-                            child:
-                            Container(
-                              height: 150,
-                              margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Card(
-                                color: _colorContainer1,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  // if you need this
-                                  side: BorderSide(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("INVITE LINK...",style: TextStyle(color: textcolor1,fontSize: 18),textAlign: TextAlign.center,),
-                                    Text("Share a link that will allow",style: TextStyle(color: textcolor1,fontSize: 16),textAlign: TextAlign.center,),
-                                    Text("your invites to join directly",style: TextStyle(color: textcolor1,fontSize: 16),textAlign: TextAlign.center,),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            onTap: () {
-                              setState(() {
-
-                                if(textcolor != Colors.white&&_colorContainer != ColorConstants.myfeed) {
-                                  click1=true;
-                                  textcolor1 = Colors.white;
-                                  _colorContainer1 = ColorConstants.myfeed;
-                                }else{
-                                  textcolor1 = ColorConstants.Omnes_font;
-                                  _colorContainer1 = Colors.white;
-                                  textcolor == Colors.white;
-                                  _colorContainer == ColorConstants.myfeed;
-                                }
-                              });
-                            }
-                        ),
                       ),
-
-                    // GestureDetector(
-                    //     onTap: () {
-                    //       click=true;
-                    //       setState(() {
-                    //         if(click==true) {
-                    //           textcolor =Colors.white ;
-                    //           _colorContainer = ColorConstants.myfeed;
-                    //         }
-                    //         click=false;
-                    //       });
-                    //
-                    //     },
-                    //     child: Container(
-                    //       height: 150,
-                    //       margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    //       child: Card(
-                    //         color: _colorContainer,
-                    //         shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(5),
-                    //           // if you need this
-                    //           side: BorderSide(
-                    //             color: Colors.grey.withOpacity(0.3),
-                    //             width: 1,
-                    //           ),
-                    //         ),
-                    //               child: Column(
-                    //                 mainAxisAlignment: MainAxisAlignment.center,
-                    //                 children: [
-                    //                   Text("IMPORT FROM...",style: TextStyle(color: textcolor,fontSize: 18),textAlign: TextAlign.center,),
-                    //                   Text("your phonebook,email",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                    //                   Text("address,or social media",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                    //                   Text("accounts",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                    //
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //   ),
-                    //   GestureDetector(
-                    //     onTap: () {
-                    //
-                    //       setState(() {
-                    //         click1=true;
-                    //         if(click1==true) {
-                    //           textcolor =Colors.white ;
-                    //           _colorContainer = ColorConstants.myfeed;
-                    //           // textcolor =
-                    //           // textcolor == ColorConstants.Omnes_font ? Colors
-                    //           //     .white : ColorConstants.Omnes_font;
-                    //           // _colorContainer =
-                    //           // _colorContainer == Colors.white ?
-                    //           // ColorConstants.myfeed :
-                    //           // Colors.white;
-                    //         }
-                    //         click1=false;
-                    //       });
-                    //     },
-                    //     child: Container(
-                    //       height: 150,
-                    //       margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    //       decoration: const BoxDecoration(color: Colors.white),
-                    //       child: Card(
-                    //         color: _colorContainer,
-                    //         shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(5),
-                    //           // if you need this
-                    //           side: BorderSide(
-                    //             color: Colors.grey.withOpacity(0.3),
-                    //             width: 1,
-                    //           ),
-                    //         ),child: Column(
-                    //           mainAxisAlignment: MainAxisAlignment.center,
-                    //           children: [
-                    //             Text("INVITE LINK...",style: TextStyle(color: textcolor,fontSize: 18),textAlign: TextAlign.center,),
-                    //             Text("Share a link that will allow",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                    //             Text("your invites to join directly",style: TextStyle(color: textcolor,fontSize: 16),textAlign: TextAlign.center,),
-                    //           ],
-                    //         ),
-                    //     ),
-                    //           ),
-                    //   ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selected = 'second';
+                          });
+                         // setState(() {
+                          //   click1=true;
+                          //   if(click1==true) {
+                          //     textcolor =Colors.white ;
+                          //     _colorContainer = ColorConstants.myfeed;
+                          //     // textcolor =
+                          //     // textcolor == ColorConstants.Omnes_font ? Colors
+                          //     //     .white : ColorConstants.Omnes_font;
+                          //     // _colorContainer =
+                          //     // _colorContainer == Colors.white ?
+                          //     // ColorConstants.myfeed :
+                          //     // Colors.white;
+                          //   }
+                          //   click1=false;
+                          // });
+                        },
+                        child: Container(
+                          height: 150,
+                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Card(
+                            color: selected == 'second' ? ColorConstants.myfeed : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.grey.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("INVITE LINK...",style: TextStyle(color: selected == 'second'?Colors.white: textcolor,fontSize: 18),textAlign: TextAlign.center,),
+                                Text("Share a link that will allow",style: TextStyle(color: selected == 'second'?Colors.white: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                                Text("your invites to join directly",style: TextStyle(color: selected == 'second'?Colors.white: textcolor,fontSize: 16),textAlign: TextAlign.center,),
+                              ],
+                            ),
+                        ),
+                              ),
+                      ),
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                         child: Row(
@@ -325,18 +342,25 @@ class _State extends State<InviteContactScreen> {
                                 //////// HERE
                               ),
                               onPressed: () {
-                                if(click==true) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (
-                                              context) => const PhonebookScreen()));
-                                }else if(click1==true){
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (
-                                              context) => const ContactInviteLink()));
+                                if(selected!='') {
+                                  if (selected == 'first') {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (
+                                                context) => const PhonebookScreen()));
+                                  } else if (selected == 'second') {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (
+                                                context) => const ContactInviteLink()));
+                                  }
+                                }else{
+                                  const snackBar = SnackBar(
+                                    content: Text('Error'),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                 }
                                 },
                               child: const Text(
