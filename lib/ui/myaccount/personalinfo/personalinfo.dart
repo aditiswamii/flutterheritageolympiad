@@ -1,11 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/invitecontact/invitecontactlink/invitecontact_link.dart';
-import 'package:flutterheritageolympiad/ui/invitecontact/phonebook/phonebook_screen.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/phonebook/phonebook_screen.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MaterialApp(
@@ -34,13 +37,31 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
   TextEditingController citycontroller = TextEditingController();
   TextEditingController datecontroller = TextEditingController();
   TextEditingController gendercontroller = TextEditingController();
-
+   File? _image;
+  final ImagePicker _picker = ImagePicker();
   @override
   void initState() {
     // click;
+    //_image=File as File?;
     super.initState();
   }
+  Future getImagefromcamera() async {
+    var image = await _picker.getImage(source: ImageSource.camera);
 
+    setState(() {
+      _image = File(image!.path);
+    });
+    Navigator.of(context).pop();
+  }
+
+  Future getImagefromGallery() async {
+    var image = await _picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(image!.path);
+    });
+    Navigator.of(context).pop();
+  }
   @override
   Widget build(BuildContext context) {
     bool click = false;
@@ -103,6 +124,61 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       child: const Text("PERSONAL INFORMATION",
                           style: TextStyle(
                               fontSize: 24, color: ColorConstants.Omnes_font))),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      AlertDialog errorDialog = AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  20.0)), //this right here
+                          title: Container(
+                              height: 100,
+                              width: 100,
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      FloatingActionButton(
+                                        onPressed: getImagefromcamera,
+                                        tooltip: "Pick Image form gallery",
+                                        child: Icon(Icons.add_a_photo),
+                                      ),
+                                      FloatingActionButton(
+                                        onPressed: getImagefromGallery,
+                                        tooltip: "Pick Image from camera",
+                                        child: Icon(Icons.broken_image_outlined),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      Text("Pick Image\nfrom camera",style: TextStyle(fontSize: 12)),
+                                      Text("Pick Image\nform gallery",style: TextStyle(fontSize: 12),),
+                                    ],
+                                  ),
+                                ],
+                              ),)
+                      );
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => errorDialog);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 100.0,
+                      child:CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: ClipOval(
+                          child: _image ==null ?  Image.asset("assets/cat1.png",height: 100,width: 100,fit: BoxFit.fill,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.fill,),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                   Container(
                     height: 60,
                     margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -263,10 +339,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           //////// HERE
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const WelcomePage()));
+                          Navigator.of(context).pop();
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const MyAccountPage()));
                         },
                         child: const Text(
                           "UPDATE",

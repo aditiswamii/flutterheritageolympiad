@@ -6,24 +6,16 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
-void main() {
-
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: NotificationScreen(),
-  ));
-}
 class NotificationScreen extends StatefulWidget{
 
   const NotificationScreen({Key? key}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _NotificationScreenState createState() => _NotificationScreenState();
 }
 
 
-class _State extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
@@ -92,7 +84,7 @@ class _State extends State<NotificationScreen> {
                 ),
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
                     child: const Text("NOTIFICATIONS", style: TextStyle(
                         fontSize: 24, color: ColorConstants.Omnes_font))),
                 Container(

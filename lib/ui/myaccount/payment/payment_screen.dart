@@ -7,24 +7,17 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
-void main() {
 
-  runApp(const MaterialApp(
-
-    debugShowCheckedModeBanner: false,
-    home: PaymentScreen(),
-  ));
-}
 class PaymentScreen extends StatefulWidget{
 
   const PaymentScreen({Key? key}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _PaymentScreenState createState() => _PaymentScreenState();
 }
 
 
-class _State extends State<PaymentScreen> {
+class _PaymentScreenState extends State<PaymentScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
@@ -44,7 +37,7 @@ class _State extends State<PaymentScreen> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
-      endDrawerEnableOpenDragGesture: true,
+      //endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(

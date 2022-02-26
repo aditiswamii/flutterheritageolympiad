@@ -8,11 +8,13 @@ import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/question
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/ui/duelquiz/duel_quiz.dart';
-import 'package:flutterheritageolympiad/ui/invitecontact/invitecontact.dart';
+
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+
+import '../invitecontact.dart';
 
 void main() {
 

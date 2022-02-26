@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:js_util';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:http/http.dart';
 
@@ -23,8 +24,11 @@ class SignUpPresenter {
           }
       );
       if (response.statusCode == 200) {
-        // var data = jsonDecode(response.body.toString());
-        // if (data != null) {
+       //var data = jsonEncode(response);
+         // var data = jsonDecode(response.body);
+         // if (data != null) {
+         //   data['name'];
+         // }
         //   throw HttpException(data['error']['message']);
         // }
         // log(data['token']);

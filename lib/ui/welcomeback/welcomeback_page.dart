@@ -29,9 +29,14 @@ class WelcomePage extends StatefulWidget{
   _State createState() => _State();
 }
 
-
 class _State extends State<WelcomePage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+//var username = SharedObjects.prefs.getString("username");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

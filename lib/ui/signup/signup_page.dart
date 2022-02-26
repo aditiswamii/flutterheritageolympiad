@@ -7,6 +7,8 @@ import 'package:flutterheritageolympiad/ui/signup/signup_presenter.dart';
 import 'package:flutterheritageolympiad/ui/signup/signup_viewmodal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/SharedObjects.dart';
+
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -38,6 +40,9 @@ class _State extends State<SignupPage> implements SignUpView {
   }
   Future<Null> SignUp() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+   SharedObjects.prefs.setString('username', usernameController.text);
+    SharedObjects.prefs.setString('password', passwordController.text);
+    SharedObjects.prefs.setString('email', emailController.text);
     var email=prefs.setString('email', emailController.text);
     var password=prefs.setString('password', passwordController.text);
     var username=prefs.setString('username', usernameController.text);

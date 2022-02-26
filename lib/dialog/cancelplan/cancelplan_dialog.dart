@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/cancelplansuccess/cancelplan_successdialog.dart';
-import 'package:flutterheritageolympiad/ui/payment/payment_screen.dart';
+
+import '../../ui/myaccount/payment/payment_screen.dart';
+
 
 void main() {
   runApp( MaterialApp(
