@@ -46,7 +46,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
     _getData();
   }
   void _getData() async {
-    _Domains = (await _presenter.getdomains())!;
+    _Domains = (await _presenter.getdomains());
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
   // List<String> _locations = ['Built Spaces',
@@ -58,6 +58,30 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
   // 'Natural Environments']; // Option 2
    String? _selectedLocation; // Option 2
 
+ domaindata() async{
+    ListView.builder(
+      shrinkWrap: true,
+      itemCount: _Domains!.length,
+      itemBuilder: (context, index) {
+        return Card(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(_Domains![index].name),
+                  Text(_Domains![index].status),
+                ],
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,52 +167,46 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                   ],
                 ),
               ),
-              Flexible(
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  decoration: const BoxDecoration(color: Colors.white),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      // if you need this
-                      side: BorderSide(
-                        color: Colors.grey.withOpacity(0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child:
-                    Expanded(
-                      child: Column(
-                        children: [
-                          _Domains == null || _Domains!.isEmpty
-                              ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                              :ListView.builder(
-                            itemCount: _Domains!.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(_Domains![index].name),
-                                        Text(_Domains![index].status),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 20.0,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    // if you need this
+                    side: BorderSide(
+                      color: Colors.grey.withOpacity(0.3),
+                      width: 1,
                     ),
                   ),
+                  child:
+                  _Domains == null || _Domains!.isEmpty
+                      ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                      :domaindata()
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   itemCount: _Domains!.length,
+                  //   itemBuilder: (context, index) {
+                  //     return Card(
+                  //       child: Column(
+                  //         children: [
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //             children: [
+                  //               Text(_Domains![index].name),
+                  //               Text(_Domains![index].status),
+                  //             ],
+                  //           ),
+                  //           const SizedBox(
+                  //             height: 20.0,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ),
               ),
               Container(
@@ -394,17 +412,34 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
     );
   }
 
-  // @override
-  //  onSuccess(List data) {
-  //   log(data.length.toString());
-  //   log(Data.fromJson(json).name);
-  //   ListView.builder(
-  //         shrinkWrap: true,
-  //         itemCount: data.length,
-  //         itemBuilder: (context, index) {
-  //           return (data[index].position);
-  //         });
-  // }
+  @override
+   onSuccess(List<Data> data) {
+    log(data.length.toString());
+    //log(Data.fromJson(json).name);
+    domaindata();
+    // ListView.builder(
+    //   shrinkWrap: true,
+    //   itemCount: _Domains!.length,
+    //   itemBuilder: (context, index) {
+    //     return Card(
+    //       child: Column(
+    //         children: [
+    //           Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //             children: [
+    //               Text(_Domains![index].name),
+    //               Text(_Domains![index].status),
+    //             ],
+    //           ),
+    //           const SizedBox(
+    //             height: 20.0,
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    // );
+  }
 
 
 }

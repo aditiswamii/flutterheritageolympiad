@@ -20,11 +20,11 @@ class ClassicQuizPresenter {
 
       if (response.statusCode == 200) {
         List<Data> _model = DataFromJson(response.body);
-        log(_model.join());
-        return _model;
+        var sobj=_model[0].name;
 
-        // for Printing the tokenvar data= Domains.fromJson(json).data ;
-        // _view.onSuccess(data);//
+        log(_model.toList(growable: true).toString());
+        _view.onSuccess(_model);
+        return _model;
       } else {
         log("Error message!!!!"); // Toast
       }

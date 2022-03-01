@@ -7,13 +7,13 @@ import 'dart:convert';
 List<Data> DataFromJson(String str) =>
     List<Data>.from(json.decode(str).map((x) => Data.fromJson(x)));
 
-String DataToJson(List<Data> data) =>
+String  DataToJson(List<Data> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Domains {
-  late  int _status;
-  late  String _message;
-  late  List<Data> _data;
+    int? _status;
+    String? _message;
+    List<Data>? _data;
   Domains({
       required int status,
       required String message,
@@ -29,22 +29,22 @@ class Domains {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data.add(Data.fromJson(v));
+        _data?.add(Data.fromJson(v));
       });
     }
   }
 
 
-  int get status => _status;
-  String get message => _message;
-  List<Data> get data => _data;
+  int? get status => _status;
+  String? get message => _message;
+  List<Data>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['status'] = _status;
     map['message'] = _message;
     if (_data != null) {
-      map['data'] = _data.map((v) => v.toJson()).toList();
+      map['data'] = _data?.map((v) => v.toJson()).toList();
     }
     return map;
   }

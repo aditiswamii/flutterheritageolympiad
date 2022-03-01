@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:js_util';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:http/http.dart';
 
