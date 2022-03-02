@@ -23,7 +23,7 @@ class ClassicQuizPresenter {
         var sobj=_model[0].name;
 
         log(_model.toList(growable: true).toString());
-        _view.onSuccess(_model);
+      //  _view.onSuccess(_model);
         return _model;
       } else {
         log("Error message!!!!"); // Toast

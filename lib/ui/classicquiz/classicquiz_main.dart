@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/domains/Domains.dart';
@@ -13,10 +13,6 @@ import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_viewmodal.dar
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/steptwoinvite.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -32,55 +28,39 @@ class ClassicQuizMain extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<ClassicQuizMain> implements ClassicQuizView{
+class _State extends State<ClassicQuizMain> implements ClassicQuizView {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   late ClassicQuizPresenter _presenter;
-  late List<Data>? _Domains = [];
+  String? data;
+  var domains_length;
   bool value = false;
-
+  static int _len = 11;
+  List<bool> isChecked = List.generate(_len, (index) => false);
+  String _getTitle() =>
+      "Checkbox Demo : Checked = ${isChecked.where((check) => check == true).length}, Unchecked = ${isChecked.where((check) => check == false).length}";
   @override
   void initState() {
     super.initState();
-   // _locations ;
-    _presenter =ClassicQuizPresenter(this);
-    _getData();
+    // _locations ;
+    _presenter = ClassicQuizPresenter(this);
+    getData();
   }
-  void _getData() async {
-    _Domains = (await _presenter.getdomains());
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-  }
-  // List<String> _locations = ['Built Spaces',
-  //   'Visual and Material',
-  //   'Cultural Practices and Rituals',
-  //   'Histories',
-  // 'People',
-  // 'Institutions',
-  // 'Natural Environments']; // Option 2
-   String? _selectedLocation; // Option 2
 
- domaindata() async{
-    ListView.builder(
-      shrinkWrap: true,
-      itemCount: _Domains!.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(_Domains![index].name),
-                  Text(_Domains![index].status),
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-            ],
-          ),
-        );
-      },
-    );
+  void getData() async {
+    http.Response response =
+        await http.get(Uri.parse("http://3.108.183.42/api/domains"));
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        domains_length = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(domains_length.length); // just printed length of data
+      });
+      var venam = jsonDecode(data!)['data'][4]['name'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
   }
 
   @override
@@ -102,7 +82,9 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
         child: Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
-            children:<Widget> [
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -168,7 +150,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                 ),
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 decoration: const BoxDecoration(color: Colors.white),
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -179,34 +161,42 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                       width: 1,
                     ),
                   ),
-                  child:
-                  _Domains == null || _Domains!.isEmpty
+                  child: domains_length == null || domains_length!.isEmpty
                       ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                      :domaindata()
-                  // ListView.builder(
-                  //   shrinkWrap: true,
-                  //   itemCount: _Domains!.length,
-                  //   itemBuilder: (context, index) {
-                  //     return Card(
-                  //       child: Column(
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //             children: [
-                  //               Text(_Domains![index].name),
-                  //               Text(_Domains![index].status),
-                  //             ],
-                  //           ),
-                  //           const SizedBox(
-                  //             height: 20.0,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
+                          child: CircularProgressIndicator(),
+                        )
+                      : SingleChildScrollView(
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: domains_length == null
+                                ? 0
+                                : domains_length.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Card(
+                                  child: CheckboxListTile(
+                                      title: Text(jsonDecode(data!)['data']
+                                          [index]['name']),
+                                      onChanged: (checked) {
+                                        setState(
+                                          () {
+                                            isChecked[index] = checked!;
+                                          },
+                                        );
+                                      },
+                                      value: isChecked[index])
+
+                                  //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+
+                                  // ListTile(
+                                  //   title: Text(jsonDecode(data!)['data'][index]['name']),
+                                  //   //trailing: ,
+                                  //   //subtitle: Text(jsonDecode(data!)['data'][index]['id'].toString()),
+                                  // ),
+                                  );
+                            },
+                          ),
+                        ),
                 ),
               ),
               Container(
@@ -233,22 +223,37 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                 alignment: Alignment.centerLeft,
                 height: 30,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
-                  ),
-                  borderRadius: BorderRadius.circular(30)
-                ),
+                    gradient: LinearGradient(colors: [
+                      ColorConstants.quiz_grad1,
+                      ColorConstants.quiz_grad2,
+                      ColorConstants.quiz_grad3
+                    ]),
+                    borderRadius: BorderRadius.circular(30)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
                   ],
                 ),
-
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -260,7 +265,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Hard",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text(
+                        "Hard",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 20),
+                      )),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -268,7 +277,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Intermediate",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text(
+                        "Intermediate",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 20),
+                      )),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -276,7 +289,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Easy",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text(
+                        "Easy",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 20),
+                      )),
                 ],
               ),
               Container(
@@ -303,22 +320,37 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                 alignment: Alignment.centerLeft,
                 height: 30,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [ColorConstants.quiz_grad1,ColorConstants.quiz_grad2,ColorConstants.quiz_grad3]
-                    ),
-                    borderRadius: BorderRadius.circular(30)
-                ),
+                    gradient: LinearGradient(colors: [
+                      ColorConstants.quiz_grad1,
+                      ColorConstants.quiz_grad2,
+                      ColorConstants.quiz_grad3
+                    ]),
+                    borderRadius: BorderRadius.circular(30)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
-                    Text("|",style: TextStyle(color: Colors.white,fontSize: 24),),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "|",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
                   ],
                 ),
-
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -330,7 +362,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Quickfire",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text(
+                        "Quickfire",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 20),
+                      )),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -338,7 +374,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Regular",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text(
+                        "Regular",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 20),
+                      )),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -346,7 +386,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Olympiad",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text(
+                        "Olympiad",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 20),
+                      )),
                 ],
               ),
               Container(
@@ -411,36 +455,4 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView{
       ),
     );
   }
-
-  @override
-   onSuccess(List<Data> data) {
-    log(data.length.toString());
-    //log(Data.fromJson(json).name);
-    domaindata();
-    // ListView.builder(
-    //   shrinkWrap: true,
-    //   itemCount: _Domains!.length,
-    //   itemBuilder: (context, index) {
-    //     return Card(
-    //       child: Column(
-    //         children: [
-    //           Row(
-    //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //             children: [
-    //               Text(_Domains![index].name),
-    //               Text(_Domains![index].status),
-    //             ],
-    //           ),
-    //           const SizedBox(
-    //             height: 20.0,
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   },
-    // );
-  }
-
-
 }
-
