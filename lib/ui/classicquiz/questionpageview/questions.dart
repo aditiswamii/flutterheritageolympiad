@@ -1,15 +1,15 @@
+import 'dart:convert';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../modal/classicquestion/ClassicQuestion.dart';
 
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ClassicQuestion(),
-  ));
-}
 class ClassicQuestion extends StatefulWidget{
   const ClassicQuestion({Key? key}) : super(key: key);
 
@@ -20,6 +20,54 @@ class ClassicQuestion extends StatefulWidget{
 
 class _State extends State<ClassicQuestion> {
   bool _hasBeenPressed = false;
+
+  String? data;
+  var domains_length;
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+    getData('83');
+  }
+  void getData(String quiz_id) async {
+    http.Response response =
+    await http.post(Uri.parse("http://3.108.183.42/api/questions"),
+        body: {
+          'quiz_id': quiz_id.toString(),
+        });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        domains_length = Data.fromJson(data).question;
+        // domains_length = jsonDecode(
+        //     data!)['question']; //get all the data from json string superheros
+        print(domains_length.length); // just printed length of data
+      });
+      var venam = jsonDecode(data!)['data']['question'];
+      var userid = jsonDecode(data!)['data']['quiz_type'];
+      var time = jsonDecode(data!)['data']['time'];
+      var whole_quiz_time = jsonDecode(data!)['data']['whole_quiz_time'];
+      var total_question = jsonDecode(data!)['data']['total_question'];
+      var total_question_in_quiz = jsonDecode(data!)['data']['total_question_in_quiz'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>ClassicQuestion()));
+    print(BackButtonInterceptor.describe()); // Do some stuff.
+    return true;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Colors.white;
@@ -66,17 +114,17 @@ class _State extends State<ClassicQuestion> {
                       children: [
                         Image.asset("assets/clock_green.png",width: 20,height: 20,),
                         TweenAnimationBuilder<Duration>(
-                            duration: Duration(minutes:20),
-                            tween: Tween(begin: Duration(minutes:20), end: Duration.zero),
+                            duration: Duration(seconds:30),
+                            tween: Tween(begin: Duration(seconds:30), end: Duration.zero),
                             onEnd: () {
-                              Navigator.of(context).pop();
+                            //  Navigator.of(context).pop();
                             },
                             builder: (BuildContext context, Duration value, Widget? child) {
                               final minutes = value.inMinutes;
                               final seconds = value.inSeconds % 60;
                               return Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text('(${minutes}m${seconds}s)',
+                                  child: Text('${seconds}Sec',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: ColorConstants.verd_dark,
@@ -84,9 +132,9 @@ class _State extends State<ClassicQuestion> {
                             }),
                       ],
                     )),
-             Container(
+                Container(
                  margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                 child: Text('Identify this type of coral reef formation',
+                 child: Text(Question.fromJson(data).id.toString(),
                    style: TextStyle(color: ColorConstants.to_the_shop,fontSize: 18),)),
                  Container(
                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),

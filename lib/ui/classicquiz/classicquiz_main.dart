@@ -14,12 +14,9 @@ import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/steptwoinvite
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ClassicQuizMain(),
-  ));
-}
+import 'cquizrule/classicquizrule.dart';
+
+
 
 class ClassicQuizMain extends StatefulWidget {
   const ClassicQuizMain({Key? key}) : super(key: key);
@@ -62,7 +59,40 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
       print(response.statusCode);
     }
   }
-
+  void createquiz(String userid, quiz_type_id,difficulty_level_id,quiz_speed_id,domains) async {
+    http.Response response =
+    await http.post(Uri.parse("http://3.108.183.42/api/createquiz"),
+        body: {
+          'user_id': userid.toString(),
+          'quiz_type_id': quiz_type_id.toString(),
+          'difficulty_level_id': difficulty_level_id.toString(),
+          'quiz_speed_id': quiz_speed_id.toString(),
+          'domains': domains.toString()
+        });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        domains_length = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(domains_length.length); // just printed length of data
+      });
+      var userid = jsonDecode(data!)['data']['user_id'];
+      var quiz_type_id = jsonDecode(data!)['data']['quiz_type_id'];
+      var difficulty_level_id = jsonDecode(data!)['data']['difficulty_level_id'];
+      var quiz_speed_id = jsonDecode(data!)['data']['quiz_speed_id'];
+      var id = jsonDecode(data!)['data']['id'];
+      print(userid);
+    } else {
+      print(response.statusCode);
+    }
+  }
+  //final String text;
+  //   SecondScreen({Key key, @required this.text}) : super(key: key);
+//Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (context) => SecondScreen(text: 'Hello',),
+//     ));
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -437,7 +467,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ClassicInvite()));
+                                builder: (context) => const ClassicQuizRule()));
                       },
                       child: const Text(
                         "LET'S GO!",
