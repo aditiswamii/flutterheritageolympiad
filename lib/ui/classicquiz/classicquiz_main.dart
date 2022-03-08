@@ -32,6 +32,16 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
   bool value = false;
   static int _len = 11;
   bool _expanded5 = false;
+  bool click1 = false;
+  bool click2 = false;
+  bool click3 = false;
+  bool click4 = false;
+  bool click5 = false;
+  bool click6 = false;
+  bool click7 = false;
+  bool click8 = false;
+  bool click9 = false;
+  bool click10 = false;
   List<bool> isChecked = List.generate(_len, (index) => false);
   String _getTitle() =>
       "Checkbox Demo : Checked = ${isChecked.where((check) => check == true).length}, Unchecked = ${isChecked.where((check) => check == false).length}";
@@ -425,25 +435,80 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click1=true;
+                          click2=false;
+                          click3=false;
+                          click4=false;
+                          click5=false;
+                        });
+                      },
+                      child: click1==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click2=true;
+                          click1=false;
+                          click3=false;
+                          click4=false;
+                          click5=false;
+                        });
+                      },
+                      child: click2==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click3=true;
+                          click2=false;
+                          click1=false;
+                          click4=false;
+                          click5=false;
+                        });
+                      },
+                      child: click3==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click4=true;
+                          click2=false;
+                          click3=false;
+                          click1=false;
+                          click5=false;
+                        });
+                      },
+                      child: click4==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click5=true;
+                          click2=false;
+                          click3=false;
+                          click4=false;
+                          click1=false;
+                        });
+                      },
+                      child: click5==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
                   ],
                 ),
@@ -522,25 +587,80 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click6=true;
+                          click7=false;
+                          click8=false;
+                          click9=false;
+                          click10=false;
+                        });
+                      },
+                      child: click1==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click7=true;
+                          click6=false;
+                          click8=false;
+                          click9=false;
+                          click10=false;
+                        });
+                      },
+                      child: click2==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click8=true;
+                          click7=false;
+                          click6=false;
+                          click9=false;
+                          click10=false;
+                        });
+                      },
+                      child: click3==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click9=true;
+                          click6=false;
+                          click7=false;
+                          click8=false;
+                          click10=false;
+                        });
+                      },
+                      child: click4==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          click10=true;
+                          click6=false;
+                          click7=false;
+                          click8=false;
+                          click9=false;
+                        });
+                      },
+                      child: click5==false?Text(
+                        "|",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ):Image.asset("assets/images/trianglewhite.png"),
                     ),
                   ],
                 ),
