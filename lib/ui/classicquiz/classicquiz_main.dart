@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,8 +17,6 @@ import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
 import 'cquizrule/classicquizrule.dart';
 
-
-
 class ClassicQuizMain extends StatefulWidget {
   const ClassicQuizMain({Key? key}) : super(key: key);
 
@@ -32,6 +31,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
   var domains_length;
   bool value = false;
   static int _len = 11;
+  bool _expanded5 = false;
   List<bool> isChecked = List.generate(_len, (index) => false);
   String _getTitle() =>
       "Checkbox Demo : Checked = ${isChecked.where((check) => check == true).length}, Unchecked = ${isChecked.where((check) => check == false).length}";
@@ -59,16 +59,17 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
       print(response.statusCode);
     }
   }
-  void createquiz(String userid, quiz_type_id,difficulty_level_id,quiz_speed_id,domains) async {
+
+  void createquiz(String userid, quiz_type_id, difficulty_level_id,
+      quiz_speed_id, domains) async {
     http.Response response =
-    await http.post(Uri.parse("http://3.108.183.42/api/createquiz"),
-        body: {
-          'user_id': userid.toString(),
-          'quiz_type_id': quiz_type_id.toString(),
-          'difficulty_level_id': difficulty_level_id.toString(),
-          'quiz_speed_id': quiz_speed_id.toString(),
-          'domains': domains.toString()
-        });
+        await http.post(Uri.parse("http://3.108.183.42/api/createquiz"), body: {
+      'user_id': userid.toString(),
+      'quiz_type_id': quiz_type_id.toString(),
+      'difficulty_level_id': difficulty_level_id.toString(),
+      'quiz_speed_id': quiz_speed_id.toString(),
+      'domains': domains.toString()
+    });
     if (response.statusCode == 200) {
       data = response.body; //store response as string
       setState(() {
@@ -78,7 +79,8 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
       });
       var userid = jsonDecode(data!)['data']['user_id'];
       var quiz_type_id = jsonDecode(data!)['data']['quiz_type_id'];
-      var difficulty_level_id = jsonDecode(data!)['data']['difficulty_level_id'];
+      var difficulty_level_id =
+          jsonDecode(data!)['data']['difficulty_level_id'];
       var quiz_speed_id = jsonDecode(data!)['data']['quiz_speed_id'];
       var id = jsonDecode(data!)['data']['id'];
       print(userid);
@@ -86,6 +88,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
       print(response.statusCode);
     }
   }
+
   //final String text;
   //   SecondScreen({Key key, @required this.text}) : super(key: key);
 //Navigator.push(
@@ -179,6 +182,56 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                   ],
                 ),
               ),
+              // Container(
+              //   margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              //   decoration: const BoxDecoration(color: Colors.white),
+              //   child: Card(
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(5),
+              //       // if you need this
+              //       side: BorderSide(
+              //         color: Colors.grey.withOpacity(0.3),
+              //         width: 1,
+              //       ),
+              //     ),
+              //     child: domains_length == null || domains_length!.isEmpty
+              //         ? const Center(
+              //             child: CircularProgressIndicator(),
+              //           )
+              //         : SingleChildScrollView(
+              //             child: ListView.builder(
+              //               physics: const BouncingScrollPhysics(),
+              //               shrinkWrap: true,
+              //               itemCount: domains_length == null
+              //                   ? 0
+              //                   : domains_length.length,
+              //               itemBuilder: (BuildContext context, int index) {
+              //                 return Card(
+              //                     child: CheckboxListTile(
+              //                         title: Text(jsonDecode(data!)['data']
+              //                             [index]['name']),
+              //                         onChanged: (checked) {
+              //                           setState(
+              //                             () {
+              //                               isChecked[index] = checked!;
+              //                             },
+              //                           );
+              //                         },
+              //                         value: isChecked[index])
+              //
+              //                     //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+              //
+              //                     // ListTile(
+              //                     //   title: Text(jsonDecode(data!)['data'][index]['name']),
+              //                     //   //trailing: ,
+              //                     //   //subtitle: Text(jsonDecode(data!)['data'][index]['id'].toString()),
+              //                     // ),
+              //                     );
+              //               },
+              //             ),
+              //           ),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 decoration: const BoxDecoration(color: Colors.white),
@@ -201,32 +254,142 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                             shrinkWrap: true,
                             itemCount: domains_length == null
                                 ? 0
-                                : domains_length.length,
+                                : domains_length.length % 4,
                             itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                  child: CheckboxListTile(
-                                      title: Text(jsonDecode(data!)['data']
-                                          [index]['name']),
-                                      onChanged: (checked) {
-                                        setState(
-                                          () {
-                                            isChecked[index] = checked!;
+                              return Column(
+                                children: [
+                                  Card(
+                                      child: CheckboxListTile(
+                                          title: Text(jsonDecode(data!)['data']
+                                              [index]['name']),
+                                          onChanged: (checked) {
+                                            setState(
+                                              () {
+                                                isChecked[index] = checked!;
+                                              },
+                                            );
                                           },
-                                        );
-                                      },
-                                      value: isChecked[index])
+                                          value: isChecked[index])
 
-                                  //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                                      //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
 
-                                  // ListTile(
-                                  //   title: Text(jsonDecode(data!)['data'][index]['name']),
-                                  //   //trailing: ,
-                                  //   //subtitle: Text(jsonDecode(data!)['data'][index]['id'].toString()),
-                                  // ),
-                                  );
+                                      // ListTile(
+                                      //   title: Text(jsonDecode(data!)['data'][index]['name']),
+                                      //   //trailing: ,
+                                      //   //subtitle: Text(jsonDecode(data!)['data'][index]['id'].toString()),
+                                      // ),
+                                      ),
+                                  //
+                                ],
+                              );
                             },
                           ),
                         ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    // if you need this
+                    side: BorderSide(
+                      color: Colors.grey.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: ExpansionTileCard(
+                      // initiallyExpanded: false,
+
+                      onExpansionChanged: (value) {
+                        setState(() {
+                          _expanded5 = value;
+                        });
+                      },
+                      // animateTrailing: true,
+                      // baseColor: ColorConstant.appbar,
+                      // expandedColor: _expanded5!=false?ColorConstant.background:ColorConstant.yellow_light,
+                      title: _expanded5 != false
+                          ? Image.asset(
+                              'assets/down_arrow.png',
+                              height: 10,
+                              width: 10,
+                              color: ColorConstants.Omnes_font,
+                            )
+                          : Image.asset('assets/down_arrow_small.png',
+                              height: 10,
+                              width: 10,
+                              color: ColorConstants.Omnes_font),
+                      //key: cardB,
+                      trailing: Text(
+                        "",
+                        style: TextStyle(
+                            color: ColorConstants.Omnes_font, fontSize: 18),
+                      ),
+                      // // subtitle: Text('It has the GFG Logo.'),
+                      // title: null,
+                      children: <Widget>[
+                        Divider(
+                          thickness: 1.0,
+                          height: 1.0,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.grey.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: domains_length == null || domains_length!.isEmpty
+                                ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                                : SingleChildScrollView(
+                              child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: domains_length == null
+                                    ?  0
+                                    : domains_length.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    children: [
+                                      Card(
+                                          child: CheckboxListTile(
+                                              title: Text(jsonDecode(data!)['data']
+                                              [index]['name']),
+                                              onChanged: (checked) {
+                                                setState(
+                                                      () {
+                                                    isChecked[index] = checked!;
+                                                  },
+                                                );
+                                              },
+                                              value: isChecked[index])
+
+                                        //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+
+                                        // ListTile(
+                                        //   title: Text(jsonDecode(data!)['data'][index]['name']),
+                                        //   //trailing: ,
+                                        //   //subtitle: Text(jsonDecode(data!)['data'][index]['id'].toString()),
+                                        // ),
+                                      ),
+                                      //
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
                 ),
               ),
               Container(
