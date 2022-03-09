@@ -368,8 +368,11 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                                     ?  0
                                     : domains_length.length,
                                 itemBuilder: (BuildContext context, int index) {
+
                                   return Column(
+
                                     children: [
+                                     //for(int i=0;i==(index-4);i++)
                                       Card(
                                           child: CheckboxListTile(
                                               title: Text(jsonDecode(data!)['data']
