@@ -32,6 +32,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
   bool value = false;
   static int _len = 11;
   bool _expanded5 = false;
+
   bool click1 = false;
   bool click2 = false;
   bool click3 = false;
@@ -42,6 +43,8 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
   bool click8 = false;
   bool click9 = false;
   bool click10 = false;
+  bool valuefalse=false;
+  bool valuetrue=true;
   List<bool> isChecked = List.generate(_len, (index) => false);
   String _getTitle() =>
       "Checkbox Demo : Checked = ${isChecked.where((check) => check == true).length}, Unchecked = ${isChecked.where((check) => check == false).length}";
@@ -441,6 +444,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                     GestureDetector(
                       onTap: (){
                         setState(() {
+
                           click1=true;
                           click2=false;
                           click3=false;
@@ -600,7 +604,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                           click10=false;
                         });
                       },
-                      child: click1==false?Text(
+                      child: click6==false?Text(
                         "|",
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ):Image.asset("assets/images/trianglewhite.png"),
@@ -615,7 +619,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                           click10=false;
                         });
                       },
-                      child: click2==false?Text(
+                      child: click7==false?Text(
                         "|",
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ):Image.asset("assets/images/trianglewhite.png"),
@@ -630,7 +634,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                           click10=false;
                         });
                       },
-                      child: click3==false?Text(
+                      child: click8==false?Text(
                         "|",
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ):Image.asset("assets/images/trianglewhite.png"),
@@ -645,7 +649,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                           click10=false;
                         });
                       },
-                      child: click4==false?Text(
+                      child: click9==false?Text(
                         "|",
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ):Image.asset("assets/images/trianglewhite.png"),
@@ -660,7 +664,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                           click9=false;
                         });
                       },
-                      child: click5==false?Text(
+                      child: click10==false?Text(
                         "|",
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ):Image.asset("assets/images/trianglewhite.png"),
@@ -750,6 +754,7 @@ class _State extends State<ClassicQuizMain> implements ClassicQuizView {
                         //////// HERE
                       ),
                       onPressed: () {
+                        //print();
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
