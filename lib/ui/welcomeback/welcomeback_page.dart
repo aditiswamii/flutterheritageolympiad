@@ -73,7 +73,7 @@ class _State extends State<WelcomePage> {
       ),
       Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.fromLTRB(0, 60, 0, 5),
+          margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
           child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
       Container(
           alignment: Alignment.centerLeft,
@@ -82,7 +82,7 @@ class _State extends State<WelcomePage> {
 
       Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.fromLTRB(10, 30, 10, 30),
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 30),
         child:Column(
 
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,10 +92,10 @@ class _State extends State<WelcomePage> {
               children: [
                 Flexible(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     height: 150,
-                    width: 150,
+                  //  width: 150,
                   decoration: const BoxDecoration(
                   color: ColorConstants.myaccount
                     ),
@@ -130,10 +130,10 @@ class _State extends State<WelcomePage> {
                 ),
                 Flexible(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                     padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                     height: 150,
-                    width: 150,
+                    //width: 150,
                      decoration: const BoxDecoration(
                      color: ColorConstants.myfeed
                        ),
@@ -169,10 +169,10 @@ class _State extends State<WelcomePage> {
               children: [
                 Flexible(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
                     padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                     height: 150,
-                    width: 150,
+                   // width: 150,
                     decoration: const BoxDecoration(
                         color: ColorConstants.to_the_quizzes
                     ),
@@ -203,10 +203,10 @@ class _State extends State<WelcomePage> {
                 ),
                Flexible(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
                     padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                     height: 150,
-                    width: 150,
+                   // width: 150,
                     decoration: const BoxDecoration(
                         color: ColorConstants.to_the_shop
                     ),
@@ -215,7 +215,7 @@ class _State extends State<WelcomePage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ShopProduct()));
+                                  builder: (context) => const ShopPage()));
                         },
 
                         child: Column(

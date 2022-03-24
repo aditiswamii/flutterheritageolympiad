@@ -1,30 +1,63 @@
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
+import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/shopproduct/product/product.dart';
-import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
+import 'package:flutterheritageolympiad/utils/apppreference.dart';
+import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../welcomeback/welcomeback_page.dart';
 
 void main() {
 
-  runApp(const MaterialApp(
-
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
-    home: ShopProduct(),
+    home: ShopPage(),
   ));
 }
-class ShopProduct extends StatefulWidget{
+class ShopPage extends StatefulWidget{
 
-  const ShopProduct({Key? key}) : super(key: key);
+  const ShopPage({Key? key}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _ShopState createState() => _ShopState();
 }
 
-
-class _State extends State<ShopProduct> implements ShopProductsView {
+class _ShopState extends State<ShopPage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  bool clickproduct = false;
+  bool clickexprerience = false;
+  bool clickgift = false;
+  bool clickplans = false;
+
+  @override
+    void initState() {
+      super.initState();
+      BackButtonInterceptor.add(myInterceptor);
+    }
+
+    @override
+    void dispose() {
+      BackButtonInterceptor.remove(myInterceptor);
+      super.dispose();
+    }
+
+    bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()));
+      // Do some stuff.
+      return true;
+    }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -36,14 +69,14 @@ class _State extends State<ShopProduct> implements ShopProductsView {
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
-      body: Container(
+      body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child:Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
               children: [
@@ -62,8 +95,8 @@ class _State extends State<ShopProduct> implements ShopProductsView {
                               MaterialPageRoute(
                                   builder: (context) => const WelcomePage()));
                         },
-                        child: Image.asset("assets/home_1.png",
-                            height: 40, width: 40),
+                        child: Image.asset(
+                            "assets/home_1.png", height: 40, width: 40),
                       ),
                     ),
                     Container(
@@ -74,37 +107,220 @@ class _State extends State<ShopProduct> implements ShopProductsView {
                         onTap: () {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
-                        child: Image.asset("assets/side_menu_2.png",
-                            height: 40, width: 40),
+                        child: Image.asset(
+                            "assets/side_menu_2.png", height: 40,
+                            width: 40),
                       ),
                     ),
                   ],
                 ),
                 Container(
+                  color: Colors.white,
+                  child: ListBody(
+                    children: [
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: const Text("STAY UNIQUE,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+                  Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                    child: const Text("SHOP\nPRODUCTS", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Text(
+                        "You deserve to treat yourself.Find the most unique product and experience here.",
+                        style: TextStyle(fontSize: 14,
+                            color: ColorConstants.Omnes_font)
+                    ),
+                  ),
+        ]
+      ),
+                ),
                 Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: const Text("Scroll down see all updates,search by\nkeywords,or filter updates by type.", style: TextStyle(
-                        fontSize: 18, color: ColorConstants.Omnes_font))),
-               Expanded(child: ProductList())
-                 // ProductList()
+                  color: Colors.white,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(10, 30, 10, 30),
+                  child:Column(
 
-              //
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  clickproduct=true;
+                                  clickexprerience=false;
+                                  clickgift=false;
+                                  clickplans=false;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                height: 150,
+                               // width: 150,
+                                decoration:  BoxDecoration(
+                                    color: clickproduct==true?ColorConstants.myfeed:ColorConstants.myfeed.withAlpha(150)
+                                ),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("PRODUCTS",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+                                      Text("Digital products included",style: TextStyle(color: Colors.white,fontSize: 12,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  clickproduct=false;
+                                  clickexprerience=true;
+                                  clickgift=false;
+                                  clickplans=false;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                               // padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                                height: 150,
+                              //  width: 150,
+                                decoration:  BoxDecoration(
+                                    color: clickexprerience==true?ColorConstants.to_the_shop:ColorConstants.to_the_shop.withAlpha(150)
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("EXPERIENCE",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 18,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+                                    Text("Curated Events Listing",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  clickproduct=false;
+                                  clickexprerience=false;
+                                  clickgift=true;
+                                  clickplans=false;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                 margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
+                               // // padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                                 height: 150,
+                               //   width: 100,
+                                decoration:  BoxDecoration(
+                                    color: clickgift!=true?ColorConstants.myaccount:ColorConstants.myaccount.withAlpha(150)
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("GIFT CARDS",
+                                      style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: "Nunito"),
+                                      textAlign: TextAlign.center,),
+                                    Text("From 1000 INR Onwards",style: TextStyle(color: Colors.white,fontSize: 12,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  clickproduct=false;
+                                  clickexprerience=false;
+                                  clickgift=false;
+                                  clickplans=true;
+                                });
+                              },
+
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                                padding: EdgeInsets.all(5),
+                                height: 150,
+                               //  width: 100,
+                                decoration:  BoxDecoration(
+                                    color: clickplans!=true?ColorConstants.to_the_quizzes:
+                                    ColorConstants.to_the_quizzes.withAlpha(150)
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("PLANS",
+                                      style: TextStyle(color:Colors.white,
+                                          fontSize: 18,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+                                    Text("Purchase Restore or Upgrade",
+                                      style: TextStyle(color:Colors.white,
+                                          fontSize: 12,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        fixedSize: const Size(120, 30),
+                        //////// HERE
+                      ),
+                      onPressed: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const WelcomePage()));
+                      },
+                      child: const Text(
+                        "NEXT",
+                        style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
               ]
           ),
         ),
       ),
     );
   }
-
-  @override
-  void onSuccess() {
-    // TODO: implement onSuccess
-  }
-
-
 }

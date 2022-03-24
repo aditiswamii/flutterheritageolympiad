@@ -30,6 +30,24 @@ class MyAccountPage extends StatefulWidget{
 
 class _AccountPageState extends State<MyAccountPage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  //@override
+  //   void initState() {
+  //     super.initState();
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //
+  //   @override
+  //   void dispose() {
+  //     BackButtonInterceptor.remove(myInterceptor);
+  //     super.dispose();
+  //   }
+  //
+  //   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //     Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+  //     // Do some stuff.
+  //     return true;
+  //   }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

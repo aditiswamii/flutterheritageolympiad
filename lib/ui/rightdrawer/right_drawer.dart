@@ -114,7 +114,7 @@ class _State extends State<MySideMenuDrawer> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ShopProduct()));
+                          builder: (context) => const ShopPage()));
                 },
               ),
               ListTile(

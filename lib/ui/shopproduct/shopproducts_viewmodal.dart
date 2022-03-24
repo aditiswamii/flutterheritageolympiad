@@ -1,6 +1,6 @@
 
 
-abstract class ShopProductsView{
-   void onSuccess();
-
-}
+// abstract class ShopProductsView{
+//    void onSuccess();
+//
+// }
