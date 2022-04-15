@@ -1,57 +1,91 @@
+import 'dart:convert';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/ui/almostthere/almostthere_page.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
-import 'package:flutterheritageolympiad/ui/signup/signup_presenter.dart';
-import 'package:flutterheritageolympiad/ui/signup/signup_viewmodal.dart';
+import 'package:flutterheritageolympiad/uinew/loginpage.dart';
+import 'package:flutterheritageolympiad/uinew/registerpage.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/SharedObjects.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: SignupPage(),
-  ));
-}
-
-class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+import '../modal/steponeresponse/GetStepOneResponse.dart';
+import '../utils/StringConstants.dart';
+class Stepone extends StatefulWidget {
+   Stepone({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<SignupPage> implements SignUpView {
+class _State extends State<Stepone> {
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController repeatpasswordController = TextEditingController();
-  late SignUpPresenter _presenter;
+ var data;
+ var snackbar;
   bool value = false;
+  void steponeapi( String email, String username, String password) async {
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL+'stepone'),
+        body: {
+  'email':email.toString(),
+  'username':username.toString(),
+  'password':password.toString()
 
+        });
+    if (response.statusCode == 200) {
+      data = response.body;
+      if(getStepOneResponseFromJson(data!).status==200) {
+        print(jsonDecode(data!)['success'].toString());
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        String code = jsonEncode(
+            getStepOneResponseFromJson(data!).data);
+        prefs.setString('verifycode', code);
+        prefs.setString('loggedin', "true");
+
+
+        signup(getStepOneResponseFromJson(data!).data);
+      }else{
+      snackbar = SnackBar(
+          content: Text(
+              getStepOneResponseFromJson(data!).message.toString()),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+      }
+    } else {
+      print(response.statusCode);
+    }
+  }
+  signup(int? data){
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) =>RegisterPage()));
+  }
 
   @override
   void initState() {
     super.initState();
-    _presenter = SignUpPresenter(this);
+    BackButtonInterceptor.remove(myInterceptor);
     //autoLogIn();
   }
-  Future<Null> SignUp() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-   SharedObjects.prefrences!.setString('username', usernameController.text);
-    SharedObjects.prefrences!.setString('password', passwordController.text);
-    SharedObjects.prefrences!.setString('email', emailController.text);
-    var email=prefs.setString('email', emailController.text);
-    var password=prefs.setString('password', passwordController.text);
-    var username=prefs.setString('username', usernameController.text);
-    prefs.getString('issocial');
-    _presenter = SignUpPresenter(this);
-    _presenter.register(
-        email.toString(),
-        username.toString(),
-        password.toString());
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+    // Do some stuff.
+    return true;
   }
   @override
   Widget build(BuildContext context) {
@@ -184,8 +218,11 @@ class _State extends State<SignupPage> implements SignUpView {
               onPressed: () {
                 if (emailController.text.isNotEmpty) {
                   if (usernameController.text.isNotEmpty) {
+                    if(passwordController.text.isNotEmpty ){
                     if (passwordController.text.toString() == repeatpasswordController.text.toString()) {
-                      SignUp();
+                      steponeapi(emailController.text.toString(),
+                          usernameController.text.toString(),
+                          repeatpasswordController.text.toString());
                       // _presenter.register(
                       //     emailController.text.toString(),
                       //     usernameController.text.toString(),
@@ -196,7 +233,14 @@ class _State extends State<SignupPage> implements SignUpView {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                  } else {
+                  }
+                    else {
+                      const snackBar = SnackBar(
+                        content: Text('Please fill password'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }else {
                     const snackBar = SnackBar(
                       content: Text('Please fill username'),
                     );
@@ -212,7 +256,7 @@ class _State extends State<SignupPage> implements SignUpView {
               child: const Text(
                 "NEXT",
                 style:
-                    TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -222,10 +266,5 @@ class _State extends State<SignupPage> implements SignUpView {
     );
   }
 
-  @override
-  void onsuccess() {
 
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => AlmostTherePage()));
-  }
 }

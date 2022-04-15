@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 
 
 import 'dart:async';
@@ -35,9 +36,9 @@ class _State extends State<MyApp> {
     !isLoggedIn ? Timer(
     const Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>const LoginPage()))):
+        builder: (BuildContext context) => LoginScreen()))):
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>const WelcomePage()));
+        builder: (BuildContext context) => WelcomePage()));
   }
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -9,18 +9,14 @@ import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
+import 'package:flutterheritageolympiad/utils/SharedObjects.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+import '../../modal/SignUpModal.dart';
 
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: WelcomePage(),
-  ));
-}
+
 class WelcomePage extends StatefulWidget{
 
   const WelcomePage({Key? key}) : super(key: key);
@@ -29,12 +25,13 @@ class WelcomePage extends StatefulWidget{
   _State createState() => _State();
 }
 
-class _State extends State<WelcomePage> {
+class _State extends State<WelcomePage> implements SharedObjects{
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+var username;
 
   @override
   void initState() {
-//var username = SharedObjects.prefs.getString("username");
+    // SharedObjects
     super.initState();
   }
   @override
@@ -78,7 +75,7 @@ class _State extends State<WelcomePage> {
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-          child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+          child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
 
       Container(
         alignment: Alignment.center,
@@ -356,4 +353,13 @@ class _State extends State<WelcomePage> {
     ),
     );
   }
+
+  @override
+  preferences(Data? data) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    username= prefs.getString('name');
+    //username = data!.username.toString();
+  }
+
+
 }

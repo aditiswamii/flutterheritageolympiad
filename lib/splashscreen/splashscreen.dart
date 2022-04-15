@@ -25,7 +25,7 @@ class SplashScreen extends StatefulWidget {
 
 class _State extends State<SplashScreen> {
   bool isLoggedIn = false;
-  String name = '';
+  String emailadd = '';
 
   @override
   void initState() {
@@ -40,12 +40,12 @@ class _State extends State<SplashScreen> {
   }
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('email');
-    print(userId);
-    if (userId != null) {
+    final String? emailaddress = prefs.getString('email');
+    print(emailaddress);
+    if (emailaddress != null) {
       setState(() {
         isLoggedIn = true;
-        name = userId;
+        emailadd = emailaddress;
       });
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) =>const WelcomePage()));

@@ -8,6 +8,7 @@ import 'package:flutterheritageolympiad/ui/signup/signup_page.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../modal/login/LoginResponse.dart';
 import 'login_presenter.dart';
 
 
@@ -36,7 +37,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
   TextEditingController passwordController = TextEditingController();
    late LoginScreenPresenter  _presenter;
   bool isLoggedIn = false;
-  String name = '';
+  String emailadd = '';
   @override
   void initState() {
     super.initState();
@@ -46,13 +47,13 @@ class _State extends State<LoginPage> implements LoginViewModal{
 
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('email');
-    print(userId);
-    if (userId != null) {
+    final String? emailadress = prefs.getString('email');
+    print(emailadress);
+    if (emailadress != null) {
       setState(() {
         isLoggedIn = true;
         _presenter = LoginScreenPresenter(this);
-        name = userId;
+        emailadd = emailadress;
       });
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) =>const WelcomePage()));
@@ -64,7 +65,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
     prefs.setString('email', "");
 
     setState(() {
-      name = '';
+      emailadd = '';
       isLoggedIn = false;
     });
 
@@ -74,12 +75,12 @@ class _State extends State<LoginPage> implements LoginViewModal{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     // var email=prefs.setString('email', emailController.text.toString());
     // var password=prefs.setString('password', passwordController.text.toString());
-    var email=prefs.getString('email');
-    var password=prefs.getString('password');
+    final String? email=prefs.getString('email');
+    final String? password=prefs.getString('password');
     prefs.getString('issocial');
     setState(() {
 
-      name = emailController.text;
+      emailadd = emailController.text;
       isLoggedIn = true;
     });
       _presenter.login(emailController.text.toString(),
@@ -101,12 +102,12 @@ class _State extends State<LoginPage> implements LoginViewModal{
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/login_bg.jpg"),
+              image: AssetImage("assets/signup_bg.jpg"),
               fit: BoxFit.cover,
             ),
           ),
           child: Container(
-            margin: EdgeInsets.fromLTRB(20, 100, 20, 10),
+            margin: EdgeInsets.fromLTRB(20, 120, 20, 10),
             child: Column(
               children: [
                 Container(
@@ -143,7 +144,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                     decoration: InputDecoration(
                       // hasFloatingPlaceholder: true,
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.5),
+                      //fillColor: Colors.grey.withOpacity(0.1),
                       // labelText: "Password",
                       hintText: "Password",
                       suffixIcon: GestureDetector(
@@ -250,7 +251,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
     }
 
   @override
-  Future<void> onLoginSuccess() async {
+ onLoginSuccess(Data data) async {
     isLoggedIn ? logout() : loginUser();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
@@ -262,7 +263,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
 
     setState(() {
 
-      name = emailController.text;
+      emailadd = emailController.text;
       isLoggedIn = true;
     });
 

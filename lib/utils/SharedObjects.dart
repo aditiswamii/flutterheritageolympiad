@@ -6,12 +6,23 @@ import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modal/SignUpModal.dart';
 import 'StringConstants.dart';
 
 class SharedObjects {
-  static late CachedSharedPreferences prefs;
+  static var username;
+  static var userid;
+  static var email;
+  static  CachedSharedPreferences? prefrences;
+  preferences(Data? data) async
+{
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  username= prefs.getString('username');
+  userid= prefs.getString('id');
+  email=prefs.getString('email');
 
 
+}
 
 
 }
