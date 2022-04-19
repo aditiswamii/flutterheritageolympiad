@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterheritageolympiad/ui/alldone/alldone.dart';
 import 'package:flutterheritageolympiad/ui/almostthere/almostthere_page.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+import 'package:flutterheritageolympiad/uinew/alldonepage.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:flutterheritageolympiad/uinew/registerpage.dart';
 
@@ -67,7 +69,7 @@ class _State extends State<Stepone> {
   }
   signup(int? data){
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) =>RegisterPage()));
+        context, MaterialPageRoute(builder: (context) =>AllDoneScreen()));
   }
 
   @override

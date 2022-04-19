@@ -40,9 +40,9 @@ class _State extends State<SignupPage> implements SignUpView {
   }
   Future<Null> SignUp() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-   SharedObjects.prefrences!.setString('username', usernameController.text);
-    SharedObjects.prefrences!.setString('password', passwordController.text);
-    SharedObjects.prefrences!.setString('email', emailController.text);
+   SharedObjects.prefrences?.setString('username', usernameController.text);
+    SharedObjects.prefrences?.setString('password', passwordController.text);
+    SharedObjects.prefrences?.setString('email', emailController.text);
     var email=prefs.setString('email', emailController.text);
     var password=prefs.setString('password', passwordController.text);
     var username=prefs.setString('username', usernameController.text);

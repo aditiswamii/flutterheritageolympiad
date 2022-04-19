@@ -30,7 +30,7 @@ class AllDoneScreen extends StatefulWidget {
 class _State extends State<AllDoneScreen> {
   TextEditingController otpController = TextEditingController();
   bool value = false;
-
+var userid;
   var data;
   var snackbar;
   void email() async {
@@ -54,13 +54,15 @@ class _State extends State<AllDoneScreen> {
         String registerdata = jsonEncode(
             getEmailVerifyResponseFromJson(data!).data);
         prefs.setString('registerdata', registerdata);
-       var email = getEmailVerifyResponseFromJson(data!).data!.email.toString();
-       var userid = getEmailVerifyResponseFromJson(data!).data!.id.toString();
-       var username=getEmailVerifyResponseFromJson(data!).data!.username.toString();
-        prefs.setString('email',getEmailVerifyResponseFromJson(data!).data!.email.toString( ));
-        prefs.setString('userid',getEmailVerifyResponseFromJson(data!).data!.id.toString());
-        prefs.setString('username',getEmailVerifyResponseFromJson(data!).data!.username.toString());
-        onsuccess(getEmailVerifyResponseFromJson(data!).data);
+        setState(() {
+          var email = getEmailVerifyResponseFromJson(data!).data!.email.toString();
+          userid = getEmailVerifyResponseFromJson(data!).data!.id.toString();
+          var username=getEmailVerifyResponseFromJson(data!).data!.username.toString();
+          prefs.setString('email',getEmailVerifyResponseFromJson(data!).data!.email.toString( ));
+          prefs.setString('userid',getEmailVerifyResponseFromJson(data!).data!.id.toString());
+          prefs.setString('username',getEmailVerifyResponseFromJson(data!).data!.username.toString());
+        });
+        onsuccess(getEmailVerifyResponseFromJson(data!).data,userid);
       }else{
         snackbar = SnackBar(
           content: Text(
@@ -73,11 +75,11 @@ class _State extends State<AllDoneScreen> {
       print(response.statusCode);
     }
   }
- onsuccess(Data? data){
+ onsuccess(Data? data, userid){
    Navigator.pushReplacement(
        context,
        MaterialPageRoute(
-           builder: (context) =>  LoginScreen()));
+           builder: (context) =>  RegisterPage( userid: userid,)));
  }
 
   @override
@@ -94,7 +96,7 @@ class _State extends State<AllDoneScreen> {
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => RegisterPage()));
+        MaterialPageRoute(builder: (BuildContext context) => AllDoneScreen()));
     // Do some stuff.
     return true;
   }
