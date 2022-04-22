@@ -28,11 +28,23 @@ class WelcomePage extends StatefulWidget{
 class _State extends State<WelcomePage> implements SharedObjects{
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 var username;
+var email;
+var country;
+var profilepic;
+var userid;
 
+ userdata() async {
+   final SharedPreferences prefs = await SharedPreferences.getInstance();
+   setState(() {
+     username = prefs.getString("username");
+     country =prefs.getString("country");
+     userid= prefs.getString("userid");
+   });
+}
   @override
   void initState() {
-    // SharedObjects
     super.initState();
+    userdata();
   }
   @override
   Widget build(BuildContext context) {

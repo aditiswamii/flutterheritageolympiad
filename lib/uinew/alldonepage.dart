@@ -10,6 +10,7 @@ import 'package:flutterheritageolympiad/ui/alldone/alldone_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/registerpage.dart';
+import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../modal/getemailverify/GetEmailVerifyResponse.dart';
@@ -21,7 +22,8 @@ import 'dart:convert' as convert;
 
 
 class AllDoneScreen extends StatefulWidget {
- AllDoneScreen({Key? key}) : super(key: key);
+  var email;
+ AllDoneScreen({Key? key,required this.email}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -36,7 +38,7 @@ var userid;
   void email() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if(otpController.text.toString()==prefs.getString('verifycode'))
-    emailverifyapi(prefs.getString('email')!, prefs.getString('verifycode')!, prefs.getString('issocial')!);
+    emailverifyapi(widget.email, prefs.getString('verifycode')!, prefs.getString('issocial').toString());
   }
   void emailverifyapi( String email, String otp, String is_social) async {
     http.Response response = await http
@@ -96,7 +98,7 @@ var userid;
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => AllDoneScreen()));
+        MaterialPageRoute(builder: (BuildContext context) => Stepone()));
     // Do some stuff.
     return true;
   }

@@ -20,8 +20,7 @@ import 'dart:convert' as convert;
 
 
 class LoginScreen extends StatefulWidget{
-
-  const LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -52,24 +51,25 @@ class _State extends State<LoginScreen> {
         });
     if (response.statusCode == 200) {
       data = response.body;
-      if(getLoginResponseFromJson(data!).status==200) {
-        print(jsonDecode(data!)['success'].toString());
+        print(jsonDecode(data!)['data'].toString());
+        print(jsonDecode(data!)['data']["id"].toString());
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        String logindata = jsonEncode(
-            getLoginResponseFromJson(data!).data);
-        prefs.setString('logindata', logindata);
+      //  String logindata = jsonEncode(getLoginResponseFromJson(data!).data.toString());
+        //prefs.setString('logindata', logindata);
+        prefs.setString('issocial',
+            jsonDecode(data!)['data']["isSocial"].toString());
+        prefs.setString("username",jsonDecode(data!)['data']["name"].toString() );
+        prefs.setString("profileComplete",jsonDecode(data!)['data']["profileComplete"].toString() );
+        prefs.setString("userid",jsonDecode(data!)['data']["id"].toString() );
+        prefs.setString("profileImage",jsonDecode(data!)['data']["profileImage"].toString() );
+        prefs.setString("gender",jsonDecode(data!)['data']["gender"].toString() );
+        prefs.setString("lastName",jsonDecode(data!)['data']["lastName"].toString() );
+        prefs.setString("stateId",jsonDecode(data!)['data']["stateId"].toString() );
+        prefs.setString("age",jsonDecode(data!)['data']["age"].toString() );
+        prefs.setString("country",jsonDecode(data!)['data']["country"].toString() );
 
+        Loginuser(jsonDecode(data!)['data']);
 
-
-        Loginuser(getLoginResponseFromJson(data!).data);
-      }else{
-        snackbar = SnackBar(
-          content: Text(
-              getLoginResponseFromJson(data!).message.toString()),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbar);
-      }
     } else {
       const snackBar = SnackBar(
         content: Text(
@@ -80,7 +80,7 @@ class _State extends State<LoginScreen> {
       print(response.statusCode);
     }
   }
-Loginuser(Data? data){
+Loginuser(jsonDecode){
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (BuildContext context) => WelcomePage()));
 }

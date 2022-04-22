@@ -11,6 +11,7 @@ import 'package:flutterheritageolympiad/ui/alldone/alldone.dart';
 import 'package:flutterheritageolympiad/ui/almostthere/almostthere_presenter.dart';
 import 'package:flutterheritageolympiad/ui/almostthere/almostthere_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/signup/signup_page.dart';
+import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
@@ -157,7 +158,6 @@ class _State extends State<RegisterPage> {
     });
     if (response.statusCode == 200) {
       data = response.body;
-      if (getRegisterResponseFromJson(data!).status == 200) {
         print(jsonDecode(data!)['success'].toString());
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         String registerdata =
@@ -165,16 +165,17 @@ class _State extends State<RegisterPage> {
         prefs.setString('registerdata', registerdata);
         prefs.setString('issocial',
             getRegisterResponseFromJson(data!).data!.isSocial.toString());
-        // getRegisterResponseFromJson(data!).data!.isSocial.toString();
-        // getRegisterResponseFromJson(data!).data!.email.toString();
-        // getRegisterResponseFromJson(data!).data!.toString();
+        prefs.setString("username",getRegisterResponseFromJson(data!).data!.name.toString() );
+      prefs.setString("profileComplete",getRegisterResponseFromJson(data!).data!.profileComplete.toString() );
+      prefs.setString("userid",getRegisterResponseFromJson(data!).data!.id.toString() );
+      prefs.setString("profileImage",getRegisterResponseFromJson(data!).data!.profileImage.toString() );
+      prefs.setString("gender",getRegisterResponseFromJson(data!).data!.gender.toString() );
+      prefs.setString("lastName",getRegisterResponseFromJson(data!).data!.lastName.toString() );
+      prefs.setString("stateId",getRegisterResponseFromJson(data!).data!.stateId.toString() );
+      prefs.setString("age",getRegisterResponseFromJson(data!).data!.age.toString() );
+      prefs.setString("country",getRegisterResponseFromJson(data!).data!.country.toString() );
         onsuccess(getRegisterResponseFromJson(data!).data);
-      } else {
-        snackbar = SnackBar(
-          content: Text(getRegisterResponseFromJson(data!).message.toString()),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      }
+
     } else {
       print(response.statusCode);
     }
@@ -182,7 +183,7 @@ class _State extends State<RegisterPage> {
 
   onsuccess(Data? data) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        context, MaterialPageRoute(builder: (context) => WelcomePage()));
   }
 
   _selectDate(BuildContext context) async {

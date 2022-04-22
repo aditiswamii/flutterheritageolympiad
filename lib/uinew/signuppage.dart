@@ -69,7 +69,7 @@ class _State extends State<Stepone> {
   }
   signup(int? data){
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) =>AllDoneScreen()));
+        context, MaterialPageRoute(builder: (context) =>AllDoneScreen(email:emailController.text.toString())));
   }
 
   @override
