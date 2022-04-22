@@ -39,6 +39,7 @@ var userid;
      username = prefs.getString("username");
      country =prefs.getString("country");
      userid= prefs.getString("userid");
+     prefs.setBool("loggedin", true);
    });
 }
   @override
@@ -88,7 +89,128 @@ var userid;
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
           child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+        Container(
+          //height: 300,
+            width: MediaQuery.of(context).size.width,
+            //alignment: Alignment.center,
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+           children: [
+             Container(
+               height: 150,
+          width: 150,
+            color: ColorConstants.myaccount,
 
+               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Container(
+                     padding: EdgeInsets.all(10),
+                     alignment: Alignment.topRight,
+                     child: Image.asset("assets/mcq_pattern2.png",
+                         height: 20,width: 20,alignment: Alignment.topRight),
+                   ),
+                   Container(child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                   Container(
+                     padding: EdgeInsets.all(10),
+                     alignment: Alignment.topLeft,
+                     child: Image.asset("assets/mcq_pattern2.png",
+                         height: 20,width: 20,alignment: Alignment.topLeft),
+                   ),
+                 ],
+               ),
+
+             ),
+             Container(
+               height: 150,
+                 width: 150,
+                 color:ColorConstants.myfeed,
+
+               child:  Column(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Container(
+                     padding: EdgeInsets.all(10),
+                     alignment: Alignment.topLeft,
+                     child: Image.asset("assets/mcq_pattern2.png",
+                         height: 20,width: 20,alignment: Alignment.topLeft),
+                   ),
+                   Container(child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                   Container(
+                     padding: EdgeInsets.all(10),
+                     alignment: Alignment.topRight,
+                     child: Image.asset("assets/mcq_pattern2.png",
+                         height: 20,width: 20,alignment: Alignment.topRight),
+                   ),
+                 ],
+               ),
+
+             ),
+           ],
+          ),
+        ),
+      Container(
+        //height: 300,
+        width: MediaQuery.of(context).size.width,
+        //alignment: Alignment.center,
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              height: 150,
+              width: 150,
+              color: ColorConstants.to_the_quizzes,
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.topRight,
+                    child: Image.asset("assets/mcq_pattern2.png",
+                        height: 20,width: 20,alignment: Alignment.topRight),
+                  ),
+                  Container(child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.topLeft,
+                    child: Image.asset("assets/mcq_pattern2.png",
+                        height: 20,width: 20,alignment: Alignment.topLeft),
+                  ),
+                ],
+              ),
+
+            ),
+            Container(
+              height: 150,
+              width: 150,
+              color: ColorConstants.to_the_shop,
+
+              child:  Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.topLeft,
+                    child: Image.asset("assets/mcq_pattern2.png",
+                        height: 20,width: 20,alignment: Alignment.topLeft),
+                  ),
+                  Container(child: Text("TO THE SHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.topRight,
+                    child: Image.asset("assets/mcq_pattern2.png",
+                        height: 20,width: 20,alignment: Alignment.topRight),
+                  ),
+                ],
+              ),
+
+            ),
+          ],
+        ),
+      ),
       Container(
         alignment: Alignment.center,
         margin: EdgeInsets.fromLTRB(10, 0, 10, 30),
@@ -132,7 +254,7 @@ var userid;
                               child: Image.asset("assets/mcq_pattern2.png",
                                 height: 20,width: 20,),
                             )),
-                         
+
                           ],
                         )),
                   ),

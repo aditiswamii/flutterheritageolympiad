@@ -33,26 +33,27 @@ class _State extends State<MyApp> {
   void initState() {
     super.initState();
     autoLogIn();
-    !isLoggedIn ? Timer(
-    const Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => LoginScreen()))):
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => WelcomePage()));
+
   }
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('email');
-    print(userId);
-    if (userId != null) {
+    final bool? loggedin = prefs.getBool('loggedin');
+    print(loggedin);
+    if (loggedin != false) {
       setState(() {
-        isLoggedIn = true;
-        name = userId;
+        isLoggedIn=true;
       });
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) =>const WelcomePage()));
-      return;
+    }else{
+      setState(() {
+        isLoggedIn=true;
+      });
     }
+    isLoggedIn==false ? Timer(
+        const Duration(seconds: 3),
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => LoginScreen()))):
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) => WelcomePage()));
   }
   @override
   Widget build(BuildContext context) {

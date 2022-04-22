@@ -35,13 +35,14 @@ class _State extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   var data;
   var snackbar;
-  bool isLoggedIn = false;
+  //bool isLoggedIn = false;
   String emailadd = '';
   @override
   void initState() {
     super.initState();
-
+    //autoLogIn();
   }
+
   void loginapi(String email, password) async {
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL+'login'),

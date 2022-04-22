@@ -31,7 +31,7 @@ class _State extends State<MySideMenuDrawer> {
   String name = '';
   Future<Null> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('email');
+    prefs.remove('loggedin');
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -49,7 +49,7 @@ class _State extends State<MySideMenuDrawer> {
           alignment: Alignment.centerRight,
           padding: EdgeInsets.only(right: 5.0),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.9)
+            color: Colors.black.withOpacity(0.8)
           ),
           child: ListView(
 
