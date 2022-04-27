@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterheritageolympiad/modal/classicquestion/ClassicQuestion.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -23,18 +24,17 @@ import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../questionpageview/questions.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ClassicQuizRule(),
-  ));
-}
+
 
 class ClassicQuizRule extends StatefulWidget {
-  const ClassicQuizRule({Key? key}) : super(key: key);
+  var quiztypeid;
+  var quizspeedid;
+  var quizid;
+   ClassicQuizRule({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -45,13 +45,28 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
   bool value = false;
   String? data;
   var domains_length;
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country =prefs.getString("country");
+      userid= prefs.getString("userid");
+    });
+  }
   @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
-    getData('1','2');
+    getData(widget.quiztypeid,widget.quizspeedid);
+    userdata();
   }
-  void getData(String quiz_type_id, quiz_speed_id) async {
+
+  void getData(String quiz_type_id, String quiz_speed_id) async {
     http.Response response =
     await http.post(Uri.parse("http://3.108.183.42/api/quiz_rules"),
         body: {
@@ -79,7 +94,7 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>ClassicQuizMain()));
+        builder: (BuildContext context) =>QuizPage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -96,7 +111,7 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -110,13 +125,13 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("CLASSIC QUIZ",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: const Text("RULES",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
 
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -164,7 +179,7 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -183,12 +198,16 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>  Mcq()));
+                                builder: (context) =>  Mcq(quizid:widget.quizid)));
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) =>  ClassicQuestion(quizid:widget.quizid)));
                       },
                       child: const Text(
                         "START",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -217,51 +236,3 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
 
 
 }
-
-//Container( margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-//                     child: ExpansionTileCard(
-//                       // initiallyExpanded: false,
-//
-//                       onExpansionChanged: (value){
-//                         setState(() {
-//                           _expanded5=value;
-//                         });
-//                       },
-//                       animateTrailing: true,
-//                       baseColor: ColorConstant.appbar,
-//                        expandedColor: _expanded5!=false?ColorConstant.background:ColorConstant.yellow_light,
-//                       trailing:
-//                       _expanded5!=false?Image.asset('assets/images/minus.png',height: 40,width: 40,color: ColorConstant.appbar,)
-//                           :Image.asset('assets/images/plus.png',height: 40,width: 40,color: ColorConstant.yellow_light,),
-//                       //key: cardB,
-//                       title:  Text("Gymnasium",style: TextStyle(color:_expanded5!=false?ColorConstant.appbar:ColorConstant.yellow_light,fontSize: 18 ),),
-//                       // subtitle: Text('It has the GFG Logo.'),
-//                       children: <Widget>[
-//                         Divider(
-//                           thickness: 1.0,
-//                           height: 1.0,
-//                         ),
-//                         Container(
-//                           decoration: BoxDecoration(
-//                             color:ColorConstant.background,
-//                           ),
-//                           child: Align(
-//                             alignment: Alignment.centerLeft,
-//                             child: Padding(
-//                               padding: const EdgeInsets.symmetric(
-//                                 horizontal: 16.0,
-//                                 vertical: 8.0,
-//                               ),
-//                               child: ListBody(
-//                                 children: [
-//                                   Text("-> CVAS,Bikaner",style: TextStyle(color:ColorConstant.appbar,fontSize: 18 ),),
-//
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//
-//                     ),
-//                   ),

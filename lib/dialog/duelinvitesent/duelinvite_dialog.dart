@@ -35,7 +35,7 @@ class _State extends State<DialogDuelInviteSent> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text('Invite Sent!',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 24 ),)
+                    child: Text('Invite Sent!',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 24 ),)
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -44,7 +44,7 @@ class _State extends State<DialogDuelInviteSent> with WidgetsBindingObserver {
                   child: CircleAvatar(
                     radius: 30.0,
                     backgroundImage:
-                    AssetImage("assets/profile.png"),
+                    AssetImage("assets/images/profile.png"),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -54,7 +54,7 @@ class _State extends State<DialogDuelInviteSent> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text('REAGAN2021',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize:18 ),)
+                    child: Text('REAGAN2021',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ),)
                 ),
                 Container(
                     alignment: Alignment.center,
@@ -62,7 +62,7 @@ class _State extends State<DialogDuelInviteSent> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text("You'll be notified when they\nhave accepted your invite.",textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize:13 ),)
+                    child: Text("You'll be notified when they\nhave accepted your invite.",textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:13 ),)
                 ),
               ],
             )

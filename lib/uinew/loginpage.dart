@@ -51,27 +51,48 @@ class _State extends State<LoginScreen> {
           'password': password.toString()
         });
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       data = response.body;
         print(jsonDecode(data!)['data'].toString());
         print(jsonDecode(data!)['data']["id"].toString());
+      var jsonResponse = convert.jsonDecode(response.body);
+      if(jsonResponse['status']==200) {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-      //  String logindata = jsonEncode(getLoginResponseFromJson(data!).data.toString());
+        prefs.setBool("loggedin", true);
+        //  String logindata = jsonEncode(getLoginResponseFromJson(data!).data.toString());
         //prefs.setString('logindata', logindata);
         prefs.setString('issocial',
             jsonDecode(data!)['data']["isSocial"].toString());
-        prefs.setString("username",jsonDecode(data!)['data']["name"].toString() );
-        prefs.setString("profileComplete",jsonDecode(data!)['data']["profileComplete"].toString() );
-        prefs.setString("userid",jsonDecode(data!)['data']["id"].toString() );
-        prefs.setString("profileImage",jsonDecode(data!)['data']["profileImage"].toString() );
-        prefs.setString("gender",jsonDecode(data!)['data']["gender"].toString() );
-        prefs.setString("lastName",jsonDecode(data!)['data']["lastName"].toString() );
-        prefs.setString("stateId",jsonDecode(data!)['data']["stateId"].toString() );
-        prefs.setString("age",jsonDecode(data!)['data']["age"].toString() );
-        prefs.setString("country",jsonDecode(data!)['data']["country"].toString() );
+        prefs.setString(
+            "username", jsonDecode(data!)['data']["name"].toString());
+        prefs.setString("profileComplete",
+            jsonDecode(data!)['data']["profileComplete"].toString());
+        prefs.setString("userid", jsonDecode(data!)['data']["id"].toString());
+        prefs.setString("profileImage",
+            jsonDecode(data!)['data']["profileImage"].toString());
+        prefs.setString(
+            "gender", jsonDecode(data!)['data']["gender"].toString());
+        prefs.setString(
+            "lastName", jsonDecode(data!)['data']["lastName"].toString());
+        prefs.setString(
+            "stateId", jsonDecode(data!)['data']["stateId"].toString());
+        prefs.setString("age", jsonDecode(data!)['data']["age"].toString());
+        prefs.setString(
+            "country", jsonDecode(data!)['data']["country"].toString());
 
         Loginuser(jsonDecode(data!)['data']);
-
+        print(jsonDecode(data!)['data'].toString());
+      }else{
+        Navigator.pop(context);
+        const snackBar = SnackBar(
+          content: Text(
+              'Invalid Login Credentials',textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
     } else {
+      Navigator.pop(context);
       const snackBar = SnackBar(
         content: Text(
             'Login Failed'),
@@ -85,7 +106,21 @@ Loginuser(jsonDecode){
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (BuildContext context) => WelcomePage()));
 }
-
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -109,7 +144,7 @@ Loginuser(jsonDecode){
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: const Text("LOG IN", style: TextStyle(
-                      fontSize: 24, color: ColorConstants.Omnes_font))),
+                      fontSize: 24, color: ColorConstants.txt))),
               Flexible(child:
               Container(
                 height: 60,
@@ -188,6 +223,7 @@ Loginuser(jsonDecode){
 
                         if(emailController.text.isNotEmpty) {
                           if (passwordController.text.isNotEmpty) {
+                            showLoaderDialog(context);
                            loginapi(emailController.text.toString(), passwordController.text.toString());
                             // _presenter.login(emailController.text.toString(),
                             //     passwordController.text.toString());
@@ -206,7 +242,7 @@ Loginuser(jsonDecode){
                       },
                       child: const Text(
                         "LET'S GO",
-                        style: TextStyle(color: ColorConstants.Omnes_font,
+                        style: TextStyle(color: ColorConstants.txt,
                             fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
@@ -220,7 +256,7 @@ Loginuser(jsonDecode){
                       },
                       child: Text("Forget Password?",style: TextStyle(
                           decoration: TextDecoration.underline,
-                          color: ColorConstants.Omnes_font)),
+                          color: ColorConstants.txt)),
                     ),
                   ],
                 ),
@@ -236,7 +272,7 @@ Loginuser(jsonDecode){
                     },
                     child: Text("I don't have an account", style: TextStyle(
                         decoration: TextDecoration.underline,
-                        color: ColorConstants.Omnes_font),),
+                        color: ColorConstants.txt),),
                   )),
 
             ],

@@ -16,17 +16,10 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 import '../invitecontact.dart';
 
-void main() {
 
-  runApp(const MaterialApp(
-
-    debugShowCheckedModeBanner: false,
-    home: PhonebookScreen(),
-  ));
-}
 class PhonebookScreen extends StatefulWidget{
 
-  const PhonebookScreen({Key? key}) : super(key: key);
+  PhonebookScreen({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -34,23 +27,37 @@ class PhonebookScreen extends StatefulWidget{
 
 
 class _State extends State<PhonebookScreen> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  Iterable<Contact>? _contacts;
-bool add =true;
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  // Iterable<Contact>? _contacts;
+  bool add =true;
+  var _contacts;
   @override
   void initState() {
-    getContacts();
+    refreshContacts();
+   // getContacts();
     super.initState();
   }
 
-  Future<void> getContacts() async {
-    //Make sure we already have permissions for contacts when we get to this
-    //page, so we can just retrieve it
-    final Iterable<Contact> contacts = await ContactsService.getContacts();
+
+
+  Future<void> refreshContacts() async {
+    // Load without thumbnails initially.
+    var contacts = (await ContactsService.getContacts(
+        withThumbnails: false, iOSLocalizedLabels: true))
+        .toList();
     setState(() {
       _contacts = contacts;
     });
   }
+  //
+  // Future<void> getContacts() async {
+  //   //Make sure we already have permissions for contacts when we get to this
+  //   //page, so we can just retrieve it
+  //   final Iterable<Contact> contacts = await ContactsService.getContacts();
+  //   setState(() {
+  //     _contacts = contacts;
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -65,7 +72,7 @@ bool add =true;
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -107,92 +114,93 @@ bool add =true;
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                    child: const Text("PHONEBOOK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+                    child: const Text("PHONEBOOK,",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
                    Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("You have 50 contacts.You may add or invite.",style: TextStyle(fontSize: 15,color: ColorConstants.Omnes_font))),
-                _contacts != null
+                    child: const Text("You have 50 contacts.You may add or invite.",style: TextStyle(fontSize: 15,color: ColorConstants.txt))),
+
+
+
+
+                _contacts == null
                 //Build a list view of all contacts, displaying their avatar and
                 // display name
-                    ?Expanded(
-                      child: Flexible(
-                          child: Container(
-                              margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              decoration: const BoxDecoration(color: Colors.white),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  // if you need this
-                                  side: BorderSide(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    width: 1,
-                                  ),
-                                ),
-                                child:ListView.builder(
-                       shrinkWrap:true,
-                       itemCount: _contacts!.length,
-                       itemBuilder: (BuildContext context, int index) {
-                         Contact? contact = _contacts!.elementAt(index);
-                         return Container(
-                             decoration:
-                              BoxDecoration(
-                                 border:  Border(
-                                     bottom:  BorderSide(color: Colors.grey)
-                                 )
-                             ),
-                           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                           child: ListTile(
-                             contentPadding:
-                             const EdgeInsets.symmetric(
-                                 vertical: 2, horizontal: 18),
-                             leading: (contact.avatar != null &&
-                                 contact.avatar!.isNotEmpty)
-                                 ? CircleAvatar(
-                               backgroundImage: MemoryImage(contact.avatar!),
-                             )
-                                 : CircleAvatar(
-                               child: Text(contact.initials(),
-                                 style: TextStyle(color: Colors.white),),
-                               backgroundColor: ColorConstants.myfeed,
-                             ),
-                             title: Text(contact.displayName ?? ''),
-                             trailing: ElevatedButton(
-                               style: ElevatedButton.styleFrom(
-                                 primary: Colors.red,
-                                 onPrimary: Colors.white,
-                                 elevation: 3,
-                                 alignment: Alignment.center,
-                                 shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(30.0)),
-                                 fixedSize: const Size(60, 20),
-                                 //////// HERE
-                               ),
-                               onPressed: () {
-                                 Navigator.pushReplacement(
-                                     context,
-                                     MaterialPageRoute(
-                                         builder: (
-                                             context) => const WelcomePage()));
-                               },
-                               child: const Text(
-                                 "Add",
-                                 style: TextStyle(
-                                     color: Colors.white, fontSize: 16),
-                                 textAlign: TextAlign.center,
-                               ),
-                             ),
-                             //This can be further expanded to showing contacts detail
-                             // onPressed().
-                           ),
-
-                         );
-                       }
-                          ),
-                        ),
-                      )
+                    ? Center(child: const CircularProgressIndicator()):
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  decoration:  BoxDecoration(color: Colors.white),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      // if you need this
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: 1,
                       ),
-                    ): Center(child: const CircularProgressIndicator()),
+                    ),
+                    child:ListView.builder(
+                        shrinkWrap:true,
+                        itemCount: _contacts!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Contact? contact = _contacts!.elementAt(index);
+                          return Container(
+                            decoration:
+                            BoxDecoration(
+                                border:  Border(
+                                    bottom:  BorderSide(color: Colors.grey)
+                                )
+                            ),
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              contentPadding:
+                              EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 18),
+                              leading: (contact!.avatar != null &&
+                                  contact.avatar!.isNotEmpty)
+                                  ? CircleAvatar(
+                                backgroundImage: MemoryImage(contact.avatar!),
+                              )
+                                  : CircleAvatar(
+                                child: Text(contact.initials(),
+                                  style: TextStyle(color: Colors.white),),
+                                backgroundColor: ColorConstants.yellow200,
+                              ),
+                              title: Text(contact.displayName ?? ''),
+                              trailing: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  onPrimary: Colors.white,
+                                  elevation: 3,
+                                  alignment: Alignment.center,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0)),
+                                  fixedSize: const Size(60, 20),
+                                  //////// HERE
+                                ),
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (
+                                              context) => const WelcomePage()));
+                                },
+                                child: const Text(
+                                  "Add",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              //This can be further expanded to showing contacts detail
+                              // onPressed().
+                            ),
+
+                          );
+                        }
+                    ),
+                  ),
+                ),
 
                 Container(
                   alignment: FractionalOffset.bottomCenter,
@@ -220,7 +228,7 @@ bool add =true;
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -236,16 +244,16 @@ bool add =true;
                           //////// HERE
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (
-                                      context) => const PhonebookScreen()));
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (
+                          //             context) => PhonebookScreen()));
                         },
                         child: const Text(
                           "LET'S GO!",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),

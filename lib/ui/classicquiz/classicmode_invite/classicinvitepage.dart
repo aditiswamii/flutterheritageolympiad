@@ -49,7 +49,7 @@ class _State extends State<ClassicInvite> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -71,7 +71,7 @@ class _State extends State<ClassicInvite> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -83,7 +83,7 @@ class _State extends State<ClassicInvite> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -94,14 +94,14 @@ class _State extends State<ClassicInvite> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("DUEL MODE",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "Invite someone else to Duel with",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 30, 10, 30),
@@ -117,7 +117,7 @@ class _State extends State<ClassicInvite> {
                         width: 150,
                         decoration: const BoxDecoration(
                             shape: BoxShape.rectangle,
-                            color: ColorConstants.to_the_shop
+                            color: ColorConstants.lightgrey200
                         ),
                         child: GestureDetector(
                             onTap: () {
@@ -139,7 +139,7 @@ class _State extends State<ClassicInvite> {
                         width: 150,
                         decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
-                            color: ColorConstants.to_the_shop
+                            color: ColorConstants.lightgrey200
                         ),
                         child: GestureDetector(
                             onTap: () {
@@ -162,7 +162,7 @@ class _State extends State<ClassicInvite> {
                 child: Text(
                   "QUIZ SUMMARY",
                   style: TextStyle(
-                      color: ColorConstants.Omnes_font, fontSize: 15),
+                      color: ColorConstants.txt, fontSize: 15),
                 ),
               ),
               Flexible(
@@ -188,13 +188,13 @@ class _State extends State<ClassicInvite> {
                               Text(
                                 "DIFFICULTY:",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                               Text(
                                 "HARD",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                             ],
@@ -209,13 +209,13 @@ class _State extends State<ClassicInvite> {
                               Text(
                                 "SPEED:",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                               Text(
                                 "REGULAR",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                             ],
@@ -232,7 +232,7 @@ class _State extends State<ClassicInvite> {
                                 child: Text(
                                   "DOMAINS SELECTED:",textAlign: TextAlign.left,
                                   style: TextStyle(
-                                      color: ColorConstants.Omnes_font,
+                                      color: ColorConstants.txt,
                                       fontSize: 15,),
                                 ),
                               ),
@@ -241,7 +241,7 @@ class _State extends State<ClassicInvite> {
                                 child: Text(
                                   "Knowlege traditions",textAlign: TextAlign.left,
                                   style: TextStyle(
-                                      color: ColorConstants.Omnes_font,
+                                      color: ColorConstants.txt,
                                       fontSize: 15),
                                 ),
                               ),
@@ -250,7 +250,7 @@ class _State extends State<ClassicInvite> {
                                   child: Text(
                                     "Literature and Languages",textAlign: TextAlign.left,
                                     style: TextStyle(
-                                        color: ColorConstants.Omnes_font,
+                                        color: ColorConstants.txt,
                                         fontSize: 15),
                                   ),
                                 ),
@@ -259,7 +259,7 @@ class _State extends State<ClassicInvite> {
                                   child: Text(
                                     "Performing Arts",textAlign: TextAlign.left,
                                     style: TextStyle(
-                                        color: ColorConstants.Omnes_font,
+                                        color: ColorConstants.txt,
                                         fontSize: 15),
                                   ),
                                 ),
@@ -297,7 +297,7 @@ class _State extends State<ClassicInvite> {
                       child: const Text(
                         "EDIT QUIZ",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -321,7 +321,7 @@ class _State extends State<ClassicInvite> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

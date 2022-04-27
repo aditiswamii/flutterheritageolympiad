@@ -39,7 +39,6 @@ var userid;
      username = prefs.getString("username");
      country =prefs.getString("country");
      userid= prefs.getString("userid");
-     prefs.setBool("loggedin", true);
    });
 }
   @override
@@ -61,7 +60,7 @@ var userid;
       body:Container(
         decoration: const BoxDecoration(
         image: DecorationImage(
-        image: AssetImage("assets/login_bg.jpg"),
+        image: AssetImage("assets/images/debackground.jpg"),
           fit: BoxFit.cover,
     ),
     ),
@@ -84,11 +83,11 @@ var userid;
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-          child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+          child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-          child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+          child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
         Container(
           //height: 300,
             width: MediaQuery.of(context).size.width,
@@ -97,55 +96,68 @@ var userid;
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
            children: [
-             Container(
-               height: 150,
+           GestureDetector(
+             onTap:(){
+               Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(
+                       builder: (context) => MyAccountPage()));
+        },
+               child: Container(
+                 height: 150,
           width: 150,
-            color: ColorConstants.myaccount,
+            color: ColorConstants.red200,
 
-               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                   Container(
-                     padding: EdgeInsets.all(10),
-                     alignment: Alignment.topRight,
-                     child: Image.asset("assets/mcq_pattern2.png",
-                         height: 20,width: 20,alignment: Alignment.topRight),
-                   ),
-                   Container(child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                   Container(
-                     padding: EdgeInsets.all(10),
-                     alignment: Alignment.topLeft,
-                     child: Image.asset("assets/mcq_pattern2.png",
-                         height: 20,width: 20,alignment: Alignment.topLeft),
-                   ),
-                 ],
+                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Container(
+                       padding: EdgeInsets.all(10),
+                       alignment: Alignment.topRight,
+                       child: Image.asset("assets/mcq_pattern2.png",
+                           height: 20,width: 20,alignment: Alignment.topRight),
+                     ),
+                     Container(child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                     Container(
+                       padding: EdgeInsets.all(10),
+                       alignment: Alignment.topLeft,
+                       child: Image.asset("assets/mcq_pattern2.png",
+                           height: 20,width: 20,alignment: Alignment.topLeft),
+                     ),
+                   ],
+                 ),
+
                ),
-
              ),
-             Container(
-               height: 150,
-                 width: 150,
-                 color:ColorConstants.myfeed,
+             GestureDetector(
+               onTap: (){
 
-               child:  Column(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                   Container(
-                     padding: EdgeInsets.all(10),
-                     alignment: Alignment.topLeft,
-                     child: Image.asset("assets/mcq_pattern2.png",
-                         height: 20,width: 20,alignment: Alignment.topLeft),
-                   ),
-                   Container(child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                   Container(
-                     padding: EdgeInsets.all(10),
-                     alignment: Alignment.topRight,
-                     child: Image.asset("assets/mcq_pattern2.png",
-                         height: 20,width: 20,alignment: Alignment.topRight),
-                   ),
-                 ],
+               },
+               child: Container(
+                 height: 150,
+                   width: 150,
+                   color:ColorConstants.yellow200,
+
+                 child:  Column(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Container(
+                       padding: EdgeInsets.all(10),
+                       alignment: Alignment.topLeft,
+                       child: Image.asset("assets/mcq_pattern2.png",
+                           height: 20,width: 20,alignment: Alignment.topLeft),
+                     ),
+                     Container(child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                     Container(
+                       padding: EdgeInsets.all(10),
+                       alignment: Alignment.topRight,
+                       child: Image.asset("assets/mcq_pattern2.png",
+                           height: 20,width: 20,alignment: Alignment.topRight),
+                     ),
+                   ],
+                 ),
+
                ),
-
              ),
            ],
           ),
@@ -158,220 +170,76 @@ var userid;
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              height: 150,
-              width: 150,
-              color: ColorConstants.to_the_quizzes,
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  QuizPage()));
+              },
+              child: Container(
+                height: 150,
+                width: 150,
+                color: ColorConstants.blue200,
 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.topRight,
-                    child: Image.asset("assets/mcq_pattern2.png",
-                        height: 20,width: 20,alignment: Alignment.topRight),
-                  ),
-                  Container(child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.topLeft,
-                    child: Image.asset("assets/mcq_pattern2.png",
-                        height: 20,width: 20,alignment: Alignment.topLeft),
-                  ),
-                ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.topRight,
+                      child: Image.asset("assets/mcq_pattern2.png",
+                          height: 20,width: 20,alignment: Alignment.topRight),
+                    ),
+                    Container(child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.topLeft,
+                      child: Image.asset("assets/mcq_pattern2.png",
+                          height: 20,width: 20,alignment: Alignment.topLeft),
+                    ),
+                  ],
+                ),
+
               ),
-
             ),
-            Container(
-              height: 150,
-              width: 150,
-              color: ColorConstants.to_the_shop,
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShopPage()));
+              },
+              child: Container(
+                height: 150,
+                width: 150,
+                color: Colors.black26,
 
-              child:  Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.topLeft,
-                    child: Image.asset("assets/mcq_pattern2.png",
-                        height: 20,width: 20,alignment: Alignment.topLeft),
-                  ),
-                  Container(child: Text("TO THE SHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.topRight,
-                    child: Image.asset("assets/mcq_pattern2.png",
-                        height: 20,width: 20,alignment: Alignment.topRight),
-                  ),
-                ],
+                child:  Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.topLeft,
+                      child: Image.asset("assets/mcq_pattern2.png",
+                          height: 20,width: 20,alignment: Alignment.topLeft),
+                    ),
+                    Container(child: Text("TO THE SHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.topCenter,
+                      child: Image.asset("assets/mcq_pattern2.png",
+                          height: 20,width: 20,alignment: Alignment.topCenter),
+                    ),
+                  ],
+                ),
+
               ),
-
             ),
           ],
         ),
       ),
-      Container(
-        alignment: Alignment.center,
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 30),
-        child:Column(
 
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    height: 150,
-                  //  width: 150,
-                  decoration: const BoxDecoration(
-                  color: ColorConstants.myaccount
-                    ),
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MyAccountPage()));
-                        },
-                        child: Column(
-
-                          children: [
-                            Flexible(
-                                child:Container(
-                                  alignment: Alignment.topRight,
-                                  child: Image.asset("assets/mcq_pattern2.png",
-                                  height: 20,width: 20,alignment: Alignment.topRight),
-                                )),
-                            Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
-
-
-                            Flexible(child:Container(
-                              alignment: Alignment.bottomCenter,
-                              child: Image.asset("assets/mcq_pattern2.png",
-                                height: 20,width: 20,),
-                            )),
-
-                          ],
-                        )),
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                    height: 150,
-                    //width: 150,
-                     decoration: const BoxDecoration(
-                     color: ColorConstants.myfeed
-                       ),
-                     child: GestureDetector(
-                         onTap: () {
-                           // Navigator.pushReplacement(
-                           //     context,
-                           //     MaterialPageRoute(
-                           //         builder: (context) =>  ReadContacts()));
-                         },
-                         child: Column(
-                           children: [
-                             Flexible(
-                                 child:Container(
-                                   alignment: Alignment.topRight,
-                                   child: Image.asset("assets/mcq_pattern2.png",
-                                       height: 20,width: 20,alignment: Alignment.topRight),
-                                 )),
-                             Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
-                             Flexible(child:Container(
-                               alignment: Alignment.bottomCenter,
-                               child: Image.asset("assets/mcq_pattern2.png",
-                                 height: 20,width: 20,),
-                             )),
-                           ],
-                         )),
-                      ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
-                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                    height: 150,
-                   // width: 150,
-                    decoration: const BoxDecoration(
-                        color: ColorConstants.to_the_quizzes
-                    ),
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const QuizPage()));
-                        },
-                        child: Column(
-                          children: [
-                            Flexible(
-                                child:Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Image.asset("assets/mcq_pattern2.png",
-                                      height: 20,width: 20,alignment: Alignment.topRight),
-                                )),
-                            Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
-                            Flexible(child:Container(
-                              alignment: Alignment.bottomRight,
-                              child: Image.asset("assets/mcq_pattern2.png",
-                                height: 20,width: 20,),
-                            )),
-                          ],
-                        )),
-                  ),
-                ),
-               Flexible(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                    height: 150,
-                   // width: 150,
-                    decoration: const BoxDecoration(
-                        color: ColorConstants.to_the_shop
-                    ),
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ShopPage()));
-                        },
-
-                        child: Column(
-                          children: [
-                            Flexible(
-                                child:Container(
-                                  alignment: Alignment.topRight,
-                                  child: Image.asset("assets/mcq_pattern2.png",
-                                      height: 20,width: 20,alignment: Alignment.topRight),
-                                )),
-                            Text("TO THE SHOP",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,),
-                            Flexible(child:Container(
-                              alignment: Alignment.bottomLeft,
-                              child: Image.asset("assets/mcq_pattern2.png",
-                                height: 20,width: 20,),
-                            )),
-                          ],
-                        )),
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
       Flexible(
         child: Container(
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -391,7 +259,7 @@ var userid;
               Container(
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: Text("Your Activity Summary",
-                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
+                  style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
               ),
               Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -433,7 +301,7 @@ var userid;
                           width: 20,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: ColorConstants.myfeed,
+                            color: ColorConstants.yellow200,
                             borderRadius: new BorderRadius.only(
                               topLeft: new Radius.circular(2),
                               topRight: new Radius.circular(2),
@@ -474,7 +342,7 @@ var userid;
       ),
               Container(
                 child: Text("Leagues",
-                  style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
+                  style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
               ),
       ]
     ),

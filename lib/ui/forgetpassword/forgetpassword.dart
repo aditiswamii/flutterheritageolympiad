@@ -80,7 +80,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text("Forget Password", style: TextStyle(
-                      fontSize: 22, color: ColorConstants.Omnes_font))),
+                      fontSize: 22, color: ColorConstants.txt))),
               Flexible(child:
               Container(
                 height: 60,

@@ -1,198 +1,446 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/modal/classicquestion/ClassicQuestion.dart';
-import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'dart:ui';
 
-void main() => runApp(Mcq());
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/material.dart';
+import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
+import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:http/http.dart' as http;
 
-class Mcq extends StatelessWidget {
+import '../../../modal/classicquestion/ClassicQuestion.dart';
+import '../../../modal/classicquestion/getQuestionResponse.dart';
+import 'dart:convert' as convert;
+
+class Mcq extends StatefulWidget{
+  var quizid;
+  Mcq({Key? key,required this.quizid}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.white),
-    );
-  }
+  _State createState() => _State();
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
 
-class _HomePageState extends State<HomePage> {
-  late Data quiz;
-  late List<Question> results;
-  late Color c;
+class _State extends State<Mcq> {
+  bool _hasBeenPressed1 = false;
+  bool _hasBeenPressed2 = false;
+  bool _hasBeenPressed3 = false;
+  bool _hasBeenPressed4 = false;
+  var quiz;
+  var results;
+  var  c;
+  var data;
+  var questions;
+  var randomItem;
+  var questionlistlen;
   Random random = Random();
+  var selectedquestion;
+  var domains_length;
+  var totalques;
+  var totalquesinquiz;
+  var questime;
+  var quiztype;
+  var ramdomcolor;
+  var quesdata;
+  var decRes;
+  var  rques;
+  var currentques;
   @override
   void initState() {
     super.initState();
-    fetchQuestions("81");
+    BackButtonInterceptor.add(myInterceptor);
+    getQuestions(widget.quizid);
+
+    ramdomcolor = (color..shuffle()).first;
   }
-Future<dynamic> fetchquestions(BuildContext context) async {
-    return fetchQuestions("83");
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  reloadques(){
+    randomItem = (questions..shuffle()).first;
+    List.generate(
+    questions.length,
+          (index) => InkWell(
+        onTap: () {
+         currentques= questions[index];
+
+        },
+
+      ),
+    );
+     print(currentques);
 
   }
-  Future fetchQuestions(String quiz_id) async {
-    var res = await http.post(Uri.parse("http://3.108.183.42/api/questions"),
+  List <Color> color= <Color>[
+    Color(0xFFED313B),
+    Color(0xFF2da79e)
+  ];
+  void getQuestions(String quiz_id) async {
+    http.Response response =
+    await http.post(Uri.parse("http://3.108.183.42/api/questions"),
         body: {
           'quiz_id': quiz_id.toString(),
         });
-    var decRes = jsonDecode(res.body);
-    print(decRes);
-    c = Colors.black;
-    quiz = Data.fromJson(decRes);
-   // results = quiz.results;
+    showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data=response.body;
+      if (jsonResponse['status'] == 200) {
+        decRes = jsonDecode(response.body);
+        quesdata=jsonDecode(data!)['data'];
+        setState(() {
+          questions = jsonDecode(data!)['data']['question'];
+          totalques = jsonDecode(data!)['data']['total_question'];
+          totalquesinquiz = jsonDecode(data!)['data']['total_question_in_quiz'];
+          questime = jsonDecode(data!)['data']['time'];
+          quiztype = jsonDecode(data!)['data']['quiz_type'];
+          questionlistlen=questions.length;
+
+        });
+
+        print(questions.toString());
+        print(decRes);
+        c = Colors.black;
+        //quiz=getQuestionResponseFromJson(data!).data;
+        // setState(() {
+        //   quiz = Data.fromJson(decRes);
+        // });
+        //randomItem = (questions..shuffle()).first;
+        randomItem = (questions..shuffle()).first;
+        questionlistlen=questions.length;
+        print(randomItem['question']);
+        print(randomItem['question_media']);
+        print(randomItem['width']);
+        print(randomItem['height']);
+        print(randomItem['option1']);
+        print(randomItem['option1_media']);
+        print(randomItem['option2']);
+        print(randomItem['option2_media']);
+        print(randomItem['option3']);
+        print(randomItem['option3_media']);
+        print(randomItem['option4']);
+        print(randomItem['option4_media']);
+        print(randomItem['right_option']);
+        print(randomItem['hint']);
+        print(randomItem['question_media_type']);
+        print(randomItem['why_right']);
+        print(randomItem['type']);
+        print(randomItem['id']);
+        reloadques();
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
   }
 
   @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>WelcomePage()));
+    print(BackButtonInterceptor.describe()); // Do some stuff.
+    return true;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    //Colors.white;
+    return  Scaffold(
+      resizeToAvoidBottomInset: false,
+      endDrawerEnableOpenDragGesture: true,
+      endDrawer: MySideMenuDrawer(),
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
-        title: Text("Quiz App"),
+        toolbarHeight: 70,
+        backgroundColor: decRes!=null?ramdomcolor:Colors.white,
         elevation: 0.0,
-      ),
-      body: RefreshIndicator(
-        onRefresh:() => fetchquestions(context),
-        child: FutureBuilder(
-            future: fetchQuestions("83"),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return Text('Press button to start.');
-                case ConnectionState.active:
-                case ConnectionState.waiting:
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                case ConnectionState.done:
-                  if (snapshot.hasError) return errorData(snapshot);
-                  return questionList();
-              }
-            }),
-      ),
-    );
-  }
-
-  Padding errorData(AsyncSnapshot snapshot) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Error: ${snapshot.error}',
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          RaisedButton(
-            child: Text("Try Again"),
-            onPressed: () {
-              fetchQuestions("83");
-              setState(() {});
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  ListView questionList() {
-    return ListView.builder(
-      itemCount: results.length,
-      itemBuilder: (context, index) => Card(
-        color: Colors.white,
-        elevation: 0.0,
-        child: ExpansionTile(
-          title: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  results[index].id.toString(),
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                FittedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FilterChip(
-                        backgroundColor: Colors.grey[100],
-                        label: Text(results[index].option1.toString()),
-                        onSelected: (b) {},
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      FilterChip(
-                        backgroundColor: Colors.grey[100],
-                        label: Text(
-                          results[index].option2.toString(),
-                        ),
-                        onSelected: (b) {},
-                      )
-                    ],
-                  ),
-                )
-              ],
+        actions: [
+          Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 5.0),
+            child: GestureDetector(
+              onTap: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+              child:  Image.asset("assets/images/side_menu_3.png",height: 40,width: 40),
             ),
           ),
-          // leading: CircleAvatar(
-          //   backgroundColor: Colors.grey[100],
-          //   child: Text(results[index].type.startsWith("m") ? "M" : "B"),
-          // ),
-          // children: results[index].option1Media?.map((m) {
-          //   return AnswerWidget(results, index, m);
-          // }).toList(),
+        ],
+      ),
+      body:decRes==null? Center(
+        child: CircularProgressIndicator(),
+      )
+          :Container(
+        decoration:  BoxDecoration(
+          color: ramdomcolor,
+        ),
+        child: Container(
+            margin: EdgeInsets.fromLTRB(20,0,20,0),
+            child: ListView(
+              children: [
+                Container(
+                    margin: EdgeInsets.fromLTRB(0,20,0,0),
+                    height: 40,
+                    width: 70,
+
+                    // margin:EdgeInsets.fromLTRB(70, 10, 70, 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: ColorConstants.lightgrey200
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,),
+                          TweenAnimationBuilder<Duration>(
+                              duration: Duration(seconds:30),
+                              tween: Tween(begin: Duration(seconds:30), end: Duration(seconds: 0)),
+                              onEnd: () {
+                                reloadques();
+                                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
+                              },
+                              builder: (BuildContext context, Duration value, Widget? child) {
+                                final minutes = value.inMinutes;
+                                final seconds = value.inSeconds % 60;
+                                return Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text('${seconds}Sec',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ramdomcolor,
+                                            fontSize:15)));
+                              }),
+                        ],
+                      ),
+                    )),
+                Container(
+                    margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    child: Text(randomItem['question'].toString(),
+                      style: TextStyle(color: ColorConstants.lightgrey200,fontSize: 18),)),
+
+                if(randomItem['question_media'] != "")
+                  Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Image.network(randomItem['question_media']
+                        ,height: 250,width: 250,alignment: Alignment.center,)),
+
+                if(randomItem['option1'].toString()!="")
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: RaisedButton(
+                      textColor: _hasBeenPressed1 ?  ramdomcolor:ColorConstants.lightgrey200 ,
+                      // 2
+                      color: _hasBeenPressed1 ?  ColorConstants.lightgrey200:ramdomcolor,
+                      onPressed: ()=> {
+                        setState(() {
+                          _hasBeenPressed1 = !_hasBeenPressed1;
+                          _hasBeenPressed2=false;
+                          _hasBeenPressed3=false;
+                          _hasBeenPressed4=false;
+                        })
+                      },
+                      child: Text(randomItem['option1'], style: TextStyle(fontSize: 18),),
+                    ),
+                  ),
+                if(randomItem['option2'].toString()!="")
+                  Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: RaisedButton(
+                      textColor: _hasBeenPressed2 ?  ramdomcolor:ColorConstants.lightgrey200 ,
+                      // 2
+                      color: _hasBeenPressed2 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                      onPressed: ()=> {
+                        setState(() {
+                          _hasBeenPressed2 = !_hasBeenPressed2;
+                          _hasBeenPressed1=false;
+                          _hasBeenPressed3=false;
+                          _hasBeenPressed4=false;
+                        })
+                      },
+                      child: Text(randomItem['option2'].toString(), style: TextStyle(fontSize: 18),),
+                    ),
+                  ),
+                if(randomItem['option3'].toString()!="")
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: RaisedButton(
+                      textColor: _hasBeenPressed3 ?  ramdomcolor:ColorConstants.lightgrey200 ,
+                      // 2
+                      color: _hasBeenPressed3 ?  ColorConstants.lightgrey200:ramdomcolor,
+                      onPressed: ()=> {
+                        setState(() {
+                          _hasBeenPressed3 = !_hasBeenPressed3;
+                          _hasBeenPressed2=false;
+                          _hasBeenPressed1=false;
+                          _hasBeenPressed4=false;
+                        })
+                      },
+                      child: Text(randomItem['option3'].toString(), style: TextStyle(fontSize: 18),),
+                    ),
+                  ),
+                if(randomItem['option4'].toString()!="")
+                  Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: BoxDecoration(
+                      color: ramdomcolor,
+                    ),
+                    child: RaisedButton(
+                      textColor: _hasBeenPressed4 ?  ramdomcolor:ColorConstants.lightgrey200 ,
+                      // 2
+                      color: _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                      onPressed: ()=> {
+                        setState(() {
+                          _hasBeenPressed4 = !_hasBeenPressed4;
+                          _hasBeenPressed2=false;
+                          _hasBeenPressed3=false;
+                          _hasBeenPressed1=false;
+                        })
+                      },
+                      child: Text(randomItem['option4'].toString(), style: TextStyle(fontSize: 18),),
+                    ),
+                  ),
+
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                  child: Row(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                            onPressed: (){
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => const QuizPage()));
+                            },
+                            child: Text("")
+                          //Image.asset("assets/images/left_arrow.png",height: 40,width: 40),
+                        ),
+                      ),
+                      if( randomItem['hint']!=null)
+                        Container(
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape:  RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                                        contentPadding:
+                                        EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                        titleTextStyle: TextStyle(
+                                            fontSize: 12, color: ColorConstants.txt),
+                                        title:  Image.asset(
+                                          "assets/images/hint_white.png",
+                                          height: 50,
+                                          width: 100,
+                                          alignment: Alignment.center,
+                                        ),
+                                        content:
+
+                                        Text(
+                                          randomItem['hint'],
+                                          style: TextStyle(color: ColorConstants.txt),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    });
+                                // Navigator.pushReplacement(context,
+                                //     MaterialPageRoute(builder: (context) => const VjournoMain()));
+                              },
+                              child: Image.asset(
+                                "assets/images/hint.png",
+                                height: 50,
+                                width: 100,
+                              )),
+                        ),
+                      if(randomItem['hint']==null)
+                        Container(
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return GestureDetector(
+                                        onTap: (){
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: AlertDialog(
+                                          shape:  RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                                          contentPadding: EdgeInsets.all(4),
+                                          titleTextStyle: TextStyle(
+                                              fontSize: 12, color: ColorConstants.txt),
+                                          title:  Image.asset(
+                                            "assets/images/hint.png",
+                                            height: 50,
+                                            width: 100,
+                                            alignment: Alignment.center,
+                                          ),
+                                          content:
+                                          Text(
+                                            "No Hint Available",
+                                            style: TextStyle(color: ColorConstants.txt,fontSize: 18),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    });
+                                // Navigator.pushReplacement(context,
+                                //     MaterialPageRoute(builder: (context) => const VjournoMain()));
+                              },
+                              child: Image.asset(
+                                "assets/images/hint.png",
+                                height: 50,
+                                width: 100,
+                              )),
+                        ),
+                      Container(
+
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: (){
+                            reloadques();
+                            // getQuestions(widget.quizid);
+                          },
+                          child: Image.asset("assets/images/rightarrow2.png",height: 40,width: 40),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Image.asset('assets/images/mcq_pattern_3.png',height: 70,width: 70,alignment: Alignment.bottomCenter,)
+              ],
+            )
         ),
       ),
+
     );
   }
 }
-
-// class AnswerWidget extends StatefulWidget {
-//   final List<Question> results;
-//   final int index;
-//   final String m;
-//
-//   AnswerWidget(this.results, this.index, this.m);
-//
-//   @override
-//   _AnswerWidgetState createState() => _AnswerWidgetState();
-// }
-//
-// class _AnswerWidgetState extends State<AnswerWidget> {
-//   Color c = Colors.black;
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListTile(
-//       onTap: () {
-//         setState(() {
-//           if (widget.m == widget.results[widget.index].rightOption) {
-//             c = Colors.green;
-//           } else {
-//             c = Colors.red;
-//           }
-//         });
-//       },
-//       title: Text(
-//         widget.m,
-//         textAlign: TextAlign.center,
-//         style: TextStyle(
-//           color: c,
-//           fontWeight: FontWeight.bold,
-//         ),
-//       ),
-//     );
-//   }
-// }

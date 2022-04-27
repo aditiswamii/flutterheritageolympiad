@@ -52,7 +52,7 @@ class _State extends State<AllDonePage> implements AllDoneView {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -65,14 +65,14 @@ class _State extends State<AllDonePage> implements AllDoneView {
                   margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
                   child: const Text("ALL DONE!",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                   child: const Text(
                       "To start using the app,please verify your email address",
                       style: TextStyle(
-                          fontSize: 18, color: ColorConstants.Omnes_font))),
+                          fontSize: 18, color: ColorConstants.txt))),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 alignment: Alignment.centerLeft,
@@ -93,7 +93,7 @@ class _State extends State<AllDonePage> implements AllDoneView {
                   child: const Text(
                     "NEXT",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16),
+                        color: ColorConstants.txt, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -101,7 +101,7 @@ class _State extends State<AllDonePage> implements AllDoneView {
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: const Divider(
-                  color: ColorConstants.Omnes_font,
+                  color: ColorConstants.txt,
                   height: 2,
                   indent: 10,
                   endIndent: 10,
@@ -114,7 +114,7 @@ class _State extends State<AllDonePage> implements AllDoneView {
                   child: const Text(
                       "Haven't gotten an email?We can send it again!",
                       style: TextStyle(
-                          fontSize: 18, color: ColorConstants.Omnes_font))),
+                          fontSize: 18, color: ColorConstants.txt))),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 20, 10),
                 alignment: Alignment.centerLeft,
@@ -149,7 +149,7 @@ class _State extends State<AllDonePage> implements AllDoneView {
                       child: const Text(
                         "RESEND",
                         style: TextStyle(
-                            color: ColorConstants.Omnes_font, fontSize: 16),
+                            color: ColorConstants.txt, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -162,16 +162,16 @@ class _State extends State<AllDonePage> implements AllDoneView {
                                   contentPadding:
                                       EdgeInsets.fromLTRB(0, 10, 0, 10),
                                   titleTextStyle: TextStyle(
-                                      fontSize: 12, color: ColorConstants.Omnes_font),
+                                      fontSize: 12, color: ColorConstants.txt),
                                   title:  Image.asset(
-                                    "assets/hint.png",
+                                    "assets/images/hint.png",
                                     height: 50,
                                     width: 100,
                                     alignment: Alignment.center,
                                   ),
                                   content: Text(
                                     'Check your spam!',
-                                    style: TextStyle(color: ColorConstants.Omnes_font),
+                                    style: TextStyle(color: ColorConstants.txt),
                                     textAlign: TextAlign.center,
                                   ),
                                 );
@@ -180,7 +180,7 @@ class _State extends State<AllDonePage> implements AllDoneView {
                           //     MaterialPageRoute(builder: (context) => const VjournoMain()));
                         },
                         child: Image.asset(
-                          "assets/hint.png",
+                          "assets/images/hint.png",
                           height: 50,
                           width: 100,
                         )),

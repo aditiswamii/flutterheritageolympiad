@@ -26,8 +26,8 @@ class PersonalInfoScreen extends StatefulWidget {
 
 class _PersonalinfoState extends State<PersonalInfoScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  Color textcolor = ColorConstants.Omnes_font;
-  Color textcolor1 = ColorConstants.Omnes_font;
+  Color textcolor = ColorConstants.txt;
+  Color textcolor1 = ColorConstants.txt;
   var selected = '';
   TextEditingController firstnamecontroller = TextEditingController();
   TextEditingController  lastnamecontroller= TextEditingController();
@@ -76,7 +76,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -123,7 +123,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
                       child: const Text("PERSONAL INFORMATION",
                           style: TextStyle(
-                              fontSize: 24, color: ColorConstants.Omnes_font))),
+                              fontSize: 24, color: ColorConstants.txt))),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: GestureDetector(

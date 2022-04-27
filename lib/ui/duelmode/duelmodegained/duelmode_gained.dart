@@ -44,7 +44,7 @@ class _State extends State<DuelModeGained> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -66,7 +66,7 @@ class _State extends State<DuelModeGained> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -78,7 +78,7 @@ class _State extends State<DuelModeGained> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -89,14 +89,14 @@ class _State extends State<DuelModeGained> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("Carousel to XP",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                     "YOU\nGAINED....",
                     style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font),
+                        fontSize: 24, color: ColorConstants.txt),
                     textAlign: TextAlign.center,
                   )),
               TextButton(

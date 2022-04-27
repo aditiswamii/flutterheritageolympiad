@@ -1,17 +1,22 @@
 import 'dart:convert';
+import 'dart:math';
+import 'dart:ui';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../modal/classicquestion/ClassicQuestion.dart';
-
+import '../../../modal/classicquestion/getQuestionResponse.dart';
+import 'dart:convert' as convert;
 
 class ClassicQuestion extends StatefulWidget{
-  const ClassicQuestion({Key? key}) : super(key: key);
+  var quizid;
+   ClassicQuestion({Key? key,required this.quizid}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -19,38 +24,109 @@ class ClassicQuestion extends StatefulWidget{
 
 
 class _State extends State<ClassicQuestion> {
-  bool _hasBeenPressed = false;
-
-  String? data;
+  bool _hasBeenPressed1 = false;
+  bool _hasBeenPressed2 = false;
+  bool _hasBeenPressed3 = false;
+  bool _hasBeenPressed4 = false;
+  var quiz;
+  var results;
+  var  c;
+  var data;
+  var questions;
+  var randomItem;
+  var questionlistlen;
+  Random random = Random();
+ var selectedquestion;
   var domains_length;
+  var totalques;
+  var totalquesinquiz;
+  var questime;
+  var quiztype;
+  var ramdomcolor;
+  var quesdata;
+  var decRes;
   @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
-    getData('83');
+    getQuestions(widget.quizid);
+
+    ramdomcolor = (color..shuffle()).first;
   }
-  void getData(String quiz_id) async {
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  List <Color> color= <Color>[
+    Color(0xFFED313B),
+    Color(0xFF2da79e)
+  ];
+  void getQuestions(String quiz_id) async {
     http.Response response =
     await http.post(Uri.parse("http://3.108.183.42/api/questions"),
         body: {
           'quiz_id': quiz_id.toString(),
         });
+    showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      data = response.body; //store response as string
-      setState(() {
-        domains_length = Data.fromJson(data).question;
-        // domains_length = jsonDecode(
-        //     data!)['question']; //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
-      });
-      var venam = jsonDecode(data!)['data']['question'];
-      var userid = jsonDecode(data!)['data']['quiz_type'];
-      var time = jsonDecode(data!)['data']['time'];
-      var whole_quiz_time = jsonDecode(data!)['data']['whole_quiz_time'];
-      var total_question = jsonDecode(data!)['data']['total_question'];
-      var total_question_in_quiz = jsonDecode(data!)['data']['total_question_in_quiz'];
-      print(venam);
+      Navigator.pop(context);
+      data=response.body;
+      if (jsonResponse['status'] == 200) {
+         decRes = jsonDecode(response.body);
+        quesdata=jsonDecode(data!)['data'];
+        setState(() {
+         questions = jsonDecode(data!)['data']['question'];
+         totalques = jsonDecode(data!)['data']['total_question'];
+         totalquesinquiz = jsonDecode(data!)['data']['total_question_in_quiz'];
+         questime = jsonDecode(data!)['data']['time'];
+         quiztype = jsonDecode(data!)['data']['quiz_type'];
+         questionlistlen=questions.length;
+        });
+
+        print(questions.toString());
+        print(decRes);
+        c = Colors.black;
+        //quiz=getQuestionResponseFromJson(data!).data;
+        // setState(() {
+        //   quiz = Data.fromJson(decRes);
+        // });
+        randomItem = (questions..shuffle()).first;
+
+         questionlistlen=questions.length;
+         print(randomItem['question']);
+        print(randomItem['question_media']);
+        print(randomItem['width']);
+        print(randomItem['height']);
+        print(randomItem['option1']);
+        print(randomItem['option1_media']);
+        print(randomItem['option2']);
+        print(randomItem['option2_media']);
+        print(randomItem['option3']);
+        print(randomItem['option3_media']);
+        print(randomItem['option4']);
+        print(randomItem['option4_media']);
+        print(randomItem['right_option']);
+        print(randomItem['hint']);
+        print(randomItem['question_media_type']);
+        print(randomItem['why_right']);
+        print(randomItem['type']);
+        print(randomItem['id']);
+      }
     } else {
+      Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -62,7 +138,7 @@ class _State extends State<ClassicQuestion> {
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>ClassicQuestion()));
+        builder: (BuildContext context) =>WelcomePage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -70,7 +146,7 @@ class _State extends State<ClassicQuestion> {
 
   @override
   Widget build(BuildContext context) {
-    Colors.white;
+    //Colors.white;
     return  Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
@@ -78,7 +154,7 @@ class _State extends State<ClassicQuestion> {
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         toolbarHeight: 70,
-        backgroundColor: ColorConstants.verd_dark,
+        backgroundColor: decRes!=null?ramdomcolor:Colors.white,
         elevation: 0.0,
         actions: [
         Container(
@@ -88,112 +164,140 @@ class _State extends State<ClassicQuestion> {
             onTap: () {
               Scaffold.of(context).openEndDrawer();
             },
-            child:  Image.asset("assets/side_menu_3.png",height: 40,width: 40),
+            child:  Image.asset("assets/images/side_menu_3.png",height: 40,width: 40),
           ),
         ),
         ],
       ),
-      body:Container(
+      body:decRes==null? Center(
+        child: CircularProgressIndicator(),
+      )
+          :Container(
         decoration:  BoxDecoration(
-         color: ColorConstants.verd_dark
+         color: ramdomcolor,
         ),
         child: Container(
-            margin: EdgeInsets.fromLTRB(20,20,20,0),
+            margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [
                 Container(
-                  height: 30,
-                    alignment: Alignment.center,
-                    margin:EdgeInsets.fromLTRB(70, 10, 70, 10),
+                    margin: EdgeInsets.fromLTRB(0,20,0,0),
+                  height: 40,
+                    width: 70,
+
+                   // margin:EdgeInsets.fromLTRB(70, 10, 70, 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: ColorConstants.to_the_shop
+                      color: ColorConstants.lightgrey200
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/clock_green.png",width: 20,height: 20,),
-                        TweenAnimationBuilder<Duration>(
-                            duration: Duration(seconds:30),
-                            tween: Tween(begin: Duration(seconds:30), end: Duration.zero),
-                            onEnd: () {
-                            //  Navigator.of(context).pop();
-                            },
-                            builder: (BuildContext context, Duration value, Widget? child) {
-                              final minutes = value.inMinutes;
-                              final seconds = value.inSeconds % 60;
-                              return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text('${seconds}Sec',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: ColorConstants.verd_dark,
-                                          fontSize:15)));
-                            }),
-                      ],
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,),
+                          TweenAnimationBuilder<Duration>(
+                              duration: Duration(seconds:30),
+                              tween: Tween(begin: Duration(seconds:30), end: Duration(seconds: 0)),
+                              onEnd: () {
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                    builder: (BuildContext context) =>ClassicQuestion(quizid: widget.quizid,)));
+                              },
+                              builder: (BuildContext context, Duration value, Widget? child) {
+                                final minutes = value.inMinutes;
+                                final seconds = value.inSeconds % 60;
+                                return Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text('${seconds}Sec',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ramdomcolor,
+                                            fontSize:15)));
+                              }),
+                        ],
+                      ),
                     )),
                 Container(
                  margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                 child: Text(Question.fromJson(data).id.toString(),
-                   style: TextStyle(color: ColorConstants.to_the_shop,fontSize: 18),)),
-                 Container(
-                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                     child: Image.asset("assets/sample_image.png",
-                       height: 250,width: 250,alignment: Alignment.center,)),
+                 child: Text(randomItem['question'].toString(),
+                   style: TextStyle(color: ColorConstants.lightgrey200,fontSize: 18),)),
+
+                 if(randomItem['question_media'] != "")
                 Container(
+                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                     child: Image.asset("assets/images/sample_image.png",
+                       height: 250,width: 250,alignment: Alignment.center,)),
+
+                if(randomItem['option1'].toString()!="")
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: RaisedButton(
-                    textColor: _hasBeenPressed ? ColorConstants.to_the_shop: ColorConstants.verdigris ,
+                    textColor: _hasBeenPressed1 ?  ramdomcolor:ColorConstants.lightgrey200 ,
                     // 2
-                    color: _hasBeenPressed ? ColorConstants.verdigris : ColorConstants.to_the_shop,
+                    color: _hasBeenPressed1 ?  ColorConstants.lightgrey200:ramdomcolor,
                     onPressed: ()=> {
                   setState(() {
-                  _hasBeenPressed = !_hasBeenPressed;
+                  _hasBeenPressed1 = !_hasBeenPressed1;
+                  _hasBeenPressed2=false;
+                  _hasBeenPressed3=false;
+                  _hasBeenPressed4=false;
                   })
                     },
-                    child: Text('Atoll', style: TextStyle(fontSize: 18),),
+                    child: Text(randomItem['option1'], style: TextStyle(fontSize: 18),),
                   ),
                 ),
-                Container(
+                if(randomItem['option2'].toString()!="")
+                Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: RaisedButton(
-                    textColor: _hasBeenPressed ? ColorConstants.to_the_shop: ColorConstants.verdigris ,
+                    textColor: _hasBeenPressed2 ?  ramdomcolor:ColorConstants.lightgrey200 ,
                     // 2
-                    color: _hasBeenPressed ? ColorConstants.verdigris : ColorConstants.to_the_shop,
+                    color: _hasBeenPressed2 ?  ColorConstants.lightgrey200:ramdomcolor ,
                     onPressed: ()=> {
                       setState(() {
-                        _hasBeenPressed = !_hasBeenPressed;
+                        _hasBeenPressed2 = !_hasBeenPressed2;
+                        _hasBeenPressed1=false;
+                        _hasBeenPressed3=false;
+                        _hasBeenPressed4=false;
                       })
                     },
-                    child: Text('Fringing', style: TextStyle(fontSize: 18),),
+                    child: Text(randomItem['option2'].toString(), style: TextStyle(fontSize: 18),),
                   ),
                 ),
+                if(randomItem['option3'].toString()!="")
                 Container(
-
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: RaisedButton(
-                    textColor: _hasBeenPressed ? ColorConstants.to_the_shop: ColorConstants.verdigris ,
+                    textColor: _hasBeenPressed3 ?  ramdomcolor:ColorConstants.lightgrey200 ,
                     // 2
-                    color: _hasBeenPressed ? ColorConstants.verdigris : ColorConstants.to_the_shop,
+                    color: _hasBeenPressed3 ?  ColorConstants.lightgrey200:ramdomcolor,
                     onPressed: ()=> {
                       setState(() {
-                        _hasBeenPressed = !_hasBeenPressed;
+                        _hasBeenPressed3 = !_hasBeenPressed3;
+                        _hasBeenPressed2=false;
+                        _hasBeenPressed1=false;
+                        _hasBeenPressed4=false;
                       })
                     },
-                    child: Text('Barrier', style: TextStyle(fontSize: 18),),
+                    child: Text(randomItem['option3'].toString(), style: TextStyle(fontSize: 18),),
                   ),
                 ),
-                Container(
+                if(randomItem['option4'].toString()!="")
+                Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   decoration: BoxDecoration(
-                    color: ColorConstants.verd_dark,
+                    color: ramdomcolor,
                   ),
                   child: RaisedButton(
-                    textColor: _hasBeenPressed ? ColorConstants.to_the_shop: ColorConstants.verdigris ,
+                    textColor: _hasBeenPressed4 ?  ramdomcolor:ColorConstants.lightgrey200 ,
                     // 2
-                    color: _hasBeenPressed ? ColorConstants.verdigris : ColorConstants.to_the_shop,
+                    color: _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
                     onPressed: ()=> {
                       setState(() {
-                        _hasBeenPressed = !_hasBeenPressed;
+                        _hasBeenPressed4 = !_hasBeenPressed4;
+                        _hasBeenPressed2=false;
+                        _hasBeenPressed3=false;
+                        _hasBeenPressed1=false;
                       })
                     },
-                    child: Text('Platform', style: TextStyle(fontSize: 18),),
+                    child: Text(randomItem['option4'].toString(), style: TextStyle(fontSize: 18),),
                   ),
                 ),
 
@@ -207,14 +311,16 @@ class _State extends State<ClassicQuestion> {
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                           onPressed: (){
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const QuizPage()));
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => const QuizPage()));
                           },
-                          child: Image.asset("assets/left_arrow.png",height: 40,width: 40),
+                          child: Text("")
+                          //Image.asset("assets/images/left_arrow.png",height: 40,width: 40),
                         ),
                       ),
+                      if( randomItem['hint']!=null)
                       Container(
                         alignment: Alignment.center,
                         child: GestureDetector(
@@ -228,16 +334,18 @@ class _State extends State<ClassicQuestion> {
                                       contentPadding:
                                       EdgeInsets.fromLTRB(0, 10, 0, 10),
                                       titleTextStyle: TextStyle(
-                                          fontSize: 12, color: ColorConstants.Omnes_font),
+                                          fontSize: 12, color: ColorConstants.txt),
                                       title:  Image.asset(
-                                        "assets/hint_white.png",
+                                        "assets/images/hint_white.png",
                                         height: 50,
                                         width: 100,
                                         alignment: Alignment.center,
                                       ),
-                                      content: Text(
-                                        'Check your spam!',
-                                        style: TextStyle(color: ColorConstants.Omnes_font),
+                                      content:
+
+                                      Text(
+                                        randomItem['hint'],
+                                        style: TextStyle(color: ColorConstants.txt),
                                         textAlign: TextAlign.center,
                                       ),
                                     );
@@ -246,7 +354,46 @@ class _State extends State<ClassicQuestion> {
                               //     MaterialPageRoute(builder: (context) => const VjournoMain()));
                             },
                             child: Image.asset(
-                              "assets/hint.png",
+                              "assets/images/hint.png",
+                              height: 50,
+                              width: 100,
+                            )),
+                      ),
+                      if(randomItem['hint']==null)
+                      Container(
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape:  RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                                      contentPadding:
+                                      EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                      titleTextStyle: TextStyle(
+                                          fontSize: 12, color: ColorConstants.txt),
+                                      title:  Image.asset(
+                                        "assets/images/hint_white.png",
+                                        height: 50,
+                                        width: 100,
+                                        alignment: Alignment.center,
+                                      ),
+                                      content:
+
+                                      Text(
+                                        "No Hint Available",
+                                        style: TextStyle(color: ColorConstants.txt),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                  });
+                              // Navigator.pushReplacement(context,
+                              //     MaterialPageRoute(builder: (context) => const VjournoMain()));
+                            },
+                            child: Image.asset(
+                              "assets/images/hint.png",
                               height: 50,
                               width: 100,
                             )),
@@ -256,16 +403,15 @@ class _State extends State<ClassicQuestion> {
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                           onPressed: (){
-                            // Navigator.pushReplacement(context,
-                            //     MaterialPageRoute(builder: (context) => const PhoneNumber()));
+                            getQuestions(widget.quizid);
                           },
-                          child: Image.asset("assets/rightarrow2.png",height: 40,width: 40),
+                          child: Image.asset("assets/images/rightarrow2.png",height: 40,width: 40),
                         ),
                       ),
                     ],
                   ),
                 ),
-                Image.asset('assets/mcq_pattern_3.png',height: 70,width: 70,alignment: Alignment.bottomCenter,)
+                Image.asset('assets/images/mcq_pattern_3.png',height: 70,width: 70,alignment: Alignment.bottomCenter,)
               ],
             )
         ),

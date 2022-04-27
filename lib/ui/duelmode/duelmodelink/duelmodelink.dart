@@ -97,20 +97,20 @@ class _State extends State<DuelModeLink> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("DUEL MODE",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "You may invite minimum 2 other player in\nyour contact list to quiz with.",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 50, 10, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: ColorConstants.to_the_shop,
+                    primary: ColorConstants.lightgrey200,
                     onPrimary: Colors.white,
                     elevation: 3,
                     alignment: Alignment.center,
@@ -126,7 +126,7 @@ class _State extends State<DuelModeLink> {
                   child:  Text(
                     "$link",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize:30),
+                        color: ColorConstants.txt, fontSize:30),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -137,7 +137,7 @@ class _State extends State<DuelModeLink> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.myfeed,
+                        primary: ColorConstants.yellow200,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -169,13 +169,13 @@ class _State extends State<DuelModeLink> {
                       child: const Text(
                         "COPY LINK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.myfeed,
+                        primary: ColorConstants.yellow200,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -195,7 +195,7 @@ class _State extends State<DuelModeLink> {
                       child: const Text(
                         "SHARE LINK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -229,7 +229,7 @@ class _State extends State<DuelModeLink> {
                       child: const Text(
                         "EDIT QUIZ",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -253,7 +253,7 @@ class _State extends State<DuelModeLink> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

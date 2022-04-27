@@ -124,14 +124,14 @@ var userid;
                   margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
                   child: const Text("ALL DONE!",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                   child: const Text(
                       "To start using the app,please verify your email address",
                       style: TextStyle(
-                          fontSize: 18, color: ColorConstants.Omnes_font))),
+                          fontSize: 18, color: ColorConstants.txt))),
               Flexible(child:
               Container(
                 height: 60,
@@ -172,7 +172,7 @@ var userid;
                   child: const Text(
                     "NEXT",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16),
+                        color: ColorConstants.txt, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -180,7 +180,7 @@ var userid;
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: const Divider(
-                  color: ColorConstants.Omnes_font,
+                  color: ColorConstants.txt,
                   height: 2,
                   indent: 10,
                   endIndent: 10,
@@ -193,7 +193,7 @@ var userid;
                   child: const Text(
                       "Haven't gotten an email?We can send it again!",
                       style: TextStyle(
-                          fontSize: 18, color: ColorConstants.Omnes_font))),
+                          fontSize: 18, color: ColorConstants.txt))),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 20, 10),
                 alignment: Alignment.centerLeft,
@@ -228,7 +228,7 @@ var userid;
                       child: const Text(
                         "RESEND",
                         style: TextStyle(
-                            color: ColorConstants.Omnes_font, fontSize: 16),
+                            color: ColorConstants.txt, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -241,7 +241,7 @@ var userid;
                                   contentPadding:
                                   EdgeInsets.fromLTRB(0, 10, 0, 10),
                                   titleTextStyle: TextStyle(
-                                      fontSize: 12, color: ColorConstants.Omnes_font),
+                                      fontSize: 12, color: ColorConstants.txt),
                                   title:  Image.asset(
                                     "assets/hint.png",
                                     height: 50,
@@ -250,7 +250,7 @@ var userid;
                                   ),
                                   content: Text(
                                     'Check your spam!',
-                                    style: TextStyle(color: ColorConstants.Omnes_font),
+                                    style: TextStyle(color: ColorConstants.txt),
                                     textAlign: TextAlign.center,
                                   ),
                                 );

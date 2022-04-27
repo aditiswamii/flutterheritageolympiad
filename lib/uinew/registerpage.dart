@@ -243,13 +243,13 @@ class _State extends State<RegisterPage> {
                 margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
                 child: const Text("ALMOST THERE...",
                     style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 alignment: Alignment.centerLeft,
                 child: Text("First Name*",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
               // height: 60,
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -262,7 +262,7 @@ class _State extends State<RegisterPage> {
                   labelStyle: TextStyle(textBaseline: TextBaseline.alphabetic),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: ColorConstants.Omnes_font, width: 1.0),
+                        color: ColorConstants.txt, width: 1.0),
                   ),
                 ),
                 inputFormatters: <TextInputFormatter>[
@@ -275,7 +275,7 @@ class _State extends State<RegisterPage> {
                 alignment: Alignment.centerLeft,
                 child: Text('Last Name*',
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: TextField(
@@ -287,7 +287,7 @@ class _State extends State<RegisterPage> {
                   labelStyle: TextStyle(textBaseline: TextBaseline.alphabetic),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: ColorConstants.Omnes_font, width: 1.0),
+                        color: ColorConstants.txt, width: 1.0),
                   ),
                 ),
                 inputFormatters: <TextInputFormatter>[
@@ -300,7 +300,7 @@ class _State extends State<RegisterPage> {
                 alignment: Alignment.centerLeft,
                 child: Text("Country*",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
                 height: 50,
                 alignment: Alignment.centerLeft,
@@ -355,7 +355,7 @@ class _State extends State<RegisterPage> {
                                               [index]['name'],
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: ColorConstants.Omnes_font),
+                                              color: ColorConstants.txt),
                                         ),
                                       ),
                                     ),
@@ -376,11 +376,11 @@ class _State extends State<RegisterPage> {
                         child: countryname == null
                             ? Text("Select Country",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14))
                             : Text(countryname.toString(),
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14)),
                       ),
                       Icon(
@@ -391,7 +391,7 @@ class _State extends State<RegisterPage> {
                   ),
                 )),
             Divider(
-              color: ColorConstants.Omnes_font,
+              color: ColorConstants.txt,
               height: 1,
               thickness: 1,
             ),
@@ -400,7 +400,7 @@ class _State extends State<RegisterPage> {
                 alignment: Alignment.centerLeft,
                 child: Text("State/Province*",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
                 height: 50,
                 alignment: Alignment.centerLeft,
@@ -452,7 +452,7 @@ class _State extends State<RegisterPage> {
                                               [index]['name'],
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: ColorConstants.Omnes_font),
+                                              color: ColorConstants.txt),
                                         ),
                                       ),
                                     ),
@@ -473,11 +473,11 @@ class _State extends State<RegisterPage> {
                         child: statename == null
                             ? Text("Select State",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14))
                             : Text(statename.toString(),
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14)),
                       ),
                       Icon(
@@ -488,7 +488,7 @@ class _State extends State<RegisterPage> {
                   ),
                 )),
             Divider(
-              color: ColorConstants.Omnes_font,
+              color: ColorConstants.txt,
               height: 1,
               thickness: 1,
             ),
@@ -497,7 +497,7 @@ class _State extends State<RegisterPage> {
                 alignment: Alignment.centerLeft,
                 child: Text('City',
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
                 height: 50,
                 alignment: Alignment.centerLeft,
@@ -548,7 +548,7 @@ class _State extends State<RegisterPage> {
                                               ['name'],
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: ColorConstants.Omnes_font),
+                                              color: ColorConstants.txt),
                                         ),
                                       ),
                                     ),
@@ -569,11 +569,11 @@ class _State extends State<RegisterPage> {
                         child: cityname == null
                             ? Text("Select City",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14))
                             : Text(cityname.toString(),
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14)),
                       ),
                       Icon(
@@ -584,7 +584,7 @@ class _State extends State<RegisterPage> {
                   ),
                 )),
             Divider(
-              color: ColorConstants.Omnes_font,
+              color: ColorConstants.txt,
               height: 1,
               thickness: 1,
             ),
@@ -596,7 +596,7 @@ class _State extends State<RegisterPage> {
                 ),
                 child: Text('Date of Birth*(DD/MM/YYYY)',
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
               height: 50,
               alignment: Alignment.centerLeft,
@@ -614,14 +614,14 @@ class _State extends State<RegisterPage> {
                   child: dobdate == null
                       ? Text("Select DOB",
                           style: TextStyle(
-                              color: ColorConstants.Omnes_font, fontSize: 14))
+                              color: ColorConstants.txt, fontSize: 14))
                       : Text("${dobdate}",
                           style: TextStyle(
-                              color: ColorConstants.Omnes_font, fontSize: 14))),
+                              color: ColorConstants.txt, fontSize: 14))),
               // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             ),
             Divider(
-              color: ColorConstants.Omnes_font,
+              color: ColorConstants.txt,
               height: 1,
               thickness: 1,
             ),
@@ -630,7 +630,7 @@ class _State extends State<RegisterPage> {
                 alignment: Alignment.centerLeft,
                 child: Text("Gender",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize: 16.0))),
+                        color: ColorConstants.txt, fontSize: 16.0))),
             Container(
                 height: 60,
                 alignment: Alignment.centerLeft,
@@ -673,7 +673,7 @@ class _State extends State<RegisterPage> {
                                         '${genderlist[index]}',
                                         style: TextStyle(
                                             fontSize: 18,
-                                            color: ColorConstants.Omnes_font),
+                                            color: ColorConstants.txt),
                                       ),
                                     ),
                                   ),
@@ -696,11 +696,11 @@ class _State extends State<RegisterPage> {
                         child: gendername == null
                             ? Text("Select Gender",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14))
                             : Text("${gendername}",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 14)),
                       ),
                       Icon(
@@ -711,7 +711,7 @@ class _State extends State<RegisterPage> {
                   ),
                 )),
             Divider(
-              color: ColorConstants.Omnes_font,
+              color: ColorConstants.txt,
               height: 1,
               thickness: 1,
             ),

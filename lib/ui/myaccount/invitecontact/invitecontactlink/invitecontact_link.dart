@@ -11,15 +11,10 @@ import 'package:share_plus/share_plus.dart';
 
 import '../invitecontact.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ContactInviteLink(),
-  ));
-}
+
 
 class ContactInviteLink extends StatefulWidget {
-  const ContactInviteLink({Key? key}) : super(key: key);
+  ContactInviteLink({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -47,9 +42,9 @@ class _State extends State<ContactInviteLink> {
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -94,20 +89,20 @@ class _State extends State<ContactInviteLink> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("INVITE CONTACTS",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "This invite link is valid for 24 hours.",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 50, 10, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: ColorConstants.to_the_shop,
+                    primary: ColorConstants.lightgrey200,
                     onPrimary: Colors.white,
                     elevation: 3,
                     alignment: Alignment.center,
@@ -123,7 +118,7 @@ class _State extends State<ContactInviteLink> {
                   child:  Text(
                     "$link",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize:30),
+                        color: ColorConstants.txt, fontSize:30),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -134,7 +129,7 @@ class _State extends State<ContactInviteLink> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.myfeed,
+                        primary: ColorConstants.yellow200,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -166,13 +161,13 @@ class _State extends State<ContactInviteLink> {
                       child: const Text(
                         "COPY LINK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.myfeed,
+                        primary: ColorConstants.yellow200,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -192,7 +187,7 @@ class _State extends State<ContactInviteLink> {
                       child: const Text(
                         "SHARE LINK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -226,7 +221,7 @@ class _State extends State<ContactInviteLink> {
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -250,7 +245,7 @@ class _State extends State<ContactInviteLink> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

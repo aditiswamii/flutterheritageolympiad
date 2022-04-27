@@ -99,18 +99,18 @@ class _ExperiencePageState extends State<ExperiencePage> {
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: const Text("STAY UNIQUE,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+                            child: const Text("STAY UNIQUE,",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+                            child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
                         Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           child: Text(
                               "You deserve to treat yourself.Find the most unique product and experience here.",
                               style: TextStyle(fontSize: 14,
-                                  color: ColorConstants.Omnes_font)
+                                  color: ColorConstants.txt)
                           ),
                         ),
                       ]

@@ -72,12 +72,12 @@ class _ShopState extends State<ShopPage> {
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
         child:Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
           child: ListView(
               children: [
 
@@ -121,18 +121,18 @@ class _ShopState extends State<ShopPage> {
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: const Text("STAY UNIQUE,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+                      child: const Text("STAY UNIQUE,",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.Omnes_font,fontFamily: "Nunito"))),
+                      child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
                   Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Text(
                         "You deserve to treat yourself.Find the most unique product and experience here.",
                         style: TextStyle(fontSize: 14,
-                            color: ColorConstants.Omnes_font)
+                            color: ColorConstants.txt)
                     ),
                   ),
         ]
@@ -165,7 +165,7 @@ class _ShopState extends State<ShopPage> {
                                 height: 150,
                                // width: 150,
                                 decoration:  BoxDecoration(
-                                    color: clickproduct==true?ColorConstants.myfeed:ColorConstants.myfeed.withAlpha(150)
+                                    color: clickproduct==true?ColorConstants.yellow200:ColorConstants.yellow200.withAlpha(150)
                                 ),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -197,13 +197,13 @@ class _ShopState extends State<ShopPage> {
                                 height: 150,
                               //  width: 150,
                                 decoration:  BoxDecoration(
-                                    color: clickexprerience==true?ColorConstants.to_the_shop:ColorConstants.to_the_shop.withAlpha(150)
+                                    color: clickexprerience==true?ColorConstants.lightgrey200:ColorConstants.lightgrey200.withAlpha(150)
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text("EXPERIENCE",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 18,fontFamily: "Nunito"),textAlign: TextAlign.center,),
-                                    Text("Curated Events Listing",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 12,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+                                    Text("EXPERIENCE",style: TextStyle(color:ColorConstants.txt,fontSize: 18,fontFamily: "Nunito"),textAlign: TextAlign.center,),
+                                    Text("Curated Events Listing",style: TextStyle(color: ColorConstants.txt,fontSize: 12,fontFamily: "Nunito"),textAlign: TextAlign.center,),
 
                                   ],
                                 ),
@@ -232,7 +232,7 @@ class _ShopState extends State<ShopPage> {
                                  height: 150,
                                //   width: 100,
                                 decoration:  BoxDecoration(
-                                    color: clickgift!=true?ColorConstants.myaccount:ColorConstants.myaccount.withAlpha(150)
+                                    color: clickgift!=true?ColorConstants.red200:ColorConstants.red200.withAlpha(150)
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -265,8 +265,8 @@ class _ShopState extends State<ShopPage> {
                                 height: 150,
                                //  width: 100,
                                 decoration:  BoxDecoration(
-                                    color: clickplans!=true?ColorConstants.to_the_quizzes:
-                                    ColorConstants.to_the_quizzes.withAlpha(150)
+                                    color: clickplans!=true?ColorConstants.blue200:
+                                    ColorConstants.blue200.withAlpha(150)
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -311,7 +311,7 @@ class _ShopState extends State<ShopPage> {
                       },
                       child: const Text(
                         "NEXT",
-                        style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                        style: TextStyle(color: ColorConstants.txt, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ),

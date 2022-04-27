@@ -4,17 +4,10 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
-void main() {
 
-  runApp(const MaterialApp(
-
-    debugShowCheckedModeBanner: false,
-    home: PrivacyPage(),
-  ));
-}
 class PrivacyPage extends StatefulWidget{
 
-  const PrivacyPage({Key? key}) : super(key: key);
+   PrivacyPage({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -70,7 +63,7 @@ bool check=false;
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
+                                builder: (context) =>  WelcomePage()));
                       },
                       child: Image.asset(
                         "assets/home_1.png", height: 40, width: 40,),
@@ -93,29 +86,29 @@ bool check=false;
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                  child: const Text("PRIVACY", style: TextStyle(
-                      fontSize: 24, color: ColorConstants.Omnes_font))),
+                  child:  Text("PRIVACY", style: TextStyle(
+                      fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: const Text(
+                  child:  Text(
                       "Edit who can and cannot see your\ninformation.",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                   tileColor: Colors.white,
                 title:  Text(
                       "MY PROFILE IS VISIBLE TO...",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Image.asset("assets/help1.png",height: 20,width: 20,)
 
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: const Divider(
-                  color: ColorConstants.Omnes_font,
+                  color: ColorConstants.txt,
                   height: 2,
                   indent: 10,
                   endIndent: 10,
@@ -128,7 +121,7 @@ bool check=false;
                   title:  Text(
                       "Anyone",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing:Checkbox( value: check,
                     onChanged: (newvalue) {
                       setState(() {
@@ -142,7 +135,7 @@ bool check=false;
                   title:  Text(
                       "Only users I have added",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Checkbox( value: check1,
                     onChanged: (newvalue1) {
                       setState(() {
@@ -156,7 +149,7 @@ bool check=false;
                   title:  Text(
                       "Only me",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Checkbox( value: check2,
                     onChanged: (newvalue2) {
                       setState(() {
@@ -170,14 +163,14 @@ bool check=false;
                   title:  Text(
                       "I CAN BE ADDED BY...",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Image.asset("assets/help1.png",height: 20,width: 20,)
 
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: const Divider(
-                  color: ColorConstants.Omnes_font,
+                  color: ColorConstants.txt,
                   height: 2,
                   indent: 10,
                   endIndent: 10,
@@ -190,7 +183,7 @@ bool check=false;
                   title:  Text(
                       "Everyone",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing:Checkbox( value: check3,
                     onChanged: (newvalue3) {
                       setState(() {
@@ -204,7 +197,7 @@ bool check=false;
                   title:  Text(
                       "Contacts of my contacts",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Checkbox( value: check4,
                     onChanged: (newvalue4) {
                       setState(() {
@@ -218,7 +211,7 @@ bool check=false;
                   title:  Text(
                       "Only those I have added",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Checkbox( value: check5,
                     onChanged: (newvalue5) {
                       setState(() {
@@ -232,14 +225,14 @@ bool check=false;
                   title:  Text(
                       "I CAN BE INVITED BY...",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Image.asset("assets/help1.png",height: 20,width: 20,)
 
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: const Divider(
-                  color: ColorConstants.Omnes_font,
+                  color: ColorConstants.txt,
                   height: 2,
                   indent: 10,
                   endIndent: 10,
@@ -252,7 +245,7 @@ bool check=false;
                   title:  Text(
                       "Everyone",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing:Checkbox( value: check6,
                     onChanged: (newvalue6) {
                       setState(() {
@@ -266,7 +259,7 @@ bool check=false;
                   title:  Text(
                       "Only those I have added",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Checkbox( value: check7,
                     onChanged: (newvalue7) {
                       setState(() {
@@ -280,7 +273,7 @@ bool check=false;
                   title:  Text(
                       "Invite link only",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font)),
+                          fontSize: 15, color: ColorConstants.txt)),
                   trailing: Checkbox(
                     activeColor: Colors.grey,
                     checkColor: Colors.grey,
@@ -316,7 +309,7 @@ bool check=false;
                   child: const Text(
                     "GO BACK",
                     style: TextStyle(
-                        color: ColorConstants.to_the_shop, fontSize: 14),
+                        color: ColorConstants.lightgrey200, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -340,7 +333,7 @@ bool check=false;
                   child: const Text(
                     "SAVE",
                     style: TextStyle(
-                        color: ColorConstants.to_the_shop, fontSize: 14),
+                        color: ColorConstants.lightgrey200, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
                 ),

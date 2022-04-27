@@ -93,7 +93,7 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
                     child: const Text("CHANGE PASSWORD", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
                 Flexible(child:
                 Container(
                   height: 40,
@@ -236,7 +236,7 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -275,7 +275,7 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                         child: const Text(
                           "LET'S GO!",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),

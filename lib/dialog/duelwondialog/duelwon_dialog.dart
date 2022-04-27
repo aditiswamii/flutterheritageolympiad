@@ -35,7 +35,7 @@ class _State extends State<DialogDuelWon> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text('You won the duel!',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 24 ),)
+                    child: Text('You won the duel!',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 24 ),)
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -44,7 +44,7 @@ class _State extends State<DialogDuelWon> with WidgetsBindingObserver {
                   child: CircleAvatar(
                     radius: 30.0,
                     backgroundImage:
-                    AssetImage("assets/cat1.png"),
+                    AssetImage("assets/images/cat1.png"),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -57,7 +57,7 @@ class _State extends State<DialogDuelWon> with WidgetsBindingObserver {
                     child: Text('Congratulations!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: ColorConstants.Omnes_font,fontSize:18 ),)
+                          color: ColorConstants.txt,fontSize:18 ),)
                 ),
                 Container(
                     alignment: Alignment.center,
@@ -65,7 +65,7 @@ class _State extends State<DialogDuelWon> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text("Keep it up!",textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize:13 ),)
+                    child: Text("Keep it up!",textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:13 ),)
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -86,7 +86,7 @@ class _State extends State<DialogDuelWon> with WidgetsBindingObserver {
                       //     MaterialPageRoute(
                       //         builder: (context) => const AlmostTherePage()));
                     },
-                    child: Image.asset("assets/share.png",height: 30,width: 30,)
+                    child: Image.asset("assets/images/share.png",height: 30,width: 30,)
                   ),
                 ),
               ],

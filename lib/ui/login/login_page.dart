@@ -114,7 +114,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: const Text("LOG IN", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
                 Flexible(child:
                 Container(
                   height: 60,
@@ -211,7 +211,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                           },
                         child: const Text(
                           "LET'S GO",
-                          style: TextStyle(color: ColorConstants.Omnes_font,
+                          style: TextStyle(color: ColorConstants.txt,
                               fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -225,7 +225,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                         },
                         child: Text("Forget Password?",style: TextStyle(
                             decoration: TextDecoration.underline,
-                            color: ColorConstants.Omnes_font)),
+                            color: ColorConstants.txt)),
                       ),
                     ],
                   ),
@@ -241,7 +241,7 @@ class _State extends State<LoginPage> implements LoginViewModal{
                       },
                       child: Text("I don't have an account", style: TextStyle(
                           decoration: TextDecoration.underline,
-                          color: ColorConstants.Omnes_font),),
+                          color: ColorConstants.txt),),
                     )),
 
               ],

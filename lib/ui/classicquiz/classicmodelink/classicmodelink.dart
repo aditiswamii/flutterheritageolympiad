@@ -55,7 +55,7 @@ class _State extends State<ClassicModeLink> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -77,7 +77,7 @@ class _State extends State<ClassicModeLink> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -89,7 +89,7 @@ class _State extends State<ClassicModeLink> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -100,20 +100,20 @@ class _State extends State<ClassicModeLink> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("DUEL MODE",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "You may invite minimum 2 other player in\nyour contact list to quiz with.",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 50, 10, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: ColorConstants.to_the_shop,
+                    primary: ColorConstants.lightgrey200,
                     onPrimary: Colors.white,
                     elevation: 3,
                     alignment: Alignment.center,
@@ -129,7 +129,7 @@ class _State extends State<ClassicModeLink> {
                   child:  Text(
                     "$link",
                     style: TextStyle(
-                        color: ColorConstants.Omnes_font, fontSize:30),
+                        color: ColorConstants.txt, fontSize:30),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -140,7 +140,7 @@ class _State extends State<ClassicModeLink> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.myfeed,
+                        primary: ColorConstants.yellow200,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -172,13 +172,13 @@ class _State extends State<ClassicModeLink> {
                       child: const Text(
                         "COPY LINK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.myfeed,
+                        primary: ColorConstants.yellow200,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -198,7 +198,7 @@ class _State extends State<ClassicModeLink> {
                       child: const Text(
                         "SHARE LINK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -232,7 +232,7 @@ class _State extends State<ClassicModeLink> {
                       child: const Text(
                         "EDIT QUIZ",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -256,7 +256,7 @@ class _State extends State<ClassicModeLink> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

@@ -7,14 +7,7 @@ import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
-void main() {
 
-  runApp(const MaterialApp(
-
-    debugShowCheckedModeBanner: false,
-    home: InviteContactScreen(),
-  ));
-}
 class InviteContactScreen extends StatefulWidget{
 
   const InviteContactScreen({Key? key}) : super(key: key);
@@ -27,9 +20,9 @@ class InviteContactScreen extends StatefulWidget{
 class _State extends State<InviteContactScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   Color _colorContainer = Colors.white;
-  Color textcolor=ColorConstants.Omnes_font;
+  Color textcolor=ColorConstants.txt;
   Color _colorContainer1 = Colors.white;
-  Color textcolor1=ColorConstants.Omnes_font;
+  Color textcolor1=ColorConstants.txt;
  var selected='';
  // int click=0;
 
@@ -57,7 +50,7 @@ class _State extends State<InviteContactScreen> {
         body: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/login_bg.jpg"),
+                image: AssetImage("assets/images/debackground.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -104,14 +97,14 @@ class _State extends State<InviteContactScreen> {
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                           child: const Text("INVITE CONTACTS", style: TextStyle(
-                              fontSize: 24, color: ColorConstants.Omnes_font))),
+                              fontSize: 24, color: ColorConstants.txt))),
                       Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child:  Text(
                               "You have 50 contacts.You may remove,block\nor report them",
                               style: TextStyle(fontSize: 15,
-                                  color: ColorConstants.Omnes_font)
+                                  color: ColorConstants.txt)
                           ),
                       ),
 
@@ -126,7 +119,7 @@ class _State extends State<InviteContactScreen> {
                           height: 150,
                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                           child: Card(
-                            color: selected == 'first' ? ColorConstants.myfeed : Colors.white,
+                            color: selected == 'first' ? ColorConstants.yellow200 : Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                               // if you need this
@@ -159,7 +152,7 @@ class _State extends State<InviteContactScreen> {
                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                           decoration: const BoxDecoration(color: Colors.white),
                           child: Card(
-                            color: selected == 'second' ? ColorConstants.myfeed : Colors.white,
+                            color: selected == 'second' ? ColorConstants.yellow200 : Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                               // if you need this
@@ -203,7 +196,7 @@ class _State extends State<InviteContactScreen> {
                               child: const Text(
                                 "GO BACK",
                                 style: TextStyle(
-                                    color: ColorConstants.to_the_shop, fontSize: 14),
+                                    color: ColorConstants.lightgrey200, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -225,13 +218,13 @@ class _State extends State<InviteContactScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (
-                                                context) => const PhonebookScreen()));
+                                                context) =>  PhonebookScreen()));
                                   } else if (selected == 'second') {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                             builder: (
-                                                context) => const ContactInviteLink()));
+                                                context) => ContactInviteLink()));
                                   }
                                 }else{
                                   const snackBar = SnackBar(
@@ -243,7 +236,7 @@ class _State extends State<InviteContactScreen> {
                               child: const Text(
                                 "LET'S GO!",
                                 style: TextStyle(
-                                    color: ColorConstants.to_the_shop, fontSize: 14),
+                                    color: ColorConstants.lightgrey200, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),

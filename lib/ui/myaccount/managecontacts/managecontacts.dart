@@ -50,7 +50,7 @@ class _State extends State<ManageContactScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -96,7 +96,7 @@ class _State extends State<ManageContactScreen> {
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                     child: const Text("YOUR CONTACTS", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
 
                 Container(
                   alignment: Alignment.centerLeft,
@@ -104,7 +104,7 @@ class _State extends State<ManageContactScreen> {
                   child: Text(
                       "You have 50 contacts.You may remove,",
                       style: TextStyle(fontSize: 15,
-                          color: ColorConstants.Omnes_font)
+                          color: ColorConstants.txt)
                   ),
                 ),
                 Container(
@@ -115,12 +115,12 @@ class _State extends State<ManageContactScreen> {
                       Text(
                           "block them,and unblock contacts ",
                           style: TextStyle(fontSize: 15,
-                              color: ColorConstants.Omnes_font)
+                              color: ColorConstants.txt)
                       ),
                       Text(
                           "here.",
                           style: TextStyle(fontSize: 15,decoration: TextDecoration.underline,
-                              color: ColorConstants.Omnes_font)
+                              color: ColorConstants.txt)
                       ),
                     ],
                   ),
@@ -161,16 +161,16 @@ class _State extends State<ManageContactScreen> {
                                 child: Column(
                                   children: [
                                     Text("EUNGEUNG519",style: TextStyle(
-                                        color: ColorConstants.Omnes_font,
+                                        color: ColorConstants.txt,
                                         fontSize: 14),
                                       textAlign: TextAlign.center,),
                                     Row(
                                       children: [
                                         Text("GROUP 3",style: TextStyle(
-                                            color: ColorConstants.Omnes_font,
+                                            color: ColorConstants.txt,
                                             fontSize: 14),
                                           textAlign: TextAlign.center,),
-                                        Divider(height: 10,thickness: 1,color: ColorConstants.Omnes_font,),
+                                        Divider(height: 10,thickness: 1,color: ColorConstants.txt,),
                                         Text("|"),
                                         Row(
                                           children: [
@@ -180,7 +180,7 @@ class _State extends State<ManageContactScreen> {
                                               height: 10,
                                             ),
                                             Text("INDIA",style: TextStyle(
-                                                color: ColorConstants.Omnes_font,
+                                                color: ColorConstants.txt,
                                                 fontSize: 14),
                                               textAlign: TextAlign.center,),
                                           ],
@@ -194,7 +194,7 @@ class _State extends State<ManageContactScreen> {
                                     ),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: ColorConstants.myfeed,
+                                        primary: ColorConstants.yellow200,
                                         onPrimary: Colors.white,
                                         elevation: 3,
                                         alignment: Alignment.center,
@@ -223,7 +223,7 @@ class _State extends State<ManageContactScreen> {
                                       child: const Text(
                                         "SEND INVITE",
                                         style: TextStyle(
-                                            color: ColorConstants.to_the_shop,
+                                            color: ColorConstants.lightgrey200,
                                             fontSize: 14),
                                         textAlign: TextAlign.center,
                                       ),
@@ -264,7 +264,7 @@ class _State extends State<ManageContactScreen> {
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -289,7 +289,7 @@ class _State extends State<ManageContactScreen> {
                         child: const Text(
                           "LET'S GO!",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),

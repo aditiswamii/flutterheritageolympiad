@@ -81,15 +81,15 @@ class _State extends State<DuelQuizSelected> {
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                    child: const Text("LET'S QUIZ,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+                    child: const Text("LET'S QUIZ,",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+                    child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 15,color: ColorConstants.Omnes_font))),
+                    child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 15,color: ColorConstants.txt))),
 
                 Container(
                   alignment: Alignment.center,
@@ -108,7 +108,7 @@ class _State extends State<DuelQuizSelected> {
                               height: 150,
                               width: 150,
                               decoration: const BoxDecoration(
-                                  color: ColorConstants.myaccount
+                                  color: ColorConstants.red200
                               ),
                               child: GestureDetector(
                                 onTap: () {
@@ -134,7 +134,7 @@ class _State extends State<DuelQuizSelected> {
                               height: 150,
                               width: 150,
                               decoration: const BoxDecoration(
-                                  color: ColorConstants.myfeed
+                                  color: ColorConstants.yellow200
                               ),
                               child: GestureDetector(
                                 onTap: () {
@@ -165,7 +165,7 @@ class _State extends State<DuelQuizSelected> {
                               height: 150,
                               width: 150,
                               decoration: const BoxDecoration(
-                                  color: ColorConstants.to_the_quizzes
+                                  color: ColorConstants.blue200
                               ),
                               child: GestureDetector(
                                 onTap: () {
@@ -191,7 +191,7 @@ class _State extends State<DuelQuizSelected> {
                               height: 150,
                               width: 150,
                               decoration: const BoxDecoration(
-                                  color: ColorConstants.to_the_shop
+                                  color: ColorConstants.lightgrey200
                               ),
                               child: GestureDetector(
                                 onTap: () {
@@ -202,8 +202,8 @@ class _State extends State<DuelQuizSelected> {
                                 },
                                 child: Column(
                                   children: [
-                                    Text("TOURNAMENT",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 22),textAlign: TextAlign.center,),
-                                    Text("The leagues beckon!",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
+                                    Text("TOURNAMENT",style: TextStyle(color:ColorConstants.txt,fontSize: 22),textAlign: TextAlign.center,),
+                                    Text("The leagues beckon!",style: TextStyle(color:ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
 
                                   ],
                                 ),
@@ -236,7 +236,7 @@ class _State extends State<DuelQuizSelected> {
                     },
                     child: const Text(
                       "NEXT",
-                      style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                      style: TextStyle(color: ColorConstants.txt, fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   ),

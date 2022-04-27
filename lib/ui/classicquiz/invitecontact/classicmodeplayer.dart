@@ -63,7 +63,7 @@ class _State extends State<ClassicModeSelectPlayer> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -85,7 +85,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -97,7 +97,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -108,14 +108,14 @@ class _State extends State<ClassicModeSelectPlayer> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("DUEL MODE",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "You may choose another player in your\ncontact list to duel with.",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -125,7 +125,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                     Text(
                       "HIDE BUSY PLAYERS",
                       style: TextStyle(
-                          color: ColorConstants.Omnes_font, fontSize: 15),
+                          color: ColorConstants.txt, fontSize: 15),
                     ),
                     Checkbox(
                       value: this.value,
@@ -141,7 +141,7 @@ class _State extends State<ClassicModeSelectPlayer> {
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: const Divider(
-                  color: ColorConstants.Omnes_font,
+                  color: ColorConstants.txt,
                   height: 2,
                   indent: 10,
                   endIndent: 10,
@@ -174,7 +174,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                               child: CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    AssetImage("assets/cat1.png"),
+                                    AssetImage("assets/images/cat1.png"),
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
@@ -191,7 +191,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                       Row(
                                         children: [
                                           Image.asset(
-                                            "assets/india.png",
+                                            "assets/images/india.png",
                                             width: 10,
                                             height: 10,
                                           ),
@@ -207,7 +207,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      primary: ColorConstants.myfeed,
+                                      primary: ColorConstants.yellow200,
                                       onPrimary: Colors.white,
                                       elevation: 3,
                                       alignment: Alignment.center,
@@ -236,7 +236,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                     child: const Text(
                                       "SEND INVITE",
                                       style: TextStyle(
-                                          color: ColorConstants.to_the_shop,
+                                          color: ColorConstants.lightgrey200,
                                           fontSize: 14),
                                       textAlign: TextAlign.center,
                                     ),
@@ -277,12 +277,12 @@ class _State extends State<ClassicModeSelectPlayer> {
                               child: CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    AssetImage("assets/cat1.png"),
+                                    AssetImage("assets/images/cat1.png"),
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
                             // Image.asset("assets/profile.png",height: 100,width: 100,),
-                            Container(
+                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
                               child: Column(
                                 children: [
@@ -294,7 +294,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                       Row(
                                         children: [
                                           Image.asset(
-                                            "assets/india.png",
+                                            "assets/images/india.png",
                                             width: 10,
                                             height: 10,
                                           ),
@@ -310,7 +310,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      primary: ColorConstants.myfeed,
+                                      primary: ColorConstants.yellow200,
                                       onPrimary: Colors.white,
                                       elevation: 3,
                                       alignment: Alignment.center,
@@ -339,7 +339,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                     child: const Text(
                                       "SEND INVITE",
                                       style: TextStyle(
-                                          color: ColorConstants.to_the_shop,
+                                          color: ColorConstants.lightgrey200,
                                           fontSize: 14),
                                       textAlign: TextAlign.center,
                                     ),
@@ -380,7 +380,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                               child: CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    AssetImage("assets/cat1.png"),
+                                    AssetImage("assets/images/cat1.png"),
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
@@ -397,7 +397,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                       Row(
                                         children: [
                                           Image.asset(
-                                            "assets/india.png",
+                                            "assets/images/india.png",
                                             width: 10,
                                             height: 10,
                                           ),
@@ -409,11 +409,11 @@ class _State extends State<ClassicModeSelectPlayer> {
                                   Text(
                                     "BUSY",
                                     style:
-                                        TextStyle(color: ColorConstants.myfeed),
+                                        TextStyle(color: ColorConstants.yellow200),
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      primary: ColorConstants.myfeed,
+                                      primary: ColorConstants.yellow200,
                                       onPrimary: Colors.white,
                                       elevation: 3,
                                       alignment: Alignment.center,
@@ -442,7 +442,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                                     child: const Text(
                                       "SEND INVITE",
                                       style: TextStyle(
-                                          color: ColorConstants.to_the_shop,
+                                          color: ColorConstants.lightgrey200,
                                           fontSize: 14),
                                       textAlign: TextAlign.center,
                                     ),
@@ -483,7 +483,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                       child: const Text(
                         "EDIT QUIZ",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -507,7 +507,7 @@ class _State extends State<ClassicModeSelectPlayer> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

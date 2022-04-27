@@ -87,14 +87,14 @@ class _State extends State<DuelModeResultXP> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("Carousel to XP",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                     "YOU\nGAINED....",
                     style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font),
+                        fontSize: 24, color: ColorConstants.txt),
                     textAlign: TextAlign.center,
                   )),
               Center(
@@ -178,7 +178,7 @@ class _State extends State<DuelModeResultXP> {
                       children: [
                         Container(
                           margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                          child: Text("YOU SCORED...",style: TextStyle(color: ColorConstants.Omnes_font),),
+                          child: Text("YOU SCORED...",style: TextStyle(color: ColorConstants.txt),),
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -201,7 +201,7 @@ class _State extends State<DuelModeResultXP> {
                                 style: TextStyle(fontSize: 18, color: Colors.white),
                               ),
                               backgroundColor: Colors.black12,
-                              progressBarColor: ColorConstants.myfeed,
+                              progressBarColor: ColorConstants.yellow200,
                             )
                         ),
                         Container(
@@ -259,7 +259,7 @@ class _State extends State<DuelModeResultXP> {
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -283,7 +283,7 @@ class _State extends State<DuelModeResultXP> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

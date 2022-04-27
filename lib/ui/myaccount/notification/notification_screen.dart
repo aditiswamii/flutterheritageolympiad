@@ -40,7 +40,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -86,14 +86,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
                     child: const Text("NOTIFICATIONS", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                       "You have 50 contacts.You may remove,\nblock or report them",
                       style: TextStyle(fontSize: 15,
-                          color: ColorConstants.Omnes_font)
+                          color: ColorConstants.txt)
                   ),
                 ),
 
@@ -123,7 +123,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -148,7 +148,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         child: const Text(
                           "LET'S GO!",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),

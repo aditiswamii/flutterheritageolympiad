@@ -40,13 +40,13 @@ class _State extends State<DialogCancelPlan> {
                     alignment: Alignment.center,
                     margin:EdgeInsets.only(bottom: 10),
 
-                    child: Text('Are you sure you want to cancel the plan?',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize:16 ),)
+                    child: Text('Are you sure you want to cancel the plan?',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:16 ),)
                 ),
 
                 Container(
                     alignment: Alignment.center,
                     margin:EdgeInsets.only(bottom: 10),
-                    child: Text('Some Conditions here about the refund and reinstatement of the plan.',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize:16 ),)
+                    child: Text('Some Conditions here about the refund and reinstatement of the plan.',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:16 ),)
                 ),
                 Container(
                   alignment: FractionalOffset.bottomCenter,
@@ -74,7 +74,7 @@ class _State extends State<DialogCancelPlan> {
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -114,7 +114,7 @@ class _State extends State<DialogCancelPlan> {
                         child: const Text(
                           "CANCEL",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),

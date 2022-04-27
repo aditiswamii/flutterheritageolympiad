@@ -1,4 +1,5 @@
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,15 +14,9 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
 
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: QuizPage(),
-  ));
-}
 class QuizPage extends StatefulWidget{
 
   const QuizPage({Key? key}) : super(key: key);
@@ -32,7 +27,37 @@ class QuizPage extends StatefulWidget{
 
 
 class _State extends State<QuizPage> {
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
 
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country =prefs.getString("country");
+      userid= prefs.getString("userid");
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.remove(myInterceptor);
+    userdata();
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>WelcomePage()));
+    print(BackButtonInterceptor.describe()); // Do some stuff.
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -46,12 +71,12 @@ class _State extends State<QuizPage> {
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
         child:Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
           child: ListView(
               children: [
                 Row(
@@ -86,157 +111,135 @@ class _State extends State<QuizPage> {
                 ),
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                    child: const Text("LET'S QUIZ,",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                    child: const Text("LET'S QUIZ,",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
+                Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("HANA210",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+                    child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 15,color: ColorConstants.txt))),
                 Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 15,color: ColorConstants.Omnes_font))),
-
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child:Column(
-
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  //height: 300,
+                  width: MediaQuery.of(context).size.width,
+                  //alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                              height: 150,
-                              width: 150,
-                              decoration: const BoxDecoration(
-                                  color: ColorConstants.myaccount
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                            //  Domainlist()
-                                         ClassicQuizMain()
-                                      ));
-                                },
-                                child: Column(
-                                  children: [
-                                    Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
-                                    Text("you are your own standard!",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,),
+                      GestureDetector(
+                        onTap:(){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  //  Domainlist()
+                                  ClassicQuizMain()
+                              ));
+                        },
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          color: ColorConstants.red200,
 
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                              height: 150,
-                              width: 150,
-                              decoration: const BoxDecoration(
-                                  color: ColorConstants.myfeed
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const DuelQuizSelected()));
-                                },
-                                child: Column(
-                                  children: [
-                                    Text("DUEL",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
-                                    Text("[v],real-time match",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(child: Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+                              Container(child: Text("you are your own standard!",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
 
-                                  ],
-                                ),
-                              ),
-                            ),
+                            ],
                           ),
-                        ],
+
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                              height: 150,
-                              width: 150,
-                              decoration: const BoxDecoration(
-                                  color: ColorConstants.to_the_quizzes
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  // Dialog errorDialog = Dialog(
-                                  //     shape: RoundedRectangleBorder(
-                                  //         borderRadius: BorderRadius.circular(
-                                  //             20.0)), //this right here
-                                  //
-                                  //         child: Container(
-                                  //           height: 500,
-                                  //             width: 350,
-                                  //             margin: EdgeInsets.all(10),
-                                  //             child: DialogDuelInviteReceive()));
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (BuildContext context) => errorDialog);
-                                  // // Navigator.pushReplacement(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => const AlmostTherePage()));
-                                },
-                                child: Column(
-                                  children: [
-                                    Text("QUIZ ROOM",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
-                                    Text("Custom group quizzes",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const DuelQuizSelected()));
+                        },
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          color:ColorConstants.yellow200,
 
-                                  ],
-                                ),
-                              ),
-                            ),
+                          child:  Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(child: Text("DUEL",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+                              Container(child: Text("[v],real-time match",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
+
+                            ],
                           ),
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                              height: 150,
-                              width: 150,
-                              decoration: const BoxDecoration(
-                                  color: ColorConstants.to_the_shop
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const TournamentQuizSelected()));
-                                },
-                                child: Column(
-                                  children: [
-                                    Text("TOURNAMENT",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 20),textAlign: TextAlign.center,),
-                                    Text("The leagues beckon!",style: TextStyle(color:ColorConstants.Omnes_font,fontSize: 12),textAlign: TextAlign.center,),
 
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+                Container(
+                  //height: 300,
+                  width: MediaQuery.of(context).size.width,
+                  //alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  QuizPage()));
+                        },
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          color: ColorConstants.blue200,
+
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(child: Text("QUIZ ROOM",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+                              Container(child: Text("Custom group quizzes",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
+
+                            ],
+                          ),
+
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const TournamentQuizSelected()));
+                        },
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          color: Colors.black26,
+
+                          child:  Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(child: Text("TOURNAMENT",style: TextStyle(color:ColorConstants.txt,fontSize: 20),textAlign: TextAlign.center,)),
+                              Container(child: Text("The leagues beckon!",style: TextStyle(color:ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,)),
+
+                            ],
+                          ),
+
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+
                 Flexible(
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -255,7 +258,7 @@ class _State extends State<QuizPage> {
                         children: [
                           Container(
                             margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.Omnes_font),),
+                            child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.txt),),
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -336,7 +339,7 @@ class _State extends State<QuizPage> {
                               },
                               child: const Text(
                                 "SEE PERFORMANCE",
-                                style: TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                                style: TextStyle(color: ColorConstants.txt, fontSize: 16),
                                 textAlign: TextAlign.center,
                               ),
                             ),

@@ -95,14 +95,14 @@ class _State extends State<DuelModeMain> {
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("DUEL MODE",
                       style: TextStyle(
-                          fontSize: 24, color: ColorConstants.Omnes_font))),
+                          fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "Choose the domain,the difficulty and the\nspeed of the quiz",
                       style: TextStyle(
-                          fontSize: 15, color: ColorConstants.Omnes_font))),
+                          fontSize: 15, color: ColorConstants.txt))),
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -112,7 +112,7 @@ class _State extends State<DuelModeMain> {
                     Text(
                       "DOMAINS",
                       style: TextStyle(
-                          color: ColorConstants.Omnes_font, fontSize: 15),
+                          color: ColorConstants.txt, fontSize: 15),
                     ),
                     Image.asset(
                       "assets/about.png",
@@ -146,7 +146,7 @@ class _State extends State<DuelModeMain> {
                               Text(
                                 "Select all",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                               Checkbox(
@@ -169,7 +169,7 @@ class _State extends State<DuelModeMain> {
                               Text(
                                 "Knowledge Traditions",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                               Checkbox(
@@ -192,7 +192,7 @@ class _State extends State<DuelModeMain> {
                               Text(
                                 "Literature and Languages",
                                 style: TextStyle(
-                                    color: ColorConstants.Omnes_font,
+                                    color: ColorConstants.txt,
                                     fontSize: 15),
                               ),
                               Checkbox(
@@ -224,7 +224,7 @@ class _State extends State<DuelModeMain> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               new Text(location,
-                                style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 15),),
+                                style: TextStyle(color: ColorConstants.txt,fontSize: 15),),
                               Checkbox(
                                 value: this.value,
                                 onChanged: (value) {
@@ -260,7 +260,7 @@ class _State extends State<DuelModeMain> {
                     Text(
                       "DIFFICULTY",
                       style: TextStyle(
-                          color: ColorConstants.Omnes_font, fontSize: 15),
+                          color: ColorConstants.txt, fontSize: 15),
                     ),
                     Image.asset(
                       "assets/about.png",
@@ -302,7 +302,7 @@ class _State extends State<DuelModeMain> {
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Hard",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text("Hard",style: TextStyle(color: ColorConstants.txt,fontSize: 20),)),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -310,7 +310,7 @@ class _State extends State<DuelModeMain> {
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Intermediate",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text("Intermediate",style: TextStyle(color: ColorConstants.txt,fontSize: 20),)),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -318,7 +318,7 @@ class _State extends State<DuelModeMain> {
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Easy",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text("Easy",style: TextStyle(color: ColorConstants.txt,fontSize: 20),)),
                 ],
               ),
               Container(
@@ -330,7 +330,7 @@ class _State extends State<DuelModeMain> {
                     Text(
                       "QUIZ SPEED",
                       style: TextStyle(
-                          color: ColorConstants.Omnes_font, fontSize: 15),
+                          color: ColorConstants.txt, fontSize: 15),
                     ),
                     Image.asset(
                       "assets/about.png",
@@ -372,7 +372,7 @@ class _State extends State<DuelModeMain> {
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Quickfire",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text("Quickfire",style: TextStyle(color: ColorConstants.txt,fontSize: 20),)),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -380,7 +380,7 @@ class _State extends State<DuelModeMain> {
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Regular",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text("Regular",style: TextStyle(color: ColorConstants.txt,fontSize: 20),)),
                   GestureDetector(
                       onTap: () {
                         // Navigator.pushReplacement(
@@ -388,7 +388,7 @@ class _State extends State<DuelModeMain> {
                         //     MaterialPageRoute(
                         //         builder: (context) => const AlmostTherePage()));
                       },
-                      child: Text("Olympiad",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 20),)),
+                      child: Text("Olympiad",style: TextStyle(color: ColorConstants.txt,fontSize: 20),)),
                 ],
               ),
               Container(
@@ -416,7 +416,7 @@ class _State extends State<DuelModeMain> {
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -440,7 +440,7 @@ class _State extends State<DuelModeMain> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.to_the_shop, fontSize: 14),
+                            color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

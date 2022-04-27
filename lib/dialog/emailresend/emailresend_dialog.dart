@@ -34,7 +34,7 @@ class _State extends State<DialogEmailResend> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text('We have resent the\nverification link!',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 24 ),)
+                    child: Text('We have resent the\nverification link!',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 24 ),)
                 ),
                 Container(margin:EdgeInsets.only(bottom: 10),
                     alignment: Alignment.center,
@@ -44,7 +44,7 @@ class _State extends State<DialogEmailResend> with WidgetsBindingObserver {
                         children: [
                           Text('RESEND',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15,color: ColorConstants.Omnes_font,decoration: TextDecoration.underline)),
+                              style: TextStyle(fontSize: 15,color: ColorConstants.txt,decoration: TextDecoration.underline)),
                           TweenAnimationBuilder<Duration>(
                               duration: Duration(seconds:30),
                               tween: Tween(begin: Duration(seconds:30), end: Duration.zero),
@@ -59,7 +59,7 @@ class _State extends State<DialogEmailResend> with WidgetsBindingObserver {
                                     child: Text('(${seconds}S)',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: ColorConstants.Omnes_font,
+                                            color: ColorConstants.txt,
                                             fontSize:15)));
                               }),
                         ],

@@ -74,7 +74,7 @@ class _State extends State<SignupPage> implements SignUpView {
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: const Text("SIGN UP",
                     style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
             Flexible(
               child: Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -115,7 +115,7 @@ class _State extends State<SignupPage> implements SignUpView {
                 child: TextFormField(
                   controller: passwordController,
                   obscureText: true,
-                  cursorColor: ColorConstants.Omnes_font,
+                  cursorColor: ColorConstants.txt,
                   obscuringCharacter: "*",
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -135,7 +135,7 @@ class _State extends State<SignupPage> implements SignUpView {
                 child: TextFormField(
                   controller: repeatpasswordController,
                   obscureText: true,
-                  cursorColor: ColorConstants.Omnes_font,
+                  cursorColor: ColorConstants.txt,
                   obscuringCharacter: "*",
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -158,7 +158,7 @@ class _State extends State<SignupPage> implements SignUpView {
                       "I agree to the terms and conditions*",
                       style: TextStyle(
                           decoration: TextDecoration.underline,
-                          color: ColorConstants.Omnes_font),
+                          color: ColorConstants.txt),
                     ),
                     Checkbox(
                       value: value,
@@ -212,7 +212,7 @@ class _State extends State<SignupPage> implements SignUpView {
               child: const Text(
                 "NEXT",
                 style:
-                    TextStyle(color: ColorConstants.Omnes_font, fontSize: 16),
+                    TextStyle(color: ColorConstants.txt, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
             ),

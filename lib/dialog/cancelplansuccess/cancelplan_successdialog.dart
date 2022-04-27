@@ -31,7 +31,7 @@ class _State extends State<DialogCancelPlanSuccess> {
             alignment: Alignment.center,
             //margin: EdgeInsets.fromLTRB(0,10,0,10),
             padding: EdgeInsets.all(10),
-            child:Text('You have successfully cancelled your plans.',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.to_the_shop,fontSize:18 ),)
+            child:Text('You have successfully cancelled your plans.',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.lightgrey200,fontSize:18 ),)
         )
     );
   }

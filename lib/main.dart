@@ -39,9 +39,9 @@ class _State extends State<MyApp> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool? loggedin = prefs.getBool('loggedin');
     print(loggedin);
-    if (loggedin != false) {
+    if (loggedin != true) {
       setState(() {
-        isLoggedIn=true;
+        isLoggedIn=false;
       });
     }else{
       setState(() {
@@ -65,7 +65,7 @@ class _State extends State<MyApp> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/splash_heritage.jpg"),
+            image: AssetImage("assets/images/splash_heritage.jpg"),
             fit: BoxFit.cover,
           ),
         ),

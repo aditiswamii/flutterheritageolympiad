@@ -66,7 +66,7 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -77,7 +77,7 @@ class _State extends State<AlmostTherePage> implements AlmostThereView{
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 70, 0, 10),
-                    child: const Text("ALMOST THERE...",style: TextStyle(fontSize: 24,color: ColorConstants.Omnes_font))),
+                    child: const Text("ALMOST THERE...",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
                 Flexible(child:
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),

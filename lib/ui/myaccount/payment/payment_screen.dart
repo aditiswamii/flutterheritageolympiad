@@ -40,9 +40,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       //endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration:BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -88,14 +88,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                     child: const Text("PAYMENTS", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.Omnes_font))),
+                        fontSize: 24, color: ColorConstants.txt))),
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                       "You can change or cancel your existing plan.\nChanges will take effects from next billing.",
                       style: TextStyle(fontSize: 15,
-                          color: ColorConstants.Omnes_font)
+                          color: ColorConstants.txt)
                   ),
                 ),
                 Flexible(
@@ -116,7 +116,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           Container(
                             margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: Text("CURRENT PLAN",style: TextStyle(color: ColorConstants.Omnes_font,fontSize: 14),),
+                            child: Text("CURRENT PLAN",style: TextStyle(color: ColorConstants.txt,fontSize: 14),),
                           ),
                           Container(
                               decoration: BoxDecoration(
@@ -153,8 +153,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("BASIC", style: TextStyle(fontSize: 12, color: ColorConstants.myfeed)),
-                            Text("INR 299/mo", style: TextStyle(fontSize: 16, color: ColorConstants.myfeed)),
+                            Text("BASIC", style: TextStyle(fontSize: 12, color: ColorConstants.yellow200)),
+                            Text("INR 299/mo", style: TextStyle(fontSize: 16, color: ColorConstants.yellow200)),
                           ],
                         ),
                     ),
@@ -250,7 +250,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -289,7 +289,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: const Text(
                           "LET'S GO!",
                           style: TextStyle(
-                              color: ColorConstants.to_the_shop, fontSize: 14),
+                              color: ColorConstants.lightgrey200, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
