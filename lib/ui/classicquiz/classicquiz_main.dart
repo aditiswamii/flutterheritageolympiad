@@ -266,7 +266,7 @@ class _State extends State<ClassicQuizMain> {
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: const Text(
-                      "Based on our Olympiad,this mode is for you to\nconstantly improve your performance",
+                      "Based on our Olympiad, this mode is for you to\nconstantly improve your performance",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt))),
               Container(
@@ -278,12 +278,16 @@ class _State extends State<ClassicQuizMain> {
                     Text(
                       "DOMAINS",
                       style: TextStyle(
-                          color: ColorConstants.txt, fontSize: 15),
+                          color: Colors.black, fontSize: 16),
                     ),
-                    Image.asset(
-                      "assets/images/about.png",
-                      height: 20,
+                    Container(
                       width: 20,
+                      height: 20,
+                      child: Image.asset(
+                        "assets/images/about.png",
+                        height: 20,
+                        width: 20,
+                      ),
                     )
                   ],
                 ),
@@ -307,28 +311,38 @@ class _State extends State<ClassicQuizMain> {
                       : SingleChildScrollView(
                           child: Column(
                             children: [
-                              Card(
-                                  child: CheckboxListTile(
-                                      title: Text("Select All"),
-                                      onChanged: (checked) {
-                                        setState(
-                                              () {
-                                            _expanded7 =  checked!;
-
-                                          },
-                                        );
-                                        if(_expanded7==true) {
-                                        isChecked = List
-                                              .generate(
-                                              _len, (index) => true);
-                                        }else{
-                                          isChecked = List
-                                              .generate(
-                                              _len, (index) => false);
-                                        }
-                                      },
-                                      value: _expanded7 )
-                              ),
+                              // Card(
+                              //     child: CheckboxListTile(
+                              //         title: Text("Select All"),
+                              //         onChanged: (checked) {
+                              //           setState(
+                              //                 () {
+                              //               _expanded7 =  checked!;
+                              //
+                              //             },
+                              //           );
+                              //           if(_expanded7==true) {
+                              //           isChecked = List
+                              //                 .generate(
+                              //                 _len, (index) => true);
+                              //           }else{
+                              //             isChecked = List
+                              //                 .generate(
+                              //                 _len, (index) => false);
+                              //           }
+                              //           if(_expanded7==true) {
+                              //             if(!domainnamelist.contains(domains_length))
+                              //               domainnamelist.addAll(domains_length);
+                              //
+                              //           }
+                              //           else {
+                              //             // if(domainnamelist.contains(domainname))
+                              //             domainnamelist.remove(domains_length);
+                              //           }
+                              //
+                              //         },
+                              //         value: _expanded7 )
+                              // ),
                               ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 shrinkWrap: true,
@@ -350,13 +364,19 @@ class _State extends State<ClassicQuizMain> {
                                                   },
                                                 );
                                                 if(isChecked[index]==true) {
+                                                  domainname=jsonDecode(data!)['data']
+                                                  [index]['id'];
+
+                                                  setState(() {
                                                     domainname=jsonDecode(data!)['data']
                                                     [index]['id'];
+                                                  });
                                                     if(!domainnamelist.contains(domainname))
                                                       domainnamelist.add(domainname);
 
                                                  }
                                                 else {
+
                                                  // if(domainnamelist.contains(domainname))
                                                     domainnamelist.remove(domainname);
                                                 }
@@ -733,6 +753,7 @@ class _State extends State<ClassicQuizMain> {
                            speedid="3";
                          });
                        }
+                       print(domainnamelist.toString());
                         log("hi");
                         log(difficultylevelid);
                         log(speedid);

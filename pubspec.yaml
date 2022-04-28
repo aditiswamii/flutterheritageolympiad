@@ -58,6 +58,7 @@ dependencies:
   json_object_mapper:
   expansion_tile_card:
   back_button_interceptor:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -193,6 +194,7 @@ flutter:
     - assets/yellowbg.png
     - assets/yellowbackground.png
     - assets/notifications.png
+    - assets/question.png
     - assets/images/
   fonts:
     - family: Omnes

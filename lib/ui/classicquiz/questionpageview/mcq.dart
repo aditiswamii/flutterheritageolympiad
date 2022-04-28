@@ -14,6 +14,8 @@ import '../../../modal/classicquestion/ClassicQuestion.dart';
 import '../../../modal/classicquestion/getQuestionResponse.dart';
 import 'dart:convert' as convert;
 
+import '../../../utils/countdowntimer.dart';
+
 class Mcq extends StatefulWidget{
   var quizid;
   Mcq({Key? key,required this.quizid}) : super(key: key);
@@ -30,7 +32,7 @@ class _State extends State<Mcq> {
   bool _hasBeenPressed4 = false;
   var quiz;
   var results;
-  var  c;
+  var c;
   var data;
   var questions;
   var randomItem;
@@ -45,8 +47,14 @@ class _State extends State<Mcq> {
   var ramdomcolor;
   var quesdata;
   var decRes;
-  var  rques;
+  var rques;
   var currentques;
+  var hasTimerStopped = false;
+  var queslist;
+var secrem=30;
+int i =0;
+  var _questionIndex = 0;
+  var _totalScore = 0;
   @override
   void initState() {
     super.initState();
@@ -55,6 +63,7 @@ class _State extends State<Mcq> {
 
     ramdomcolor = (color..shuffle()).first;
   }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -71,25 +80,39 @@ class _State extends State<Mcq> {
       },
     );
   }
-  reloadques(){
+
+  reloadques() {
+    setState(() {
+      secrem=30;
+    });
+
     randomItem = (questions..shuffle()).first;
-    List.generate(
-    questions.length,
-          (index) => InkWell(
-        onTap: () {
-         currentques= questions[index];
+   queslist=  List.generate(
+       (questions..shuffle()).length,
+          (index) =>
+              currentques = questions[index]
 
-        },
-
-      ),
     );
-     print(currentques);
+setState(() {
+  currentques;
+});
+   print("current ques"+"${currentques}");
+
+
+
 
   }
-  List <Color> color= <Color>[
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+  List <Color> color = <Color>[
     Color(0xFFED313B),
     Color(0xFF2da79e)
   ];
+
   void getQuestions(String quiz_id) async {
     http.Response response =
     await http.post(Uri.parse("http://3.108.183.42/api/questions"),
@@ -100,18 +123,17 @@ class _State extends State<Mcq> {
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
-      data=response.body;
+      data = response.body;
       if (jsonResponse['status'] == 200) {
         decRes = jsonDecode(response.body);
-        quesdata=jsonDecode(data!)['data'];
+        quesdata = jsonDecode(data!)['data'];
         setState(() {
           questions = jsonDecode(data!)['data']['question'];
           totalques = jsonDecode(data!)['data']['total_question'];
           totalquesinquiz = jsonDecode(data!)['data']['total_question_in_quiz'];
           questime = jsonDecode(data!)['data']['time'];
           quiztype = jsonDecode(data!)['data']['quiz_type'];
-          questionlistlen=questions.length;
-
+          questionlistlen = questions.length;
         });
 
         print(questions.toString());
@@ -123,7 +145,7 @@ class _State extends State<Mcq> {
         // });
         //randomItem = (questions..shuffle()).first;
         randomItem = (questions..shuffle()).first;
-        questionlistlen=questions.length;
+        questionlistlen = questions.length;
         print(randomItem['question']);
         print(randomItem['question_media']);
         print(randomItem['width']);
@@ -143,6 +165,16 @@ class _State extends State<Mcq> {
         print(randomItem['type']);
         print(randomItem['id']);
         reloadques();
+
+        setState(() {
+          _questionIndex = _questionIndex + 1;
+        });
+        print(_questionIndex);
+        if (_questionIndex < questions.length) {
+          print('We have more questions!');
+        } else {
+          print('No more questions!');
+        }
       }
     } else {
       Navigator.pop(context);
@@ -150,19 +182,26 @@ class _State extends State<Mcq> {
     }
   }
 
+
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
+
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>WelcomePage()));
+        builder: (BuildContext context) => WelcomePage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
 
+  @override
+  void didUpdateWidget(Mcq oldWidget) {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.didUpdateWidget(oldWidget);
 
+  }
   @override
   Widget build(BuildContext context) {
     //Colors.white;
@@ -200,6 +239,28 @@ class _State extends State<Mcq> {
             child: ListView(
               children: [
                 Container(
+                  width: 60.0,
+                  padding: EdgeInsets.only(top: 3.0, right: 4.0),
+                  child: CountDownTimer(
+                    secondsRemaining: secrem,
+                    whenTimeExpires: () {
+                      initState();
+                      setState(() {
+                        reloadques();
+
+                        // secrem=30;
+                        // hasTimerStopped=true;
+                       // secrem=30;
+                      });
+                    },
+                    countDownTimerStyle: TextStyle(
+                      color: Color(0XFFf5a623),
+                      fontSize: 17.0,
+                      height: 1.2,
+                    ),
+                  ),
+                ),
+                Container(
                     margin: EdgeInsets.fromLTRB(0,20,0,0),
                     height: 40,
                     width: 70,
@@ -219,6 +280,7 @@ class _State extends State<Mcq> {
                               tween: Tween(begin: Duration(seconds:30), end: Duration(seconds: 0)),
                               onEnd: () {
                                 reloadques();
+                               // Duration(seconds: 30);
                                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
                                 //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
                               },
@@ -237,7 +299,7 @@ class _State extends State<Mcq> {
                       ),
                     )),
                 Container(
-                    margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
                     child: Text(randomItem['question'].toString(),
                       style: TextStyle(color: ColorConstants.lightgrey200,fontSize: 18),)),
 

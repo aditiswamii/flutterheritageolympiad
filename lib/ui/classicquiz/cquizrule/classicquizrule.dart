@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/modal/classicquestion/ClassicQuestion.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
@@ -195,6 +196,10 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
                         //////// HERE
                       ),
                       onPressed: () {
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) =>  MyApp()));
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
