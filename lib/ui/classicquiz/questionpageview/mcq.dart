@@ -52,6 +52,8 @@ class _State extends State<Mcq> {
   var hasTimerStopped = false;
   var queslist;
 var secrem=30;
+var selectans="0";
+var correctanswer="0";
 int i =0;
   var _questionIndex = 0;
   var _totalScore = 0;
@@ -82,11 +84,21 @@ int i =0;
   }
 
   reloadques() {
+    secrem=30;
     setState(() {
       secrem=30;
     });
+    setState(() {
+      _questionIndex = _questionIndex + 1;
+    });
+    print(_questionIndex);
+    if (_questionIndex < questions.length) {
+      randomItem = (questions..shuffle()).first;
+      print('We have more questions!');
+    } else {
+      print('No more questions!');
+    }
 
-    randomItem = (questions..shuffle()).first;
    queslist=  List.generate(
        (questions..shuffle()).length,
           (index) =>
@@ -166,15 +178,7 @@ setState(() {
         print(randomItem['id']);
         reloadques();
 
-        setState(() {
-          _questionIndex = _questionIndex + 1;
-        });
-        print(_questionIndex);
-        if (_questionIndex < questions.length) {
-          print('We have more questions!');
-        } else {
-          print('No more questions!');
-        }
+
       }
     } else {
       Navigator.pop(context);
@@ -200,7 +204,10 @@ setState(() {
   void didUpdateWidget(Mcq oldWidget) {
     BackButtonInterceptor.remove(myInterceptor);
     super.didUpdateWidget(oldWidget);
-
+    if(secrem==0){
+      secrem=30;
+      reloadques();
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -244,14 +251,20 @@ setState(() {
                   child: CountDownTimer(
                     secondsRemaining: secrem,
                     whenTimeExpires: () {
-                      initState();
-                      setState(() {
+                      if(secrem==0){
                         reloadques();
-
-                        // secrem=30;
-                        // hasTimerStopped=true;
-                       // secrem=30;
-                      });
+                            setState(() {
+                              secrem==30;
+                            });
+                      }
+                      initState();
+                      // setState(() {
+                      //   reloadques();
+                      //
+                      //   // secrem=30;
+                      //   // hasTimerStopped=true;
+                      //  // secrem=30;
+                      // });
                     },
                     countDownTimerStyle: TextStyle(
                       color: Color(0XFFf5a623),
@@ -280,6 +293,7 @@ setState(() {
                               tween: Tween(begin: Duration(seconds:30), end: Duration(seconds: 0)),
                               onEnd: () {
                                 reloadques();
+                                initState();
                                // Duration(seconds: 30);
                                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
                                 //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
@@ -322,7 +336,9 @@ setState(() {
                           _hasBeenPressed2=false;
                           _hasBeenPressed3=false;
                           _hasBeenPressed4=false;
-                        })
+                          selectans=_hasBeenPressed1 ?  "1":"0";
+                        }),
+
                       },
                       child: Text(randomItem['option1'], style: TextStyle(fontSize: 18),),
                     ),
@@ -339,7 +355,11 @@ setState(() {
                           _hasBeenPressed1=false;
                           _hasBeenPressed3=false;
                           _hasBeenPressed4=false;
-                        })
+                          selectans=_hasBeenPressed2 ?  "2":"0";
+
+
+                        }),
+
                       },
                       child: Text(randomItem['option2'].toString(), style: TextStyle(fontSize: 18),),
                     ),
@@ -357,7 +377,10 @@ setState(() {
                           _hasBeenPressed2=false;
                           _hasBeenPressed1=false;
                           _hasBeenPressed4=false;
-                        })
+                          selectans=_hasBeenPressed3 ?  "3":"0";
+
+                        }),
+
                       },
                       child: Text(randomItem['option3'].toString(), style: TextStyle(fontSize: 18),),
                     ),
@@ -377,7 +400,10 @@ setState(() {
                           _hasBeenPressed2=false;
                           _hasBeenPressed3=false;
                           _hasBeenPressed1=false;
-                        })
+                          selectans=_hasBeenPressed4 ?  "4":"0";
+
+                        }),
+
                       },
                       child: Text(randomItem['option4'].toString(), style: TextStyle(fontSize: 18),),
                     ),
@@ -488,7 +514,18 @@ setState(() {
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                           onPressed: (){
+                          _hasBeenPressed1 = false;
+                            _hasBeenPressed2 = false;
+                            _hasBeenPressed3 = false;
+                           _hasBeenPressed4 = false;
+                            print(correctanswer);
+                            print(selectans);
+                            // if(selectans==randomItem['right_option'].toString()){
+                            //   correctanswer="4";
+                            //
+                            // }
                             reloadques();
+                           // initState();
                             // getQuestions(widget.quizid);
                           },
                           child: Image.asset("assets/images/rightarrow2.png",height: 40,width: 40),

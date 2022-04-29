@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
@@ -131,7 +132,10 @@ var userid;
              ),
              GestureDetector(
                onTap: (){
-
+                 Navigator.pushReplacement(
+                     context,
+                     MaterialPageRoute(
+                         builder: (context) => Mcq(quizid: "83")));
                },
                child: Container(
                  height: 150,
