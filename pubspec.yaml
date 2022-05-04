@@ -59,6 +59,7 @@ dependencies:
   expansion_tile_card:
   back_button_interceptor:
   flip_card:
+  package_info_plus:
 dev_dependencies:
   flutter_test:
     sdk: flutter

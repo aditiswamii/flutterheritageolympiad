@@ -1,5 +1,6 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,6 +17,8 @@ import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/SharedObjects.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../welcomeback/welcomeback_page.dart';
@@ -38,26 +41,41 @@ class _State extends State<ResultPage> {
   var userid;
 var xp;
 var percentage;
+String packagename="";
+  PackageInfo? packageInfo;
   userdata() async {
+    // PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString("username");
       country = prefs.getString("country");
       userid = prefs.getString("userid");
+      // packagename=packageInfo.packageName.toString();
     });
   }
-
+  void getPackage() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      packagename = packageInfo!.packageName;
+    });
+    String appName = packageInfo!.appName;
+    packagename = packageInfo!.packageName;
+    String version = packageInfo!.version;
+    String buildNumber = packageInfo!.buildNumber;
+    print("App Name : ${appName}, App Package Name: ${packagename },App Version: ${version}, App build Number: ${buildNumber}");
+  }
   @override
   void initState() {
     super.initState();
-    setState(() {
-      xp=widget.savedata["xp"];
-      percentage=widget.savedata["17"];
-
-    });
-    print(xp);
-    print(percentage);
+    getPackage();
+    // setState(() {
+    //   xp=widget.savedata["xp"];
+    //   percentage=widget.savedata["17"];
+    //
+    // });
+    // print(xp);
+    // print(percentage);
     userdata();
     BackButtonInterceptor.add(myInterceptor);
   }
@@ -133,6 +151,7 @@ var percentage;
                         ),
                       ),
                       FlipCard(
+                        controller: FlipCardController(),
                         direction: FlipDirection.HORIZONTAL,
 
                         front: Column(
@@ -157,6 +176,9 @@ var percentage;
               children: [
                 GestureDetector(
                   onTap: (){
+
+                    Share.share("I got " +"${widget.savedata["xp"]} XP"+" on Cultre App. you can play on "
+                        "https://play.google.com/store/apps/details?id=$packagename", subject: 'Share link');
 
                   },
                   child: Container(
