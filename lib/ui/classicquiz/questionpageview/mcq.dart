@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
@@ -52,12 +53,16 @@ class _State extends State<Mcq> {
   var hasTimerStopped = false;
   var queslist;
   Duration? duration;
-var secrem=30;
-var selectans="0";
-var correctanswer="0";
-int i =0;
+  var secrem=30;
+  var selectans="0";
+  var correctanswer="0";
+  int i =0;
   var _questionIndex = 0;
   var _totalScore = 0;
+  Timer? countdownTimer;
+  late Duration myDuration;
+
+
   @override
   void initState() {
     super.initState();
@@ -83,34 +88,53 @@ int i =0;
       },
     );
   }
+  void setCountDown() {
+    final reduceSecondsBy = 1;
+    setState(() {
+      final seconds = myDuration.inSeconds - reduceSecondsBy;
+      if (seconds < 0) {
+        countdownTimer!.cancel();
+        reloadques();
+      } else {
 
+        myDuration = Duration(seconds: seconds);
+      }
+    });
+  }
   reloadques() {
 
-    secrem=30;
+    secrem=questime;
     setState(() {
-      secrem=30;
+      secrem=questime;
     });
-    setState(() {
-      _questionIndex = _questionIndex + 1;
-    });
+    if(countdownTimer!=null)
+    setState(() => countdownTimer!.cancel());
+    setState(() => myDuration = Duration(seconds: questime));
+    countdownTimer =
+        Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
     print(_questionIndex);
     if (_questionIndex < questions.length) {
-      randomItem = (questions..shuffle()).first;
+   //   randomItem = (questions..shuffle()).first;
+      randomItem = questions[_questionIndex];
+      currentques = questions[_questionIndex];
       print('We have more questions!');
+      setState(() {
+        _questionIndex = _questionIndex + 1;
+        currentques;
+      });
+      print("current ques"+"${currentques}");
     } else {
       print('No more questions!');
     }
 
-   queslist=  List.generate(
-       (questions..shuffle()).length,
-          (index) =>
-              currentques = questions[index]
+   // queslist=  List.generate(
+   //     (questions..shuffle()).length,
+   //        (index) =>
+   //            currentques = questions[index]
+   //
+   //  );
 
-    );
-setState(() {
-  currentques;
-});
-   print("current ques"+"${currentques}");
+
 
 
 
@@ -142,6 +166,7 @@ setState(() {
         decRes = jsonDecode(response.body);
         quesdata = jsonDecode(data!)['data'];
         setState(() {
+          _questionIndex = 0;
           questions = jsonDecode(data!)['data']['question'];
           totalques = jsonDecode(data!)['data']['total_question'];
           totalquesinquiz = jsonDecode(data!)['data']['total_question_in_quiz'];
@@ -149,35 +174,31 @@ setState(() {
           quiztype = jsonDecode(data!)['data']['quiz_type'];
           questionlistlen = questions.length;
         });
-
+        myDuration = Duration(seconds: questime);
         print(questions.toString());
         print(decRes);
         c = Colors.black;
-        //quiz=getQuestionResponseFromJson(data!).data;
-        // setState(() {
-        //   quiz = Data.fromJson(decRes);
-        // });
-        //randomItem = (questions..shuffle()).first;
-        randomItem = (questions..shuffle()).first;
-        questionlistlen = questions.length;
-        print(randomItem['question']);
-        print(randomItem['question_media']);
-        print(randomItem['width']);
-        print(randomItem['height']);
-        print(randomItem['option1']);
-        print(randomItem['option1_media']);
-        print(randomItem['option2']);
-        print(randomItem['option2_media']);
-        print(randomItem['option3']);
-        print(randomItem['option3_media']);
-        print(randomItem['option4']);
-        print(randomItem['option4_media']);
-        print(randomItem['right_option']);
-        print(randomItem['hint']);
-        print(randomItem['question_media_type']);
-        print(randomItem['why_right']);
-        print(randomItem['type']);
-        print(randomItem['id']);
+
+       // randomItem = (questions..shuffle()).first;
+       // questionlistlen = questions.length;
+       //  print(randomItem['question']);
+       //  print(randomItem['question_media']);
+       //  print(randomItem['width']);
+       //  print(randomItem['height']);
+       //  print(randomItem['option1']);
+       //  print(randomItem['option1_media']);
+       //  print(randomItem['option2']);
+       //  print(randomItem['option2_media']);
+       //  print(randomItem['option3']);
+       //  print(randomItem['option3_media']);
+       //  print(randomItem['option4']);
+       //  print(randomItem['option4_media']);
+       //  print(randomItem['right_option']);
+       //  print(randomItem['hint']);
+       //  print(randomItem['question_media_type']);
+       //  print(randomItem['why_right']);
+       //  print(randomItem['type']);
+       //  print(randomItem['id']);
         reloadques();
 
 
@@ -207,13 +228,15 @@ setState(() {
     BackButtonInterceptor.remove(myInterceptor);
     super.didUpdateWidget(oldWidget);
     if(secrem==0){
-      secrem=30;
+      secrem=questime;
       reloadques();
     }
   }
   @override
   Widget build(BuildContext context) {
-    //Colors.white;
+    String strDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = strDigits(myDuration.inMinutes.remainder(60));
+    final seconds = strDigits(myDuration.inSeconds.remainder(60));
     return  Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
@@ -262,27 +285,36 @@ setState(() {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,),
-                          TweenAnimationBuilder<Duration>(
-                              duration: Duration(seconds:30),
-                              tween: Tween(begin: Duration(seconds:30), end: Duration(seconds: 0)),
-                              onEnd: () {
-                                reloadques();
-                               // initState();
-                               // Duration(seconds: 30);
-                                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
-                              },
-                              builder: (BuildContext context, Duration value, Widget? child) {
-                                final minutes = value.inMinutes;
-                                final seconds = value.inSeconds % 60;
-                                return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 5),
-                                    child: Text('${seconds}Sec',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: ramdomcolor,
-                                            fontSize:15)));
-                              }),
+                          Text(
+                            '$minutes:$seconds',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 50),
+                          ),
+                          SizedBox(height: 20),
+                          // TweenAnimationBuilder<Duration>(
+                          //     duration: Duration(seconds:questime),
+                          //     tween: Tween(begin: Duration(seconds:questime), end: Duration(seconds: 0)),
+                          //     onEnd: () {
+                          //       reloadques();
+                          //      // initState();
+                          //      // Duration(seconds: 30);
+                          //       // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          //       //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
+                          //     },
+                          //     builder: (BuildContext context, Duration value, Widget? child) {
+                          //       final minutes = value.inMinutes;
+                          //       final seconds = value.inSeconds % 60;
+                          //       return Padding(
+                          //           padding: const EdgeInsets.symmetric(vertical: 5),
+                          //           child: Text('${seconds} Sec',
+                          //               textAlign: TextAlign.center,
+                          //               style: TextStyle(
+                          //                   color: ramdomcolor,
+                          //                   fontSize:15)));
+                          //     }),
+
                         ],
                       ),
                     )),
