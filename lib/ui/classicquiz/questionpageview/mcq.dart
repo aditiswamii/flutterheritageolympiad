@@ -51,6 +51,7 @@ class _State extends State<Mcq> {
   var currentques;
   var hasTimerStopped = false;
   var queslist;
+  Duration? duration;
 var secrem=30;
 var selectans="0";
 var correctanswer="0";
@@ -84,6 +85,7 @@ int i =0;
   }
 
   reloadques() {
+
     secrem=30;
     setState(() {
       secrem=30;
@@ -246,34 +248,6 @@ setState(() {
             child: ListView(
               children: [
                 Container(
-                  width: 60.0,
-                  padding: EdgeInsets.only(top: 3.0, right: 4.0),
-                  child: CountDownTimer(
-                    secondsRemaining: secrem,
-                    whenTimeExpires: () {
-                      if(secrem==0){
-                        reloadques();
-                            setState(() {
-                              secrem==30;
-                            });
-                      }
-                      initState();
-                      // setState(() {
-                      //   reloadques();
-                      //
-                      //   // secrem=30;
-                      //   // hasTimerStopped=true;
-                      //  // secrem=30;
-                      // });
-                    },
-                    countDownTimerStyle: TextStyle(
-                      color: Color(0XFFf5a623),
-                      fontSize: 17.0,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-                Container(
                     margin: EdgeInsets.fromLTRB(0,20,0,0),
                     height: 40,
                     width: 70,
@@ -293,7 +267,7 @@ setState(() {
                               tween: Tween(begin: Duration(seconds:30), end: Duration(seconds: 0)),
                               onEnd: () {
                                 reloadques();
-                                initState();
+                               // initState();
                                // Duration(seconds: 30);
                                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
                                 //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
@@ -314,16 +288,16 @@ setState(() {
                     )),
                 Container(
                     margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: Text(randomItem['question'].toString(),
+                    child: Text(currentques['question'].toString(),
                       style: TextStyle(color: ColorConstants.lightgrey200,fontSize: 18),)),
 
-                if(randomItem['question_media'] != "")
+                if(currentques['question_media'] != "")
                   Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Image.network(randomItem['question_media']
+                      child: Image.network(currentques['question_media']
                         ,height: 250,width: 250,alignment: Alignment.center,)),
 
-                if(randomItem['option1'].toString()!="")
+                if(currentques['option1'].toString()!="")
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: RaisedButton(
@@ -340,10 +314,10 @@ setState(() {
                         }),
 
                       },
-                      child: Text(randomItem['option1'], style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option1'], style: TextStyle(fontSize: 18),),
                     ),
                   ),
-                if(randomItem['option2'].toString()!="")
+                if(currentques['option2'].toString()!="")
                   Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: RaisedButton(
                       textColor: _hasBeenPressed2 ?  ramdomcolor:ColorConstants.lightgrey200 ,
@@ -361,10 +335,10 @@ setState(() {
                         }),
 
                       },
-                      child: Text(randomItem['option2'].toString(), style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option2'].toString(), style: TextStyle(fontSize: 18),),
                     ),
                   ),
-                if(randomItem['option3'].toString()!="")
+                if(currentques['option3'].toString()!="")
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: RaisedButton(
@@ -382,10 +356,10 @@ setState(() {
                         }),
 
                       },
-                      child: Text(randomItem['option3'].toString(), style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option3'].toString(), style: TextStyle(fontSize: 18),),
                     ),
                   ),
-                if(randomItem['option4'].toString()!="")
+                if(currentques['option4'].toString()!="")
                   Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     decoration: BoxDecoration(
                       color: ramdomcolor,
@@ -405,7 +379,7 @@ setState(() {
                         }),
 
                       },
-                      child: Text(randomItem['option4'].toString(), style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option4'].toString(), style: TextStyle(fontSize: 18),),
                     ),
                   ),
 
@@ -428,7 +402,7 @@ setState(() {
                           //Image.asset("assets/images/left_arrow.png",height: 40,width: 40),
                         ),
                       ),
-                      if( randomItem['hint']!=null)
+                      if( currentques['hint']!=null)
                         Container(
                           alignment: Alignment.center,
                           child: GestureDetector(
@@ -452,7 +426,7 @@ setState(() {
                                         content:
 
                                         Text(
-                                          randomItem['hint'],
+                                          currentques['hint'],
                                           style: TextStyle(color: ColorConstants.txt),
                                           textAlign: TextAlign.center,
                                         ),
@@ -467,7 +441,7 @@ setState(() {
                                 width: 100,
                               )),
                         ),
-                      if(randomItem['hint']==null)
+                      if(currentques['hint']==null)
                         Container(
                           alignment: Alignment.center,
                           child: GestureDetector(
