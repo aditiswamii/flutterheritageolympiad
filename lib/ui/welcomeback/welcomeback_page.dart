@@ -16,6 +16,7 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modal/SignUpModal.dart';
+import '../classicquiz/result/result.dart';
 
 
 class WelcomePage extends StatefulWidget{
@@ -212,7 +213,11 @@ var userid;
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ShopPage()));
+                        builder: (context) => ResultPage(quizid: "1339",)));
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => ShopPage()));
               },
               child: Container(
                 height: 150,
