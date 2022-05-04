@@ -1,4 +1,5 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -21,7 +22,8 @@ import '../../welcomeback/welcomeback_page.dart';
 
 class ResultPage extends StatefulWidget {
   var quizid;
- ResultPage({Key? key,required this.quizid}) : super(key: key);
+  var savedata;
+ ResultPage({Key? key,required this.quizid,required this.savedata}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -34,8 +36,10 @@ class _State extends State<ResultPage> {
   var country;
   var profilepic;
   var userid;
-
+var xp;
+var percentage;
   userdata() async {
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString("username");
@@ -47,6 +51,13 @@ class _State extends State<ResultPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      xp=widget.savedata["xp"];
+      percentage=widget.savedata["17"];
+
+    });
+    print(xp);
+    print(percentage);
     userdata();
     BackButtonInterceptor.add(myInterceptor);
   }
@@ -121,12 +132,23 @@ class _State extends State<ResultPage> {
                           ),
                         ),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(child: Text("Test")),
-                          Center(child: Text("Test")),
-                        ],
+                      FlipCard(
+                        direction: FlipDirection.HORIZONTAL,
+
+                        front: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(child: Text("${widget.savedata["xp"]} XP")),
+
+                            Center(child: Text("oh boy!")),
+                          ],
+                        ),
+                        back: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(child: Text("${widget.savedata["per"]}")),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -154,7 +176,7 @@ class _State extends State<ResultPage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AnswerkeyPage(quizid: widget.quizid)));
+                            builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: widget.savedata,)));
                   },
                   child: Container(
                       alignment: Alignment.center,

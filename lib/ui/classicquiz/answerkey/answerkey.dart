@@ -33,7 +33,9 @@ import '../questionpageview/questions.dart';
 
 class AnswerkeyPage extends StatefulWidget {
   var quizid;
-  AnswerkeyPage({Key? key, required this.quizid}) : super(key: key);
+  var saveddata;
+
+  AnswerkeyPage({Key? key, required this.quizid,required this.saveddata}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -98,7 +100,7 @@ class _State extends State<AnswerkeyPage> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => ResultPage(quizid: widget.quizid)));
+        MaterialPageRoute(builder: (BuildContext context) => ResultPage(quizid: widget.quizid, savedata: widget.saveddata)));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }

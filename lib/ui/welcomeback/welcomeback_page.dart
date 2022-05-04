@@ -210,10 +210,10 @@ var userid;
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ResultPage(quizid: "1339",)));
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => ResultPage(quizid: "1339", savedata: null, )));
                 // Navigator.pushReplacement(
                 //     context,
                 //     MaterialPageRoute(

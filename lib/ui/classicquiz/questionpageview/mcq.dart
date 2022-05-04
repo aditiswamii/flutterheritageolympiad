@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -31,11 +33,17 @@ class _State extends State<Mcq> {
   bool _hasBeenPressed2 = false;
   bool _hasBeenPressed3 = false;
   bool _hasBeenPressed4 = false;
+  var resultdata;  // save result api data
+  var resultres;   //save result response
+  var savedata;
   var quiz;
   var results;
-  var c;
-  var data;
-  var questions;
+  var c;   //color
+  var data;  //fetchques api data
+  var questions; //question list
+  var answer;
+  var datares;
+  var answerstring="";
   var randomItem;
   var questionlistlen;
   Random random = Random();
@@ -47,7 +55,7 @@ class _State extends State<Mcq> {
   var quiztype;
   var ramdomcolor;
   var quesdata;
-  var decRes;
+  var decRes;  //fetch ques response
   var rques;
   var currentques;
   var hasTimerStopped = false;
@@ -60,7 +68,7 @@ class _State extends State<Mcq> {
   var _questionIndex = 0;
   var _totalScore = 0;
   Timer? countdownTimer;
-  late Duration myDuration;
+  Duration? myDuration;
 
 
   @override
@@ -91,7 +99,7 @@ class _State extends State<Mcq> {
   void setCountDown() {
     final reduceSecondsBy = 1;
     setState(() {
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
+      final seconds = myDuration!.inSeconds - reduceSecondsBy;
       if (seconds < 0) {
         countdownTimer!.cancel();
         reloadques();
@@ -106,9 +114,15 @@ class _State extends State<Mcq> {
     secrem=questime;
     setState(() {
       secrem=questime;
+      _hasBeenPressed1 = false;
+        _hasBeenPressed2 = false;
+        _hasBeenPressed3 = false;
+       _hasBeenPressed4 = false;
+      ramdomcolor = (color..shuffle()).first;
     });
-    if(countdownTimer!=null)
-    setState(() => countdownTimer!.cancel());
+    if(!(countdownTimer == null)) {
+      setState(() => countdownTimer!.cancel());
+    }
     setState(() => myDuration = Duration(seconds: questime));
     countdownTimer =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
@@ -124,7 +138,19 @@ class _State extends State<Mcq> {
       });
       print("current ques"+"${currentques}");
     } else {
-      print('No more questions!');
+     // print("index"+answer[5]);
+      answerstring = "";
+      for (var i = 0; i < answer.length; i++) {
+        if(answerstring.isEmpty){
+          answerstring = answer[i].toString();
+        } else {
+          answerstring = answerstring + "," + answer[i].toString();
+        }
+
+
+      }
+      saveresult(widget.quizid, answerstring);
+      print(answerstring);
     }
 
    // queslist=  List.generate(
@@ -174,6 +200,10 @@ class _State extends State<Mcq> {
           quiztype = jsonDecode(data!)['data']['quiz_type'];
           questionlistlen = questions.length;
         });
+        answer = List.filled(questions.length, 0, growable: false);
+        // for (var i = 0; i < questions.length; i++) {
+        //   answer[i] = 0;
+        // }
         myDuration = Duration(seconds: questime);
         print(questions.toString());
         print(decRes);
@@ -209,6 +239,43 @@ class _State extends State<Mcq> {
     }
   }
 
+  void saveresult(String quiz_id,String quiz_answer) async {
+    http.Response response =
+    await http.post(Uri.parse("http://3.108.183.42/api/save_result"),
+        body: {
+          'quiz_id': quiz_id.toString(),
+          'quiz_answer': quiz_answer.toString(),
+        });
+    showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      resultdata = response.body;
+      if (jsonResponse['status'] == 200) {
+
+        resultres = jsonDecode(response.body);
+        savedata = jsonDecode(resultdata!)['data'];
+        setState(() {
+          savedata = jsonDecode(resultdata!)['data'];
+        });
+        onsuccess(savedata);
+        print(savedata);
+        print(savedata['quiz_id']);
+        print(jsonDecode(resultdata!)['data']);
+         print(jsonDecode(resultdata!)['data']['quiz_id']);
+        print(jsonDecode(resultdata!)['data']['xp']);
+        print(jsonDecode(resultdata!)['data']['per']);
+
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+onsuccess(savedata){
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (BuildContext context) => ResultPage(quizid: savedata['quiz_id'],savedata:savedata, )));
+}
 
   @override
   void dispose() {
@@ -235,8 +302,8 @@ class _State extends State<Mcq> {
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
-    final minutes = strDigits(myDuration.inMinutes.remainder(60));
-    final seconds = strDigits(myDuration.inSeconds.remainder(60));
+    final minutes = strDigits(myDuration!.inMinutes.remainder(60));
+    final seconds = strDigits(myDuration!.inSeconds.remainder(60));
     return  Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
@@ -284,13 +351,14 @@ class _State extends State<Mcq> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,),
+                          Container(  margin: EdgeInsets.fromLTRB(0,0,5,0),
+                              child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,)),
                           Text(
                             '$minutes:$seconds',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 50),
+                                color: ramdomcolor,
+                                fontSize: 24),
                           ),
                           SizedBox(height: 20),
                           // TweenAnimationBuilder<Duration>(
@@ -343,6 +411,7 @@ class _State extends State<Mcq> {
                           _hasBeenPressed3=false;
                           _hasBeenPressed4=false;
                           selectans=_hasBeenPressed1 ?  "1":"0";
+                          answer[_questionIndex] = 1;
                         }),
 
                       },
@@ -362,7 +431,7 @@ class _State extends State<Mcq> {
                           _hasBeenPressed3=false;
                           _hasBeenPressed4=false;
                           selectans=_hasBeenPressed2 ?  "2":"0";
-
+                          answer[_questionIndex] =  _hasBeenPressed2?2:0;
 
                         }),
 
@@ -384,7 +453,7 @@ class _State extends State<Mcq> {
                           _hasBeenPressed1=false;
                           _hasBeenPressed4=false;
                           selectans=_hasBeenPressed3 ?  "3":"0";
-
+                          answer[_questionIndex] = 3;
                         }),
 
                       },
@@ -407,7 +476,7 @@ class _State extends State<Mcq> {
                           _hasBeenPressed3=false;
                           _hasBeenPressed1=false;
                           selectans=_hasBeenPressed4 ?  "4":"0";
-
+                          answer[_questionIndex] = 4;
                         }),
 
                       },
@@ -520,12 +589,12 @@ class _State extends State<Mcq> {
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                           onPressed: (){
-                          _hasBeenPressed1 = false;
-                            _hasBeenPressed2 = false;
-                            _hasBeenPressed3 = false;
-                           _hasBeenPressed4 = false;
-                            print(correctanswer);
-                            print(selectans);
+                          // _hasBeenPressed1 = false;
+                          //   _hasBeenPressed2 = false;
+                          //   _hasBeenPressed3 = false;
+                          //  _hasBeenPressed4 = false;
+                           // print(correctanswer);
+                            print("ans:$selectans");
                             // if(selectans==randomItem['right_option'].toString()){
                             //   correctanswer="4";
                             //
