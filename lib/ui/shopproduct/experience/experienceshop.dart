@@ -31,7 +31,7 @@ class ExperiencePage extends StatefulWidget{
 }
 
 class _ExperiencePageState extends State<ExperiencePage> {
-  // TextEditingController controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
   // List<Data> _searchResult = [];
   // List<Data> _userDetails = [];
   var _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -54,7 +54,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
   getExperience(String userid ,String searchkey) async {
     try {
       http.Response response = await http.get(
-          Uri.parse(StringConstants.BASE_URL+"exp")
+          Uri.parse(StringConstants.BASE_URL+"exp&search="+searchkey)
       );
       if (response.statusCode == 200) {
         data = response.body;
@@ -102,6 +102,22 @@ class _ExperiencePageState extends State<ExperiencePage> {
         MaterialPageRoute(builder: (BuildContext context) => ShopPage()));
     // Do some stuff.
     return true;
+  }
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -184,24 +200,34 @@ class _ExperiencePageState extends State<ExperiencePage> {
                                   color: ColorConstants.txt)
                           ),
                         ),
-                        // Card(
-                        //   child: ListTile(
-                        //     leading: Icon(Icons.search),
-                        //     title: TextField(
-                        //       controller: controller,
-                        //       decoration: InputDecoration(
-                        //           hintText: 'Search', border: InputBorder.none),
-                        //       onChanged: onSearchTextChanged,
-                        //     ),
-                        //     trailing: IconButton(
-                        //       icon: Icon(Icons.cancel),
-                        //       onPressed: () {
-                        //         controller.clear();
-                        //         onSearchTextChanged('');
-                        //       },
-                        //     ),
-                        //   ),
-                        // ),
+                        Card(
+                          child: ListTile(
+                            leading: Icon(Icons.search),
+                            title: TextFormField(
+                              controller: controller,
+                              textInputAction: TextInputAction.search,
+                              onFieldSubmitted: (text){
+                                if(text.isNotEmpty){
+                                  getExperience(userid.toString(), text);
+                                }else{
+                                  getExperience(userid.toString(), "");
+                                }
+                                print(text);
+                                log(text);
+                              },
+                              decoration: InputDecoration(
+                                  hintText: 'Search', border: InputBorder.none),
+
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                controller.clear();
+                                onSearchTextChanged('');
+                              },
+                            ),
+                          ),
+                        ),
                         expdata==null?const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -276,19 +302,17 @@ class _ExperiencePageState extends State<ExperiencePage> {
       ),
     );
   }
-  // onSearchTextChanged(String text) async {
-  //   _searchResult.clear();
-  //   if (text.isEmpty) {
-  //     setState(() {});
-  //     return;
-  //   }
-  //
-  //   _userDetails.forEach((userDetail) {
-  //     if (userDetail.name!.contains(text) || userDetail.description!.contains(text))
-  //       _searchResult.add(userDetail);
-  //     print(_searchResult);
-  //   });
-  //
-  //   setState(() {});
-  // }
+  onSearchTextChanged(String text)  {
+    if (text.isEmpty) {
+      print(text);
+      getExperience(userid.toString(), "");
+    }else{
+      print(text);
+      getExperience(userid.toString(), text);
+    }
+
+
+
+    setState(() {});
+  }
 }

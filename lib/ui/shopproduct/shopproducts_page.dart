@@ -134,7 +134,7 @@ class _ShopState extends State<ShopPage> {
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      child:  Text(username,style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
+                      child:  Text(username.toString(),style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
                   Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),

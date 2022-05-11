@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -306,28 +307,33 @@ class _FeedPageState extends State<FeedPage> {
                                                 Container(
                                                   child: Row(
                                                     children: [
-                                                      Container(
-                                                          child: jsonDecode(data!)[
-                                                                              'data']
-                                                                          [
-                                                                          index]
-                                                                      [
-                                                                      'is_saved'] !=
-                                                                  1
-                                                              ? Image.asset(
-                                                                  "assets/images/folder_2.png",
-                                                                  height: 30,
-                                                                  width: 30,
-                                                                  color: ColorConstants
-                                                                      .lightgrey200,
-                                                                )
-                                                              : Image.asset(
-                                                                  "assets/images/folder.png",
-                                                                  height: 30,
-                                                                  width: 30,
-                                                                  color: Colors
-                                                                      .deepOrange,
-                                                                )),
+                                                      GestureDetector(
+                                                        onTap:(){
+
+                                                        },
+                                                        child: Container(
+                                                            child: jsonDecode(data!)[
+                                                                                'data']
+                                                                            [
+                                                                            index]
+                                                                        [
+                                                                        'is_saved'] !=
+                                                                    1
+                                                                ? Image.asset(
+                                                                    "assets/images/folder_2.png",
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                    color: ColorConstants
+                                                                        .lightgrey200,
+                                                                  )
+                                                                : Image.asset(
+                                                                    "assets/images/folder.png",
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                    color: Colors
+                                                                        .deepOrange,
+                                                                  )),
+                                                      ),
                                                       Container(
                                                         margin: const EdgeInsets
                                                                 .fromLTRB(
@@ -387,8 +393,10 @@ class _FeedPageState extends State<FeedPage> {
                                             ),
                                           ),
                                           // Container(
+                                          //  child:Event(
                                           //
-                                          // )
+                                          //  ),
+                                          //)
                                         ],
                                       ),
                                     )
