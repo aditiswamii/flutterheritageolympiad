@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
+import 'package:flutterheritageolympiad/ui/feed/feed.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
@@ -79,7 +80,7 @@ var userid;
           onTap: () {
             _scaffoldKey.currentState!.openEndDrawer();
           },
-          child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
+          child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
         ),
       ),
       Container(
@@ -116,14 +117,14 @@ var userid;
                      Container(
                        padding: EdgeInsets.all(10),
                        alignment: Alignment.topRight,
-                       child: Image.asset("assets/mcq_pattern2.png",
+                       child: Image.asset("assets/images/mcq_pattern2.png",
                            height: 20,width: 20,alignment: Alignment.topRight),
                      ),
                      Container(child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                      Container(
                        padding: EdgeInsets.all(10),
                        alignment: Alignment.topLeft,
-                       child: Image.asset("assets/mcq_pattern2.png",
+                       child: Image.asset("assets/images/mcq_pattern2.png",
                            height: 20,width: 20,alignment: Alignment.topLeft),
                      ),
                    ],
@@ -136,7 +137,7 @@ var userid;
                  Navigator.pushReplacement(
                      context,
                      MaterialPageRoute(
-                         builder: (context) => Mcq(quizid: "83")));
+                         builder: (context) => FeedPage()));
                },
                child: Container(
                  height: 150,
@@ -149,14 +150,14 @@ var userid;
                      Container(
                        padding: EdgeInsets.all(10),
                        alignment: Alignment.topLeft,
-                       child: Image.asset("assets/mcq_pattern2.png",
+                       child: Image.asset("assets/images/mcq_pattern2.png",
                            height: 20,width: 20,alignment: Alignment.topLeft),
                      ),
                      Container(child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                      Container(
                        padding: EdgeInsets.all(10),
                        alignment: Alignment.topRight,
-                       child: Image.asset("assets/mcq_pattern2.png",
+                       child: Image.asset("assets/images/mcq_pattern2.png",
                            height: 20,width: 20,alignment: Alignment.topRight),
                      ),
                    ],
@@ -193,14 +194,14 @@ var userid;
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.topRight,
-                      child: Image.asset("assets/mcq_pattern2.png",
+                      child: Image.asset("assets/images/mcq_pattern2.png",
                           height: 20,width: 20,alignment: Alignment.topRight),
                     ),
                     Container(child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.topLeft,
-                      child: Image.asset("assets/mcq_pattern2.png",
+                      child: Image.asset("assets/images/mcq_pattern2.png",
                           height: 20,width: 20,alignment: Alignment.topLeft),
                     ),
                   ],
@@ -214,10 +215,10 @@ var userid;
                 //     context,
                 //     MaterialPageRoute(
                 //         builder: (context) => ResultPage(quizid: "1339", savedata: null, )));
-                // Navigator.pushReplacement(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => ShopPage()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShopPage()));
               },
               child: Container(
                 height: 150,
@@ -230,14 +231,14 @@ var userid;
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.topLeft,
-                      child: Image.asset("assets/mcq_pattern2.png",
+                      child: Image.asset("assets/images/mcq_pattern2.png",
                           height: 20,width: 20,alignment: Alignment.topLeft),
                     ),
                     Container(child: Text("TO THE SHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.topCenter,
-                      child: Image.asset("assets/mcq_pattern2.png",
+                      child: Image.asset("assets/images/mcq_pattern2.png",
                           height: 20,width: 20,alignment: Alignment.topCenter),
                     ),
                   ],

@@ -111,7 +111,7 @@ var userid;
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -243,7 +243,7 @@ var userid;
                                   titleTextStyle: TextStyle(
                                       fontSize: 12, color: ColorConstants.txt),
                                   title:  Image.asset(
-                                    "assets/hint.png",
+                                    "assets/images/hint.png",
                                     height: 50,
                                     width: 100,
                                     alignment: Alignment.center,
@@ -259,7 +259,7 @@ var userid;
                           //     MaterialPageRoute(builder: (context) => const VjournoMain()));
                         },
                         child: Image.asset(
-                          "assets/hint.png",
+                          "assets/images/hint.png",
                           height: 50,
                           width: 100,
                         )),

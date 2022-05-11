@@ -60,6 +60,8 @@ dependencies:
   back_button_interceptor:
   flip_card:
   package_info_plus:
+  device_calendar:
+  add_2_calendar:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -82,120 +84,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/splash_heritage.jpg
-    - assets/arrow1.png
-    - assets/arrow2.png
-    - assets/arrowup.png
-    - assets/artwork1.png
-    - assets/artwork2.png
-    - assets/artwork3.png
-    - assets/about.png
-    - assets/address.png
-    - assets/calender.png
-    - assets/change_password.png
-    - assets/check_box.png
-    - assets/check_box_filled.png
-    - assets/check_box_with_tick.png
-    - assets/checkbox.png
-    - assets/checkboxfilled.png
-    - assets/clock_green.png
-    - assets/clock_grey.png
-    - assets/clock_red.png
-    - assets/clock_yellow.png
-    - assets/collections.png
-    - assets/collections2.png
-    - assets/comment.png
-    - assets/component.png
-    - assets/delete.png
-    - assets/down_arrow.png
-    - assets/down_arrow_small.png
-    - assets/edit.png
-    - assets/email.png
-    - assets/emoji1.png
-    - assets/emoji2.png
-    - assets/emoji3.png
-    - assets/emoji4.png
-    - assets/export.png
-    - assets/eye.png
-    - assets/facebook_512.png
-    - assets/flower1.png
-    - assets/flower2.png
-    - assets/flower3.png
-    - assets/flower4.png
-    - assets/folder.png
-    - assets/folder_2.png
-    - assets/forward.png
-    - assets/generating_result_screen_icon.png
-    - assets/google_512.png
-    - assets/group_594.png
-    - assets/help.png
-    - assets/help1.png
-    - assets/hint.png
-    - assets/hint_white.png
-    - assets/home.png
-    - assets/home_1.png
-    - assets/india.png
-    - assets/intangible.png
-    - assets/interval.png
-    - assets/interval2.png
-    - assets/israel.png
-    - assets/left_arrow.png
-    - assets/leftarrow.png
-    - assets/like.png
-    - assets/logo.png
-    - assets/mcq_pattern1.png
-    - assets/mcq_pattern2.png
-    - assets/mcq_pattern_3.png
-    - assets/module2.png
-    - assets/modules.png
-    - assets/modules2.png
-    - assets/monthly_calendar.png
-    - assets/monthly_calendar_1.png
-    - assets/natural.png
-    - assets/pause.png
-    - assets/payment_setting.png
-    - assets/phone.png
-    - assets/placce_holder.png
-    - assets/play.png
-    - assets/point.png
-    - assets/points.png
-    - assets/privacy.png
-    - assets/profile.png
-    - assets/profile_page.png
-    - assets/reverse.png
-    - assets/right_arrow.png
-    - assets/rightarrow2.png
-    - assets/sample_image.png
-    - assets/search.png
-    - assets/setting.png
-    - assets/share.png
-    - assets/share1.png
-    - assets/side_menu.png
-    - assets/side_menu_2.png
-    - assets/side_menu_3.png
-    - assets/single.png
-    - assets/single_posts.png
-    - assets/specials_calendar.png
-    - assets/specials_calendar_1.png
-    - assets/sponsor.png
-    - assets/tangible.png
-    - assets/thematic_collections.png
-    - assets/tho_logo.png
-    - assets/facebook.png
-    - assets/google_plus.png
-    - assets/twitter.png
-    - assets/whitebg.png
-    - assets/cat1.png
-    - assets/cat2.png
-    - assets/debackground.jpg
-    - assets/login_bg.jpg
-    - assets/signup_bg.jpg
-    - assets/img.png
-    - assets/cross.png
-    - assets/yellowbg.png
-    - assets/yellowbackground.png
-    - assets/notifications.png
-    - assets/question.png
     - assets/images/
   fonts:
     - family: Omnes

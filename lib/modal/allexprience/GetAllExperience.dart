@@ -1,7 +1,7 @@
 import 'dart:convert';
 /// status : 200
 /// message : "Experince Found"
-/// data : [{"name":"Exp1","price":"₹ 100","description":"This Is Description For Exp 1","link":"Https://ap-south-1.console.aws.amazon.com/","images":["http://3.108.183.42/storage/exp/ZkQqiIR2sHkiC5NEnigzKRGCWPHUKz5XFQQIuzXi.png","http://3.108.183.42/storage/exp/YkZKSjhgN2SXgVdX3VmrKdc7sDBq59ipFvjAc7lx.png","http://3.108.183.42/storage/exp/RTkcbmcoVpkmP4Zam2jGX5dts1kyelYtHvGS2r40.png"]}]
+/// data : [{"name":"Pizza","price":"₹ 230","description":"Pizza Is More Important","link":"Https://www.google.com/search?gs_ssp=ejzj4tdp1tcwmzmum2b0ypbilcisqkoeac4fbre&q=pizza&oq=pizza&aqs=ch","images":["http://3.108.183.42/storage/exp/QxelSXBlNvKqdMIGQosQDVDg4TvzmzT9Swe94hgC.jpg"]}]
 
 GetAllExperience getAllExperienceFromJson(String str) => GetAllExperience.fromJson(json.decode(str));
 String getAllExperienceToJson(GetAllExperience data) => json.encode(data.toJson());
@@ -45,11 +45,11 @@ class GetAllExperience {
 
 }
 
-/// name : "Exp1"
-/// price : "₹ 100"
-/// description : "This Is Description For Exp 1"
-/// link : "Https://ap-south-1.console.aws.amazon.com/"
-/// images : ["http://3.108.183.42/storage/exp/ZkQqiIR2sHkiC5NEnigzKRGCWPHUKz5XFQQIuzXi.png","http://3.108.183.42/storage/exp/YkZKSjhgN2SXgVdX3VmrKdc7sDBq59ipFvjAc7lx.png","http://3.108.183.42/storage/exp/RTkcbmcoVpkmP4Zam2jGX5dts1kyelYtHvGS2r40.png"]
+/// name : "Pizza"
+/// price : "₹ 230"
+/// description : "Pizza Is More Important"
+/// link : "Https://www.google.com/search?gs_ssp=ejzj4tdp1tcwmzmum2b0ypbilcisqkoeac4fbre&q=pizza&oq=pizza&aqs=ch"
+/// images : ["http://3.108.183.42/storage/exp/QxelSXBlNvKqdMIGQosQDVDg4TvzmzT9Swe94hgC.jpg"]
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());

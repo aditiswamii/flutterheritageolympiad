@@ -74,7 +74,7 @@ class _State extends State<ManageContactScreen> {
                                   builder: (context) => const WelcomePage()));
                         },
                         child: Image.asset(
-                            "assets/home_1.png", height: 40, width: 40),
+                            "assets/images/home_1.png", height: 40, width: 40),
                       ),
                     ),
                     Container(
@@ -86,7 +86,7 @@ class _State extends State<ManageContactScreen> {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child: Image.asset(
-                            "assets/side_menu_2.png", height: 40,
+                            "assets/images/side_menu_2.png", height: 40,
                             width: 40),
                       ),
                     ),
@@ -151,7 +151,7 @@ class _State extends State<ManageContactScreen> {
                                 child: CircleAvatar(
                                   radius: 30.0,
                                   backgroundImage:
-                                  AssetImage("assets/cat1.png"),
+                                  AssetImage("assets/images/cat1.png"),
                                   backgroundColor: Colors.transparent,
                                 ),
                               ),
@@ -175,7 +175,7 @@ class _State extends State<ManageContactScreen> {
                                         Row(
                                           children: [
                                             Image.asset(
-                                              "assets/india.png",
+                                              "assets/images/india.png",
                                               width: 10,
                                               height: 10,
                                             ),

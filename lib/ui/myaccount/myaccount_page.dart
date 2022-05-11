@@ -87,7 +87,7 @@ class _AccountPageState extends State<MyAccountPage> {
                                     MaterialPageRoute(
                                         builder: (context) => const WelcomePage()));
                               },
-                              child:  Image.asset("assets/home_1.png",height: 40,width: 40,),
+                              child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                             ),
                           ),
                           Container(
@@ -98,7 +98,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               onTap: () {
                                 _scaffoldKey.currentState!.openEndDrawer();
                               },
-                              child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
+                              child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                             ),
                           ),
                         ],
@@ -135,7 +135,7 @@ class _AccountPageState extends State<MyAccountPage> {
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/notifications.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/notifications.png",height: 30,width: 30,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.push(
@@ -169,7 +169,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/setting.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/setting.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                   onTap: (){
                                     Navigator.push(
@@ -201,7 +201,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/interval.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
                                 title: GestureDetector(
                                     onTap: (){
                                       Navigator.push(
@@ -233,7 +233,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/change_password.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/change_password.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                     onTap: (){
                                       Navigator.push(
@@ -266,7 +266,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/privacy.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/privacy.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                     onTap: (){
                                       Navigator.push(
@@ -299,7 +299,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/interval.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
                                 title: GestureDetector(
                                     onTap: (){
                                       Navigator.push(
@@ -332,7 +332,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/payment_setting.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                     onTap: (){
                                       Navigator.push(
@@ -365,7 +365,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/help.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/help.png",height: 30,width: 30,),
                                 title: GestureDetector(
                                     onTap: (){
 
@@ -395,7 +395,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/about.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/about.png",height: 30,width: 30,),
                                 title: GestureDetector(
                                     onTap: (){
 
@@ -425,7 +425,7 @@ class _AccountPageState extends State<MyAccountPage> {
                               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: ListTile(
                                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/share1.png",height: 30,width: 30,),
+                                leading: Image.asset("assets/images/share1.png",height: 30,width: 30,),
                                 title: GestureDetector(
                                     onTap: (){
                                       Share.share('Share App', subject: 'share');

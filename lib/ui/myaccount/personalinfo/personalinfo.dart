@@ -100,7 +100,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                               MaterialPageRoute(
                                   builder: (context) => const WelcomePage()));
                         },
-                        child: Image.asset("assets/home_1.png",
+                        child: Image.asset("assets/images/home_1.png",
                             height: 40, width: 40),
                       ),
                     ),
@@ -112,7 +112,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                         onTap: () {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
-                        child: Image.asset("assets/side_menu_2.png",
+                        child: Image.asset("assets/images/side_menu_2.png",
                             height: 40, width: 40),
                       ),
                     ),
@@ -173,7 +173,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       child:CircleAvatar(
                         backgroundColor: Colors.white,
                         child: ClipOval(
-                          child: _image ==null ?  Image.asset("assets/cat1.png",height: 100,width: 100,fit: BoxFit.fill,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.fill,),
+                          child: _image ==null ?  Image.asset("assets/images/cat1.png",height: 100,width: 100,fit: BoxFit.fill,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.fill,),
                         ),
                       ),
                     ),

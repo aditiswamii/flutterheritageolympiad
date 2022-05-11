@@ -9,24 +9,19 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:flutterheritageolympiad/ui/shopproduct/product/product.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../welcomeback/welcomeback_page.dart';
+import 'experience/experienceshop.dart';
 
-void main() {
 
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: ShopPage(),
-  ));
-}
 class ShopPage extends StatefulWidget{
 
-  const ShopPage({Key? key}) : super(key: key);
+ShopPage({Key? key}) : super(key: key);
 
   @override
   _ShopState createState() => _ShopState();
@@ -39,11 +34,25 @@ class _ShopState extends State<ShopPage> {
   bool clickexprerience = false;
   bool clickgift = false;
   bool clickplans = false;
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
 
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country =prefs.getString("country");
+      userid= prefs.getString("userid");
+    });
+  }
   @override
     void initState() {
       super.initState();
       BackButtonInterceptor.add(myInterceptor);
+      userdata();
     }
 
     @override
@@ -96,7 +105,7 @@ class _ShopState extends State<ShopPage> {
                                   builder: (context) => const WelcomePage()));
                         },
                         child: Image.asset(
-                            "assets/home_1.png", height: 40, width: 40),
+                            "assets/images/home_1.png", height: 40, width: 40),
                       ),
                     ),
                     Container(
@@ -108,7 +117,7 @@ class _ShopState extends State<ShopPage> {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child: Image.asset(
-                            "assets/side_menu_2.png", height: 40,
+                            "assets/images/side_menu_2.png", height: 40,
                             width: 40),
                       ),
                     ),
@@ -125,12 +134,12 @@ class _ShopState extends State<ShopPage> {
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
+                      child:  Text(username,style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
                   Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Text(
-                        "You deserve to treat yourself.Find the most unique product and experience here.",
+                        "You deserve to treat yourself. Find the most unique product and experience here.",
                         style: TextStyle(fontSize: 14,
                             color: ColorConstants.txt)
                     ),
@@ -165,7 +174,7 @@ class _ShopState extends State<ShopPage> {
                                 height: 150,
                                // width: 150,
                                 decoration:  BoxDecoration(
-                                    color: clickproduct==true?ColorConstants.yellow200:ColorConstants.yellow200.withAlpha(150)
+                                    color: clickproduct!=true?ColorConstants.yellow200:ColorConstants.yellow200.withAlpha(150)
                                 ),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -197,7 +206,7 @@ class _ShopState extends State<ShopPage> {
                                 height: 150,
                               //  width: 150,
                                 decoration:  BoxDecoration(
-                                    color: clickexprerience==true?ColorConstants.lightgrey200:ColorConstants.lightgrey200.withAlpha(150)
+                                    color: clickexprerience!=true?ColorConstants.lightgrey200:ColorConstants.lightgrey200.withAlpha(150)
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -304,10 +313,21 @@ class _ShopState extends State<ShopPage> {
                         //////// HERE
                       ),
                       onPressed: () {
+                        if(clickproduct==true){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProductList()));
+                        }else if(clickexprerience==true){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  ExperiencePage()));
+                        }
                         // Navigator.pushReplacement(
                         //     context,
                         //     MaterialPageRoute(
-                        //         builder: (context) => const WelcomePage()));
+                        //         builder: (context) => const ExperiencePage()));
                       },
                       child: const Text(
                         "NEXT",

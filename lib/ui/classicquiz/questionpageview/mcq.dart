@@ -326,14 +326,14 @@ onsuccess(savedata){
           ),
         ],
       ),
-      body:decRes==null? Center(
-        child: CircularProgressIndicator(),
-      )
-          :Container(
+      body:Container(
         decoration:  BoxDecoration(
           color: ramdomcolor,
         ),
-        child: Container(
+        child: decRes==null? const Center(
+          child: CircularProgressIndicator(),
+        )
+            :Container(
             margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [

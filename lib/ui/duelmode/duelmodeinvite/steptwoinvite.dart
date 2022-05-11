@@ -46,7 +46,7 @@ class _State extends State<DuelModeInvite> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -68,7 +68,7 @@ class _State extends State<DuelModeInvite> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -80,7 +80,7 @@ class _State extends State<DuelModeInvite> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),

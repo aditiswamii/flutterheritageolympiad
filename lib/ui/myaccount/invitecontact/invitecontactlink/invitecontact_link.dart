@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +10,10 @@ import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.d
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../invitecontact.dart';
 
 
@@ -23,14 +28,59 @@ class ContactInviteLink extends StatefulWidget {
 class _State extends State<ContactInviteLink> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
+  var data;
+  var linkd;
+  var username;
+  var userid;
+  var country;
   String link="cul.tre/ejojkx";
-  // Future<void> share() async {
-  //   await FlutterShare.share(
-  //       title: 'share',
-  //       text: 'share text',
-  //       linkUrl: '$link',
-  //       chooserTitle: 'Choose link share plateform');
-  // }
+  void getlink(String user_id) async {
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL+"invite_contact"), body: {
+      'user_id': user_id.toString(),
+    });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        linkd = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(linkd.length); // just printed length of data
+      });
+
+      var venam = jsonDecode(data!)['data'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
+  }
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+    });
+    getlink(userid.toString());
+  }
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+
+    userdata();
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => ContactInviteLink()));
+    print(BackButtonInterceptor.describe()); // Do some stuff.
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +99,12 @@ class _State extends State<ContactInviteLink> {
           ),
         ),
         child: Container(
+          color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(
+          child:linkd==null?const Center(
+            child: CircularProgressIndicator(),
+          )
+              : ListView(
             children:<Widget> [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +120,7 @@ class _State extends State<ContactInviteLink> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -78,7 +132,7 @@ class _State extends State<ContactInviteLink> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -112,13 +166,13 @@ class _State extends State<ContactInviteLink> {
                     //////// HERE
                   ),
                   onPressed: () {
-                    //Clipboard.setData(ClipboardData(text: "$link"));
+                   // Clipboard.setData(ClipboardData(text: "$linkd"));
 
                   },
                   child:  Text(
-                    "$link",
+                    "$linkd",
                     style: TextStyle(
-                        color: ColorConstants.txt, fontSize:30),
+                        color: ColorConstants.txt, fontSize:24),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -139,25 +193,12 @@ class _State extends State<ContactInviteLink> {
                         //////// HERE
                       ),
                       onPressed: () {
-                        Clipboard.setData(ClipboardData(text: "$link"));
+                        Clipboard.setData(ClipboardData(text: "http://cultre.app/$linkd"));
                         Clipboard.kTextPlain;
-                        Clipboard.getData("$link");
+                        Clipboard.getData("http://cultre.app/$linkd");
 
-                        // ClipboardManager.copyToClipBoard("your text to copy").then((result) {
-                        //   final snackBar = SnackBar(
-                        //     content: Text('Copied to Clipboard'),
-                        //     action: SnackBarAction(
-                        //       label: 'Undo',
-                        //       onPressed: () {},
-                        //     ),
-                        //   );
-                        //   Scaffold.of(context).showSnackBar(snackBar);
-                        // });
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => DuelModeMain()));
-                      },
+                        }
+                      ,
                       child: const Text(
                         "COPY LINK",
                         style: TextStyle(
@@ -178,11 +219,8 @@ class _State extends State<ContactInviteLink> {
                       ),
                       onPressed: () {
                         //share;
-                        Share.share('$link', subject: 'Share link');
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const WelcomePage()));
+                        Share.share('http://cultre.app/$linkd', subject: 'Share link');
+
                       },
                       child: const Text(
                         "SHARE LINK",

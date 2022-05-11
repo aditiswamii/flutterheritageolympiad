@@ -98,7 +98,7 @@ class _State extends State<Stepone> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/signup_bg.jpg"),
+            image: AssetImage("assets/images/signup_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),

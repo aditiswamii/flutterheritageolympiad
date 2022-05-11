@@ -1,18 +1,25 @@
 
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/modal/allexprience/GetAllExperience.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
+import '../../../utils/StringConstants.dart';
 import '../../welcomeback/welcomeback_page.dart';
 
 class ExperiencePage extends StatefulWidget{
@@ -24,17 +31,77 @@ class ExperiencePage extends StatefulWidget{
 }
 
 class _ExperiencePageState extends State<ExperiencePage> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  // TextEditingController controller = TextEditingController();
+  // List<Data> _searchResult = [];
+  // List<Data> _userDetails = [];
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  var expdata;
+  var data;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country =prefs.getString("country");
+      userid= prefs.getString("userid");
+    });
+    getExperience(userid.toString(), "") ;
+  }
+  getExperience(String userid ,String searchkey) async {
+    try {
+      http.Response response = await http.get(
+          Uri.parse(StringConstants.BASE_URL+"exp")
+      );
+      if (response.statusCode == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          expdata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(expdata.length);
+          // for (Map user in responseJson) {
+          //   _userDetails.add(Data.fromJson(user));
+          // }// just printed length of data
+        });
 
-  // bool clickproduct=false;
-  // bool clickexprerience=false;
-  // bool clickgift=false;
-  // bool clickplans=false;
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+        print(jsonDecode(data!)['data'][0]['name']);
+        print(jsonDecode(data!)['data'][0]['price']);
+        print(jsonDecode(data!)['data'][0]['description']);
+        print(jsonDecode(data!)['data'][0]['images']);
+        print(jsonDecode(data!)['data'][0]['link']);
+      } else {
+        print(response.statusCode);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+  onsuccess(){
 
+  }
   @override
   void initState() {
-//var username = SharedObjects.prefs.getString("username");
     super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+    userdata();
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => ShopPage()));
+    // Do some stuff.
+    return true;
   }
   @override
   Widget build(BuildContext context) {
@@ -50,11 +117,11 @@ class _ExperiencePageState extends State<ExperiencePage> {
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
-        child:Container(
+        child:Container( color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
               children: [
@@ -66,6 +133,10 @@ class _ExperiencePageState extends State<ExperiencePage> {
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(left: 5.0),
+                      height: 40, width: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,color: Colors.white,
+                      ),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -74,7 +145,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
                                   builder: (context) => const WelcomePage()));
                         },
                         child: Image.asset(
-                            "assets/home_1.png", height: 40, width: 40),
+                            "assets/images/home_1.png", height: 40, width: 40),
                       ),
                     ),
                     Container(
@@ -86,7 +157,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child: Image.asset(
-                            "assets/side_menu_2.png", height: 40,
+                            "assets/images/side_menu_2.png", height: 40,
                             width: 40),
                       ),
                     ),
@@ -99,19 +170,100 @@ class _ExperiencePageState extends State<ExperiencePage> {
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: const Text("STAY UNIQUE,",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
+                            child: const Text("EXPLORE",style: TextStyle(fontSize: 18,color: Colors.black,fontFamily: "Nunito"))),
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: const Text("HANA210",style: TextStyle(fontSize: 18,color: ColorConstants.txt,fontFamily: "Nunito"))),
+                            child:  Text("EXPERIENCES",style: TextStyle(fontSize: 18,color: Colors.black,fontFamily: "Nunito"))),
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                              "You deserve to treat yourself.Find the most unique product and experience here.",
+                              "Scroll down see all updates, search by keywords, or filter update by type.",
                               style: TextStyle(fontSize: 14,
                                   color: ColorConstants.txt)
                           ),
+                        ),
+                        // Card(
+                        //   child: ListTile(
+                        //     leading: Icon(Icons.search),
+                        //     title: TextField(
+                        //       controller: controller,
+                        //       decoration: InputDecoration(
+                        //           hintText: 'Search', border: InputBorder.none),
+                        //       onChanged: onSearchTextChanged,
+                        //     ),
+                        //     trailing: IconButton(
+                        //       icon: Icon(Icons.cancel),
+                        //       onPressed: () {
+                        //         controller.clear();
+                        //         onSearchTextChanged('');
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
+                        expdata==null?const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                            : Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: ListView.builder(
+                              physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
+                              shrinkWrap: true,
+                              itemCount: jsonDecode(data!)['data'].length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return
+                                  Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      // if you need this
+                                      side: BorderSide(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: ListBody(
+                                      children: [
+                                       Container(
+                                         height: 300,
+                                         color: ColorConstants.lightgrey200,
+                                         child: Image.network(jsonDecode(data!)['data'][index]['images'][0],fit: BoxFit.contain,),
+                                       ),
+                                        Container(
+                                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          child: ListBody(
+                                            children: [
+
+                                          Container(
+                                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                            child: Text(jsonDecode(data!)['data'][index]['name'],style: TextStyle(fontSize: 16,color: Colors.black,fontFamily: "Nunito")),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                            child: Text(jsonDecode(data!)['data'][index]['description'],style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(jsonDecode(data!)['data'][index]['price'],style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
+                                                GestureDetector(
+                                                  onTap: (){
+                                                    Share.share(jsonDecode(data!)['data'][index]['link'], subject: 'Share link');
+                                                  },
+                                                    child: Text("REGISTER",style: TextStyle(fontSize: 14,color: Colors.orange,fontFamily: "Nunito"))),
+                                              ],
+                                            ),
+                                          ),
+
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                              }),
                         ),
                       ]
                   ),
@@ -124,4 +276,19 @@ class _ExperiencePageState extends State<ExperiencePage> {
       ),
     );
   }
+  // onSearchTextChanged(String text) async {
+  //   _searchResult.clear();
+  //   if (text.isEmpty) {
+  //     setState(() {});
+  //     return;
+  //   }
+  //
+  //   _userDetails.forEach((userDetail) {
+  //     if (userDetail.name!.contains(text) || userDetail.description!.contains(text))
+  //       _searchResult.add(userDetail);
+  //     print(_searchResult);
+  //   });
+  //
+  //   setState(() {});
+  // }
 }

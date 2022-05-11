@@ -39,7 +39,7 @@ class _State extends State<TournamentQuizSelected> {
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/whitebg.png"),
+            image: AssetImage("assets/images/whitebg.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -61,7 +61,7 @@ class _State extends State<TournamentQuizSelected> {
                               MaterialPageRoute(
                                   builder: (context) => const WelcomePage()));
                         },
-                        child:  Image.asset("assets/home_1.png",height: 40,width: 40),
+                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40),
                       ),
                     ),
                     Container(
@@ -72,7 +72,7 @@ class _State extends State<TournamentQuizSelected> {
                         onTap: () {
                           Scaffold.of(context).openEndDrawer();
                         },
-                        child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
+                        child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                       ),
                     ),
                   ],

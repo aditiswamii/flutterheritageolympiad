@@ -42,7 +42,7 @@ class _State extends State<DuelModeResult> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -64,7 +64,7 @@ class _State extends State<DuelModeResult> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -76,7 +76,7 @@ class _State extends State<DuelModeResult> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -203,7 +203,7 @@ class _State extends State<DuelModeResult> {
                                 child: CircleAvatar(
                                   radius: 30.0,
                                   backgroundImage:
-                                  AssetImage("assets/cat1.png"),
+                                  AssetImage("assets/images/cat1.png"),
                                   backgroundColor: Colors.transparent,
                                 ),
                               ),
@@ -227,7 +227,7 @@ class _State extends State<DuelModeResult> {
                                 child: CircleAvatar(
                                   radius: 30.0,
                                   backgroundImage:
-                                  AssetImage("assets/cat2.png"),
+                                  AssetImage("assets/images/cat2.png"),
                                   backgroundColor: Colors.transparent,
                                 ),
                               ),

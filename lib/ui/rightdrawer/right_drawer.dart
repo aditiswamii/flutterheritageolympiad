@@ -56,7 +56,7 @@ class _State extends State<MySideMenuDrawer> {
             children: [
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: 4),
-                 trailing: Image.asset("assets/cross.png",height: 20,width: 20),
+                 trailing: Image.asset("assets/images/cross.png",height: 20,width: 20),
                  onTap: () {
                   // Update the state of the app
                   // ...
@@ -114,7 +114,7 @@ class _State extends State<MySideMenuDrawer> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ShopPage()));
+                          builder: (context) =>  ShopPage()));
                 },
               ),
               ListTile(

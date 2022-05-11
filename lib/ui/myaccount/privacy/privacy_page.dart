@@ -39,7 +39,7 @@ bool check=false;
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
          // color: Colors.white.withOpacity(0.6),
@@ -66,7 +66,7 @@ bool check=false;
                                 builder: (context) =>  WelcomePage()));
                       },
                       child: Image.asset(
-                        "assets/home_1.png", height: 40, width: 40,),
+                        "assets/images/home_1.png", height: 40, width: 40,),
                     ),
                   ),
                   Container(
@@ -78,7 +78,7 @@ bool check=false;
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
                       child: Image.asset(
-                          "assets/side_menu_2.png", height: 40, width: 40),
+                          "assets/images/side_menu_2.png", height: 40, width: 40),
                     ),
                   ),
                 ],
@@ -102,7 +102,7 @@ bool check=false;
                       "MY PROFILE IS VISIBLE TO...",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt)),
-                  trailing: Image.asset("assets/help1.png",height: 20,width: 20,)
+                  trailing: Image.asset("assets/images/help1.png",height: 20,width: 20,)
 
               ),
               Container(
@@ -164,7 +164,7 @@ bool check=false;
                       "I CAN BE ADDED BY...",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt)),
-                  trailing: Image.asset("assets/help1.png",height: 20,width: 20,)
+                  trailing: Image.asset("assets/images/help1.png",height: 20,width: 20,)
 
               ),
               Container(
@@ -226,7 +226,7 @@ bool check=false;
                       "I CAN BE INVITED BY...",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt)),
-                  trailing: Image.asset("assets/help1.png",height: 20,width: 20,)
+                  trailing: Image.asset("assets/images/help1.png",height: 20,width: 20,)
 
               ),
               Container(

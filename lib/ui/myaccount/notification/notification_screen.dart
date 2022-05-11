@@ -64,7 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   builder: (context) => const WelcomePage()));
                         },
                         child: Image.asset(
-                            "assets/home_1.png", height: 40, width: 40),
+                            "assets/images/home_1.png", height: 40, width: 40),
                       ),
                     ),
                     Container(
@@ -76,7 +76,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child: Image.asset(
-                            "assets/side_menu_2.png", height: 40,
+                            "assets/images/side_menu_2.png", height: 40,
                             width: 40),
                       ),
                     ),

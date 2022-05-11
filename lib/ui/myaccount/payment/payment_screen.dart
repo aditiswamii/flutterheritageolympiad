@@ -66,7 +66,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   builder: (context) => const WelcomePage()));
                         },
                         child: Image.asset(
-                            "assets/home_1.png", height: 40, width: 40),
+                            "assets/images/home_1.png", height: 40, width: 40),
                       ),
                     ),
                     Container(
@@ -78,7 +78,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child: Image.asset(
-                            "assets/side_menu_2.png", height: 40,
+                            "assets/images/side_menu_2.png", height: 40,
                             width: 40),
                       ),
                     ),
@@ -146,7 +146,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
-                            image: AssetImage("assets/yellowbackground.png"),
+                            image: AssetImage("assets/images/yellowbackground.png"),
                             fit: BoxFit.cover,
                           ),
                         ),

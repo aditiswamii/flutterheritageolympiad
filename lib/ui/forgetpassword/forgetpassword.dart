@@ -65,7 +65,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -75,7 +75,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
             children: [
               Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child:  Image.asset("assets/tho_logo.png"),height: 80,width: 200,),
+                  child:  Image.asset("assets/images/tho_logo.png"),height: 80,width: 200,),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),

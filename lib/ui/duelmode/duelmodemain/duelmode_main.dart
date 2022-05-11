@@ -50,7 +50,7 @@ class _State extends State<DuelModeMain> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_bg.jpg"),
+            image: AssetImage("assets/images/login_bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -72,7 +72,7 @@ class _State extends State<DuelModeMain> {
                             MaterialPageRoute(
                                 builder: (context) => const WelcomePage()));
                       },
-                      child: Image.asset("assets/home_1.png",
+                      child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -84,7 +84,7 @@ class _State extends State<DuelModeMain> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/side_menu_2.png",
+                      child: Image.asset("assets/images/side_menu_2.png",
                           height: 40, width: 40),
                     ),
                   ),
@@ -115,7 +115,7 @@ class _State extends State<DuelModeMain> {
                           color: ColorConstants.txt, fontSize: 15),
                     ),
                     Image.asset(
-                      "assets/about.png",
+                      "assets/images/about.png",
                       height: 20,
                       width: 20,
                     )
@@ -210,7 +210,7 @@ class _State extends State<DuelModeMain> {
                   Container(
                     margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: DropdownButton(
-                      icon: Image.asset("assets/down_arrow.png",height: 20,width: 20,),
+                      icon: Image.asset("assets/images/down_arrow.png",height: 20,width: 20,),
                      // hint: Text(''), // Not necessary for Option 1
                       value: _selectedLocation,
                       onChanged: (newValue) {
@@ -263,7 +263,7 @@ class _State extends State<DuelModeMain> {
                           color: ColorConstants.txt, fontSize: 15),
                     ),
                     Image.asset(
-                      "assets/about.png",
+                      "assets/images/about.png",
                       height: 20,
                       width: 20,
                     )
@@ -333,7 +333,7 @@ class _State extends State<DuelModeMain> {
                           color: ColorConstants.txt, fontSize: 15),
                     ),
                     Image.asset(
-                      "assets/about.png",
+                      "assets/images/about.png",
                       height: 20,
                       width: 20,
                     )

@@ -93,7 +93,7 @@ class _State extends State<QuizPage> {
                               MaterialPageRoute(
                                   builder: (context) => const WelcomePage()));
                         },
-                        child:  Image.asset("assets/home_1.png",height: 40,width: 40),
+                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40),
                       ),
                     ),
                     Container(
@@ -104,7 +104,7 @@ class _State extends State<QuizPage> {
                         onTap: () {
                           Scaffold.of(context).openEndDrawer();
                         },
-                        child:  Image.asset("assets/side_menu_2.png",height: 40,width: 40),
+                        child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                       ),
                     ),
                   ],
