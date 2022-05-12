@@ -21,7 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/StringConstants.dart';
 import '../../welcomeback/welcomeback_page.dart';
-
+import 'dart:convert' as convert;
 class ExperiencePage extends StatefulWidget{
 
   const ExperiencePage({Key? key}) : super(key: key);
@@ -41,7 +41,9 @@ class _ExperiencePageState extends State<ExperiencePage> {
   var profilepic;
   var userid;
   var expdata;
+  List<Data>? experdata;
   var data;
+  var snackBar;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -49,41 +51,82 @@ class _ExperiencePageState extends State<ExperiencePage> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+
     getExperience(userid.toString(), "") ;
   }
   getExperience(String userid ,String searchkey) async {
-    try {
+    if (searchkey == null) {
       http.Response response = await http.get(
-          Uri.parse(StringConstants.BASE_URL+"exp&search="+searchkey)
+          Uri.parse(StringConstants.BASE_URL + "exp")
       );
+      showLoaderDialog(context);
+      var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          expdata = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(expdata.length);
-          // for (Map user in responseJson) {
-          //   _userDetails.add(Data.fromJson(user));
-          // }// just printed length of data
-        });
-
-        var venam = jsonDecode(data!)['data'];
-        print(venam);
-        print(jsonDecode(data!)['data'][0]['name']);
-        print(jsonDecode(data!)['data'][0]['price']);
-        print(jsonDecode(data!)['data'][0]['description']);
-        print(jsonDecode(data!)['data'][0]['images']);
-        print(jsonDecode(data!)['data'][0]['link']);
+        Navigator.pop(context);
+        if (jsonResponse['status'] == 200) {
+          setState(() {
+            expdata = jsonDecode(
+                data!)['data']; //get all the data from json string superheros
+            print(expdata.length);
+          });
+          onsuccess(getAllExperienceFromJson(data).data);
+          var venam = jsonDecode(data!)['data'];
+          print(venam);
+        } else {
+          onsuccess(null);
+          snackBar = SnackBar(
+            content: Text(
+                jsonResponse['message']),
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(snackBar);
+        }
       } else {
+        Navigator.pop(context);
+        // onsuccess(null);
         print(response.statusCode);
       }
-    } catch (e) {
-      log(e.toString());
+    } else {
+      http.Response response = await http.get(
+          Uri.parse(StringConstants.BASE_URL + "exp?search=" + searchkey)
+      );
+      showLoaderDialog(context);
+      var jsonResponse = convert.jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        data = response.body;
+        Navigator.pop(context);
+        if (jsonResponse['status'] == 200) {
+          setState(() {
+            expdata = jsonDecode(
+                data!)['data']; //get all the data from json string superheros
+            print(expdata.length);
+          });
+          onsuccess(getAllExperienceFromJson(data).data);
+          var venam = jsonDecode(data!)['data'];
+          print(venam);
+        } else {
+          onsuccess(null);
+          snackBar = SnackBar(
+            content: Text(
+                jsonResponse['message']),
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(snackBar);
+        }
+      } else {
+        Navigator.pop(context);
+        // onsuccess(null);
+        print(response.statusCode);
+      }
     }
   }
-  onsuccess(){
+  onsuccess(List<Data>? list){
 
+        setState(() {
+          experdata=list ;
+        });
+    print(experdata.toString());
   }
   @override
   void initState() {
@@ -206,30 +249,24 @@ class _ExperiencePageState extends State<ExperiencePage> {
                             title: TextFormField(
                               controller: controller,
                               textInputAction: TextInputAction.search,
-                              onFieldSubmitted: (text){
-                                if(text.isNotEmpty){
-                                  getExperience(userid.toString(), text);
-                                }else{
-                                  getExperience(userid.toString(), "");
-                                }
-                                print(text);
-                                log(text);
-                              },
+                              onFieldSubmitted: onSearchTextChanged,
                               decoration: InputDecoration(
                                   hintText: 'Search', border: InputBorder.none),
 
                             ),
-                            trailing: IconButton(
+                            trailing: controller.text.isNotEmpty?IconButton(
                               icon: Icon(Icons.cancel),
                               onPressed: () {
                                 controller.clear();
                                 onSearchTextChanged('');
                               },
-                            ),
+                            ):Text(""),
                           ),
                         ),
-                        expdata==null?const Center(
-                          child: CircularProgressIndicator(),
+                        experdata==null? Center(
+                          child: Container(
+
+                          ),
                         )
                             : Container(
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -253,7 +290,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
                                        Container(
                                          height: 300,
                                          color: ColorConstants.lightgrey200,
-                                         child: Image.network(jsonDecode(data!)['data'][index]['images'][0],fit: BoxFit.contain,),
+                                         child: Image.network(experdata![index].images![0].toString(),fit: BoxFit.contain,),
                                        ),
                                         Container(
                                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -262,21 +299,21 @@ class _ExperiencePageState extends State<ExperiencePage> {
 
                                           Container(
                                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                            child: Text(jsonDecode(data!)['data'][index]['name'],style: TextStyle(fontSize: 16,color: Colors.black,fontFamily: "Nunito")),
+                                            child: Text(experdata![index].name.toString(),style: TextStyle(fontSize: 16,color: Colors.black,fontFamily: "Nunito")),
                                           ),
                                           Container(
                                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                            child: Text(jsonDecode(data!)['data'][index]['description'],style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
+                                            child: Text(experdata![index].description.toString(),style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
                                           ),
                                           Container(
                                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text(jsonDecode(data!)['data'][index]['price'],style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
+                                                Text(experdata![index].price.toString(),style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
                                                 GestureDetector(
                                                   onTap: (){
-                                                    Share.share(jsonDecode(data!)['data'][index]['link'], subject: 'Share link');
+                                                    Share.share(experdata![index].link.toString(), subject: 'Share link');
                                                   },
                                                     child: Text("REGISTER",style: TextStyle(fontSize: 14,color: Colors.orange,fontFamily: "Nunito"))),
                                               ],
@@ -303,13 +340,15 @@ class _ExperiencePageState extends State<ExperiencePage> {
     );
   }
   onSearchTextChanged(String text)  {
-    if (text.isEmpty) {
-      print(text);
-      getExperience(userid.toString(), "");
-    }else{
-      print(text);
+    if(text.isNotEmpty){
+      // showLoaderDialog(context);
       getExperience(userid.toString(), text);
+    }else{
+      // showLoaderDialog(context);
+      getExperience(userid.toString(), "");
     }
+    print(text);
+    log(text);
 
 
 

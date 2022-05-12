@@ -83,78 +83,87 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ],
                 ),
                 Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
-                    child: const Text("NOTIFICATIONS", style: TextStyle(
-                        fontSize: 24, color: ColorConstants.txt))),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(
-                      "You have 50 contacts.You may remove,\nblock or report them",
-                      style: TextStyle(fontSize: 15,
-                          color: ColorConstants.txt)
-                  ),
-                ),
-
-                Container(
-                  alignment: FractionalOffset.bottomCenter,
-                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: ListBody(
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.red,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyAccountPage()));
-                        },
-                        child: const Text(
-                          "GO BACK",
-                          style: TextStyle(
-                              color: ColorConstants.lightgrey200, fontSize: 14),
-                          textAlign: TextAlign.center,
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                          child: const Text("NOTIFICATIONS", style: TextStyle(
+                              fontSize: 24, color: ColorConstants.txt))),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Text(
+                            "You have 50 contacts.You may remove,\nblock or report them",
+                            style: TextStyle(fontSize: 15,
+                                color: ColorConstants.txt)
                         ),
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.verdigris,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (
-                          //             context) => const PhonebookScreen()));
-                        },
-                        child: const Text(
-                          "LET'S GO!",
-                          style: TextStyle(
-                              color: ColorConstants.lightgrey200, fontSize: 14),
-                          textAlign: TextAlign.center,
+                      Container(
+                        alignment: FractionalOffset.bottomCenter,
+                        margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: ColorConstants.red,
+                                onPrimary: Colors.white,
+                                elevation: 3,
+                                alignment: Alignment.center,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                fixedSize: const Size(100, 40),
+                                //////// HERE
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyAccountPage()));
+                              },
+                              child: const Text(
+                                "GO BACK",
+                                style: TextStyle(
+                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: ColorConstants.verdigris,
+                                onPrimary: Colors.white,
+                                elevation: 3,
+                                alignment: Alignment.center,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                fixedSize: const Size(100, 40),
+                                //////// HERE
+                              ),
+                              onPressed: () {
+                                // Navigator.pushReplacement(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (
+                                //             context) => const PhonebookScreen()));
+                              },
+                              child: const Text(
+                                "LET'S GO!",
+                                style: TextStyle(
+                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+
+
                     ],
                   ),
                 ),
+
+
 
               ]
           ),
