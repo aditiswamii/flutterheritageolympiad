@@ -33,6 +33,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   var data;
   var gnotidata;
   var updata;
+  var notifyid="";
   int ischecked=0;
   List<Data>? getnotidata;
   var snackBar;
@@ -403,11 +404,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 //////// HERE
                               ),
                               onPressed: () {
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (
-                                //             context) => const PhonebookScreen()));
+                                updatenotify(userid.toString(), notifyid);
                               },
                               child: const Text(
                                 "LET'S GO!",

@@ -1,10 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/modal/getuserleagueresponse/GetUserLeagueResponse.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
 import 'package:flutterheritageolympiad/ui/feed/feed.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
@@ -16,9 +19,11 @@ import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../modal/SignUpModal.dart';
-import '../classicquiz/result/result.dart';
 
+import '../../utils/StringConstants.dart';
+import '../classicquiz/result/result.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class WelcomePage extends StatefulWidget{
 
@@ -28,14 +33,16 @@ class WelcomePage extends StatefulWidget{
   _State createState() => _State();
 }
 
-class _State extends State<WelcomePage> implements SharedObjects{
+class _State extends State<WelcomePage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 var username;
 var email;
 var country;
 var profilepic;
 var userid;
-
+var data;
+var userleagdata;
+var snackBar;
  userdata() async {
    final SharedPreferences prefs = await SharedPreferences.getInstance();
    setState(() {
@@ -44,6 +51,62 @@ var userid;
      userid= prefs.getString("userid");
    });
 }
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  getuserleague(String userid) async {
+
+    http.Response response = await http.get(
+        Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
+    );
+    showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      data = response.body;
+      Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          userleagdata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(userleagdata.length);
+        });
+        getuserleagueresponse(getUserLeagueResponseFromJson(data!));
+        var venam = userleagdata(data!)['data'];
+        print(venam.toString());
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      // onsuccess(null);
+      print(response.statusCode);
+    }
+
+  }
+  getuserleagueresponse(GetUserLeagueResponse userLeagueResponseFromJson){
+   
+  }
   @override
   void initState() {
     super.initState();
@@ -366,12 +429,6 @@ var userid;
     );
   }
 
-  @override
-  preferences(Data? data) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    username= prefs.getString('name');
-    //username = data!.username.toString();
-  }
 
 
 }
