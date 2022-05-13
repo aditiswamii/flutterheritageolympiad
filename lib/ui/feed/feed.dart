@@ -25,7 +25,10 @@ import '../../modal/feedtagfilter/GetTagFilterResponse.dart';
 import '../welcomeback/welcomeback_page.dart';
 import 'dart:convert' as convert;
 class FeedPage extends StatefulWidget {
-  FeedPage({Key? key}) : super(key: key);
+  var contents;
+  var themes;
+  var seldomain;
+  FeedPage({Key? key,required this.seldomain,required this.contents,required this.themes}) : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState();

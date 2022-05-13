@@ -137,7 +137,7 @@ var userid;
                  Navigator.pushReplacement(
                      context,
                      MaterialPageRoute(
-                         builder: (context) => FeedPage()));
+                         builder: (context) => FeedPage(contents: "", seldomain: "", themes: "",)));
                },
                child: Container(
                  height: 150,

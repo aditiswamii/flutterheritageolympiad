@@ -10,10 +10,10 @@ import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/classicmodelink/classicmodelink.dart';
+
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/cquizrule/classicquizrule_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/invitecontact/classicmodeplayer.dart';
+
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
@@ -27,7 +27,6 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../questionpageview/questions.dart';
 
 
 

@@ -22,7 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../modal/domains/GetDomainsResponse.dart';
 
-
 import 'dart:convert' as convert;
 
 class FilterPage extends StatefulWidget {
@@ -48,21 +47,26 @@ class _FilterPageState extends State<FilterPage> {
   var data;
   var domains_length;
   var domains_rev;
-  var domainnamelist =[].toList(growable: true);
-  String domain="";
+  var domainnamelist = [].toList(growable: true);
+  var seldomain;
+  String domain = "";
   var selectedIndexes = [];
   static int _len = 11;
   var domainname;
-  bool allselect=false;
+  bool allselect = false;
   List<bool> isChecked = List.generate(_len, (index) => false);
   var ftype = 0;
   var tangible = 1;
   var intangible = 0;
   var natural = 0;
-  var single  = 0;
-  var modules  = 0;
-  var collection  = 0;
+  var single = 0;
+  var modules = 0;
+  var collection = 0;
+  var singleb = false;
+  var modulesb = false;
+  var collectionb = false;
   var themes = "";
+  var contents = "";
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -70,28 +74,42 @@ class _FilterPageState extends State<FilterPage> {
       country = prefs.getString("country");
       userid = prefs.getString("userid");
     });
-    getDomains("1");
+    //calTheme();
+    getDomains("$tangible");
+
     // getFeed(userid.toString(), "0", "", "", "");
   }
+
   void getDomains(String theme_id) async {
-    http.Response response =
-    await http.get(Uri.parse(StringConstants.BASE_URL+"domains?theme_id=$theme_id"));
+    http.Response response = await http.get(
+        Uri.parse(StringConstants.BASE_URL + "domains?theme_id=$theme_id"));
     showLoaderDialog(context);
     if (response.statusCode == 200) {
+      domainname="";
+      domainnamelist.clear();
+      isChecked.every((element) => false);
       Navigator.pop(context);
       data = response.body; //store response as string
       setState(() {
-        domains_length = jsonDecode(
-            data!)['data'];
-        domains_rev=domains_length.reversed;
+        domains_length = jsonDecode(data!)['data'];
+        domains_rev = domains_length.reversed;
         //get all the data from json string superheros
         print(domains_length.length); // just printed length of data
       });
-      var jsondata=getDomainsResponseFromJson(data!).data;
-      var jsondataa=datadomainFromJson(data!).id.toString();
+      var jsondata = getDomainsResponseFromJson(data!).data;
+      //var jsondataa=datadomainFromJson(data!).id.toString();
       log(jsondata.toString());
-      var venam = jsonDecode(data!)['data'][4]['name'];
-      log(venam);
+      var venam = jsonDecode(data!)['data'];
+      log(venam.toString());
+      // log("tang " + tangible.toString());
+      // log("intang " + intangible.toString());
+      // log("natu " + natural.toString());
+      // log("themeid" + theme_id);
+      // log("contents" + contents);
+      //  log("domainid"+domainnamelist.toString().replaceAll("[", "").replaceAll("]", ""));
+      // log("seldomain"+seldomain);
+      // var text = domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+      // log(text);
     } else {
       Navigator.pop(context);
       print(response.statusCode);
@@ -133,50 +151,51 @@ class _FilterPageState extends State<FilterPage> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => FeedPage()));
+        MaterialPageRoute(builder: (BuildContext context) => FeedPage(seldomain: "", themes: "", contents: "",)));
     // Do some stuff.
     return true;
   }
-   calTheme() {
-     themes = "";
-     if (intangible == 1) {
-       setState(() {
-         themes += "1";
-       });
-       print(themes);
-       getDomains(themes);
-     }
-     if (natural == 1) {
-       if (themes.isNotEmpty) {
-         setState(() {
-           themes += ",2";
-         });
 
-       } else {
-         setState(() {
-           themes += "2";
-         });
-         themes += "2";
-       }
-       print(themes);
-       getDomains(themes);
-     }
-     if (tangible == 1) {
-       if (themes.isNotEmpty) {
-         setState(() {
-           themes += ",3";
-         });
-         themes += ",3";
-       } else {
-         setState(() {
-           themes += "3";
-         });
-         themes += "3";
-       }
-       print(themes);
-       getDomains(themes);
-     }
-   }
+  // calTheme() async{
+  //   themes = "";
+  //   if (intangible == 1) {
+  //     setState(() {
+  //       themes += "1";
+  //     });
+  //     print(themes);
+  //     getDomains(themes);
+  //   }
+  //   if (natural == 1) {
+  //     if (themes.isNotEmpty) {
+  //       setState(() {
+  //         themes += ",2";
+  //       });
+  //
+  //     } else {
+  //       setState(() {
+  //         themes += "2";
+  //       });
+  //       themes += "2";
+  //     }
+  //     print(themes);
+  //     getDomains(themes);
+  //   }
+  //   if (tangible == 1) {
+  //     if (themes.isNotEmpty) {
+  //       setState(() {
+  //         themes += ",3";
+  //       });
+  //       themes += ",3";
+  //     } else {
+  //       setState(() {
+  //         themes += "3";
+  //       });
+  //       themes += "3";
+  //     }
+  //     print(themes);
+  //     getDomains(themes);
+  //   }
+  // }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -238,21 +257,25 @@ class _FilterPageState extends State<FilterPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
+
                                   if (tangible == 1) {
                                     tangible = 0;
                                     setState(() {
                                       tangible = 0;
                                     });
-                                    calTheme();
-                                  }else{
+                                  } else {
                                     tangible = 1;
                                     setState(() {
                                       tangible = 1;
                                     });
-                                    calTheme();
                                   }
+                                  setState(() {
+                                    intangible = 0;
+                                    natural = 0;
+                                    themes = "1";
+                                  });
+                                  getDomains("$themes");
                                   // calTheme();
-
                                 },
                                 child: tangible == 1
                                     ? Image.asset("assets/images/tangible.png",
@@ -273,8 +296,10 @@ class _FilterPageState extends State<FilterPage> {
                             ],
                           ),
                         ),
-                        Container( margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Column(  mainAxisSize: MainAxisSize.min,
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               GestureDetector(
@@ -283,26 +308,30 @@ class _FilterPageState extends State<FilterPage> {
                                     natural = 0;
                                     setState(() {
                                       natural = 0;
-
                                     });
-                                    calTheme();
-                                  }else{
+                                    // calTheme();
+                                  } else {
                                     natural = 1;
                                     setState(() {
                                       natural = 1;
                                     });
-                                    calTheme();
                                   }
+                                  setState(() {
+                                    intangible = 0;
+                                    tangible = 0;
+                                    themes = "2";
+                                  });
+                                  getDomains("$themes");
                                   // calTheme();
                                   // getDomains(themes);
                                 },
                                 child: natural == 1
                                     ? Image.asset("assets/images/natural.png",
-                                    height: 90, width: 90)
+                                        height: 90, width: 90)
                                     : Image.asset(
-                                    "assets/images/theme_natural_light.png",
-                                    height: 90,
-                                    width: 90),
+                                        "assets/images/theme_natural_light.png",
+                                        height: 90,
+                                        width: 90),
                               ),
                               Container(
                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -317,7 +346,8 @@ class _FilterPageState extends State<FilterPage> {
                         ),
                         Container(
                           margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Column(  mainAxisSize: MainAxisSize.min,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               GestureDetector(
@@ -327,24 +357,30 @@ class _FilterPageState extends State<FilterPage> {
                                     setState(() {
                                       intangible = 0;
                                     });
-                                    calTheme();
-                                  }else{
+                                  } else {
                                     intangible = 1;
                                     setState(() {
                                       intangible = 1;
                                     });
-                                    calTheme();
                                   }
+                                  setState(() {
+                                    natural = 0;
+                                    tangible = 0;
+                                    themes = "3";
+                                  });
 
-                                 // getDomains(themes);
+                                  getDomains("$themes");
+                                  // getDomains(themes);
                                 },
                                 child: intangible == 1
-                                    ? Image.asset("assets/images/intengible.png",
-                                    height: 90, width: 90)
+                                    ? Image.asset(
+                                        "assets/images/intengible.png",
+                                        height: 90,
+                                        width: 90)
                                     : Image.asset(
-                                    "assets/images/theme_intangi_light.png",
-                                    height: 90,
-                                    width: 90),
+                                        "assets/images/theme_intangi_light.png",
+                                        height: 90,
+                                        width: 90),
                               ),
                               Container(
                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -368,8 +404,7 @@ class _FilterPageState extends State<FilterPage> {
                       children: [
                         Text(
                           "DOMAINS",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 16),
+                          style: TextStyle(color: Colors.black, fontSize: 16),
                         ),
                         Container(
                           width: 20,
@@ -395,90 +430,103 @@ class _FilterPageState extends State<FilterPage> {
                           width: 1,
                         ),
                       ),
-
                       child: domains_length == null || domains_length!.isEmpty
                           ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
+                              child: CircularProgressIndicator(),
+                            )
                           : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 35,
-                              child: CheckboxListTile(
-                                  visualDensity: VisualDensity(vertical: -4),
-                                  title: Text("Select All",style: TextStyle(fontSize: 14),),
-                                  onChanged: (checked) {
-                                    setState(
-                                          () {
-                                        isChecked = List.generate(domains_length.length, (index) => checked!);
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 35,
+                                    child: CheckboxListTile(
+                                        visualDensity:
+                                            VisualDensity(vertical: -4),
+                                        title: Text(
+                                          "Select All",
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                        onChanged: (checked) {
+                                          setState(
+                                            () {
+                                              isChecked.every((element) => checked!);
+                                              allselect = checked!;
+                                            },
+                                          );
+                                         // allselect = checked!;
+                                        },
+                                        value: allselect),
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    reverse: true,
+                                    itemCount: domains_length.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Column(
+                                        children: [
+                                          Container(
+                                            height: 35,
+                                            child: CheckboxListTile(
+                                                visualDensity:
+                                                    VisualDensity(vertical: -4),
+                                                title: Text(
+                                                  jsonDecode(data!)['data']
+                                                      [index]['name'],
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                                onChanged: (checked) {
+                                                  setState(
+                                                    () {
+                                                      isChecked[index] =
+                                                          checked!;
+                                                    },
+                                                  );
+                                                  if (isChecked[index] ==
+                                                      true) {
+                                                    domainname = jsonDecode(
+                                                            data!)['data']
+                                                        [index]['id'];
 
-                                      },
-                                    );
-                                    allselect=checked!;
-                                  },
-                                  value:allselect ),
+                                                    setState(() {
+                                                      domainname = jsonDecode(
+                                                              data!)['data']
+                                                          [index]['id'];
+                                                    });
+                                                    if (!domainnamelist
+                                                        .contains(domainname))
+                                                      domainnamelist
+                                                          .add(domainname);
+                                                    //seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+                                                  } else {
+
+                                                    // if(domainnamelist.contains(domainname))
+                                                    domainnamelist
+                                                        .remove(domainname);
+
+                                                  }
+                                                },
+                                                value: isChecked[index]),
+                                          ),
+                                          Divider(
+                                            color: Colors.grey,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                            Divider(
-                              color:Colors.grey,
-                            ),
-                            ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              reverse: true,
-                              itemCount: domains_length.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Column(
-                                  children: [
-                                    Container(
-                                      height: 35,
-                                      child: CheckboxListTile(
-                                        visualDensity: VisualDensity(vertical: -4),
-                                          title: Text(jsonDecode(data!)['data']
-                                          [index]['name'],style: TextStyle(fontSize: 14),),
-                                          onChanged: (checked) {
-                                            setState(
-                                                  () {
-                                                isChecked[index] = checked!;
-
-                                              },
-                                            );
-                                            if(isChecked[index]==true) {
-                                              domainname=jsonDecode(data!)['data']
-                                              [index]['id'];
-
-                                              setState(() {
-                                                domainname=jsonDecode(data!)['data']
-                                                [index]['id'];
-                                              });
-                                              if(!domainnamelist.contains(domainname))
-                                                domainnamelist.add(domainname);
-
-                                            }
-                                            else {
-
-                                              // if(domainnamelist.contains(domainname))
-                                              domainnamelist.remove(domainname);
-                                            }
-
-
-                                          },
-                                          value: isChecked[index]),
-                                    ),
-                                    Divider(
-                                      color:Colors.grey,
-                                    )
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
                   Container(
-                    color: Colors.white,
+                      color: Colors.white,
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: const Text("Content Type",
@@ -486,107 +534,213 @@ class _FilterPageState extends State<FilterPage> {
                               fontSize: 18,
                               color: Colors.black,
                               fontFamily: "Nunito"))),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 35,
+                            child: ListTile(
+                              minLeadingWidth: 5,
+                              visualDensity:
+                                  VisualDensity(vertical: -4, horizontal: -4),
+                              leading: Image.asset(
+                                  "assets/images/single_posts.png",
+                                  height: 20,
+                                  width: 20),
+                              title: Text(
+                                "Single Posts",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              trailing: Checkbox(
+                                onChanged: (checked) {
+                                  if (single == 1) {
+                                    single = 0;
+                                    singleb = false;
+                                    setState(() {
+                                      single = 0;
+                                      singleb = false;
+                                      if(contents.isNotEmpty){
+                                        contents=contents;
+                                      }else{
+                                        contents="";
+                                      }
+                                    });
+                                  } else {
+                                    single = 1;
+                                    singleb = true;
+                                    setState(() {
+                                      single = 1;
+                                      singleb = true;
+                                      if (contents.isNotEmpty) {
+                                        contents = contents + ",1";
+                                      } else {
+                                        contents = "1";
 
-              Container(
-                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // if you need this
-                    side: BorderSide(
-                      color: Colors.grey.withOpacity(0.3),
-                      width: 1,
+                                      }
+
+                                    });
+                                  }
+                                  // setState(() {
+                                  //   if (contents.isNotEmpty) {
+                                  //     contents = contents + ",1";
+                                  //   } else {
+                                  //     contents = "1";
+                                  //   }
+                                  // });
+                                },
+                                value: singleb,
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                          Container(
+                            height: 35,
+                            child: ListTile(
+                              minLeadingWidth: 5,
+                              visualDensity:
+                                  VisualDensity(vertical: -4, horizontal: -4),
+                              leading: Image.asset("assets/images/modules.png",
+                                  height: 20, width: 20),
+                              title: Text(
+                                "Modules",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              trailing: Checkbox(
+                                onChanged: (checked) {
+                                  if (modules == 1) {
+                                    modules = 0;
+
+                                    setState(() {
+                                      modules = 0;
+
+                                      // if(contents.isNotEmpty){
+                                      //   contents=contents;
+                                      // }else{
+                                      //   contents="";
+                                      // }
+                                    });
+                                  } else {
+                                    modules = 1;
+
+                                    setState(() {
+                                      modules = 1;
+                                      //
+                                      // if (contents.isNotEmpty) {
+                                      //   contents = contents + ",2";
+                                      // } else {
+                                      //   contents = "2";
+                                      // }
+
+                                    });
+
+                                  }
+                                 setState(() {
+                                   modulesb = checked!;
+                                 });
+                                  if(modulesb==true){
+                                    if(contents.isNotEmpty){
+                                      setState(() {
+                                        if(contents.contains("2")){
+                                          setState(() {
+                                            contents.replaceAll(RegExp(',2'), '');
+                                            contents.replaceAll(RegExp('2'), '');
+                                          });
+
+                                        }
+                                        contents=contents+",2";
+                                      });
+
+                                    }else{
+                                      setState(() {
+                                        contents="2";
+                                      });
+
+                                    }
+                                  }else{
+                                      // if(contents.contains(",2")){
+                                      //
+                                      //   setState(() {
+                                      //     contents='';
+                                      //   });
+                                      //
+                                      // }
+
+                                  }
+                                },
+                                value: modulesb,
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                          Container(
+                            height: 35,
+                            child: ListTile(
+                              minLeadingWidth: 5,
+                              visualDensity:
+                                  VisualDensity(vertical: -4, horizontal: -4),
+                              leading: Image.asset(
+                                  "assets/images/collections.png",
+                                  height: 20,
+                                  width: 20),
+                              title: Text(
+                                "Collections",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              trailing: Checkbox(
+                                onChanged: (checked) {
+                                  if (collection == 1) {
+                                    collection = 0;
+                                    collectionb = false;
+                                    setState(() {
+                                      collection = 0;
+                                      collectionb = false;
+                                      if(contents.isNotEmpty){
+                                        contents=contents;
+                                      }else{
+                                        contents="";
+                                      }
+                                    });
+                                  } else {
+                                    collection = 1;
+                                    collectionb = true;
+                                    setState(() {
+                                      collection = 1;
+                                      collectionb = true;
+                                      if (contents.isNotEmpty) {
+                                        contents = contents + ",3";
+                                      } else {
+                                        contents = "3";
+                                      }
+                                    });
+
+                                  }
+                                },
+                                value: collectionb,
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 35,
-                        child: ListTile(
-                          minLeadingWidth: 5,
-                          visualDensity: VisualDensity(vertical: -4,horizontal: -4),
-                            leading: Image.asset(
-                                "assets/images/single_posts.png",
-                                height: 20,
-                                width: 20),
-                            title: Text("Single Posts",style: TextStyle(fontSize: 14),),
-                            trailing: Checkbox( onChanged: (checked) {
-                              // setState(
-                              //       () {
-                              //     isChecked = List.generate(domains_length.length, (index) => checked!);
-                              //
-                              //   },
-                              // );
-                              allselect=checked!;
-                            },
-                              value:allselect,
-
-                            ),
-                            ),
-                      ),
-                      Divider(
-                        color:Colors.grey,
-                      ),
-                      Container(
-                        height: 35,
-                        child: ListTile(
-                          minLeadingWidth: 5,
-                          visualDensity: VisualDensity(vertical: -4,horizontal: -4),
-                          leading: Image.asset(
-                              "assets/images/modules.png",
-                              height: 20,
-                              width: 20),
-                          title: Text("Modules",style: TextStyle(fontSize: 14),),
-                          trailing: Checkbox( onChanged: (checked) {
-                            // setState(
-                            //       () {
-                            //     isChecked = List.generate(domains_length.length, (index) => checked!);
-                            //
-                            //   },
-                            // );
-                            allselect=checked!;
-                          },
-                            value:allselect,
-
-                          ),
-                        ),
-                      ),
-                      Divider(
-                        color:Colors.grey,
-                      ),
-                      Container(
-                        height: 35,
-                        child: ListTile(
-                          minLeadingWidth: 5,
-                          visualDensity: VisualDensity(vertical: -4,horizontal: -4),
-                          leading: Image.asset(
-                              "assets/images/collections.png",
-                              height: 20,
-                              width: 20),
-                          title: Text("Collections",style: TextStyle(fontSize: 14),),
-                          trailing: Checkbox( onChanged: (checked) {
-                            // setState(
-                            //       () {
-                            //     isChecked = List.generate(domains_length.length, (index) => checked!);
-                            //
-                            //   },
-                            // );
-                            allselect=checked!;
-                          },
-                            value:allselect,
-
-                          ),
-                        ),
-                      ),
-                      Divider(
-                        color:Colors.grey,
-                      ),
-                    ],
-                  ),
-                  ),
-              ),
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
@@ -605,15 +759,23 @@ class _FilterPageState extends State<FilterPage> {
                             //////// HERE
                           ),
                           onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FeedPage()));
-                          },
+
+    seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+    log("tang " + tangible.toString());
+    log("intang " + intangible.toString());
+    log("natu " + natural.toString());
+    log("themeid" + themes);
+    log("contents" + contents);
+    log("domainid"+domainnamelist.toString().replaceAll("[", "").replaceAll("]", ""));
+    log("seldomain"+seldomain);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FeedPage(seldomain: "", themes: "", contents: "",)));
+                             },
                           child: const Text(
                             "GO BACK",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 14),
+                            style: TextStyle(color: Colors.white, fontSize: 14),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -629,15 +791,23 @@ class _FilterPageState extends State<FilterPage> {
                             //////// HERE
                           ),
                           onPressed: () {
+                            seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+                            log("tang " + tangible.toString());
+                            log("intang " + intangible.toString());
+                            log("natu " + natural.toString());
+                            log("themeid" + themes);
+                            log("contents" + contents);
+                            log("domainid"+domainnamelist.toString().replaceAll("[", "").replaceAll("]", ""));
+                            log("seldomain"+seldomain);
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => FeedPage()));
+                                    builder: (context) => FeedPage(contents: contents, seldomain: seldomain, themes: themes,)));
+
                           },
                           child: const Text(
                             "LET'S GO",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 14),
+                            style: TextStyle(color: Colors.white, fontSize: 14),
                             textAlign: TextAlign.center,
                           ),
                         ),

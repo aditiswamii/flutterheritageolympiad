@@ -182,7 +182,7 @@ class _SavedPostState extends State<SavedPost> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => FeedPage()));
+        MaterialPageRoute(builder: (BuildContext context) => FeedPage(seldomain: "", themes: "", contents: "",)));
     // Do some stuff.
     return true;
   }

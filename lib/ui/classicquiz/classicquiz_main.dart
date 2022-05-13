@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
-import 'package:flutterheritageolympiad/ui/classicquiz/classicmode_invite/classicinvitepage.dart';
+
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_presenter.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/steptwoinvite.dart';

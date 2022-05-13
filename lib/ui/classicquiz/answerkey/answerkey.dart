@@ -12,24 +12,14 @@ import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/classicmodelink/classicmodelink.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/cquizrule/classicquizrule_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/invitecontact/classicmodeplayer.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
+
+import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../questionpageview/questions.dart';
+
 
 class AnswerkeyPage extends StatefulWidget {
   var quizid;
