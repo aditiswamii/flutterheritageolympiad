@@ -43,6 +43,7 @@ var userid;
 var data;
 var userleagdata;
 var snackBar;
+GetUserLeagueResponse? userLeagueR;
  userdata() async {
    final SharedPreferences prefs = await SharedPreferences.getInstance();
    setState(() {
@@ -50,6 +51,8 @@ var snackBar;
      country =prefs.getString("country");
      userid= prefs.getString("userid");
    });
+   showLoaderDialog(context);
+   getuserleague(userid.toString());
 }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -75,11 +78,11 @@ var snackBar;
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
     );
-    showLoaderDialog(context);
+    Navigator.pop(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       data = response.body;
-      Navigator.pop(context);
+
       if (jsonResponse['status'] == 200) {
         setState(() {
           userleagdata = jsonDecode(
@@ -98,14 +101,18 @@ var snackBar;
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
       // onsuccess(null);
       print(response.statusCode);
     }
 
   }
-  getuserleagueresponse(GetUserLeagueResponse userLeagueResponseFromJson){
-   
+  getuserleagueresponse(GetUserLeagueResponse userLeagueResponse){
+   if(userLeagueResponse.data!=null){
+     setState(() {
+       userLeagueR=userLeagueResponse;
+     });
+   }
+
   }
   @override
   void initState() {
@@ -313,20 +320,20 @@ var snackBar;
         ),
       ),
 
-      Flexible(
-        child: Container(
-            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            decoration: BoxDecoration(
-                color: Colors.white),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                // if you need this
-                side: BorderSide(
-                  color: Colors.grey.withOpacity(0.3),
-                  width: 1,
-                ),
+      userLeagueR!=null?  Container(
+          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          decoration: BoxDecoration(
+              color: Colors.white),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              // if you need this
+              side: BorderSide(
+                color: Colors.grey.withOpacity(0.3),
+                width: 1,
               ),
+            ),
+        child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Column(
             children: [
               Container(
@@ -334,94 +341,45 @@ var snackBar;
                 child: Text("Your Activity Summary",
                   style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
               ),
+              if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
               Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                  RotatedBox(
-                  quarterTurns: 3,
-                  child: new Container(
-                      width: 20,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: ColorConstants.red,
-                      borderRadius: new BorderRadius.only(
-                        topLeft: new Radius.circular(10),
-                        topRight: new Radius.circular(10),
-                ),
-              ),
+                  child: GFProgressBar(
+                    percentage:
+                    (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
+                    lineHeight: 30,
+                    alignment: MainAxisAlignment.spaceBetween,
+                    child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                    backgroundColor: Colors.black12,
+                    progressBarColor: ColorConstants.verdigris,
                   )
               ),
-                    RotatedBox(
-                        quarterTurns: 3,
-                        child: new Container(
-                          width: 20,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.deepOrange,
-                            borderRadius: new BorderRadius.only(
-                              topLeft: new Radius.circular(2),
-                              topRight: new Radius.circular(2),
-                            ),
-                          ),
-                        )
+              if((userLeagueR!.data!.goalsummery!.play!*100/userLeagueR!.data!.goalsummery!.total!)>=1)
+              Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: GFProgressBar(
+                    percentage:1.0,
+                    lineHeight: 30,
+                    alignment: MainAxisAlignment.spaceBetween,
+                    child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
-                    RotatedBox(
-                        quarterTurns: 3,
-                        child: new Container(
-                          width: 20,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: ColorConstants.yellow200,
-                            borderRadius: new BorderRadius.only(
-                              topLeft: new Radius.circular(2),
-                              topRight: new Radius.circular(2),
-                            ),
-                          ),
-                        )
-                    ),
-                    RotatedBox(
-                        quarterTurns: 3,
-                        child: new Container(
-                          width: 20,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: new BorderRadius.only(
-                              topLeft: new Radius.circular(2),
-                              topRight: new Radius.circular(2),
-                            ),
-                          ),
-                        )
-                    ),
-                    RotatedBox(
-                        quarterTurns: 3,
-                        child: new Container(
-                          width: 20,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: ColorConstants.verdigris,
-                            borderRadius: new BorderRadius.only(
-                              bottomLeft: new Radius.circular(10),
-                              bottomRight: new Radius.circular(10),
-                            ),
-                          ),
-                        )
-                    ),
-            ],
-          ),
-      ),
+                    backgroundColor: Colors.black12,
+                    progressBarColor: ColorConstants.verdigris,
+                  )
+              ),
+
               Container(
                 child: Text("Leagues",
                   style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
               ),
       ]
     ),
+        ),
       ),
-    ),
-    ),
+    ):Container(),
       ]
       ),
       ),

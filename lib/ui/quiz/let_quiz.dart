@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,12 @@ import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
+import '../../modal/getuserleagueresponse/GetUserLeagueResponse.dart';
+import '../../utils/StringConstants.dart';
+import '../duelmode/duelmoderesult/duelmode_result.dart';
 
 class QuizPage extends StatefulWidget{
 
@@ -33,6 +40,10 @@ class _State extends State<QuizPage> {
   var profilepic;
   var userid;
 
+  var data;
+  var userleagdata;
+  var snackBar;
+  GetUserLeagueResponse? userLeagueR;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -40,11 +51,74 @@ class _State extends State<QuizPage> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+    showLoaderDialog(context);
+    getuserleague(userid.toString());
+  }
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  getuserleague(String userid) async {
+
+    http.Response response = await http.get(
+        Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
+    );
+    Navigator.pop(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      data = response.body;
+
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          userleagdata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(userleagdata.length);
+        });
+        getuserleagueresponse(getUserLeagueResponseFromJson(data!));
+        var venam = userleagdata(data!)['data'];
+        print(venam.toString());
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+
+      // onsuccess(null);
+      print(response.statusCode);
+    }
+
+  }
+  getuserleagueresponse(GetUserLeagueResponse userLeagueResponse){
+    if(userLeagueResponse.data!=null){
+      setState(() {
+        userLeagueR=userLeagueResponse;
+      });
+    }
+
   }
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
     userdata();
   }
   @override
@@ -160,7 +234,7 @@ class _State extends State<QuizPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const DuelQuizSelected()));
+                                  builder: (context) =>  DuelModeResult(duelid: 1663,)));
                         },
                         child: Container(
                           height: 150,
@@ -217,7 +291,7 @@ class _State extends State<QuizPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const TournamentQuizSelected()));
+                                  builder: (context) =>  TournamentPage()));
                         },
                         child: Container(
                           height: 150,
@@ -240,115 +314,66 @@ class _State extends State<QuizPage> {
                 ),
 
 
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        // if you need this
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.3),
-                          width: 1,
-                        ),
+              userLeagueR!=null?  Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      // if you need this
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: 1,
                       ),
+                    ),
+                    child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: Text("YOUR ACTIVITY SUMMARY",style: TextStyle(color: ColorConstants.txt),),
-                          ),
-                          Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                              child: GFProgressBar(
-                                percentage: 0.5,
-                                lineHeight: 30,
-                                alignment: MainAxisAlignment.spaceBetween,
-                                child: const Text('10 out of 20', textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 18, color: Colors.white),
-                                ),
-                                backgroundColor: Colors.black12,
-                                progressBarColor: Colors.blue,
-                              )
-                          ),
-                          Container(
+                          children: [
+                            Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: GFProgressBar(
-                                percentage: 0.6,
-                                lineHeight: 30,
-                                alignment: MainAxisAlignment.spaceBetween,
-                                child: const Text('12000 XP out of 20000XP', textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 18, color: Colors.white),
-                                ),
-                                backgroundColor: Colors.black12,
-                                progressBarColor: Colors.blue,
-                              )
-                          ),
-                          // Container(
-                          //     margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                          //
-                          //     child: GFProgressBar(
-                          //       //   linearGradient:  LinearGradient(begin: Alignment.centerLeft,
-                          //       //   end: Alignment.centerRight,colors: [ColorConstants.quiz_grad1, ColorConstants.quiz_grad2, ColorConstants.quiz_grad3].toList(growable: true)),
-                          //       percentage: 0.9,
-                          //       lineHeight: 30,
-                          //       alignment: MainAxisAlignment.spaceBetween,
-                          //       // child: const Text('70%', textAlign: TextAlign.center,
-                          //       //   style: TextStyle(fontSize: 18, color: Colors.white),
-                          //       // ),
-                          //       backgroundColor: Colors.black12,
-                          //       progressBarColor: ColorConstants.quiz_grad1,
-                          //       child: Container(
-                          //         decoration: BoxDecoration(
-                          //           gradient: LinearGradient(
-                          //             colors: [
-                          //               ColorConstants.quiz_grad1,
-                          //               ColorConstants.quiz_grad2,
-                          //               ColorConstants.quiz_grad3
-                          //             ],
-                          //             stops: [
-                          //               0.0,
-                          //               0.5,
-                          //               0.9,
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     )
-                          // ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                onPrimary: Colors.white,
-                                elevation: 3,
-                                alignment: Alignment.center,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                fixedSize: const Size(190, 50),
-                                //////// HERE
-                              ),
-                              onPressed: () {
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => const AlmostTherePage()));
-                              },
-                              child: const Text(
-                                "SEE PERFORMANCE",
-                                style: TextStyle(color: ColorConstants.txt, fontSize: 16),
-                                textAlign: TextAlign.center,
-                              ),
+                              child: Text("Your OVERALL PERFORMANCE",
+                                style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
                             ),
-                          ),
-                        ],
+                            if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
+                              Container(
+                                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  child: GFProgressBar(
+                                    percentage:
+                                    (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
+                                    lineHeight: 30,
+                                    alignment: MainAxisAlignment.spaceBetween,
+                                    child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 18, color: Colors.white),
+                                    ),
+                                    backgroundColor: Colors.black12,
+                                    progressBarColor: ColorConstants.verdigris,
+                                  )
+                              ),
+                            if((userLeagueR!.data!.goalsummery!.play!*100/userLeagueR!.data!.goalsummery!.total!)>=1)
+                              Container(
+                                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  child: GFProgressBar(
+                                    percentage:1.0,
+                                    lineHeight: 30,
+                                    alignment: MainAxisAlignment.spaceBetween,
+                                    child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 18, color: Colors.white),
+                                    ),
+                                    backgroundColor: Colors.black12,
+                                    progressBarColor: ColorConstants.verdigris,
+                                  )
+                              ),
+
+                            Container(
+                              child: Text("Leagues",
+                                style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
+                            ),
+                          ]
                       ),
                     ),
                   ),
-                ),
+                ):Container(),
               ]
           ),
         ),

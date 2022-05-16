@@ -62,6 +62,7 @@ dependencies:
   package_info_plus:
   device_calendar:
   add_2_calendar:
+  intl:
 dev_dependencies:
   flutter_test:
     sdk: flutter
