@@ -234,7 +234,7 @@ class _State extends State<QuizPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  DuelModeResult(duelid: 1663,)));
+                                  builder: (context) =>  DuelModeResult(quizid: "1663",)));
                         },
                         child: Container(
                           height: 150,

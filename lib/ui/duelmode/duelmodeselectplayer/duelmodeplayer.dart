@@ -485,7 +485,7 @@ class _State extends State<DuelModeSelectPlayer> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DuelModeResult(duelid: "",)));
+                                builder: (context) => DuelModeResult(quizid: "",)));
                       },
                       child: const Text(
                         "LET'S GO!",

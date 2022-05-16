@@ -25,4 +25,9 @@ static const red_ques=Color(0xFFEE5858);
 static const txt=Color(0xFF707070);
 static const gradient=[Color(0xFFFE4756),Color(0xFFFCA95C),Color(0xFF33E9D6)];
 static const gradient_progress=[Color(0xFFFCA95C),Color(0xFF47B8AC)];
+  static const stage1color  = Color(0xFFF28D19);
+  static const stage2color = Color(0xFFFFD21D);
+  static const stage3color = Color(0xFFCDD93B);
+  static const stage4color = Color(0xFF5CD696);
+  static const stage5color = Color(0xFF65C9C0);
 }

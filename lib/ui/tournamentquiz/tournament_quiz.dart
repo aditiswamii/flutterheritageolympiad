@@ -16,6 +16,7 @@ import 'package:flutterheritageolympiad/ui/feed/filterpage/filterpage.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/filtertour/filtertour.dart';
+import 'package:flutterheritageolympiad/ui/tournamentquiz/waitlist/waitlist.dart';
 import 'package:flutterheritageolympiad/utils/countdowntimer.dart';
 import 'package:intl/intl.dart';
 
@@ -147,6 +148,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
+    _controller!.dispose();
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
@@ -505,7 +507,9 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                         //////// HERE
                                       ),
                                       onPressed: () {
-                                        // updatenotify(userid.toString(), notifyid);
+                                        _controller!.dispose();
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(builder: (BuildContext context) => TourRoomWaitlist( tourid: gettourR!.data![index].id.toString(), sessionid: gettourR!.data![index].sessions![index].id.toString(),)));
                                       },
                                       child: const Text(
                                         "WAITLIST",

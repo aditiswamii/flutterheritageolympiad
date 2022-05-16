@@ -281,6 +281,7 @@ onsuccess(savedata){
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
+    countdownTimer!.cancel();
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
@@ -330,14 +331,14 @@ onsuccess(savedata){
         decoration:  BoxDecoration(
           color: ramdomcolor,
         ),
-        child: decRes==null? const Center(
-          child: CircularProgressIndicator(),
-        )
-            :Container(
+        child: Container(
             margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [
-                Container(
+                questions==null? const Center(
+                  child: CircularProgressIndicator(),
+                )
+                    :  Container(
                     margin: EdgeInsets.fromLTRB(0,20,0,0),
                     height: 40,
                     width: 70,

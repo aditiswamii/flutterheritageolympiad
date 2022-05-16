@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,15 +11,12 @@ import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+import '../../../utils/StringConstants.dart';
 
-  runApp(const MaterialApp(
-
-    debugShowCheckedModeBanner: false,
-    home: ManageContactScreen(),
-  ));
-}
 class ManageContactScreen extends StatefulWidget{
 
   const ManageContactScreen({Key? key}) : super(key: key);
@@ -29,10 +30,111 @@ class _State extends State<ManageContactScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  var data;
+  var roomdata;
+
+
+
+  var duelresultr;
+  // GetTourRoomlist? getTourRoomlistt;
+
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+    });
+    print("userdata");
+    //calTheme();
+
+    //getTourRoom(widget.tourid, widget.sessionid);
+    getUserlist(userid.toString());
+    // getFeed(userid.toString(), "0", "", "", "");
+  }
+
+  getUserlist(String userid) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "get_all_contacts"),
+        body: {'user_id': userid.toString()});
+    showLoaderDialog(context);
+
+    print("getTourRoomapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        roomdata = jsonResponse[
+        'data']; //get all the data from json string superheros
+        print("length" + roomdata.length.toString());
+       // onsuccess(jsonResponse);
+       //  onsuccess(getTourRoomlistFromJson(data));
+      } else {
+        // onsuccess(null);
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+
+  // onsuccess(GetTourRoomlist? tourRoomlistn) {
+  //   log("log" + tourRoomlistn.toString());
+  //   if (tourRoomlistn != null) {
+  //     setState(() {
+  //       getTourRoomlistt = tourRoomlistn;
+  //     });
+  //     print("getdueljsonsuccess" + getTourRoomlistt.toString());
+  //
+  //   }
+  // }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   void initState() {
-
     super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+    userdata();
+
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => MyAccountPage()));
+    // Do some stuff.
+    return true;
   }
 
 
@@ -125,7 +227,15 @@ class _State extends State<ManageContactScreen> {
                     ],
                   ),
                 ),
-                Container(
+     Container(
+    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+    child: ListView.builder(
+    physics: ClampingScrollPhysics(
+    parent: BouncingScrollPhysics()),
+    shrinkWrap: true,
+    itemCount: jsonDecode(data!)['data'].length,
+    itemBuilder: (BuildContext context, int index) {
+    return Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   decoration: const BoxDecoration(color: Colors.white),
                   child: Card(
@@ -237,7 +347,9 @@ class _State extends State<ManageContactScreen> {
                       ],
                     ),
                   ),
-                ),
+                );}
+                  )
+    ),
                 Container(
                   alignment: FractionalOffset.bottomCenter,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
