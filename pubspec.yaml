@@ -47,7 +47,6 @@ dependencies:
   share_plus: ^3.0.4
   mvp:
   image_picker: ^0.7.2+1
-  firebase_storage:
   http:
   aws_s3_upload:
   file_picker:
@@ -61,7 +60,6 @@ dependencies:
   flip_card:
   package_info_plus:
   device_calendar:
-  add_2_calendar:
   intl:
 dev_dependencies:
   flutter_test:

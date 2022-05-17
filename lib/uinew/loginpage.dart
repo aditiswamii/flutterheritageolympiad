@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/forgetpassword/forgetpassword.dart';
-import 'package:flutterheritageolympiad/ui/login/login_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/signup/signup_page.dart';
+
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +78,10 @@ class _State extends State<LoginScreen> {
         prefs.setString("age", jsonDecode(data!)['data']["age"].toString());
         prefs.setString(
             "country", jsonDecode(data!)['data']["country"].toString());
-
+        prefs.setString(
+            "flagicon", jsonDecode(data!)["flag"].toString());
+        prefs.setString(
+            "agegroup", jsonDecode(data!)["age_group"].toString());
         Loginuser(jsonDecode(data!)['data']);
         print(jsonDecode(data!)['data'].toString());
       }else{

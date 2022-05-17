@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/phonebook/contactlist.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/phonebook/phonebook_screen.dart';
+
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -219,7 +219,7 @@ class _State extends State<InviteContactScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (
-                                                context) =>  PhonebookScreen()));
+                                                context) =>  PhonebookPage()));
                                   } else if (selected == 'second') {
                                     Navigator.pushReplacement(
                                         context,

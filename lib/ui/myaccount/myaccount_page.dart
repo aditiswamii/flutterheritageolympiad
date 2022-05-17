@@ -17,6 +17,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -31,6 +32,26 @@ class MyAccountPage extends StatefulWidget{
 
 class _AccountPageState extends State<MyAccountPage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  var agegroup;
+  var flagicon;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+      agegroup=prefs.getString("agegroup");
+      flagicon=prefs.getString("flagicon");
+    });
+    print("userdata");
+    //calTheme();
+  }
+
   @override
     void initState() {
       super.initState();
@@ -111,6 +132,50 @@ class _AccountPageState extends State<MyAccountPage> {
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: const Text("Scroll down see all updates,search by\nkeywords,or filter updates by type.",style: TextStyle(fontSize: 15,color: ColorConstants.txt))),
+                // Container(alignment: Alignment.centerLeft,
+                //   child: Text("${username}",style: TextStyle(
+                //       color: ColorConstants.txt,
+                //       fontSize: 16,fontWeight: FontWeight.w600),
+                //     textAlign: TextAlign.center,),
+                // ),
+                // Container(
+                //   height: 20,
+                //   child: Row(
+                //     children: [
+                //
+                //         Text("${agegroup}",style: TextStyle(
+                //             color: ColorConstants.txt,
+                //             fontSize: 14),
+                //           textAlign: TextAlign.center,),
+                //       VerticalDivider(color: Colors.black),
+                //       // Text("|"),
+                //       Row(
+                //         children: [
+                //
+                //             Container(
+                //                 height: 20,width: 20,
+                //                 decoration: BoxDecoration(
+                //                     shape: BoxShape.circle
+                //                 ),
+                //                 child:
+                //                 CircleAvatar(
+                //                   radius: 20.0,
+                //                   backgroundImage:
+                //                   NetworkImage("${flagicon}"),
+                //                   backgroundColor: Colors.transparent,
+                //                 )
+                //             ),
+                //
+                //             Text("${country}",style: TextStyle(
+                //                 color: ColorConstants.txt,
+                //                 fontSize: 14),
+                //               textAlign: TextAlign.center,),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
                 ListBody(
                   // scrollDirection: Axis.vertical,
                   // shrinkWrap: true,
@@ -335,10 +400,10 @@ class _AccountPageState extends State<MyAccountPage> {
                                 leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                     onTap: (){
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => PaymentScreen()));
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) => PaymentScreen()));
                                     },
                                     child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt),)),
                               )

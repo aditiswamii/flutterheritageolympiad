@@ -1,6 +1,4 @@
-
-
 abstract class AllDoneView{
-   void onsuccess();
+  void onsuccess();
 
 }

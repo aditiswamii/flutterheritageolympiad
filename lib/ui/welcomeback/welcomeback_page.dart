@@ -51,7 +51,7 @@ GetUserLeagueResponse? userLeagueR;
      country =prefs.getString("country");
      userid= prefs.getString("userid");
    });
-   showLoaderDialog(context);
+
    getuserleague(userid.toString());
 }
   showLoaderDialog(BuildContext context) {
@@ -78,9 +78,11 @@ GetUserLeagueResponse? userLeagueR;
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
     );
-    Navigator.pop(context);
+    showLoaderDialog(context);
+
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
@@ -101,6 +103,7 @@ GetUserLeagueResponse? userLeagueR;
             .showSnackBar(snackBar);
       }
     } else {
+      Navigator.pop(context);
       // onsuccess(null);
       print(response.statusCode);
     }

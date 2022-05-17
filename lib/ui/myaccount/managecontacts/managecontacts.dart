@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.dart';
+import 'package:flutterheritageolympiad/modal/getcontactlist/GetContactUserlist.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/managecontacts/blockcontact/blockcontact.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -36,12 +38,15 @@ class _State extends State<ManageContactScreen> {
   var profilepic;
   var userid;
   var data;
-  var roomdata;
+  var contactdata;
+  var blockdata;
+  var deletedata;
 
 
 
   var duelresultr;
-  // GetTourRoomlist? getTourRoomlistt;
+  var contactlist;
+  var snackBar;
 
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -64,19 +69,31 @@ class _State extends State<ManageContactScreen> {
         body: {'user_id': userid.toString()});
     showLoaderDialog(context);
 
-    print("getTourRoomapi");
+    print("getUserlistapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
         //final responseJson = json.decode(response.body);//store response as string
-        roomdata = jsonResponse[
-        'data']; //get all the data from json string superheros
-        print("length" + roomdata.length.toString());
+        contactdata = jsonResponse[
+        'data'];
+        print("data" + contactdata.toString());
+        setState(() {
+          contactdata = jsonResponse[
+          'data'];
+        });
+        //get all the data from json string superheros
+        print("length" + contactdata.length.toString());
        // onsuccess(jsonResponse);
-       //  onsuccess(getTourRoomlistFromJson(data));
+
       } else {
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
         // onsuccess(null);
         log(jsonResponse['message']);
       }
@@ -86,16 +103,83 @@ class _State extends State<ManageContactScreen> {
     }
   }
 
-  // onsuccess(GetTourRoomlist? tourRoomlistn) {
-  //   log("log" + tourRoomlistn.toString());
-  //   if (tourRoomlistn != null) {
-  //     setState(() {
-  //       getTourRoomlistt = tourRoomlistn;
-  //     });
-  //     print("getdueljsonsuccess" + getTourRoomlistt.toString());
-  //
-  //   }
-  // }
+  BlockApi(String userid,String blockid) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "blockuser"),
+        body: {
+          'user_id': userid.toString(),
+          'block_id': blockid.toString(),
+        });
+    showLoaderDialog(context);
+
+    print("getBlockApiapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        blockdata = jsonResponse[
+        'data'];
+        print("data" + blockdata.toString());
+        //get all the data from json string superheros
+        print("length" + blockdata.length.toString());
+        // onsuccess(jsonResponse);
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+        // onsuccess(null);
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+  DeleteApi(String userid,String deleteid) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "deleteuser"),
+        body: {
+          'user_id': userid.toString(),
+          'delete_id':deleteid.toString()
+        });
+    showLoaderDialog(context);
+
+    print("getUserlistapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        deletedata = jsonResponse[
+        'data'];
+        print("data" + deletedata.toString());
+        //get all the data from json string superheros
+        print("length" + deletedata.length.toString());
+        // onsuccess(jsonResponse);
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+        // onsuccess(null);
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -196,17 +280,40 @@ class _State extends State<ManageContactScreen> {
                 ),
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                     child: const Text("YOUR CONTACTS", style: TextStyle(
                         fontSize: 24, color: ColorConstants.txt))),
 
                 Container(
                   alignment: Alignment.centerLeft,
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(
-                      "You have 50 contacts.You may remove,",
-                      style: TextStyle(fontSize: 15,
-                          color: ColorConstants.txt)
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                          "You have",
+                          style: TextStyle(fontSize: 15,
+                              color: ColorConstants.txt)
+                      ),
+                      Container( margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        child: contactdata==null?Text(
+                            "0",
+                            style: TextStyle(fontSize: 15,
+                                color: ColorConstants.txt)
+                        ):Text(
+                            contactdata.length.toString(),
+                            style: TextStyle(fontSize: 15,
+                                color: ColorConstants.txt)
+                        ),
+                      ),
+                      Container( margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        child: Text(
+                            "contacts. You may remove,",
+                            style: TextStyle(fontSize: 15,
+                                color: ColorConstants.txt)
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -215,25 +322,31 @@ class _State extends State<ManageContactScreen> {
                   child: Row(
                     children: [
                       Text(
-                          "block them,and unblock contacts ",
+                          "block them, and unblock contacts ",
                           style: TextStyle(fontSize: 15,
                               color: ColorConstants.txt)
                       ),
-                      Text(
-                          "here.",
-                          style: TextStyle(fontSize: 15,decoration: TextDecoration.underline,
-                              color: ColorConstants.txt)
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (BuildContext context) => BlockContactScreen()));
+                        },
+                        child: Text(
+                            "here.",
+                            style: TextStyle(fontSize: 15,decoration: TextDecoration.underline,
+                                color: ColorConstants.txt)
+                        ),
                       ),
                     ],
                   ),
                 ),
-     Container(
+                contactdata==null?Container(): Container(
     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
     child: ListView.builder(
     physics: ClampingScrollPhysics(
     parent: BouncingScrollPhysics()),
     shrinkWrap: true,
-    itemCount: jsonDecode(data!)['data'].length,
+    itemCount: contactdata.length,
     itemBuilder: (BuildContext context, int index) {
     return Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -254,90 +367,124 @@ class _State extends State<ManageContactScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              if(contactdata[index]['image']!="")
                               Container(
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                height: 120,
-                                width: 120,
-                                child: CircleAvatar(
+                                height: 90,
+                                width: 90,
+                                child:
+                                CircleAvatar(
                                   radius: 30.0,
                                   backgroundImage:
-                                  AssetImage("assets/images/cat1.png"),
+                                 NetworkImage("${contactdata[index]['image']}"),
                                   backgroundColor: Colors.transparent,
                                 ),
                               ),
+                              if(contactdata[index]['image']=="")
+                              Container(
+                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              height: 90,
+                              width: 90,
+                              child:
+                              CircleAvatar(
+                              radius: 30.0,
+                              backgroundImage:AssetImage("assets/images/placeholder.png"),
+                              backgroundColor: Colors.transparent,
+                              ),
+                              ),
                               // Image.asset("assets/profile.png",height: 100,width: 100,),
                               Container(
+                                width: 150,
                                 margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
                                 child: Column(
                                   children: [
-                                    Text("EUNGEUNG519",style: TextStyle(
-                                        color: ColorConstants.txt,
-                                        fontSize: 14),
-                                      textAlign: TextAlign.center,),
-                                    Row(
-                                      children: [
-                                        Text("GROUP 3",style: TextStyle(
-                                            color: ColorConstants.txt,
-                                            fontSize: 14),
-                                          textAlign: TextAlign.center,),
-                                        Divider(height: 10,thickness: 1,color: ColorConstants.txt,),
-                                        Text("|"),
-                                        Row(
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/india.png",
-                                              width: 10,
-                                              height: 10,
-                                            ),
-                                            Text("INDIA",style: TextStyle(
-                                                color: ColorConstants.txt,
-                                                fontSize: 14),
-                                              textAlign: TextAlign.center,),
-                                          ],
-                                        ),
-                                      ],
+                                    Container(alignment: Alignment.centerLeft,
+                                      child: Text("${contactdata[index]['name']}",style: TextStyle(
+                                          color: ColorConstants.txt,
+                                          fontSize: 16,fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.center,),
                                     ),
-                                    Text(
-                                      "AVAILABLE",
-                                      style: TextStyle(
-                                          color: ColorConstants.verdigris),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: ColorConstants.yellow200,
-                                        onPrimary: Colors.white,
-                                        elevation: 3,
-                                        alignment: Alignment.center,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                        fixedSize: const Size(100, 40),
-                                        //////// HERE
+                                    Container(
+                                      height: 20,
+                                      child: Row(
+                                        children: [
+                                          if(contactdata[index]['age_group']!=null)
+                                          Text("${contactdata[index]['age_group']}",style: TextStyle(
+                                              color: ColorConstants.txt,
+                                              fontSize: 14),
+                                            textAlign: TextAlign.center,),
+                                          VerticalDivider(color: Colors.black),
+                                          // Text("|"),
+                                          Row(
+                                            children: [
+                                              if(contactdata[index]['flag_icon']!=null)
+                                              Container(
+                                                height: 20,width: 20,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle
+                                                ),
+                                                child:
+                                                CircleAvatar(
+                                                  radius: 20.0,
+                                                  backgroundImage:
+                                                  NetworkImage("${contactdata[index]['flag_icon']}"),
+                                                  backgroundColor: Colors.transparent,
+                                                )
+                                              ),
+                                              if(contactdata[index]['country']!=null)
+                                              Text("${contactdata[index]['country']}",style: TextStyle(
+                                                  color: ColorConstants.txt,
+                                                  fontSize: 14),
+                                                textAlign: TextAlign.center,),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: () {
-                                        AlertDialog errorDialog = AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(
-                                                    20.0)), //this right here
-                                            title: Container(
-                                                height: 250,
-                                                width: 250,
-                                                alignment: Alignment.center,
-                                                child: DialogDuelInviteSent()));
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                            errorDialog);
-                                      },
-                                      child: const Text(
-                                        "SEND INVITE",
+                                    ),
+                                    if(contactdata[index]['status']!=null)
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "${contactdata[index]['status']}",
                                         style: TextStyle(
-                                            color: ColorConstants.lightgrey200,
-                                            fontSize: 14),
-                                        textAlign: TextAlign.center,
+                                            color: ColorConstants.verdigris),
                                       ),
                                     ),
+                                    Container(
+                                        height:35,
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap:(){
+
+                                        },
+                                            child: Container(margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                              child: Card(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  // if you need this
+
+                                                ),
+                                                elevation: 3,
+                                                child: Image.asset("assets/images/warning.png",height: 30,width: 30,),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30),
+                                                // if you need this
+
+                                              ),
+                                              elevation: 3,
+                                              child: Image.asset("assets/images/delete.png",height: 30,width: 30,),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+
                                   ],
                                 ),
                               )
@@ -380,31 +527,7 @@ class _State extends State<ManageContactScreen> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.verdigris,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (
-                          //             context) => const PhonebookScreen()));
-                        },
-                        child: const Text(
-                          "LET'S GO!",
-                          style: TextStyle(
-                              color: ColorConstants.lightgrey200, fontSize: 14),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+
                     ],
                   ),
                 ),

@@ -1,6 +1,6 @@
 
 
 abstract class SignUpView{
-   void onsuccess();
+  void onsuccess();
 
 }

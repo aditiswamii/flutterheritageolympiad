@@ -111,78 +111,70 @@ class _State extends State<Stepone> {
                 child: const Text("SIGN UP",
                     style: TextStyle(
                         fontSize: 24, color: ColorConstants.txt))),
-            Flexible(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: TextFormField(
-                  controller: emailController,
-                  obscureText: false,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Email ID*',
-                  ),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.singleLineFormatter
-                  ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: TextFormField(
+                controller: emailController,
+                obscureText: false,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  filled: true,
+                  hintText: 'Email ID*',
                 ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
               ),
             ),
-            Flexible(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: TextFormField(
-                  controller: usernameController,
-                  obscureText: false,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Username*',
-                  ),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.singleLineFormatter
-                  ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: TextFormField(
+                controller: usernameController,
+                obscureText: false,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  filled: true,
+                  hintText: 'Username*',
                 ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
               ),
             ),
-            Flexible(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  cursorColor: ColorConstants.txt,
-                  obscuringCharacter: "*",
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    filled: true,
-                    // hasFloatingPlaceholder: true,
-                    hintText: 'Password*',
-                  ),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.singleLineFormatter
-                  ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: TextFormField(
+                controller: passwordController,
+                obscureText: true,
+                cursorColor: ColorConstants.txt,
+                obscuringCharacter: "*",
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  filled: true,
+                  // hasFloatingPlaceholder: true,
+                  hintText: 'Password*',
                 ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
               ),
             ),
-            Flexible(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: TextFormField(
-                  controller: repeatpasswordController,
-                  obscureText: true,
-                  cursorColor: ColorConstants.txt,
-                  obscuringCharacter: "*",
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    filled: true,
-                    // hasFloatingPlaceholder: true,
-                    hintText: 'Repeat Password*',
-                  ),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.singleLineFormatter
-                  ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: TextFormField(
+                controller: repeatpasswordController,
+                obscureText: true,
+                cursorColor: ColorConstants.txt,
+                obscuringCharacter: "*",
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  filled: true,
+                  // hasFloatingPlaceholder: true,
+                  hintText: 'Repeat Password*',
                 ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
               ),
             ),
             Container(

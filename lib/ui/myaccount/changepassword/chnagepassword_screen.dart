@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
@@ -6,7 +9,11 @@ import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/StringConstants.dart';
 
 class ChangepasswordScreen extends StatefulWidget{
 
@@ -26,10 +33,105 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
   bool _passwordVisible2 = false;
   bool _passwordVisible3= false;
   bool value = false;
+  var data;
+  var changedata;
+  var snackBar;
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+    });
+    print("userdata");
+
+  }
+  changepass(String userid, String current_password,String new_password) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "change-password"),
+        body: {
+          'user_id': userid.toString(),
+          'current_password': current_password.toString(),
+          'new_password': new_password.toString()
+        });
+    showLoaderDialog(context);
+
+    print("changepassapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        changedata = jsonResponse[
+        'data'];
+        print("data" + changedata.toString());
+        setState(() {
+          changedata = jsonResponse[
+          'data'];
+        });
+
+        //get all the data from json string superheros
+        print("length" + changedata.length.toString());
+
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+        // onsuccess(null);
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
   @override
   void initState() {
-
     super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+    userdata();
+
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => MyAccountPage()));
+    // Do some stuff.
+    return true;
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
 
@@ -227,16 +329,16 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                           //////// HERE
                         ),
                         onPressed: () {
-                          Navigator.of(context).pop();
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => MyAccountPage()));
+
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyAccountPage()));
                         },
                         child: const Text(
                           "GO BACK",
                           style: TextStyle(
-                              color: ColorConstants.lightgrey200, fontSize: 14),
+                              color:Colors.white, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -252,30 +354,62 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                           //////// HERE
                         ),
                         onPressed: () {
-                          // AlertDialog errorDialog = AlertDialog(
-                          //     shape: RoundedRectangleBorder(
-                          //         borderRadius:
-                          //         BorderRadius.circular(
-                          //             20.0)), //this right here
-                          //     title: Container(
-                          //         height: 250,
-                          //         width: 250,
-                          //         alignment: Alignment.center,
-                          //         child: DialogCancelPlan()));
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) =>
-                          //     errorDialog);
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (
-                          //             context) => const PhonebookScreen()));
+                         if(currentpasswordController.text.isNotEmpty){
+                           if(newpasswordController.text.isNotEmpty){
+                             if(confirmpasswordController.text.isNotEmpty){
+                               if(newpasswordController.text==confirmpasswordController.text){
+
+                                 changepass(userid.toString(), currentpasswordController.text.toString(),newpasswordController.text.toString());
+
+                               }else{
+                                 const snackBar =
+                                 SnackBar(
+                                   content: Text(
+                                       'Please enter valid password'),
+                                 );
+                                 ScaffoldMessenger
+                                     .of(context)
+                                     .showSnackBar(
+                                     snackBar);
+                               }
+                             }else{
+                               const snackBar =
+                               SnackBar(
+                                 content: Text(
+                                     'Please enter password'),
+                               );
+                               ScaffoldMessenger
+                                   .of(context)
+                                   .showSnackBar(
+                                   snackBar);
+                             }
+                           }else{
+                             const snackBar =
+                             SnackBar(
+                               content: Text(
+                                   'Please enter new password'),
+                             );
+                             ScaffoldMessenger
+                                 .of(context)
+                                 .showSnackBar(
+                                 snackBar);
+                           }
+                         }else{
+                           const snackBar =
+                           SnackBar(
+                             content: Text(
+                                 'Please enter current password'),
+                           );
+                           ScaffoldMessenger
+                               .of(context)
+                               .showSnackBar(
+                               snackBar);
+                         }
                         },
                         child: const Text(
                           "LET'S GO!",
                           style: TextStyle(
-                              color: ColorConstants.lightgrey200, fontSize: 14),
+                              color: Colors.white, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ),
