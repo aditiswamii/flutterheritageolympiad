@@ -12,35 +12,31 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/cquizrule/classicquizrule_viewmodal.dart';
 
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
+
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/StringConstants.dart';
 
 
 
-class ClassicQuizRule extends StatefulWidget {
+
+class RulesPage extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
   var quizid;
-   ClassicQuizRule({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid}) : super(key: key);
+  var type;
+   RulesPage({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
+class _State extends State<RulesPage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String? data;
@@ -68,7 +64,7 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
 
   void getData(String quiz_type_id, String quiz_speed_id) async {
     http.Response response =
-    await http.post(Uri.parse("http://3.108.183.42/api/quiz_rules"),
+    await http.post(Uri.parse(StringConstants.BASE_URL+"quiz_rules"),
         body: {
           'quiz_type_id': quiz_type_id.toString(),
           'quiz_speed_id': quiz_speed_id.toString()
@@ -202,7 +198,7 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>  Mcq(quizid:widget.quizid)));
+                                builder: (context) =>  Mcq(quizid:widget.quizid, type: widget.type,)));
                         // Navigator.pushReplacement(
                         //     context,
                         //     MaterialPageRoute(
@@ -225,17 +221,7 @@ class _State extends State<ClassicQuizRule> implements ClassicQuizRuleView{
     );
   }
 
-  @override
-  void onSuccess(List jsonResponse) {
-    ListView _quizrule(data) {
-      return ListView.builder(
-          shrinkWrap: true,
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return (data[index].position);
-          });
-    }
-  }
+  
 
 
 

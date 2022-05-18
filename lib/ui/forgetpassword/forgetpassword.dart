@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
@@ -8,18 +10,12 @@ import 'package:flutterheritageolympiad/ui/login/login_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/StringConstants.dart';
 import 'forget_presenter.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 
-
-void main() {
-
-  runApp(const MaterialApp(
-
-    debugShowCheckedModeBanner: false,
-    home: ForgetPassword(),
-  ));
-}
 class ForgetPassword extends StatefulWidget{
 
   const ForgetPassword({Key? key}) : super(key: key);
@@ -31,8 +27,70 @@ class ForgetPassword extends StatefulWidget{
 
 class _State extends State<ForgetPassword> implements ForgetPasswordView{
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var forgetdata;
+  var snackBar;
+  var data;
   TextEditingController emailController = TextEditingController();
   late ForgetPasswordPresenter  _presenter;
+  // forgetpass(String email) async {
+  //   http.Response response = await http.post(
+  //       Uri.parse(StringConstants.BASE_URL + "forgetPassword"),
+  //       body: {
+  //         'email': email.toString()
+  //       });
+  //   showLoaderDialog(context);
+  //
+  //   print("changepassapi");
+  //   var jsonResponse = convert.jsonDecode(response.body);
+  //   if (response.statusCode == 200) {
+  //     Navigator.pop(context);
+  //     data = response.body;
+  //     if (jsonResponse['status'] == 200) {
+  //       forgetdata = jsonResponse[
+  //       'data'];
+  //       print("data" + forgetdata.toString());
+  //       setState(() {
+  //         forgetdata = jsonResponse[
+  //         'data'];
+  //       });
+  //
+  //       //get all the data from json string superheros
+  //       print("length" + forgetdata.length.toString());
+  //
+  //
+  //     } else {
+  //       snackBar = SnackBar(
+  //         content: Text(
+  //           jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+  //       );
+  //       ScaffoldMessenger.of(context)
+  //           .showSnackBar(snackBar);
+  //       // onsuccess(null);
+  //       log(jsonResponse['message']);
+  //     }
+  //   } else {
+  //     Navigator.pop(context);
+  //     print(response.statusCode);
+  //   }
+  // }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   @override
   void initState() {
@@ -41,19 +99,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
     //autoLogIn();
   }
 
-  // void autoLogIn() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   final String? userId = prefs.getString('username');
-  //   print(userId);
-  //   if (userId != null) {
-  //     setState(() {
-  //       // isLoggedIn = true;
-  //       // name = userId;
-  //     });
-  //     //Navigator.of(context).pushReplacementNamed("/home");
-  //     return;
-  //   }
-  // }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -81,7 +127,6 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text("Forget Password", style: TextStyle(
                       fontSize: 22, color: ColorConstants.txt))),
-              Flexible(child:
               Container(
                 height: 60,
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -100,7 +145,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
                     FilteringTextInputFormatter.singleLineFormatter
                   ],
                 ),
-              ),),
+              ),
 
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
@@ -142,13 +187,6 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
             builder: (context) => const LoginPage()));
   }
 
-  // @override
-  // void onLoginSuccess() {
-  //   Navigator.of(context).pushAndRemoveUntil(
-  //       MaterialPageRoute(
-  //         builder: (BuildContext context) => WelcomePage(),
-  //       ),
-  //           (Route<dynamic> route) => false);
-  // }
+
 }
 

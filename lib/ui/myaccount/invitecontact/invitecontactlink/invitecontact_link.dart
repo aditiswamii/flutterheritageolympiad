@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
+
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';

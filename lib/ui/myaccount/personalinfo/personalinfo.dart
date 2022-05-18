@@ -212,8 +212,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     final DateTime? selected = await showDatePicker(
       context: context,
       initialDate: DateTime(selectedDate.year - 1),
-      firstDate: DateTime(1950),
-      lastDate: DateTime(selectedDate.year),
+      firstDate: DateTime(selectedDate.year-99),
+      lastDate: DateTime(selectedDate.year-1),
     );
     if (selected != null && selected != selectedDate)
       setState(() {

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.dart';
 import 'package:flutterheritageolympiad/modal/getcontactlist/GetContactUserlist.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/contactpage/contactpage.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/managecontacts/blockcontact/blockcontact.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
@@ -348,117 +349,134 @@ class _State extends State<ManageContactScreen> {
     shrinkWrap: true,
     itemCount: contactdata.length,
     itemBuilder: (BuildContext context, int index) {
-    return Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  decoration: const BoxDecoration(color: Colors.white),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      // if you need this
-                      side: BorderSide(
-                        color: Colors.grey.withOpacity(0.3),
-                        width: 1,
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (BuildContext context) => ContactPage(contactid: contactdata[index]['id'].toString(),)));
+      },
+      child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              if(contactdata[index]['image']!="")
-                              Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                if(contactdata[index]['image']!="")
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  height: 90,
+                                  width: 90,
+                                  child:
+                                  CircleAvatar(
+                                    radius: 30.0,
+                                    backgroundImage:
+                                   NetworkImage("${contactdata[index]['image']}"),
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                ),
+                                if(contactdata[index]['image']=="")
+                                Container(
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 height: 90,
                                 width: 90,
                                 child:
                                 CircleAvatar(
-                                  radius: 30.0,
-                                  backgroundImage:
-                                 NetworkImage("${contactdata[index]['image']}"),
-                                  backgroundColor: Colors.transparent,
+                                radius: 30.0,
+                                backgroundImage:AssetImage("assets/images/placeholder.png"),
+                                backgroundColor: Colors.transparent,
                                 ),
-                              ),
-                              if(contactdata[index]['image']=="")
-                              Container(
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              height: 90,
-                              width: 90,
-                              child:
-                              CircleAvatar(
-                              radius: 30.0,
-                              backgroundImage:AssetImage("assets/images/placeholder.png"),
-                              backgroundColor: Colors.transparent,
-                              ),
-                              ),
-                              // Image.asset("assets/profile.png",height: 100,width: 100,),
-                              Container(
-                                width: 150,
-                                margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
-                                child: Column(
-                                  children: [
-                                    Container(alignment: Alignment.centerLeft,
-                                      child: Text("${contactdata[index]['name']}",style: TextStyle(
-                                          color: ColorConstants.txt,
-                                          fontSize: 16,fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.center,),
-                                    ),
-                                    Container(
-                                      height: 20,
-                                      child: Row(
-                                        children: [
-                                          if(contactdata[index]['age_group']!=null)
-                                          Text("${contactdata[index]['age_group']}",style: TextStyle(
-                                              color: ColorConstants.txt,
-                                              fontSize: 14),
-                                            textAlign: TextAlign.center,),
-                                          VerticalDivider(color: Colors.black),
-                                          // Text("|"),
-                                          Row(
-                                            children: [
-                                              if(contactdata[index]['flag_icon']!=null)
-                                              Container(
-                                                height: 20,width: 20,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle
+                                ),
+                                // Image.asset("assets/profile.png",height: 100,width: 100,),
+                                Container(
+                                  width: 150,
+                                  margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                                  child: Column(
+                                    children: [
+                                      Container(alignment: Alignment.centerLeft,
+                                        child: Text("${contactdata[index]['name']}",style: TextStyle(
+                                            color: ColorConstants.txt,
+                                            fontSize: 16,fontWeight: FontWeight.w600),
+                                          textAlign: TextAlign.center,),
+                                      ),
+                                      Container(
+                                        height: 20,
+                                        child: Row(
+                                          children: [
+                                            if(contactdata[index]['age_group']!=null)
+                                            Text("${contactdata[index]['age_group']}",style: TextStyle(
+                                                color: ColorConstants.txt,
+                                                fontSize: 14),
+                                              textAlign: TextAlign.center,),
+                                            VerticalDivider(color: Colors.black),
+                                            // Text("|"),
+                                            Row(
+                                              children: [
+                                                if(contactdata[index]['flag_icon']!=null)
+                                                Container(
+                                                  height: 20,width: 20,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle
+                                                  ),
+                                                  child:
+                                                  CircleAvatar(
+                                                    radius: 20.0,
+                                                    backgroundImage:
+                                                    NetworkImage("${contactdata[index]['flag_icon']}"),
+                                                    backgroundColor: Colors.transparent,
+                                                  )
                                                 ),
-                                                child:
-                                                CircleAvatar(
-                                                  radius: 20.0,
-                                                  backgroundImage:
-                                                  NetworkImage("${contactdata[index]['flag_icon']}"),
-                                                  backgroundColor: Colors.transparent,
-                                                )
-                                              ),
-                                              if(contactdata[index]['country']!=null)
-                                              Text("${contactdata[index]['country']}",style: TextStyle(
-                                                  color: ColorConstants.txt,
-                                                  fontSize: 14),
-                                                textAlign: TextAlign.center,),
-                                            ],
-                                          ),
-                                        ],
+                                                if(contactdata[index]['country']!=null)
+                                                Text("${contactdata[index]['country']}",style: TextStyle(
+                                                    color: ColorConstants.txt,
+                                                    fontSize: 14),
+                                                  textAlign: TextAlign.center,),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    if(contactdata[index]['status']!=null)
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "${contactdata[index]['status']}",
-                                        style: TextStyle(
-                                            color: ColorConstants.verdigris),
+                                      if(contactdata[index]['status']!=null)
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "${contactdata[index]['status']}",
+                                          style: TextStyle(
+                                              color: ColorConstants.verdigris),
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                        height:35,
-                                      child: Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap:(){
+                                      Container(
+                                          height:35,
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap:(){
 
-                                        },
-                                            child: Container(margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                          },
+                                              child: Container(margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                                child: Card(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(30),
+                                                    // if you need this
+
+                                                  ),
+                                                  elevation: 3,
+                                                  child: Image.asset("assets/images/warning.png",height: 30,width: 30,),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
                                               child: Card(
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(30),
@@ -466,35 +484,24 @@ class _State extends State<ManageContactScreen> {
 
                                                 ),
                                                 elevation: 3,
-                                                child: Image.asset("assets/images/warning.png",height: 30,width: 30,),
+                                                child: Image.asset("assets/images/delete.png",height: 30,width: 30,),
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30),
-                                                // if you need this
+                                          ],
+                                        ),
+                                      )
 
-                                              ),
-                                              elevation: 3,
-                                              child: Image.asset("assets/images/delete.png",height: 30,width: 30,),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-
-                                  ],
-                                ),
-                              )
-                            ],
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                );}
+    );}
                   )
     ),
                 Container(

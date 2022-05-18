@@ -21,7 +21,8 @@ import '../../../utils/countdowntimer.dart';
 
 class Mcq extends StatefulWidget{
   var quizid;
-  Mcq({Key? key,required this.quizid}) : super(key: key);
+  var type;
+  Mcq({Key? key,required this.quizid,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();

@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
@@ -29,8 +30,21 @@ class _State extends State<InviteContactScreen> {
 
   @override
   void initState() {
-  // click;
     super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => MyAccountPage()));
+    // Do some stuff.
+    return true;
   }
 
 

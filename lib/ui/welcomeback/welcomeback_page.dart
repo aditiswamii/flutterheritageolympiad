@@ -65,7 +65,6 @@ GetUserLeagueResponse? userLeagueR;
       ),
     );
     showDialog(
-      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
@@ -74,11 +73,11 @@ GetUserLeagueResponse? userLeagueR;
   }
 
   getuserleague(String userid) async {
-
+    showLoaderDialog(context);
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
     );
-    showLoaderDialog(context);
+
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -364,10 +363,10 @@ GetUserLeagueResponse? userLeagueR;
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: GFProgressBar(
                     percentage:1.0,
-                    lineHeight: 30,
+                    lineHeight: 20,
                     alignment: MainAxisAlignment.spaceBetween,
                     child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
                     ),
                     backgroundColor: Colors.black12,
                     progressBarColor: ColorConstants.verdigris,
@@ -375,7 +374,7 @@ GetUserLeagueResponse? userLeagueR;
               ),
 
               Container(
-                child: Text("Leagues",
+                child: Text("Quizzes Done",
                   style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
               ),
       ]

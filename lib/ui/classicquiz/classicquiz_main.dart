@@ -11,8 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
 
-import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_presenter.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/steptwoinvite.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
@@ -170,7 +168,7 @@ class _State extends State<ClassicQuizMain> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  ClassicQuizRule(quizspeedid:quiz_speed_id, quiztypeid: quiz_type_id, quizid: quizid ,)));
+            builder: (context) =>  RulesPage(quizspeedid:quiz_speed_id, quiztypeid: quiz_type_id, quizid: quizid, type: "1" ,)));
   }
 
   showLoaderDialog(BuildContext context) {
@@ -354,6 +352,7 @@ class _State extends State<ClassicQuizMain> {
                                     children: [
                                       Card(
                                           child: CheckboxListTile(
+                                            visualDensity: VisualDensity(vertical: -4,horizontal: 4),
                                               title: Text(jsonDecode(data!)['data']
                                                   [index]['name']),
                                               onChanged: (checked) {
@@ -393,66 +392,46 @@ class _State extends State<ClassicQuizMain> {
                              _expanded6==false? Container(
                                 width: MediaQuery.of(context).size.width,
                                height: 50,
-                               child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    // if you need this
-                                    side: BorderSide(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child:GestureDetector(
-                                    onTap: (){
-                                      setState(() {
-                                        _expanded6=true;
+                               child: GestureDetector(
+                                 onTap: (){
+                                   setState(() {
+                                     _expanded6=true;
 
-                                      });
+                                   });
 
-                                    },
-                                    child: Container(
+                                 },
+                                 child: Container(
 
-                                      margin: EdgeInsets.all(4),
-                                      child: Center(
-                                        child:Image.asset(
-                                          'assets/images/down_arrow.png',
-                                          height: 20,width: 20,
-                                          color: ColorConstants.txt,
-                                        )
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                   margin: EdgeInsets.all(4),
+                                   child: Center(
+                                     child:Image.asset(
+                                       'assets/images/down_arrow.png',
+                                       height: 20,width: 20,
+                                       color: ColorConstants.txt,
+                                     )
+                                   ),
+                                 ),
+                               )
                               ):Container(
                                  width: MediaQuery.of(context).size.width,
                                  height: 50,
-                                 child: Card(
-                                   shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(5),
-                                     // if you need this
-                                     side: BorderSide(
-                                       color: Colors.grey.withOpacity(0.3),
-                                       width: 1,
-                                     ),
-                                   ),
-                                   child:GestureDetector(
-                                     onTap: (){
-                                       setState(() {
-                                         _expanded6=false;
-                                       });
+                                 child: GestureDetector(
+                                   onTap: (){
+                                     setState(() {
+                                       _expanded6=false;
+                                     });
 
 
-                                     },
-                                     child: Container(
+                                   },
+                                   child: Container(
 
-                                       margin: EdgeInsets.all(4),
-                                       child: Center(
-                                           child:Image.asset(
-                                             'assets/images/down_arrow_small.png',
-                                             height: 20,width: 20,
-                                             color: ColorConstants.txt,
-                                           )
-                                       ),
+                                     margin: EdgeInsets.all(4),
+                                     child: Center(
+                                         child:Image.asset(
+                                           'assets/images/down_arrow_small.png',
+                                           height: 20,width: 20,
+                                           color: ColorConstants.txt,
+                                         )
                                      ),
                                    ),
                                  )

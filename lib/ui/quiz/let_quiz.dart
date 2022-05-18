@@ -332,7 +332,7 @@ class _State extends State<QuizPage> {
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Text("Your OVERALL PERFORMANCE",
+                              child: Text("YOUR OVERALL PERFORMANCE",
                                 style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
                             ),
                             if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
@@ -355,10 +355,10 @@ class _State extends State<QuizPage> {
                                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: GFProgressBar(
                                     percentage:1.0,
-                                    lineHeight: 30,
+                                    lineHeight: 20,
                                     alignment: MainAxisAlignment.spaceBetween,
                                     child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                                      style: TextStyle(fontSize: 18, color: Colors.white),
+                                      style: TextStyle(fontSize: 14, color: Colors.white),
                                     ),
                                     backgroundColor: Colors.black12,
                                     progressBarColor: ColorConstants.verdigris,
@@ -366,7 +366,7 @@ class _State extends State<QuizPage> {
                               ),
 
                             Container(
-                              child: Text("Leagues",
+                              child: Text("Quizzes Done",
                                 style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
                             ),
                           ]

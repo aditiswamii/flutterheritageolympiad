@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
+
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
@@ -14,12 +14,9 @@ import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: DuelModeInvite(),
-  ));
-}
+import '../duelcontactlist/duelcontactlist.dart';
+
+
 
 class DuelModeInvite extends StatefulWidget {
   const DuelModeInvite({Key? key}) : super(key: key);

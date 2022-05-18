@@ -61,6 +61,8 @@ dependencies:
   package_info_plus:
   device_calendar:
   intl:
+  webview_flutter:
+  syncfusion_flutter_charts:
 dev_dependencies:
   flutter_test:
     sdk: flutter

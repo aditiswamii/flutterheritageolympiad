@@ -44,7 +44,7 @@ class _State extends State<Result> {
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
     userdata();
   }
   @override

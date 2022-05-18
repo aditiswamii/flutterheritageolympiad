@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeselectplayer/duelmodeplayer.dart';
+
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 
@@ -13,6 +13,8 @@ import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../duelcontactlist/duelcontactlist.dart';
 
 void main() {
   runApp(const MaterialApp(

@@ -16,12 +16,7 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: DuelModeSelectPlayer(),
-  ));
-}
+
 
 class DuelModeSelectPlayer extends StatefulWidget {
   const DuelModeSelectPlayer({Key? key}) : super(key: key);
