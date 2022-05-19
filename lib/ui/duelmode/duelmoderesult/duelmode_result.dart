@@ -15,7 +15,7 @@ import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart
 
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';

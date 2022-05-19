@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 
 

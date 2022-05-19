@@ -167,7 +167,7 @@ GetUserLeagueResponse? userLeagueR;
           //height: 300,
             width: MediaQuery.of(context).size.width,
             //alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
            children: [
@@ -180,7 +180,7 @@ GetUserLeagueResponse? userLeagueR;
         },
                child: Container(
                  height: 150,
-          width: 160,
+                 width: 150,
             color: ColorConstants.red200,
 
                  child: Column(
@@ -213,7 +213,7 @@ GetUserLeagueResponse? userLeagueR;
                },
                child: Container(
                  height: 150,
-                 width: 160,
+                 width: 150,
                    color:ColorConstants.yellow200,
 
                  child:  Column(
@@ -244,7 +244,7 @@ GetUserLeagueResponse? userLeagueR;
         //height: 300,
         width: MediaQuery.of(context).size.width,
         //alignment: Alignment.center,
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -257,7 +257,7 @@ GetUserLeagueResponse? userLeagueR;
               },
               child: Container(
                 height: 150,
-                width: 160,
+                width: 150,
                 color: ColorConstants.blue200,
 
                 child: Column(
@@ -294,7 +294,7 @@ GetUserLeagueResponse? userLeagueR;
               },
               child: Container(
                 height: 150,
-                width: 160,
+                width: 150,
                 color: Colors.black26,
 
                 child:  Column(

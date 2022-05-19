@@ -21,7 +21,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 
 class ResultPage extends StatefulWidget {
   var quizid;

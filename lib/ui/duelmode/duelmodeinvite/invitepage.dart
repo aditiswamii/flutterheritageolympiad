@@ -8,7 +8,7 @@ import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.da
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 
 import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';

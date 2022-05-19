@@ -20,7 +20,7 @@ import 'package:flutterheritageolympiad/ui/myaccount/personalinfo/personalinfo.d
 import 'package:flutterheritageolympiad/ui/myaccount/privacy/privacy_page.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/yourpage/yourpage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';

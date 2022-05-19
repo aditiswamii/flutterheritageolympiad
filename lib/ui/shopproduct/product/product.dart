@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../colors/colors.dart';
 import '../../../utils/StringConstants.dart';
 import '../../rightdrawer/right_drawer.dart';
-import '../../welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import '../shopproducts_page.dart';
 
 class ProductList extends StatefulWidget{

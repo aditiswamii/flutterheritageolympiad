@@ -7,7 +7,7 @@ import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/phonebook/con
 
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 
 
 class InviteContactScreen extends StatefulWidget{

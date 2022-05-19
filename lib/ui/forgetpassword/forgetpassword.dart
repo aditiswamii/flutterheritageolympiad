@@ -7,7 +7,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/forgetpassword/forget_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/login/login_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

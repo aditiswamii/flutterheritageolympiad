@@ -11,7 +11,7 @@ import 'package:flutterheritageolympiad/ui/alldone/alldone.dart';
 import 'package:flutterheritageolympiad/ui/almostthere/almostthere_presenter.dart';
 import 'package:flutterheritageolympiad/ui/almostthere/almostthere_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/signup/signup_page.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';

@@ -12,10 +12,10 @@ import 'package:flutterheritageolympiad/ui/classicquiz/domainlist.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelquiz/duel_quiz.dart';
+
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -210,7 +210,7 @@ class _State extends State<QuizPage> {
                   //height: 300,
                   width: MediaQuery.of(context).size.width,
                   //alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -226,7 +226,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 160,
+                          width: 150,
                           color: ColorConstants.red200,
 
                           child: Column(
@@ -249,7 +249,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 160,
+                          width: 150,
                           color:ColorConstants.yellow200,
 
                           child:  Column(
@@ -270,7 +270,7 @@ class _State extends State<QuizPage> {
                   //height: 300,
                   width: MediaQuery.of(context).size.width,
                   //alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 30),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -283,7 +283,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 160,
+                          width: 150,
                           color: ColorConstants.blue200,
 
                           child: Column(
@@ -306,7 +306,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 160,
+                          width: 150,
                           color: Colors.black26,
 
                           child:  Column(

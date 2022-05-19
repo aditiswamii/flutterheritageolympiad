@@ -15,7 +15,7 @@ import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'experience/experienceshop.dart';
 
 

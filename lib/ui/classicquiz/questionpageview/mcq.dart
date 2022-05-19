@@ -10,7 +10,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+
 import 'package:http/http.dart' as http;
 
 import '../../../modal/classicquestion/ClassicQuestion.dart';
@@ -19,6 +19,7 @@ import 'dart:convert' as convert;
 
 import '../../../utils/countdowntimer.dart';
 import '../../duelmode/duelmoderesult/duelmode_result.dart';
+import '../../homepage/welcomeback_page.dart';
 
 class Mcq extends StatefulWidget{
   var quizid;

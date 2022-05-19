@@ -20,7 +20,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/StringConstants.dart';
-import '../../welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'dart:convert' as convert;
 class ExperiencePage extends StatefulWidget{
 
