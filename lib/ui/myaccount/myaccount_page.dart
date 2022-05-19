@@ -9,7 +9,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/userprofile/GetUserProfileResponse.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/aboutuspage/aboutuspage.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/changepassword/chnagepassword_screen.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/changepassword/changepassword_screen.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/helppage/helppage.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontact.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/managecontacts/managecontacts.dart';
@@ -168,18 +168,26 @@ print("flagicon"+flagicon);
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(left: 5.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const WelcomePage()));
-                              },
-                              child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+
+                            padding: EdgeInsets.all(5),
+                            child: Center(
+                              child: Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const WelcomePage()));
+                                  },
+                                  child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                                ),
+                              ),
                             ),
                           ),
                           Container(

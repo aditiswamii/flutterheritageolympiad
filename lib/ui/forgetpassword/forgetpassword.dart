@@ -8,6 +8,7 @@ import 'package:flutterheritageolympiad/ui/forgetpassword/forget_viewmodal.dart'
 import 'package:flutterheritageolympiad/ui/login/login_page.dart';
 import 'package:flutterheritageolympiad/ui/login/login_viewmodal.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/StringConstants.dart';
@@ -184,7 +185,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => const LoginPage()));
+            builder: (context) =>  LoginScreen()));
   }
 
 

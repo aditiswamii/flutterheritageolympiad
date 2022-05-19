@@ -167,7 +167,7 @@ GetUserLeagueResponse? userLeagueR;
           //height: 300,
             width: MediaQuery.of(context).size.width,
             //alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
            children: [
@@ -180,7 +180,7 @@ GetUserLeagueResponse? userLeagueR;
         },
                child: Container(
                  height: 150,
-          width: 150,
+          width: 160,
             color: ColorConstants.red200,
 
                  child: Column(
@@ -192,7 +192,7 @@ GetUserLeagueResponse? userLeagueR;
                        child: Image.asset("assets/images/mcq_pattern2.png",
                            height: 20,width: 20,alignment: Alignment.topRight),
                      ),
-                     Container(child: Text("MY ACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                     Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                      Container(
                        padding: EdgeInsets.all(10),
                        alignment: Alignment.topLeft,
@@ -213,7 +213,7 @@ GetUserLeagueResponse? userLeagueR;
                },
                child: Container(
                  height: 150,
-                   width: 150,
+                 width: 160,
                    color:ColorConstants.yellow200,
 
                  child:  Column(
@@ -225,7 +225,7 @@ GetUserLeagueResponse? userLeagueR;
                        child: Image.asset("assets/images/mcq_pattern2.png",
                            height: 20,width: 20,alignment: Alignment.topLeft),
                      ),
-                     Container(child: Text("MY FEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                     Container(child: Text("MY\nFEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                      Container(
                        padding: EdgeInsets.all(10),
                        alignment: Alignment.topRight,
@@ -244,7 +244,7 @@ GetUserLeagueResponse? userLeagueR;
         //height: 300,
         width: MediaQuery.of(context).size.width,
         //alignment: Alignment.center,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -257,7 +257,7 @@ GetUserLeagueResponse? userLeagueR;
               },
               child: Container(
                 height: 150,
-                width: 150,
+                width: 160,
                 color: ColorConstants.blue200,
 
                 child: Column(
@@ -269,7 +269,7 @@ GetUserLeagueResponse? userLeagueR;
                       child: Image.asset("assets/images/mcq_pattern2.png",
                           height: 20,width: 20,alignment: Alignment.topRight),
                     ),
-                    Container(child: Text("TO THE QUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                    Container(child: Text("TO THE\nQUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.topLeft,
@@ -294,7 +294,7 @@ GetUserLeagueResponse? userLeagueR;
               },
               child: Container(
                 height: 150,
-                width: 150,
+                width: 160,
                 color: Colors.black26,
 
                 child:  Column(
@@ -306,7 +306,7 @@ GetUserLeagueResponse? userLeagueR;
                       child: Image.asset("assets/images/mcq_pattern2.png",
                           height: 20,width: 20,alignment: Alignment.topLeft),
                     ),
-                    Container(child: Text("TO THE SHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                    Container(child: Text("TO THE\nSHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.topCenter,

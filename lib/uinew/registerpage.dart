@@ -754,7 +754,7 @@ class _State extends State<RegisterPage> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignupPage()));
+                                builder: (context) =>  Stepone()));
                       },
                       child: const Text(
                         "BACK",

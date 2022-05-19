@@ -11,6 +11,7 @@ import 'package:flutterheritageolympiad/ui/classicquiz/domainlist.dart';
 
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
+import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 import 'package:flutterheritageolympiad/ui/duelquiz/duel_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
@@ -34,6 +35,7 @@ class QuizPage extends StatefulWidget{
 
 
 class _State extends State<QuizPage> {
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   var username;
   var email;
   var country;
@@ -138,7 +140,7 @@ class _State extends State<QuizPage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown
     ]);
-    return Scaffold(
+    return Scaffold(   key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
@@ -150,7 +152,7 @@ class _State extends State<QuizPage> {
           ),
         ),
         child:Container(
-          margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: ListView(
               children: [
                 Row(
@@ -159,15 +161,24 @@ class _State extends State<QuizPage> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const WelcomePage()));
-                        },
-                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40),
+
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const WelcomePage()));
+                            },
+                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
@@ -176,7 +187,7 @@ class _State extends State<QuizPage> {
                       padding: EdgeInsets.only(right: 5.0),
                       child: GestureDetector(
                         onTap: () {
-                          Scaffold.of(context).openEndDrawer();
+                          _scaffoldKey.currentState!.openEndDrawer();
                         },
                         child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                       ),
@@ -199,7 +210,7 @@ class _State extends State<QuizPage> {
                   //height: 300,
                   width: MediaQuery.of(context).size.width,
                   //alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -215,7 +226,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 150,
+                          width: 160,
                           color: ColorConstants.red200,
 
                           child: Column(
@@ -234,11 +245,11 @@ class _State extends State<QuizPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  DuelModeResult(quizid: "1663",)));
+                                  builder: (context) =>  DuelModeMain()));
                         },
                         child: Container(
                           height: 150,
-                          width: 150,
+                          width: 160,
                           color:ColorConstants.yellow200,
 
                           child:  Column(
@@ -259,7 +270,7 @@ class _State extends State<QuizPage> {
                   //height: 300,
                   width: MediaQuery.of(context).size.width,
                   //alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -272,7 +283,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 150,
+                          width: 160,
                           color: ColorConstants.blue200,
 
                           child: Column(
@@ -295,7 +306,7 @@ class _State extends State<QuizPage> {
                         },
                         child: Container(
                           height: 150,
-                          width: 150,
+                          width: 160,
                           color: Colors.black26,
 
                           child:  Column(

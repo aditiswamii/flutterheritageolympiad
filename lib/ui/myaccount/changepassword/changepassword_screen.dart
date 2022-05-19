@@ -29,9 +29,9 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
   TextEditingController currentpasswordController = TextEditingController();
   TextEditingController newpasswordController = TextEditingController();
   TextEditingController confirmpasswordController = TextEditingController();
-  bool _passwordVisible1 = false;
-  bool _passwordVisible2 = false;
-  bool _passwordVisible3= false;
+  bool _passwordVisible1 = true;
+  bool _passwordVisible2 = true;
+  bool _passwordVisible3= true;
   bool value = false;
   var data;
   var changedata;
@@ -153,8 +153,8 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Container( color: Colors.white.withAlpha(100),
+          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: ListView(
 
               children: [
@@ -164,16 +164,24 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const WelcomePage()));
-                        },
-                        child: Image.asset(
-                            "assets/images/home_1.png", height: 40, width: 40),
+
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const WelcomePage()));
+                            },
+                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
@@ -184,25 +192,22 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                         onTap: () {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
-                        child: Image.asset(
-                            "assets/images/side_menu_2.png", height: 40,
-                            width: 40),
+                        child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                       ),
                     ),
                   ],
                 ),
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: const Text("CHANGE PASSWORD", style: TextStyle(
                         fontSize: 24, color: ColorConstants.txt))),
-                Flexible(child:
                 Container(
                   height: 40,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: TextFormField(
                     controller: currentpasswordController,
-                    obscureText: !_passwordVisible1,
+                    obscureText: _passwordVisible1,
                     obscuringCharacter: "*",
                     decoration: InputDecoration(
                       // hasFloatingPlaceholder: true,
@@ -210,21 +215,14 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                       border: InputBorder.none,
                       // labelText: "Password",
                       hintText: "Current Password*",
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _passwordVisible1 = true;
-                          });
-                        },
-                        onPanCancel: () {
-                          setState(() {
-                            _passwordVisible1 = false;
-                          });
-                        },
-                        child: Icon(
-                            _passwordVisible1 ? Icons.visibility : Icons
-                                .visibility_off),
-                      ),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                              _passwordVisible1 ?  Icons.visibility_off:Icons.visibility ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible1 = !_passwordVisible1;
+                            });
+                          }),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -234,14 +232,13 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                     // onSaved: (value) {
                     // _setPassword(value);
                     // },
-                  ),),),
-                Flexible(child:
+                  ),),
                 Container(
                   height: 40,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: TextFormField(
                     controller: newpasswordController,
-                    obscureText: !_passwordVisible2,
+                    obscureText: _passwordVisible2,
                     obscuringCharacter: "*",
                     decoration: InputDecoration(
                       // hasFloatingPlaceholder: true,
@@ -249,21 +246,14 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                       border: InputBorder.none,
                       // labelText: "Password",
                       hintText: "New Password*",
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _passwordVisible2 = true;
-                          });
-                        },
-                        onPanCancel: () {
-                          setState(() {
-                            _passwordVisible2 = false;
-                          });
-                        },
-                        child: Icon(
-                            _passwordVisible2 ? Icons.visibility : Icons
-                                .visibility_off),
-                      ),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                              _passwordVisible2 ?  Icons.visibility_off:Icons.visibility ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible2 = !_passwordVisible2;
+                            });
+                          }),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -273,14 +263,13 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                     // onSaved: (value) {
                     // _setPassword(value);
                     // },
-                  ),),),
-                Flexible(child:
+                  ),),
                 Container(
                   height: 40,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: TextFormField(
                     controller: confirmpasswordController,
-                    obscureText: _passwordVisible3?false:true,
+                    obscureText: _passwordVisible3,
                     obscuringCharacter: "*",
                     decoration: InputDecoration(
                       // hasFloatingPlaceholder: true,
@@ -288,17 +277,14 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                       border: InputBorder.none,
                       // labelText: "Password",
                       hintText: "Password",
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _passwordVisible3= true;
-                          });
-                        },
-
-                        child: Icon(
-                            _passwordVisible3 ? Icons.visibility : Icons
-                                .visibility_off),
-                      ),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                              _passwordVisible3 ?  Icons.visibility_off:Icons.visibility ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible3 = !_passwordVisible3;
+                            });
+                          }),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -308,7 +294,7 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                     // onSaved: (value) {
                     // _setPassword(value);
                     // },
-                  ),),),
+                  ),),
 
 
                 Container(

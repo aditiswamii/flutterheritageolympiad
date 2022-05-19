@@ -8,6 +8,8 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../uinew/loginpage.dart';
+
 
 void main() {
   runApp(const MaterialApp(
@@ -34,7 +36,7 @@ class _State extends State<SplashScreen> {
     !isLoggedIn ? Timer(
         const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>const LoginPage()))):
+            builder: (BuildContext context) => LoginScreen()))):
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (BuildContext context) =>const WelcomePage()));
   }

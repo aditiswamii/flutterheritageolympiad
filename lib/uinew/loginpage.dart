@@ -28,7 +28,7 @@ class LoginScreen extends StatefulWidget{
 
 class _State extends State<LoginScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _passwordVisible = false;
+  bool _passwordVisible = true;
   bool value = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -171,7 +171,7 @@ Loginuser(jsonDecode){
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: TextFormField(
                   controller: passwordController,
-                  obscureText: !_passwordVisible,
+                  obscureText: _passwordVisible,
                   obscuringCharacter: "*",
                   decoration: InputDecoration(
                     // hasFloatingPlaceholder: true,
@@ -179,21 +179,14 @@ Loginuser(jsonDecode){
                     //fillColor: Colors.grey.withOpacity(0.1),
                     // labelText: "Password",
                     hintText: "Password",
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _passwordVisible = true;
-                        });
-                      },
-                      onPanCancel: () {
-                        setState(() {
-                          _passwordVisible = false;
-                        });
-                      },
-                      child: Icon(
-                          _passwordVisible ? Icons.visibility : Icons
-                              .visibility_off),
-                    ),
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                            _passwordVisible ?  Icons.visibility_off:Icons.visibility ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        }),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {

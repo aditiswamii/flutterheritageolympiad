@@ -9,6 +9,8 @@ import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../uinew/loginpage.dart';
+
 void main() {
 
   runApp( MaterialApp(
@@ -35,7 +37,7 @@ class _State extends State<MySideMenuDrawer> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => LoginPage()));
+            builder: (context) => LoginScreen()));
   }
   @override
   Widget build(BuildContext context) {

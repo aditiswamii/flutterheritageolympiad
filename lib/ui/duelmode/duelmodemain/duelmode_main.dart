@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
 
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/steptwoinvite.dart';
+import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/invitepage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +21,7 @@ import 'dart:convert' as convert;
 
 import '../../../modal/createquizresponse/CreateQuizResponse.dart';
 import '../../../modal/domains/GetDomainsResponse.dart';
+import '../../../utils/StringConstants.dart';
 import '../../classicquiz/cquizrule/classicquizrule.dart';
 import '../../quiz/let_quiz.dart';
 class DuelModeMain extends StatefulWidget {
@@ -34,7 +35,8 @@ class _State extends State<DuelModeMain> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   // late ClassicQuizPresenter _presenter;
   var data;
-  var domains_length;
+  var domaindata;
+  var createdata;
   bool value = false;
   static int _len = 11;
   bool _expanded5 = false;
@@ -72,7 +74,7 @@ class _State extends State<DuelModeMain> {
   void initState() {
     super.initState();
     // _locations ;
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
     // _presenter = ClassicQuizPresenter(this);
     userdata();
     getDomains();
@@ -99,21 +101,26 @@ class _State extends State<DuelModeMain> {
   }
   void getDomains() async {
     http.Response response =
-    await http.get(Uri.parse("http://3.108.183.42/api/domains"));
+    await http.get(Uri.parse(StringConstants.BASE_URL+"domains"));
+
     if (response.statusCode == 200) {
-      data = response.body; //store response as string
-      setState(() {
-        domains_length = jsonDecode(
-            data!)['data'];
-        //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
-      });
-      var jsondata=getDomainsResponseFromJson(data!).data;
-      var jsondataa=datadomainFromJson(data!).id.toString();
-      log(jsondata.toString());
-      var venam = jsonDecode(data!)['data'][4]['name'];
-      log(venam);
-    } else {
+      data = response.body;
+      var jsonResponse = convert.jsonDecode(response.body);
+      if (jsonResponse['status'] == 200) {
+        //store response as string
+        setState(() {
+          domaindata = jsonResponse;
+          print(domaindata['data'].length); // just printed length of data
+        });
+      }else{
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+      }
+    }else {
       print(response.statusCode);
     }
   }
@@ -121,39 +128,42 @@ class _State extends State<DuelModeMain> {
   void createquiz(String userid, String quiz_type_id,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
     http.Response response =
-    await http.post(Uri.parse("http://3.108.183.42/api/createquiz"), body: {
+    await http.post(Uri.parse(StringConstants.BASE_URL+"createquiz"), body: {
       'user_id': userid.toString(),
       'quiz_type_id': quiz_type_id.toString(),
       'difficulty_level_id': difficulty_level_id.toString(),
       'quiz_speed_id': quiz_speed_id.toString(),
       'domains': domains.toString()
     });
+    Navigator.pop(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
+      data = response.body;
       if (jsonResponse['status'] == 200) {
-        Navigator.pop(context);
-        data = response.body; //store response as string
+
+      //store response as string
         setState(() {
-          domains_length = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(domains_length.length); // just printed length of data
+          createdata = jsonResponse; //get all the data from json string superheros
+          print("domiaindata: "+createdata['data'].toString()); // just printed length of data
         });
-        var userid = jsonDecode(data!)['data']['user_id'];
-        var quiz_type_id = jsonDecode(data!)['data']['quiz_type_id'];
-        var difficulty_level_id =
-        jsonDecode(data!)['data']['difficulty_level_id'];
-        var quiz_speed_id = jsonDecode(data!)['data']['quiz_speed_id'];
-        var quizid=createQuizResponseFromJson(data!).data!.id.toString();
-        onsuccess(quiz_type_id,quiz_speed_id,quizid);
+        print(createdata['data'].toString());
+        onsuccess(createdata);
+        // var userid = jsonDecode(data!)['data']['user_id'];
+        // var quiz_type_id = jsonDecode(data!)['data']['quiz_type_id'];
+        // var difficulty_level_id =
+        // jsonDecode(data!)['data']['difficulty_level_id'];
+        // var quiz_speed_id = jsonDecode(data!)['data']['quiz_speed_id'];
+        // var quizid=createQuizResponseFromJson(data!).data!.id.toString();
+        // onsuccess(quiz_type_id,quiz_speed_id,quizid);
 
         // var id = jsonDecode(data!)['data']['id'];
-        log(userid);
-        log(quiz_type_id);
-        log(difficulty_level_id);
-        log(quiz_speed_id);
-        print(userid);
+        // log(userid);
+        // log(quiz_type_id);
+        // log(difficulty_level_id);
+        // log(quiz_speed_id);
+        // print(userid);
       } else {
-        Navigator.pop(context);
+
         snackbar = SnackBar(
             content: Text(
               jsonResponse['message'].toString(),
@@ -162,15 +172,18 @@ class _State extends State<DuelModeMain> {
             .showSnackBar(snackbar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
-  onsuccess(quiz_type_id, quiz_speed_id, String quizid){
+  onsuccess(createdata){
+if(domaindata['data']!=null)
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  RulesPage(quizspeedid:quiz_speed_id, quiztypeid: quiz_type_id, quizid: quizid, type: "2" ,)));
+            builder: (context) =>  DuelModeInvite(quizspeedid:createdata['data']['quiz_speed_id'].toString(), quiztypeid: createdata['data']['quiz_type_id'].toString(), quizid:createdata['data']['id'].toString(), type: "2" ,)));
+
+
   }
 
   showLoaderDialog(BuildContext context) {
@@ -224,16 +237,24 @@ class _State extends State<DuelModeMain> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
-                      },
-                      child: Image.asset("assets/images/home_1.png",
-                          height: 40, width: 40),
+
+                    padding: EdgeInsets.all(5),
+                    child: Center(
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WelcomePage()));
+                          },
+                          child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -244,8 +265,7 @@ class _State extends State<DuelModeMain> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/images/side_menu_2.png",
-                          height: 40, width: 40),
+                      child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                     ),
                   ),
                 ],
@@ -254,12 +274,10 @@ class _State extends State<DuelModeMain> {
                 color: Colors.white70,
                 child: ListBody(
                   children: [
-
-
                     Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                        child: const Text("CLASSIC QUIZ",
+                        child: const Text("DUEL MODE",
                             style: TextStyle(
                                 fontSize: 24, color: ColorConstants.txt))),
                     Container(
@@ -304,7 +322,7 @@ class _State extends State<DuelModeMain> {
                             width: 1,
                           ),
                         ),
-                        child: domains_length == null || domains_length!.isEmpty
+                        child: domaindata == null || domaindata!.isEmpty
                             ? const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -346,15 +364,15 @@ class _State extends State<DuelModeMain> {
                               ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: domains_length == null
+                                itemCount: domaindata == null
                                     ? 0
-                                    : _expanded6==false?2:domains_length.length,
+                                    : _expanded6==false?2:domaindata.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Column(
                                     children: [
                                       Card(
                                           child: CheckboxListTile(
-                                              title: Text(jsonDecode(data!)['data']
+                                              title: Text(domaindata['data']
                                               [index]['name']),
                                               onChanged: (checked) {
                                                 setState(
@@ -364,11 +382,11 @@ class _State extends State<DuelModeMain> {
                                                   },
                                                 );
                                                 if(isChecked[index]==true) {
-                                                  domainname=jsonDecode(data!)['data']
+                                                  domainname=domaindata['data']
                                                   [index]['id'];
 
                                                   setState(() {
-                                                    domainname=jsonDecode(data!)['data']
+                                                    domainname=domaindata(data!)['data']
                                                     [index]['id'];
                                                   });
                                                   if(!domainnamelist.contains(domainname))
@@ -711,7 +729,7 @@ class _State extends State<DuelModeMain> {
                             child: const Text(
                               "GO BACK",
                               style: TextStyle(
-                                  color: ColorConstants.lightgrey200, fontSize: 14),
+                                  color: Colors.white, fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -775,7 +793,7 @@ class _State extends State<DuelModeMain> {
                             child: const Text(
                               "LET'S GO!",
                               style: TextStyle(
-                                  color: ColorConstants.lightgrey200, fontSize: 14),
+                                  color: Colors.white, fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                           ),

@@ -366,7 +366,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         ),
         child: Container(
           color: Colors.white.withAlpha(200),
-          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          margin: EdgeInsets.fromLTRB(20, 40, 20, 0),
           child: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Column(
@@ -377,16 +377,24 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const WelcomePage()));
-                        },
-                        child: Image.asset("assets/images/home_1.png",
-                            height: 40, width: 40),
+
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const WelcomePage()));
+                            },
+                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
@@ -397,8 +405,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                         onTap: () {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
-                        child: Image.asset("assets/images/side_menu_2.png",
-                            height: 40, width: 40),
+                        child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                       ),
                     ),
                   ],

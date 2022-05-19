@@ -197,16 +197,24 @@ class _State extends State<DuelModeResult> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
-                      },
-                      child: Image.asset("assets/images/home_1.png",
-                          height: 40, width: 40),
+
+                    padding: EdgeInsets.all(5),
+                    child: Center(
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WelcomePage()));
+                          },
+                          child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -217,8 +225,7 @@ class _State extends State<DuelModeResult> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/images/side_menu_2.png",
-                          height: 40, width: 40),
+                      child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                     ),
                   ),
                 ],

@@ -70,7 +70,7 @@ class _State extends State<InviteContactScreen> {
               ),
             ),
             child: Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: ListView(
 
                     children: [
@@ -80,17 +80,24 @@ class _State extends State<InviteContactScreen> {
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(left: 5.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (
-                                            context) => const WelcomePage()));
-                              },
-                              child: Image.asset(
-                                  "assets/images/home_1.png", height: 40, width: 40),
+
+                            padding: EdgeInsets.all(5),
+                            child: Center(
+                              child: Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const WelcomePage()));
+                                  },
+                                  child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                                ),
+                              ),
                             ),
                           ),
                           Container(
@@ -101,16 +108,14 @@ class _State extends State<InviteContactScreen> {
                               onTap: () {
                                 _scaffoldKey.currentState!.openEndDrawer();
                               },
-                              child: Image.asset(
-                                  "assets/images/side_menu_2.png", height: 40,
-                                  width: 40),
+                              child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                             ),
                           ),
                         ],
                       ),
                       Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
+                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                           child: const Text("INVITE CONTACTS", style: TextStyle(
                               fontSize: 24, color: ColorConstants.txt))),
                       Container(
@@ -211,7 +216,7 @@ class _State extends State<InviteContactScreen> {
                               child: const Text(
                                 "GO BACK",
                                 style: TextStyle(
-                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                    color: Colors.white, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -251,7 +256,7 @@ class _State extends State<InviteContactScreen> {
                               child: const Text(
                                 "LET'S GO!",
                                 style: TextStyle(
-                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                    color: Colors.white, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),

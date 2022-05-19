@@ -11,13 +11,14 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
 
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/steptwoinvite.dart';
+import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/invitepage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/welcomeback/welcomeback_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modal/createquizresponse/CreateQuizResponse.dart';
 import '../../modal/domains/GetDomainsResponse.dart';
+import '../../utils/StringConstants.dart';
 import '../quiz/let_quiz.dart';
 import 'cquizrule/classicquizrule.dart';
 import 'dart:convert' as convert;
@@ -70,7 +71,7 @@ class _State extends State<ClassicQuizMain> {
   void initState() {
     super.initState();
     // _locations ;
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
    // _presenter = ClassicQuizPresenter(this);
     userdata();
     getDomains();
@@ -97,7 +98,7 @@ class _State extends State<ClassicQuizMain> {
   }
   void getDomains() async {
     http.Response response =
-        await http.get(Uri.parse("http://3.108.183.42/api/domains"));
+        await http.get(Uri.parse(StringConstants.BASE_URL+"domains"));
     if (response.statusCode == 200) {
       data = response.body; //store response as string
       setState(() {
@@ -119,7 +120,7 @@ class _State extends State<ClassicQuizMain> {
   void createquiz(String userid, String quiz_type_id,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
     http.Response response =
-        await http.post(Uri.parse("http://3.108.183.42/api/createquiz"), body: {
+        await http.post(Uri.parse(StringConstants.BASE_URL+"createquiz"), body: {
       'user_id': userid.toString(),
       'quiz_type_id': quiz_type_id.toString(),
       'difficulty_level_id': difficulty_level_id.toString(),
@@ -222,16 +223,24 @@ class _State extends State<ClassicQuizMain> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
-                      },
-                      child: Image.asset("assets/images/home_1.png",
-                          height: 40, width: 40),
+
+                    padding: EdgeInsets.all(5),
+                    child: Center(
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WelcomePage()));
+                          },
+                          child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -242,8 +251,7 @@ class _State extends State<ClassicQuizMain> {
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child: Image.asset("assets/images/side_menu_2.png",
-                          height: 40, width: 40),
+                      child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                     ),
                   ),
                 ],

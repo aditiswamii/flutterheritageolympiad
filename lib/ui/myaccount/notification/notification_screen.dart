@@ -176,7 +176,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: ListView(
               children: [
                 Row(
@@ -185,17 +185,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WelcomePage()));
-                        },
+
+                      padding: EdgeInsets.all(5),
+                      child: Center(
                         child: Card(
-                          child: Image.asset(
-                              "assets/images/home_1.png", height: 40, width: 40),
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const WelcomePage()));
+                            },
+                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          ),
                         ),
                       ),
                     ),
@@ -207,9 +213,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         onTap: () {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
-                        child: Image.asset(
-                            "assets/images/side_menu_2.png", height: 40,
-                            width: 40),
+                        child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                       ),
                     ),
                   ],

@@ -18,6 +18,7 @@ import '../../../modal/classicquestion/getQuestionResponse.dart';
 import 'dart:convert' as convert;
 
 import '../../../utils/countdowntimer.dart';
+import '../../duelmode/duelmoderesult/duelmode_result.dart';
 
 class Mcq extends StatefulWidget{
   var quizid;
@@ -274,8 +275,16 @@ class _State extends State<Mcq> {
     }
   }
 onsuccess(savedata){
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (BuildContext context) => ResultPage(quizid: savedata['quiz_id'],savedata:savedata, )));
+    if(widget.type=="1"){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => ResultPage(quizid: savedata['quiz_id'],savedata:savedata, )));
+    }else if(widget.type=="2"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  DuelModeResult(quizid: widget.quizid,)));
+    }
+
 }
 
   @override

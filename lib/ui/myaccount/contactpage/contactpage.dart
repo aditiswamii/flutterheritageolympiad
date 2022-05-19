@@ -107,8 +107,8 @@ class _ContactPageState extends State<ContactPage> {
         flagicon=jsonDecode['flag_icon'].toString();
       });
       print("flagicon"+flagicon);
-      xpgainchart(userid.toString(), "");
-      getbadges(userid.toString(), "");
+      xpgainchart(userid.toString(), widget.contactid.toString());
+      getbadges(userid.toString(), widget.contactid.toString());
     }
   }
   deleteApi(String userid,String deleteid) async {
@@ -224,13 +224,14 @@ ondeletesuccess(){
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
         setState(() {
-          badgedata = jsonResponse['data']; //get all the data from json string superheros
+          badgedata =
+              jsonResponse; //get all the data from json string superheros
           print(badgedata.length);
           print(badgedata.toString());
-
+          print(badgedata['data'].toString());
 
           // onbadgesuccess(badgedata);
-          onbadgesuccess(getBadgeResponseFromJson(datab));
+          onbadgesuccess(badgedata);
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -252,11 +253,12 @@ ondeletesuccess(){
     }
 
   }
-  onbadgesuccess(GetBadgeResponse badgeResponseFromJson){
+  onbadgesuccess(badgedata){
     //  xplist=List.from(xpdata['data']['mnth']);
-    if(badgeResponseFromJson!=null)
-      print("badgedata : "+badgeResponseFromJson.data.toString());
-
+    if (badgedata != null) print("badgedata : " + badgedata['data'].toString());
+    print("badgedata : " + badgedata['data'][0]['image'].toString());
+    print("badgedata : " + badgedata['data'][0]['title'].toString());
+    print("badgedata : " + badgedata['data'][0]['description'].toString());
 
   }
   showLoaderDialog(BuildContext context) {
@@ -517,7 +519,30 @@ ondeletesuccess(){
                                     child: Text("YOUR BADGES",style: TextStyle(
                                         color: ColorConstants.txt,
                                         fontSize: 16)),
-                                  )
+                                  ),
+                                  GridView.builder(
+                                      physics: ClampingScrollPhysics(
+                                          parent:
+                                          BouncingScrollPhysics()),
+                                      itemCount:
+                                      badgedata['data'].length,
+                                      shrinkWrap: true,
+                                      gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3),
+                                      itemBuilder:
+                                          (BuildContext context,
+                                          int index) {
+                                        return Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: Container(
+                                            height: 50,
+                                            width: MediaQuery.of(context).size.width,
+                                            child: Image.network(
+                                              "${badgedata['data'][index]['image'].toString()}", height: 50,width: 50,),
+                                          ),
+                                        );
+                                      }),
                                 ],
                               ),
                             ),
