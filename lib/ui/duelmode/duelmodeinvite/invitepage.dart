@@ -23,9 +23,12 @@ import '../duelcontactlist/duelcontactlist.dart';
 class DuelModeInvite extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
+  var difficultylevelid;
   var quizid;
   var type;
-   DuelModeInvite({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid,required this.type}) : super(key: key);
+  var seldomain;
+   DuelModeInvite({Key? key,required this.quizspeedid,required this.quiztypeid,
+     required this.quizid,required this.type,required this.difficultylevelid,required seldomain}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -129,8 +132,9 @@ class _State extends State<DuelModeInvite> {
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt))),
               Container(
+                width: 350,
                 alignment: Alignment.center,
-                margin: EdgeInsets.fromLTRB(10, 30, 10, 30),
+                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
                 child:Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -139,7 +143,7 @@ class _State extends State<DuelModeInvite> {
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                       height: 150,
-                      width: 160,
+                      width: 150,
                       decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                           color: ColorConstants.lightgrey200
@@ -156,10 +160,10 @@ class _State extends State<DuelModeInvite> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                       height: 150,
-                      width: 160,
+                      width: 150,
                       decoration: const BoxDecoration(
                         shape: BoxShape.rectangle,
                           color: ColorConstants.lightgrey200
@@ -207,17 +211,19 @@ class _State extends State<DuelModeInvite> {
                         child: Row(
                              children: [
                             Text(
-                              "DIFFICULTY:",
+                              "DIFFICULTY: ",
                               style: TextStyle(
                                   color: ColorConstants.txt,
-                                  fontSize: 15),
+                                  fontSize: 15,fontWeight: FontWeight.w600),
                             ),
+
                             Text(
-                              "HARD",
+                              widget.difficultylevelid,
                               style: TextStyle(
                                   color: ColorConstants.txt,
                                   fontSize: 15),
                             ),
+
                           ],
                         ),
 
@@ -228,13 +234,13 @@ class _State extends State<DuelModeInvite> {
 
                           children: [
                             Text(
-                              "SPEED:",
+                              "SPEED: ",
                               style: TextStyle(
                                   color: ColorConstants.txt,
-                                  fontSize: 15),
+                                  fontSize: 15,fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              "REGULAR",
+                              widget.quizspeedid,
                               style: TextStyle(
                                   color: ColorConstants.txt,
                                   fontSize: 15),
@@ -254,18 +260,27 @@ class _State extends State<DuelModeInvite> {
                                 "DOMAINS SELECTED:",textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 15,),
+                                    fontSize: 15,fontWeight: FontWeight.w600),
                               ),
                             ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Knowlege traditions",textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: ColorConstants.txt,
-                                    fontSize: 15),
-                              ),
-                            ),
+                              ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: widget.seldomain == null
+    ? 0
+        : widget.seldomain.length,
+    itemBuilder: (BuildContext context, int index) {
+      return
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.seldomain[index]['name'].toString(), textAlign: TextAlign.left,
+            style: TextStyle(
+                color: ColorConstants.txt,
+                fontSize: 15),
+          ),
+        );
+    }),
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -312,10 +327,10 @@ class _State extends State<DuelModeInvite> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DuelModeMain()));
+                                builder: (context) => QuizPage()));
                       },
                       child: const Text(
-                        "EDIT QUIZ",
+                        "GO BACK",
                         style: TextStyle(
                             color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,

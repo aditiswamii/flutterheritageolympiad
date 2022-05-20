@@ -52,8 +52,8 @@ class _State extends State<DuelModeMain> {
 
   bool valuefalse=false;
   bool valuetrue=true;
-  var difficultylevelid;
-  var speedid;
+  var difficultylevelid="3";
+  var speedid="1";
   var snackbar;
   var username;
   var email;
@@ -63,7 +63,9 @@ class _State extends State<DuelModeMain> {
   var domainname;
   var domainnamelist =[].toList(growable: true);
   String domain="";
+  String domainid="";
   var selectedIndexes = [];
+
   List<bool> isChecked = List.generate(_len, (index) => false);
   // String _getTitle() =>
   //     "Checkbox Demo : Checked = ${isChecked.where((check) => check == true)}, Unchecked = ${isChecked.where((check) => check == false)}";
@@ -125,12 +127,11 @@ class _State extends State<DuelModeMain> {
     }
   }
 
-  void createquiz(String userid, String quiz_type_id,String  difficulty_level_id,
+  void createquiz(String userid,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL+"createquiz"), body: {
+    await http.post(Uri.parse(StringConstants.BASE_URL+"create_duel"), body: {
       'user_id': userid.toString(),
-      'quiz_type_id': quiz_type_id.toString(),
       'difficulty_level_id': difficulty_level_id.toString(),
       'quiz_speed_id': quiz_speed_id.toString(),
       'domains': domains.toString()
@@ -148,20 +149,6 @@ class _State extends State<DuelModeMain> {
         });
         print(createdata['data'].toString());
         onsuccess(createdata);
-        // var userid = jsonDecode(data!)['data']['user_id'];
-        // var quiz_type_id = jsonDecode(data!)['data']['quiz_type_id'];
-        // var difficulty_level_id =
-        // jsonDecode(data!)['data']['difficulty_level_id'];
-        // var quiz_speed_id = jsonDecode(data!)['data']['quiz_speed_id'];
-        // var quizid=createQuizResponseFromJson(data!).data!.id.toString();
-        // onsuccess(quiz_type_id,quiz_speed_id,quizid);
-
-        // var id = jsonDecode(data!)['data']['id'];
-        // log(userid);
-        // log(quiz_type_id);
-        // log(difficulty_level_id);
-        // log(quiz_speed_id);
-        // print(userid);
       } else {
 
         snackbar = SnackBar(
@@ -177,11 +164,21 @@ class _State extends State<DuelModeMain> {
     }
   }
   onsuccess(createdata){
+    print(createdata['data'].toString());
+    print(createdata['data']['dual_id'].toString());
+    print(createdata['data']['user'].toString());
+    print(createdata['data']['domain'].toString());
+    print(createdata['data']['quiz_speed'].toString());
+    print(createdata['data']['difficulty'].toString());
+    print(createdata['data']['quiz_type'].toString());
+    print(createdata['data']['created_date'].toString());
 if(domaindata['data']!=null)
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  DuelModeInvite(quizspeedid:createdata['data']['quiz_speed_id'].toString(), quiztypeid: createdata['data']['quiz_type_id'].toString(), quizid:createdata['data']['id'].toString(), type: "2" ,)));
+            builder: (context) =>  DuelModeInvite(quizspeedid:createdata['data']['quiz_speed'].toString(),
+              quiztypeid: createdata['data']['quiz_type'].toString(),
+              quizid:createdata['data']['dual_id'].toString(), type: "2", difficultylevelid:createdata['data']['difficulty'].toString(), seldomain: createdata['data']['domain'] ,)));
 
 
   }
@@ -310,178 +307,7 @@ if(domaindata['data']!=null)
                         ],
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.grey.withOpacity(0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: domaindata == null || domaindata!.isEmpty
-                            ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                            : SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              // Card(
-                              //     child: CheckboxListTile(
-                              //         title: Text("Select All"),
-                              //         onChanged: (checked) {
-                              //           setState(
-                              //                 () {
-                              //               _expanded7 =  checked!;
-                              //
-                              //             },
-                              //           );
-                              //           if(_expanded7==true) {
-                              //           isChecked = List
-                              //                 .generate(
-                              //                 _len, (index) => true);
-                              //           }else{
-                              //             isChecked = List
-                              //                 .generate(
-                              //                 _len, (index) => false);
-                              //           }
-                              //           if(_expanded7==true) {
-                              //             if(!domainnamelist.contains(domains_length))
-                              //               domainnamelist.addAll(domains_length);
-                              //
-                              //           }
-                              //           else {
-                              //             // if(domainnamelist.contains(domainname))
-                              //             domainnamelist.remove(domains_length);
-                              //           }
-                              //
-                              //         },
-                              //         value: _expanded7 )
-                              // ),
-                              ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: domaindata == null
-                                    ? 0
-                                    : _expanded6==false?2:domaindata.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Column(
-                                    children: [
-                                      Card(
-                                          child: CheckboxListTile(
-                                              title: Text(domaindata['data']
-                                              [index]['name']),
-                                              onChanged: (checked) {
-                                                setState(
-                                                      () {
-                                                    isChecked[index] = checked!;
-
-                                                  },
-                                                );
-                                                if(isChecked[index]==true) {
-                                                  domainname=domaindata['data']
-                                                  [index]['id'];
-
-                                                  setState(() {
-                                                    domainname=domaindata(data!)['data']
-                                                    [index]['id'];
-                                                  });
-                                                  if(!domainnamelist.contains(domainname))
-                                                    domainnamelist.add(domainname);
-
-                                                }
-                                                else {
-
-                                                  // if(domainnamelist.contains(domainname))
-                                                  domainnamelist.remove(domainname);
-                                                }
-
-
-                                              },
-                                              value: isChecked[index])
-                                      ),
-                                      //
-                                    ],
-                                  );
-                                },
-                              ),
-                              _expanded6==false? Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // if you need this
-                                      side: BorderSide(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child:GestureDetector(
-                                      onTap: (){
-                                        setState(() {
-                                          _expanded6=true;
-
-                                        });
-
-                                      },
-                                      child: Container(
-
-                                        margin: EdgeInsets.all(4),
-                                        child: Center(
-                                            child:Image.asset(
-                                              'assets/images/down_arrow.png',
-                                              height: 20,width: 20,
-                                              color: ColorConstants.txt,
-                                            )
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                              ):Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // if you need this
-                                      side: BorderSide(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child:GestureDetector(
-                                      onTap: (){
-                                        setState(() {
-                                          _expanded6=false;
-                                        });
-
-
-                                      },
-                                      child: Container(
-
-                                        margin: EdgeInsets.all(4),
-                                        child: Center(
-                                            child:Image.asset(
-                                              'assets/images/down_arrow_small.png',
-                                              height: 20,width: 20,
-                                              color: ColorConstants.txt,
-                                            )
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                              ),
-
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    domainwidget(domaindata),
 
                     Container(
                       alignment: Alignment.center,
@@ -774,16 +600,16 @@ if(domaindata['data']!=null)
                               print(domainnamelist.toString());
                               log("hi");
                               log(difficultylevelid);
-                              log(speedid);
+                              log("speedid"+speedid);
                               log(domainnamelist.toString());
-                              log("${domainnamelist.toString()}");
+                              log("${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
                               log(_getTitle());
                               if(domainnamelist!=null){
                                 if(speedid!=null){
                                   if(difficultylevelid!=null){
                                     showLoaderDialog(context);
 
-                                    createquiz(userid,"1", difficultylevelid, speedid,"${domainnamelist.toString()}");
+                                    createquiz(userid.toString(), difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
                                   }
                                 }
 
@@ -802,6 +628,157 @@ if(domaindata['data']!=null)
                     ),
                   ],
                 ),)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  Widget domainwidget(domaindata){
+   // List<bool> isChecked = List<bool>.filled(domaindata.length, false);
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          // if you need this
+          side: BorderSide(
+            color: Colors.grey.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: domaindata == null || domaindata!.isEmpty
+            ? const Center(
+          child: CircularProgressIndicator(),
+        )
+            : SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: domaindata == null
+                    ? 0
+                    : _expanded6==false?2:domaindata.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      Card(
+                          child: CheckboxListTile(
+                              title: Text(domaindata['data']
+                              [index]['name']),
+                              onChanged: (checked) {
+                                setState(
+                                      () {
+                                        isChecked[index] = checked!;
+
+                                  },
+                                );
+                                if(isChecked[index]==true) {
+                                  domainname=domaindata['data']
+                                  [index]['id'];
+                                  domainid=domaindata['data'][index]['id'].toString();
+
+                                  setState(() {
+                                    domainname=domaindata['data']
+                                    [index]['id'];
+                                    domainid=domaindata['data'][index]['id'].toString();
+                                  });
+                                  if(!domainnamelist.contains(domainname))
+                                    {
+                                      domainnamelist.add(domainname);
+                                      domainid=domainid;
+                                    }else{
+                                    domainid=domainid+","+domainid;
+                                  }
+
+
+                                }
+                                else {
+
+                                  // if(domainnamelist.contains(domainname))
+                                  domainnamelist.remove(domainname);
+                                }
+
+
+                              },
+                              value: isChecked[index])
+                      ),
+                      //
+                    ],
+                  );
+                },
+              ),
+              _expanded6==false? Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      // if you need this
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child:GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _expanded6=true;
+
+                        });
+
+                      },
+                      child: Container(
+
+                        margin: EdgeInsets.all(4),
+                        child: Center(
+                            child:Image.asset(
+                              'assets/images/down_arrow.png',
+                              height: 20,width: 20,
+                              color: ColorConstants.txt,
+                            )
+                        ),
+                      ),
+                    ),
+                  )
+              ):Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      // if you need this
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child:GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _expanded6=false;
+                        });
+
+
+                      },
+                      child: Container(
+
+                        margin: EdgeInsets.all(4),
+                        child: Center(
+                            child:Image.asset(
+                              'assets/images/down_arrow_small.png',
+                              height: 20,width: 20,
+                              color: ColorConstants.txt,
+                            )
+                        ),
+                      ),
+                    ),
+                  )
+              ),
+
+
             ],
           ),
         ),

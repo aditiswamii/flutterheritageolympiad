@@ -83,7 +83,7 @@ class _FilterTourState extends State<FilterTour> {
 
   void getDomains(String theme_id) async {
     http.Response response = await http.get(
-        Uri.parse(StringConstants.BASE_URL + "domains?theme_id=$theme_id"));
+        Uri.parse(StringConstants.BASE_URL + "feed_domains?theme_id=$theme_id"));
     showLoaderDialog(context);
     if (response.statusCode == 200) {
       domainname="";
