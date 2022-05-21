@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,11 +18,25 @@ import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/StringConstants.dart';
+import '../../myaccount/contactpage/contactpage.dart';
+import '../duelmodeinvite/invitepage.dart';
 
 
 class DuelModeSelectPlayer extends StatefulWidget {
-  const DuelModeSelectPlayer({Key? key}) : super(key: key);
+  var quiztypeid;
+  var quizspeedid;
+  var difficultylevelid;
+  var quizid;
+  var type;
+  var seldomain;
+
+  DuelModeSelectPlayer({Key? key,required this.quizspeedid,required this.quiztypeid,
+    required this.quizid,required this.type,required this.difficultylevelid,required seldomain}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -28,6 +45,98 @@ class DuelModeSelectPlayer extends StatefulWidget {
 class _State extends State<DuelModeSelectPlayer> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
+  var snackBar;
+  var contactdata;
+  var data;
+  var username;
+  var country;
+  var userid;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country =prefs.getString("country");
+      userid= prefs.getString("userid");
+    });
+  }
+  getUserlist(String userid) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "get_all_contacts"),
+        body: {'user_id': userid.toString()});
+    showLoaderDialog(context);
+
+    print("getUserlistapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        contactdata = jsonResponse[
+        'data'];
+        print("data" + contactdata.toString());
+        setState(() {
+          contactdata = jsonResponse[
+          'data'];
+        });
+        //get all the data from json string superheros
+        print("length" + contactdata.length.toString());
+        // onsuccess(jsonResponse);
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+        // onsuccess(null);
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  @override
+  void initState() {
+    super.initState();
+    // _locations ;
+    BackButtonInterceptor.add(myInterceptor);
+    // _presenter = ClassicQuizPresenter(this);
+
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+    // Do some stuff.
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,314 +235,163 @@ class _State extends State<DuelModeSelectPlayer> {
                   thickness: 2,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                decoration: const BoxDecoration(color: Colors.white),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // if you need this
-                    side: BorderSide(
-                      color: Colors.grey.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              height: 120,
-                              width: 120,
-                              child: CircleAvatar(
-                                radius: 30.0,
-                                backgroundImage:
-                                    AssetImage("assets/images/cat1.png"),
-                                backgroundColor: Colors.transparent,
+              contactdata==null?Container(): Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: ListView.builder(
+                      physics: ClampingScrollPhysics(
+                          parent: BouncingScrollPhysics()),
+                      shrinkWrap: true,
+                      itemCount: contactdata.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.grey.withOpacity(0.3),
+                                width: 1,
                               ),
                             ),
-                            // Image.asset("assets/profile.png",height: 100,width: 100,),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
-                              child: Column(
-                                children: [
-                                  Text("EUNGEUNG519"),
-                                  Row(
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text("GROUP 3"),
-                                      Text("|"),
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/india.png",
-                                            width: 10,
-                                            height: 10,
+                                      if(contactdata[index]['image']!="")
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          height: 90,
+                                          width: 90,
+                                          child:
+                                          CircleAvatar(
+                                            radius: 30.0,
+                                            backgroundImage:
+                                            NetworkImage("${contactdata[index]['image']}"),
+                                            backgroundColor: Colors.transparent,
                                           ),
-                                          Text("INDIA"),
-                                        ],
-                                      ),
+                                        ),
+                                      if(contactdata[index]['image']=="")
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          height: 90,
+                                          width: 90,
+                                          child:
+                                          CircleAvatar(
+                                            radius: 30.0,
+                                            backgroundImage:AssetImage("assets/images/placeholder.png"),
+                                            backgroundColor: Colors.transparent,
+                                          ),
+                                        ),
+                                      // Image.asset("assets/profile.png",height: 100,width: 100,),
+                                      Container(
+                                        width: 150,
+                                        margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                                        child: Column(
+                                          children: [
+                                            Container(alignment: Alignment.centerLeft,
+                                              child: Text("${contactdata[index]['name']}",style: TextStyle(
+                                                  color: ColorConstants.txt,
+                                                  fontSize: 16,fontWeight: FontWeight.w600),
+                                                textAlign: TextAlign.center,),
+                                            ),
+                                            Container(
+                                              height: 20,
+                                              child: Row(
+                                                children: [
+                                                  if(contactdata[index]['age_group']!=null)
+                                                    Text("${contactdata[index]['age_group']}",style: TextStyle(
+                                                        color: ColorConstants.txt,
+                                                        fontSize: 14),
+                                                      textAlign: TextAlign.center,),
+                                                  VerticalDivider(color: Colors.black),
+                                                  // Text("|"),
+                                                  Row(
+                                                    children: [
+                                                      if(contactdata[index]['flag_icon']!=null)
+                                                        Container(
+                                                            height: 20,width: 20,
+                                                            decoration: BoxDecoration(
+                                                                shape: BoxShape.circle
+                                                            ),
+                                                            child:
+                                                            CircleAvatar(
+                                                              radius: 20.0,
+                                                              backgroundImage:
+                                                              NetworkImage("${contactdata[index]['flag_icon']}"),
+                                                              backgroundColor: Colors.transparent,
+                                                            )
+                                                        ),
+                                                      if(contactdata[index]['country']!=null)
+                                                        Text("${contactdata[index]['country']}",style: TextStyle(
+                                                            color: ColorConstants.txt,
+                                                            fontSize: 14),
+                                                          textAlign: TextAlign.center,),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            if(contactdata[index]['status']!=null)
+                                              Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "${contactdata[index]['status']}",
+                                                  style: TextStyle(
+                                                      color: ColorConstants.txt),
+                                                ),
+                                              ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: ColorConstants.yellow200,
+                                                onPrimary: Colors.white,
+                                                elevation: 3,
+                                                alignment: Alignment.center,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(30.0)),
+                                                fixedSize: const Size(100, 40),
+                                                //////// HERE
+                                              ),
+                                              onPressed: () {
+                                                AlertDialog errorDialog = AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0)), //this right here
+                                                    title: Container(
+                                                        height: 250,
+                                                        width: 250,
+                                                        alignment: Alignment.center,
+                                                        child: DialogDuelInviteSent()));
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) =>
+                                                    errorDialog);
+                                              },
+                                              child: const Text(
+                                                "SEND INVITE",
+                                                style: TextStyle(
+                                                    color: ColorConstants.lightgrey200,
+                                                    fontSize: 14),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                  Text(
-                                    "AVAILABLE",
-                                    style: TextStyle(
-                                        color: ColorConstants.verdigris),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: ColorConstants.yellow200,
-                                      onPrimary: Colors.white,
-                                      elevation: 3,
-                                      alignment: Alignment.center,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0)),
-                                      fixedSize: const Size(100, 40),
-                                      //////// HERE
-                                    ),
-                                    onPressed: () {
-                                      AlertDialog errorDialog = AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  20.0)), //this right here
-                                          title: Container(
-                                              height: 250,
-                                              width: 250,
-                                              alignment: Alignment.center,
-                                              child: DialogDuelInviteSent()));
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                          errorDialog);
-                                    },
-                                    child: const Text(
-                                      "SEND INVITE",
-                                      style: TextStyle(
-                                          color: ColorConstants.lightgrey200,
-                                          fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                decoration: const BoxDecoration(color: Colors.white),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // if you need this
-                    side: BorderSide(
-                      color: Colors.grey.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              height: 120,
-                              width: 120,
-                              child: CircleAvatar(
-                                radius: 30.0,
-                                backgroundImage:
-                                    AssetImage("assets/images/cat1.png"),
-                                backgroundColor: Colors.transparent,
-                              ),
+                                ),
+                              ],
                             ),
-                            // Image.asset("assets/profile.png",height: 100,width: 100,),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
-                              child: Column(
-                                children: [
-                                  Text("EUNGEUNG519"),
-                                  Row(
-                                    children: [
-                                      Text("GROUP 3"),
-                                      Text("|"),
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/india.png",
-                                            width: 10,
-                                            height: 10,
-                                          ),
-                                          Text("INDIA"),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    "AVAILABLE",
-                                    style: TextStyle(
-                                        color: ColorConstants.verdigris),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: ColorConstants.yellow200,
-                                      onPrimary: Colors.white,
-                                      elevation: 3,
-                                      alignment: Alignment.center,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0)),
-                                      fixedSize: const Size(100, 40),
-                                      //////// HERE
-                                    ),
-                                    onPressed: () {
-                                      AlertDialog errorDialog = AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  20.0)), //this right here
-                                          title: Container(
-                                              height: 250,
-                                              width: 250,
-                                              alignment: Alignment.center,
-                                              child: DialogDuelInviteSent()));
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                          errorDialog);
-                                    },
-                                    child: const Text(
-                                      "SEND INVITE",
-                                      style: TextStyle(
-                                          color: ColorConstants.lightgrey200,
-                                          fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                decoration: const BoxDecoration(color: Colors.white),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // if you need this
-                    side: BorderSide(
-                      color: Colors.grey.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              height: 120,
-                              width: 120,
-                              child: CircleAvatar(
-                                radius: 30.0,
-                                backgroundImage:
-                                    AssetImage("assets/images/cat1.png"),
-                                backgroundColor: Colors.transparent,
-                              ),
-                            ),
-                            // Image.asset("assets/profile.png",height: 100,width: 100,),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
-                              child: Column(
-                                children: [
-                                  Text("EUNGEUNG519"),
-                                  Row(
-                                    children: [
-                                      Text("GROUP 3"),
-                                      Text("|"),
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/india.png",
-                                            width: 10,
-                                            height: 10,
-                                          ),
-                                          Text("INDIA"),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    "BUSY",
-                                    style:
-                                        TextStyle(color: ColorConstants.yellow200),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: ColorConstants.yellow200,
-                                      onPrimary: Colors.white,
-                                      elevation: 3,
-                                      alignment: Alignment.center,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0)),
-                                      fixedSize: const Size(100, 40),
-                                      //////// HERE
-                                    ),
-                                    onPressed: () {
-                                      AlertDialog errorDialog = AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      20.0)), //this right here
-                                          title: Container(
-                                              height: 250,
-                                              width: 250,
-                                              alignment: Alignment.center,
-                                              child: DialogDuelInviteSent()));
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              errorDialog);
-                                    },
-                                    child: const Text(
-                                      "SEND INVITE",
-                                      style: TextStyle(
-                                          color: ColorConstants.lightgrey200,
-                                          fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                          ),
+                        );}
+                  )
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 120, 0, 10),
@@ -456,7 +414,8 @@ class _State extends State<DuelModeSelectPlayer> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => QuizPage()));
+                                builder: (context) =>  DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
                       },
                       child: const Text(
                         "EDIT QUIZ",

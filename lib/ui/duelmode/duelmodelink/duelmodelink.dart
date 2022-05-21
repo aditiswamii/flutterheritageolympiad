@@ -209,7 +209,7 @@ class _State extends State<DuelModeLink> {
                 margin: const EdgeInsets.fromLTRB(0, 120, 0, 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -235,30 +235,30 @@ class _State extends State<DuelModeLink> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.verdigris,
-                        onPrimary: Colors.white,
-                        elevation: 3,
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(100, 40),
-                        //////// HERE
-                      ),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DuelModeSelectPlayer()));
-                      },
-                      child: const Text(
-                        "LET'S GO!",
-                        style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: ColorConstants.verdigris,
+                    //     onPrimary: Colors.white,
+                    //     elevation: 3,
+                    //     alignment: Alignment.center,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(30.0)),
+                    //     fixedSize: const Size(100, 40),
+                    //     //////// HERE
+                    //   ),
+                    //   onPressed: () {
+                    //     Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>  DuelModeSelectPlayer()));
+                    //   },
+                    //   child: const Text(
+                    //     "LET'S GO!",
+                    //     style: TextStyle(
+                    //         color: ColorConstants.lightgrey200, fontSize: 14),
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

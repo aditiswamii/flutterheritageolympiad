@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +17,9 @@ import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 
+import '../../../utils/StringConstants.dart';
 import '../../quiz/let_quiz.dart';
 import '../duelcontactlist/duelcontactlist.dart';
-
-
 
 class DuelModeInvite extends StatefulWidget {
   var quiztypeid;
@@ -27,6 +28,7 @@ class DuelModeInvite extends StatefulWidget {
   var quizid;
   var type;
   var seldomain;
+
    DuelModeInvite({Key? key,required this.quizspeedid,required this.quiztypeid,
      required this.quizid,required this.type,required this.difficultylevelid,required seldomain}) : super(key: key);
 
@@ -37,6 +39,7 @@ class DuelModeInvite extends StatefulWidget {
 class _State extends State<DuelModeInvite> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
+
   @override
   void initState() {
     super.initState();
@@ -154,7 +157,8 @@ class _State extends State<DuelModeInvite> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const DuelModeSelectPlayer()));
+                                    builder: (context) =>  DuelModeSelectPlayer(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
                           },
                           child: Text("INVITE",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
                     ),
@@ -310,7 +314,7 @@ class _State extends State<DuelModeInvite> {
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -336,30 +340,30 @@ class _State extends State<DuelModeInvite> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.verdigris,
-                        onPrimary: Colors.white,
-                        elevation: 3,
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(100, 40),
-                        //////// HERE
-                      ),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
-                      },
-                      child: const Text(
-                        "LET'S GO!",
-                        style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: ColorConstants.verdigris,
+                    //     onPrimary: Colors.white,
+                    //     elevation: 3,
+                    //     alignment: Alignment.center,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(30.0)),
+                    //     fixedSize: const Size(100, 40),
+                    //     //////// HERE
+                    //   ),
+                    //   onPressed: () {
+                    //     Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => const WelcomePage()));
+                    //   },
+                    //   child: const Text(
+                    //     "LET'S GO!",
+                    //     style: TextStyle(
+                    //         color: ColorConstants.lightgrey200, fontSize: 14),
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
