@@ -159,13 +159,78 @@ String packagename="";
                           children: [
                             Center(child: Text("${widget.savedata["xp"]} XP")),
 
-                            Center(child: Text("oh boy!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                0.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <
+                                    10.0)
+                              Center(child: Text("oh boy!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                10.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <
+                                    50.0)
+                              Center(child: Text("Don't give up!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) ==
+                                50.0)
+                              Center(
+                                  child: Text("Practice makes perfect!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                50.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <=
+                                    90.0)
+                              Center(child: Text("Almost there!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                90.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <=
+                                    100.0)
+                              Center(child: Text("Keep it up!")),
                           ],
                         ),
                         back: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(child: Text("${widget.savedata["per"]}")),
+                            Center(child: Text("${widget.savedata["per"]} %")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                0.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <
+                                    10.0)
+                              Center(child: Text("oh boy!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                10.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <
+                                    50.0)
+                              Center(child: Text("Don't give up!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) ==
+                                50.0)
+                              Center(
+                                  child: Text("Practice makes perfect!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                50.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <=
+                                    90.0)
+                              Center(child: Text("Almost there!")),
+                            if (double.parse(widget.savedata["per"]
+                                .toString()) >
+                                90.0 &&
+                                double.parse(widget.savedata["per"]
+                                    .toString()) <=
+                                    100.0)
+                              Center(child: Text("Keep it up!")),
                           ],
                         ),
                       ),

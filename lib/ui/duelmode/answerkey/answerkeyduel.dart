@@ -37,7 +37,7 @@ class _State extends State<AnswerkeyDuel> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String? data;
-  var domains_length;
+  var answerdata;
   var username;
   var email;
   var country;
@@ -72,9 +72,9 @@ class _State extends State<AnswerkeyDuel> {
     if (response.statusCode == 200) {
       data = response.body; //store response as string
       setState(() {
-        domains_length = jsonDecode(
+        answerdata = jsonDecode(
             data!)['data']; //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
+        print(answerdata.length); // just printed length of data
       });
 
       var venam = jsonDecode(data!)['data'];
@@ -134,7 +134,7 @@ class _State extends State<AnswerkeyDuel> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                         decoration: const BoxDecoration(color: Colors.white),
-                        child: domains_length == null || domains_length!.isEmpty
+                        child: answerdata == null || answerdata!.isEmpty
                             ? const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -142,9 +142,9 @@ class _State extends State<AnswerkeyDuel> {
                           child: ListView.builder(
                             physics: ClampingScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: domains_length == null
+                            itemCount: answerdata == null
                                 ? 0
-                                : domains_length.length,
+                                : answerdata.length,
                             itemBuilder:
                                 (BuildContext context, int index) {
                               return Container(

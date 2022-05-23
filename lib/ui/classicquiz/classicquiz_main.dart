@@ -698,7 +698,7 @@ class _State extends State<ClassicQuizMain> {
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
+                            color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -762,7 +762,7 @@ class _State extends State<ClassicQuizMain> {
                       child: const Text(
                         "LET'S GO!",
                         style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
+                            color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

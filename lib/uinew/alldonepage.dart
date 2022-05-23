@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/emailresend/emailresend_dialog.dart';
-import 'package:flutterheritageolympiad/ui/alldone/alldone_presenter.dart';
-import 'package:flutterheritageolympiad/ui/alldone/alldone_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+
+
 
 import 'package:flutterheritageolympiad/uinew/registerpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';

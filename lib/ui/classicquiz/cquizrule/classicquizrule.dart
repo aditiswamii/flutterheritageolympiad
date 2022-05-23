@@ -40,7 +40,7 @@ class _State extends State<RulesPage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String? data;
-  var domains_length;
+  var ruledata;
   var username;
   var email;
   var country;
@@ -72,9 +72,9 @@ class _State extends State<RulesPage> {
     if (response.statusCode == 200) {
       data = response.body; //store response as string
       setState(() {
-        domains_length = jsonDecode(
+        ruledata = jsonDecode(
             data!)['data']; //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
+        print(ruledata.length); // just printed length of data
       });
       var venam = jsonDecode(data!)['data'];
       print(venam);
@@ -129,10 +129,10 @@ class _State extends State<RulesPage> {
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
 
-              Container(
+              ruledata==null?Container():   Container(
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 decoration: const BoxDecoration(color: Colors.white),
-                child: domains_length == null || domains_length!.isEmpty
+                child: ruledata == null || ruledata!.isEmpty
                     ? const Center(
                   child: CircularProgressIndicator(),
                 )
@@ -140,12 +140,12 @@ class _State extends State<RulesPage> {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: domains_length == null
+                    itemCount: ruledata == null
                         ? 0
-                        : domains_length.length,
+                        : ruledata.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container( margin:  EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Expanded(child: Text("${index+1})""${jsonDecode(data!)['data'][index]}")));
+                          child: Text("${index+1})""${jsonDecode(data!)['data'][index]}"));
                     },
                   ),
                 ),
@@ -207,7 +207,7 @@ class _State extends State<RulesPage> {
                       child: const Text(
                         "START",
                         style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
+                            color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

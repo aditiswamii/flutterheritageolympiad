@@ -1,12 +1,12 @@
 
 import 'dart:developer';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/forgetpassword/forget_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/login/login_page.dart';
-import 'package:flutterheritageolympiad/ui/login/login_viewmodal.dart';
+
 
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,73 +33,29 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
   var data;
   TextEditingController emailController = TextEditingController();
   late ForgetPasswordPresenter  _presenter;
-  // forgetpass(String email) async {
-  //   http.Response response = await http.post(
-  //       Uri.parse(StringConstants.BASE_URL + "forgetPassword"),
-  //       body: {
-  //         'email': email.toString()
-  //       });
-  //   showLoaderDialog(context);
-  //
-  //   print("changepassapi");
-  //   var jsonResponse = convert.jsonDecode(response.body);
-  //   if (response.statusCode == 200) {
-  //     Navigator.pop(context);
-  //     data = response.body;
-  //     if (jsonResponse['status'] == 200) {
-  //       forgetdata = jsonResponse[
-  //       'data'];
-  //       print("data" + forgetdata.toString());
-  //       setState(() {
-  //         forgetdata = jsonResponse[
-  //         'data'];
-  //       });
-  //
-  //       //get all the data from json string superheros
-  //       print("length" + forgetdata.length.toString());
-  //
-  //
-  //     } else {
-  //       snackBar = SnackBar(
-  //         content: Text(
-  //           jsonResponse['message'].toString(),textAlign: TextAlign.center,),
-  //       );
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(snackBar);
-  //       // onsuccess(null);
-  //       log(jsonResponse['message']);
-  //     }
-  //   } else {
-  //     Navigator.pop(context);
-  //     print(response.statusCode);
-  //   }
-  // }
-  // showLoaderDialog(BuildContext context) {
-  //   AlertDialog alert = AlertDialog(
-  //     content: new Row(
-  //       children: [
-  //         CircularProgressIndicator(),
-  //         Container(
-  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-  //       ],
-  //     ),
-  //   );
-  //   showDialog(
-  //     barrierDismissible: false,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
 
   @override
   void initState() {
     super.initState();
+    BackButtonInterceptor.add(myInterceptor);
     _presenter = ForgetPasswordPresenter(this);
+
     //autoLogIn();
   }
 
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    // Do some stuff.
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +72,7 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child: Container(color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 100, 20, 10),
           child: Column(
             children: [
@@ -162,7 +118,15 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
                     //////// HERE
                   ),
                   onPressed: () {
-                   _presenter.forgetpassword(emailController.text.toString());
+                    if(emailController.text.isNotEmpty){
+                      _presenter.forgetpassword(context,emailController.text.toString());
+                    }else{
+                      snackBar = SnackBar(
+                        content: Text("Please enter email"),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
                     // _presenter.login(emailController.text.toString(),
                     //     passwordController.text.toString());
                   },
@@ -182,10 +146,15 @@ class _State extends State<ForgetPassword> implements ForgetPasswordView{
 
   @override
   void forget() {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>  LoginScreen()));
+    snackBar = SnackBar(
+      content: Text("Change password link has been sent to your email. Please check your email!"),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) =>  LoginScreen()));
+
   }
 
 

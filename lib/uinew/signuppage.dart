@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/ui/alldone/alldone.dart';
-import 'package:flutterheritageolympiad/ui/almostthere/almostthere_page.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+
 import 'package:flutterheritageolympiad/uinew/alldonepage.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:flutterheritageolympiad/uinew/registerpage.dart';
@@ -102,7 +100,7 @@ class _State extends State<Stepone> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child: Container(color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 100, 20, 10),
           child: Column(children: [
             Container(
@@ -214,13 +212,16 @@ class _State extends State<Stepone> {
                   if (usernameController.text.isNotEmpty) {
                     if(passwordController.text.isNotEmpty ){
                     if (passwordController.text.toString() == repeatpasswordController.text.toString()) {
-                      steponeapi(emailController.text.toString(),
-                          usernameController.text.toString(),
-                          repeatpasswordController.text.toString());
-                      // _presenter.register(
-                      //     emailController.text.toString(),
-                      //     usernameController.text.toString(),
-                      //     passwordController.text.toString());
+                      if(value==true){
+                        steponeapi(emailController.text.toString(),
+                            usernameController.text.toString(),
+                            repeatpasswordController.text.toString());
+                      }else{
+                        const snackBar = SnackBar(
+                          content: Text('Please agree to term and conditions'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     } else {
                       const snackBar = SnackBar(
                         content: Text('Please check password'),

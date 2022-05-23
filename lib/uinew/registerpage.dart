@@ -7,10 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/getcitylist/GetCityResponse.dart';
 import 'package:flutterheritageolympiad/modal/getstate/GetStateResponse.dart';
-import 'package:flutterheritageolympiad/ui/alldone/alldone.dart';
-import 'package:flutterheritageolympiad/ui/almostthere/almostthere_presenter.dart';
-import 'package:flutterheritageolympiad/ui/almostthere/almostthere_viewmodal.dart';
-import 'package:flutterheritageolympiad/ui/signup/signup_page.dart';
 import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
@@ -69,6 +65,7 @@ class _State extends State<RegisterPage> {
   String date = "";
   DateTime selectedDate = DateTime.now();
   bool valuenews = false;
+
   void getCity(GetCityResponse, var statid) async {
     http.Response response =
         await http.get(Uri.parse("http://3.108.183.42/api/city/$statid"));
@@ -183,7 +180,7 @@ class _State extends State<RegisterPage> {
 
   onsuccess(Data? data) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => WelcomePage()));
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   _selectDate(BuildContext context) async {

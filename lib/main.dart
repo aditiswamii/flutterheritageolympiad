@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/ui/login/login_page.dart';
+
 import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 
@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
+
   runApp( MaterialApp(
     theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
@@ -38,7 +39,7 @@ class _State extends State<MyApp> {
   void autoLogIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool? loggedin = prefs.getBool('loggedin');
-    print(loggedin);
+    // print(loggedin.toString());
     if (loggedin != true) {
       setState(() {
         isLoggedIn=false;

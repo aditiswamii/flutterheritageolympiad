@@ -12,6 +12,7 @@ import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../modal/classicquestion/ClassicQuestion.dart';
 import '../../../modal/classicquestion/getQuestionResponse.dart';
@@ -63,6 +64,7 @@ class _State extends State<Mcq> {
   var currentques;
   var hasTimerStopped = false;
   var queslist;
+  var snackBar;
   Duration? duration;
   var secrem=30;
   var selectans="0";
@@ -141,33 +143,25 @@ class _State extends State<Mcq> {
       });
       print("current ques"+"${currentques}");
     } else {
+
      // print("index"+answer[5]);
-      answerstring = "";
-      for (var i = 0; i < answer.length; i++) {
-        if(answerstring.isEmpty){
-          answerstring = answer[i].toString();
-        } else {
-          answerstring = answerstring + "," + answer[i].toString();
-        }
+      PassValue();
 
-
-      }
-      saveresult(widget.quizid, answerstring);
-      print(answerstring);
     }
-
-   // queslist=  List.generate(
-   //     (questions..shuffle()).length,
-   //        (index) =>
-   //            currentques = questions[index]
-   //
-   //  );
-
-
-
-
+  }
+  PassValue(){
+    answerstring = "";
+    for (var i = 0; i < answer.length; i++) {
+      if(answerstring.isEmpty){
+        answerstring = answer[i].toString();
+      } else {
+        answerstring = answerstring + "," + answer[i].toString();
+      }
 
 
+    }
+    saveresult(widget.quizid, answerstring);
+    print(answerstring);
   }
   void _resetQuiz() {
     setState(() {
@@ -192,49 +186,23 @@ class _State extends State<Mcq> {
       Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
-        decRes = jsonDecode(response.body);
-        quesdata = jsonDecode(data!)['data'];
+        decRes = jsonResponse;
+        quesdata = jsonResponse['data'];
         setState(() {
-          _questionIndex = 0;
-          questions = jsonDecode(data!)['data']['question'];
-          totalques = jsonDecode(data!)['data']['total_question'];
-          totalquesinquiz = jsonDecode(data!)['data']['total_question_in_quiz'];
-          questime = jsonDecode(data!)['data']['time'];
-          quiztype = jsonDecode(data!)['data']['quiz_type'];
-          questionlistlen = questions.length;
+          quesdata = jsonResponse['data'];
+          onquestion(quesdata);
+
         });
-        answer = List.filled(questions.length, 0, growable: false);
-        // for (var i = 0; i < questions.length; i++) {
-        //   answer[i] = 0;
-        // }
-        myDuration = Duration(seconds: questime);
-        print(questions.toString());
-        print(decRes);
-        c = Colors.black;
-
-       // randomItem = (questions..shuffle()).first;
-       // questionlistlen = questions.length;
-       //  print(randomItem['question']);
-       //  print(randomItem['question_media']);
-       //  print(randomItem['width']);
-       //  print(randomItem['height']);
-       //  print(randomItem['option1']);
-       //  print(randomItem['option1_media']);
-       //  print(randomItem['option2']);
-       //  print(randomItem['option2_media']);
-       //  print(randomItem['option3']);
-       //  print(randomItem['option3_media']);
-       //  print(randomItem['option4']);
-       //  print(randomItem['option4_media']);
-       //  print(randomItem['right_option']);
-       //  print(randomItem['hint']);
-       //  print(randomItem['question_media_type']);
-       //  print(randomItem['why_right']);
-       //  print(randomItem['type']);
-       //  print(randomItem['id']);
-        reloadques();
+        print(jsonResponse['data'].toString());
 
 
+      }else{
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
       }
     } else {
       Navigator.pop(context);
@@ -242,6 +210,25 @@ class _State extends State<Mcq> {
     }
   }
 
+  onquestion(quesdata) {
+    if (quesdata != null) {
+    setState(() {
+      _questionIndex = 0;
+      questions = quesdata['question'];
+      totalques = quesdata['total_question'];
+      totalquesinquiz = quesdata['total_question_in_quiz'];
+      questime = quesdata['time'];
+      quiztype = quesdata['quiz_type'];
+      questionlistlen = questions.length;
+      answer = List.filled(questions.length, 0, growable: false);
+      myDuration = Duration(seconds: questime);
+      print(questions.toString());
+      print(decRes);
+    });
+    c = Colors.black;
+    reloadques();
+  }
+  }
   void saveresult(String quiz_id,String quiz_answer) async {
     http.Response response =
     await http.post(Uri.parse("http://3.108.183.42/api/save_result"),
@@ -287,12 +274,42 @@ onsuccess(savedata){
     }
 
 }
+  showMessageDialog(BuildContext context) async {
 
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    AlertDialog alert=AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 10.0),
+      title: Text("Do you want to submit?",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton(onPressed: (){
+              
+            },
+                child: Text("Yes",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700))),
+            TextButton(onPressed: (){
+              Navigator.pop(context);
+            }, child: Text("No",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700))),
+          ],
+        ),
+      ],
+    );
+    showDialog(
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
     countdownTimer!.cancel();
+    super.dispose();
+
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
@@ -323,7 +340,7 @@ onsuccess(savedata){
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         toolbarHeight: 70,
-        backgroundColor: decRes!=null?ramdomcolor:Colors.white,
+        backgroundColor: ramdomcolor,
         elevation: 0.0,
         actions: [
           Container(
@@ -338,7 +355,8 @@ onsuccess(savedata){
           ),
         ],
       ),
-      body:Container(
+      body: currentques==""? Container()
+          : Container(
         decoration:  BoxDecoration(
           color: ramdomcolor,
         ),
@@ -346,10 +364,7 @@ onsuccess(savedata){
             margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [
-                questions==null? const Center(
-                  child: CircularProgressIndicator(),
-                )
-                    :  Container(
+                Container(
                     margin: EdgeInsets.fromLTRB(0,20,0,0),
                     height: 40,
                     width: 70,
@@ -373,27 +388,6 @@ onsuccess(savedata){
                                 fontSize: 24),
                           ),
                           SizedBox(height: 20),
-                          // TweenAnimationBuilder<Duration>(
-                          //     duration: Duration(seconds:questime),
-                          //     tween: Tween(begin: Duration(seconds:questime), end: Duration(seconds: 0)),
-                          //     onEnd: () {
-                          //       reloadques();
-                          //      // initState();
-                          //      // Duration(seconds: 30);
-                          //       // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          //       //     builder: (BuildContext context) =>Mcq(quizid: widget.quizid,)));
-                          //     },
-                          //     builder: (BuildContext context, Duration value, Widget? child) {
-                          //       final minutes = value.inMinutes;
-                          //       final seconds = value.inSeconds % 60;
-                          //       return Padding(
-                          //           padding: const EdgeInsets.symmetric(vertical: 5),
-                          //           child: Text('${seconds} Sec',
-                          //               textAlign: TextAlign.center,
-                          //               style: TextStyle(
-                          //                   color: ramdomcolor,
-                          //                   fontSize:15)));
-                          //     }),
 
                         ],
                       ),
@@ -515,7 +509,7 @@ onsuccess(savedata){
                           //Image.asset("assets/images/left_arrow.png",height: 40,width: 40),
                         ),
                       ),
-                      if( currentques['hint']!=null)
+                      if( currentques['hint'].toString().isNotEmpty)
                         Container(
                           alignment: Alignment.center,
                           child: GestureDetector(
@@ -554,7 +548,7 @@ onsuccess(savedata){
                                 width: 100,
                               )),
                         ),
-                      if(currentques['hint']==null)
+                      if(currentques['hint'].toString().isEmpty)
                         Container(
                           alignment: Alignment.center,
                           child: GestureDetector(
