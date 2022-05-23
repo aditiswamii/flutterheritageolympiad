@@ -58,6 +58,7 @@ class _State extends State<DuelModeSelectPlayer> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+    getUserlist(userid.toString());
   }
   getUserlist(String userid) async {
     http.Response response = await http.post(
@@ -418,36 +419,36 @@ class _State extends State<DuelModeSelectPlayer> {
                                   quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
                       },
                       child: const Text(
-                        "EDIT QUIZ",
+                        "GO BACK",
                         style: TextStyle(
                             color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.verdigris,
-                        onPrimary: Colors.white,
-                        elevation: 3,
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(100, 40),
-                        //////// HERE
-                      ),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DuelModeResult(quizid: "",)));
-                      },
-                      child: const Text(
-                        "LET'S GO!",
-                        style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: ColorConstants.verdigris,
+                    //     onPrimary: Colors.white,
+                    //     elevation: 3,
+                    //     alignment: Alignment.center,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(30.0)),
+                    //     fixedSize: const Size(100, 40),
+                    //     //////// HERE
+                    //   ),
+                    //   onPressed: () {
+                    //     Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => DuelModeResult(quizid: "",)));
+                    //   },
+                    //   child: const Text(
+                    //     "LET'S GO!",
+                    //     style: TextStyle(
+                    //         color: ColorConstants.lightgrey200, fontSize: 14),
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

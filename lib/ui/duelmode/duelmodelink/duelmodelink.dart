@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,16 +16,20 @@ import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../duelcontactlist/duelcontactlist.dart';
+import '../duelmodeinvite/invitepage.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: DuelModeLink(),
-  ));
-}
+
 
 class DuelModeLink extends StatefulWidget {
-  const DuelModeLink({Key? key}) : super(key: key);
+  var quiztypeid;
+  var quizspeedid;
+  var difficultylevelid;
+  var quizid;
+  var type;
+  var seldomain;
+  var link;
+ DuelModeLink({Key? key,required this.quizspeedid,required this.quiztypeid,
+   required this.quizid,required this.type,required this.difficultylevelid,required seldomain,required this.link}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -34,13 +39,27 @@ class _State extends State<DuelModeLink> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String link="cul.tre/ejojkx";
-  // Future<void> share() async {
-  //   await FlutterShare.share(
-  //       title: 'share',
-  //       text: 'share text',
-  //       linkUrl: '$link',
-  //       chooserTitle: 'Choose link share plateform');
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // _locations ;
+    BackButtonInterceptor.add(myInterceptor);
+    // _presenter = ClassicQuizPresenter(this);
+
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+    // Do some stuff.
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,10 +245,11 @@ class _State extends State<DuelModeLink> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DuelModeMain()));
+                                builder: (context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
                       },
                       child: const Text(
-                        "EDIT QUIZ",
+                        "GO BACK",
                         style: TextStyle(
                             color: ColorConstants.lightgrey200, fontSize: 14),
                         textAlign: TextAlign.center,

@@ -16,7 +16,10 @@ import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'dart:convert' as convert;
 import '../../../utils/StringConstants.dart';
 import '../../quiz/let_quiz.dart';
 import '../duelcontactlist/duelcontactlist.dart';
@@ -39,7 +42,78 @@ class DuelModeInvite extends StatefulWidget {
 class _State extends State<DuelModeInvite> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  var data;
+  var link;
+  var gendata;
+  var snackBar;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country =prefs.getString("country");
+      userid= prefs.getString("userid");
+    });
+    generatelink(userid.toString(), widget.quizid.toString());
+  }
+  void generatelink(String userid,String dualid) async {
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL+"generate_link"), body: {
+      'user_id': userid.toString(),
+      'dual_id': dualid.toString()
+    });
+    Navigator.pop(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
 
+        //store response as string
+        setState(() {
+          gendata = jsonResponse; //get all the data from json string superheros
+          print("domiaindata: "+gendata['data']['link'].toString()); // just printed length of data
+        });
+        onsuccess(gendata);
+      } else {
+
+        snackBar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+
+      print(response.statusCode);
+    }
+  }
+  onsuccess(gendata){
+    if(gendata['data']!=null)
+      link=gendata['data']['link'];
+
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -177,7 +251,8 @@ class _State extends State<DuelModeInvite> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const DuelModeLink()));
+                                    builder: (context) =>  DuelModeLink(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link,)));
                             // Navigator.pushReplacement(
                             //     context,
                             //     MaterialPageRoute(

@@ -752,7 +752,7 @@ class _State extends State<ClassicQuizMain> {
                             if(difficultylevelid!=null){
                               showLoaderDialog(context);
 
-                              createquiz(userid,"1", difficultylevelid, speedid,"${domainnamelist.toString()}");
+                              createquiz(userid,"1", difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
                             }
                           }
 
