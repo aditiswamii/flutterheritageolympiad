@@ -199,13 +199,7 @@ if(domaindata['data']!=null)
       },
     );
   }
-  //final String text;
-  //   SecondScreen({Key key, @required this.text}) : super(key: key);
-//Navigator.push(
-//     context,
-//     MaterialPageRoute(
-//       builder: (context) => SecondScreen(text: 'Hello',),
-//     ));
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(

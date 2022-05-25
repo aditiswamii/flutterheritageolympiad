@@ -321,7 +321,7 @@ onsuccess(savedata){
 
   @override
   void didUpdateWidget(Mcq oldWidget) {
-    BackButtonInterceptor.remove(myInterceptor);
+    // BackButtonInterceptor.remove(myInterceptor);
     super.didUpdateWidget(oldWidget);
     if(secrem==0){
       secrem=questime;

@@ -510,11 +510,8 @@ print("flagicon"+flagicon);
                                 leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                     onTap: (){
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) => PaymentScreen()));
-                                    },
+
+                                       },
                                     child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt),)),
                               )
                           ),

@@ -64,6 +64,16 @@ class _State extends State<ManageContactScreen> {
     // getFeed(userid.toString(), "0", "", "", "");
   }
 
+  contactnumber(BuildContext context,String text) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(text.isNotEmpty){
+      prefs.setString("contactnum", text);
+    }else{
+      prefs.setString("contactnum", "0");
+    }
+
+
+  }
   getUserlist(String userid) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "get_all_contacts"),
@@ -87,7 +97,7 @@ class _State extends State<ManageContactScreen> {
         //get all the data from json string superheros
         print("length" + contactdata.length.toString());
        // onsuccess(jsonResponse);
-
+       contactnumber(context, contactdata.length.toString());
       } else {
         snackBar = SnackBar(
           content: Text(

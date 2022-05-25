@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   var updata;
   var notifyid="";
   int ischecked=0;
+  var contactnum;
+  bool check=false;
+  String notificationId="";
   List<Data>? getnotidata;
   var snackBar;
   userdata() async {
@@ -43,6 +47,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       username = prefs.getString("username");
       country = prefs.getString("country");
       userid = prefs.getString("userid");
+      contactnum=prefs.getString("contactnum");
     });
 
     getnotification(userid.toString());
@@ -64,6 +69,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             data!)['data']; //get all the data from json string superheros
         print(updata.length);
       });
+      getnotification(userid.toString());
       var venam = jsonDecode(data!)['data'];
       print(venam);
       //last_id
@@ -91,8 +97,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           print(gnotidata.length);
         });
         onsuccess(getNotificationResponseFromJson(data).data);
-        var venam = gnotidata(data!)['data'];
-        print(venam.toString());
+        // var venam = gnotidata(data!)['data'];
+        // print(venam.toString());
       } else {
         onsuccess(null);
         snackBar = SnackBar(
@@ -116,6 +122,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     });
     print(getnotidata.toString());
   }
+
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -135,7 +143,41 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-
+  hintdialog(BuildContext context,String text) {
+    AlertDialog alert = AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                20.0)),
+      content: Container(
+         child: Text("Missing out your favourite ${text.toLowerCase()}? Stay updated with latest posts by turning on the notifications."
+           ,style:TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
+      ),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("OK"))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+ // ischeckfun (int? ischecked, int index, int index1) async{
+ //   if(ischecked==0){
+ //     setState(() {
+ //       ischecked=1;
+ //     });
+ //
+ //   }else{
+ //     setState(() {
+ //       ischecked=0;
+ //     });
+ //   }
+ // }
   @override
   void initState() {
     super.initState();
@@ -224,14 +266,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     children: [
                       Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                           child: const Text("NOTIFICATIONS", style: TextStyle(
                               fontSize: 24, color: Colors.black))),
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Text(
-                            "You have 50 contacts.You may remove,\nblock or report them",
+                            "You have $contactnum contacts.You may remove,\nblock or report them",
                             style: TextStyle(fontSize: 15,
                                 color: ColorConstants.txt)
                         ),
@@ -270,7 +312,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                   ),
                                                              GestureDetector(
                                                                onTap: (){
-
+                                                                 hintdialog(context,getnotidata![index].title!);
                                                                },
                                                                 child: Container(
                                                                   width: 20,
@@ -300,59 +342,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                               itemBuilder:
                                                                   (BuildContext context,
                                                                   int index1) {
-                                                                return
-                                                                  Column(
-                                                                    children: [
-                                                                      Container(
-                                                                        alignment: Alignment.centerLeft,
-                                                                        child:  Row(
-                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                          children: [
-                                                                            Text(
-                                                                              getnotidata![index].data![index1].title!,
-                                                                              style:
-                                                                              TextStyle(fontSize: 18),
-                                                                            ),
-                                                                            GestureDetector(
-                                                                              onTap: (){
-                                                                              //  ischecked= getnotidata![index].data![index1].isChecked!;
-                                                                                //  if((getnotidata![index].data![index1].isChecked!)==0){
-                                                                                //
-                                                                                //    setState(() {
-                                                                                //      ischecked=1;
-                                                                                //   });
-                                                                                //
-                                                                                // }else{
-                                                                                //   setState(() {
-                                                                                //     ischecked=0;
-                                                                                //   });
-                                                                                //
-                                                                                // }
-                                                                              },
-                                                                              child: getnotidata![index].data![index1].isChecked== 0?Container(
-                                                                                width: 20,
-                                                                                height: 20,
-                                                                                child: Image.asset(
-                                                                                  "assets/images/check_box.png",
-                                                                                  height: 20,
-                                                                                  width: 20,
-                                                                                ),
-                                                                              ):Container(
-                                                                                width: 20,
-                                                                                height: 20,
-                                                                                child: Image.asset(
-                                                                                  "assets/images/check_box_with_tick.png",
-                                                                                  height: 20,
-                                                                                  width: 20,
-                                                                                ),
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        ),
-
-                                                                      ),
-                                                                    ],
-                                                                  );
+                                                                return ischeck(context, index, index1,getnotidata![index].data!.length);
 
                                                               }),
                                                         )
@@ -392,7 +382,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               child: const Text(
                                 "GO BACK",
                                 style: TextStyle(
-                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                    color: Colors.white, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -408,12 +398,50 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 //////// HERE
                               ),
                               onPressed: () {
-                                updatenotify(userid.toString(), notifyid);
+                                notificationId = "";
+                                for (var i = 0; i < getnotidata!.length; i++) {
+                                List<Data1>? daobj  = getnotidata![i].data;
+                                  for(var j = 0; j < daobj!.length;j++){
+                                    if(daobj[j].isChecked==1){
+                                        if(notificationId.isEmpty){
+                                          notificationId = ""+daobj[j].id.toString();
+                                        } else {
+                                          notificationId = notificationId+","+daobj[j].id.toString();
+                                        }
+                                    }
+                                  //  Log.e("ischecked",""+daobj[i].id +" "+daobj[i].is_checked)
+                                  }
+                                }
+                                log(notificationId);
+
+
+
+
+                                // for (var i = 0; i < getnotidata![i].data!.length; i++){
+                                //   if(getnotidata![i].data![i].isChecked==1){
+                                //     if(notificationId.isEmpty){
+                                //       notificationId = ""+getnotidata![i].data![i].id.toString();
+                                //     } else {
+                                //       notificationId = notificationId+","+getnotidata![i].data![i].id.toString();
+                                //     }
+                                //   }
+                                //   log(notificationId);
+                                // }
+                                if(notificationId.length>0){
+                                   updatenotify(userid.toString(), notificationId);
+                                } else {
+                                  snackBar = SnackBar(
+                                    content: Text(
+                                        "please select notification settings"),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
                               },
                               child: const Text(
-                                "LET'S GO!",
+                                "SAVE",
                                 style: TextStyle(
-                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                    color: Colors.white, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -433,6 +461,80 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
       ),
     );
+  }
+
+  Widget ischeck(BuildContext context,int index,int index1, int length){
+    // ischecked=getnotidata![index].data![index1].isChecked!;
+     List<bool> isChecked = List.generate(length, (index) => false);
+    // if(ischecked==0){
+    //   isChecked[index1]=false;
+    // }else{
+    //   isChecked[index1]=true;
+    // }
+    // ischecked=0;
+    return  Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                getnotidata![index].data![index1].title!,
+                style:
+                TextStyle(fontSize: 18),
+              ),
+              GestureDetector(
+                onTap: (){
+                if(getnotidata![index].data![index1].isChecked==0){
+                  getnotidata![index].data![index1].isChecked = 1;
+                } else {
+                  getnotidata![index].data![index1].isChecked = 0;
+                }
+
+
+                  log("tap"+ getnotidata![index].data![index1].isChecked.toString());
+                 // isChecked[index1]=!isChecked[index1];
+                  // ischeckfun(ischecked,index,index1);
+                  //
+                  if(ischecked==0){
+                    setState(() {
+                      ischecked=1;
+                    });
+                    log(ischecked.toString());
+                  }else{
+                    setState(() {
+                      ischecked=0;
+                    });
+                    log(ischecked.toString());
+                  }
+                },
+                child: getnotidata![index].data![index1].isChecked==0?
+                Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/check_box.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                ):Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/check_box_with_tick.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+
+        ),
+      ],
+    );
+
   }
 }
 

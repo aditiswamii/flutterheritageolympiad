@@ -73,7 +73,7 @@ class _State extends State<Stepone> {
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
     //autoLogIn();
   }
   @override

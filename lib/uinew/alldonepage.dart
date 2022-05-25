@@ -87,7 +87,7 @@ var userid;
   void initState() {
     super.initState();
 
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
     //autoLogIn();
   }
   @override

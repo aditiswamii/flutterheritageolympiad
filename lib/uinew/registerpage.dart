@@ -201,7 +201,7 @@ class _State extends State<RegisterPage> {
     getCountry(GetCountryList);
     super.initState();
 
-    BackButtonInterceptor.remove(myInterceptor);
+    BackButtonInterceptor.add(myInterceptor);
 
     //autoLogIn();
   }
