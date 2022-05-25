@@ -18,6 +18,7 @@ import 'package:flutterheritageolympiad/ui/myaccount/payment/payment_screen.dart
 import 'package:flutterheritageolympiad/ui/myaccount/personalinfo/personalinfo.dart';
 
 import 'package:flutterheritageolympiad/ui/myaccount/privacy/privacy_page.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/yourpage/chart.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/yourpage/yourpage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
@@ -63,7 +64,7 @@ class _AccountPageState extends State<MyAccountPage> {
   }
   getUserProfile(String userid) async {
 
-    showLoaderDialog(context);
+   // showLoaderDialog(context);
     http.Response response =
     await http.post(
         Uri.parse(StringConstants.BASE_URL + "user_profile"),body: {
@@ -71,7 +72,7 @@ class _AccountPageState extends State<MyAccountPage> {
     });
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       data = response.body;
       //final responseJson = json.decode(response.body);//store response as string
       setState(() {
@@ -86,7 +87,7 @@ class _AccountPageState extends State<MyAccountPage> {
       var venam = jsonDecode(data!)['data'];
       print(venam);
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       print(response.statusCode);
     }
 
@@ -510,7 +511,10 @@ print("flagicon"+flagicon);
                                 leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
                                 title:GestureDetector(
                                     onTap: (){
-
+                                      // Navigator.pushReplacement(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>  BarChartDemo()));
                                        },
                                     child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt),)),
                               )
@@ -606,7 +610,7 @@ print("flagicon"+flagicon);
                                 leading: Image.asset("assets/images/share1.png",height: 30,width: 30,),
                                 title: GestureDetector(
                                     onTap: (){
-                                      Share.share('https://cultre.app', subject: 'share');
+                                      Share.share('https://cultre.app/cul.tre/2', subject: 'share');
                                       //Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
                                     },
                                     child: Text("SHARE",style: TextStyle(color:ColorConstants.txt),)),

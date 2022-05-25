@@ -409,24 +409,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           notificationId = notificationId+","+daobj[j].id.toString();
                                         }
                                     }
-                                  //  Log.e("ischecked",""+daobj[i].id +" "+daobj[i].is_checked)
+
                                   }
                                 }
                                 log(notificationId);
-
-
-
-
-                                // for (var i = 0; i < getnotidata![i].data!.length; i++){
-                                //   if(getnotidata![i].data![i].isChecked==1){
-                                //     if(notificationId.isEmpty){
-                                //       notificationId = ""+getnotidata![i].data![i].id.toString();
-                                //     } else {
-                                //       notificationId = notificationId+","+getnotidata![i].data![i].id.toString();
-                                //     }
-                                //   }
-                                //   log(notificationId);
-                                // }
                                 if(notificationId.length>0){
                                    updatenotify(userid.toString(), notificationId);
                                 } else {

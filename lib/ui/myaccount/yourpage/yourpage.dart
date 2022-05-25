@@ -14,11 +14,12 @@ import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+
 import 'dart:convert' as convert;
 
 import '../../../modal/userprofile/GetUserProfileResponse.dart';
 import '../../../utils/StringConstants.dart';
+import 'chart.dart';
 
 class YourPage extends StatefulWidget {
   const YourPage({Key? key}) : super(key: key);
@@ -49,12 +50,59 @@ class _YourPageState extends State<YourPage> {
   var snackBar;
   List<num>? xplist;
   GetBadgeResponse? badgeResponse;
+  GetXpGainChartResponse? getXpGainChartResponse;
+  // final List<BarChartModel> data = [
+  //   BarChartModel(
+  //     xp: 250,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Color(0xFF47505F)), month: '',
+  //   ),
+  //   BarChartModel(
+  //     year: "2015",
+  //     financial: 300,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Colors.red),
+  //   ),
+  //   BarChartModel(
+  //     year: "2016",
+  //     financial: 100,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Colors.green),
+  //   ),
+  //   BarChartModel(
+  //     year: "2017",
+  //     financial: 450,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Colors.yellow),
+  //   ),
+  //   BarChartModel(
+  //     year: "2018",
+  //     financial: 630,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Colors.lightBlueAccent),
+  //   ),
+  //   BarChartModel(
+  //     year: "2019",
+  //     financial: 1000,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Colors.pink),
+  //   ),
+  //   BarChartModel(
+  //     year: "2020",
+  //     financial: 400,
+  //     color: charts.ColorUtil.fromDartColor
+  //       (Colors.purple),
+  //   ),
+  // ];
+
   final List<String> goallist = <String>[
     'Monthly',
     'Weekly',
     'Daily'
   ]; //for goal list
-  var goalname; // selected goal
+  var goalname;
+  //TooltipBehavior _tooltipBehavior=TooltipBehavior(enable: true);
+// selected goal
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -133,7 +181,7 @@ class _YourPageState extends State<YourPage> {
           print("max" + jsonResponse['data']['max'].toString());
           print("totalquiz" + jsonResponse['data']['totalquiz'].toString());
 
-          onxpsuccess(xpdata);
+          onxpsuccess(xpdata,getXpGainChartResponseFromJson(data!));
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -150,7 +198,10 @@ class _YourPageState extends State<YourPage> {
     }
   }
 
-  onxpsuccess(xpdata) {
+  onxpsuccess(xpdata, GetXpGainChartResponse? getXpGainChartR) {
+    setState(() {
+      getXpGainChartResponse=getXpGainChartR;
+    });
     //  xplist=List.from(xpdata['data']['mnth']);
     print("mnth : " + xpdata['data']['mnth'].toString());
     print("userdata" + xpdata['data']['totalxp'].toString());
@@ -641,6 +692,43 @@ class _YourPageState extends State<YourPage> {
                                                     color: ColorConstants.txt,
                                                     fontSize: 16)),
                                           ),
+                                          // Container(
+                                          //     child: SfCartesianChart(
+                                          //
+                                          //         primaryXAxis: CategoryAxis(),
+                                          //         // Chart title
+                                          //         title: ChartTitle(text: 'Half yearly sales analysis'),
+                                          //         // Enable legend
+                                          //         legend: Legend(isVisible: true),
+                                          //         // Enable tooltip
+                                          //         tooltipBehavior: _tooltipBehavior,
+                                          //
+                                          //         series: <LineSeries<GetXpGainChartResponse, String>>[
+                                          //           LineSeries<GetXpGainChartResponse, String>(
+                                          //               dataSource:  <GetXpGainChartResponse>[
+                                          //                 //"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                                          //
+                                          //         xpdata("Jan",getXpGainChartResponse!.data!.mnth![1].xp),
+                                          //         xpdata("Feb",getXpGainChartResponse!.data!.mnth![2].xp),
+                                          //         xpdata("Mar", getXpGainChartResponse!.data!.mnth![3].xp),
+                                          //         xpdata("Apr",getXpGainChartResponse!.data!.mnth![4].xp),
+                                          //         xpdata("May",getXpGainChartResponse!.data!.mnth![5].xp),
+                                          //         xpdata("Jun",getXpGainChartResponse!.data!.mnth![6].xp),
+                                          //         xpdata("Jul",getXpGainChartResponse!.data!.mnth![7].xp),
+                                          //         xpdata("Aug",getXpGainChartResponse!.data!.mnth![8].xp),
+                                          //         xpdata("Sep",getXpGainChartResponse!.data!.mnth![9].xp),
+                                          //         xpdata("Oct",getXpGainChartResponse!.data!.mnth![10].xp),
+                                          //                 xpdata("Nov",getXpGainChartResponse!.data!.mnth![11].xp),
+                                          //                 xpdata("Dec",getXpGainChartResponse!.data!.mnth![0].xp)
+                                          //               ],
+                                          //               xValueMapper: (GetXpGainChartResponse xpl, _) => xpl.data!.mnth.toString(),
+                                          //               yValueMapper: (GetXpGainChartResponse xpl, _) => xpl.data!.max,
+                                          //               // Enable data label
+                                          //               dataLabelSettings: DataLabelSettings(isVisible: true)
+                                          //           )
+                                          //         ]
+                                          //     )
+                                          // )
                                           // xplist==null?Container():  Container(
                                           //     child: SfSparkLineChart(data:xplist,color: Colors.black,))
                                           //
@@ -684,21 +772,25 @@ class _YourPageState extends State<YourPage> {
                                                     color: ColorConstants.txt,
                                                     fontSize: 16)),
                                           ),
-                                          // if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
-                                          //   Container(
-                                          //       margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                          //       child: GFProgressBar(
-                                          //         percentage:
-                                          //         (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
-                                          //         lineHeight: 30,
-                                          //         alignment: MainAxisAlignment.spaceBetween,
-                                          //         child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                                          //           style: TextStyle(fontSize: 18, color: Colors.white),
-                                          //         ),
-                                          //         backgroundColor: Colors.black12,
-                                          //         progressBarColor: ColorConstants.verdigris,
-                                          //       )
-                                          //   ),
+                                          if(((goalsummarydata['data']
+                                          ['play'] *
+                                              100) /
+                                              (goalsummarydata['data']
+                                              ['total']))<1)
+                                            Container(
+                                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                                child: GFProgressBar(
+                                                  percentage:
+                                                  (goalsummarydata['data']['play']!/goalsummarydata['data']['total']!)*(0.3).toDouble(),
+                                                  lineHeight: 30,
+                                                  alignment: MainAxisAlignment.spaceBetween,
+                                                  child: Text('${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}', textAlign: TextAlign.left,
+                                                    style: TextStyle(fontSize: 18, color: Colors.white),
+                                                  ),
+                                                  backgroundColor: Colors.black12,
+                                                  progressBarColor: ColorConstants.verdigris,
+                                                )
+                                            ),
 
                                           if (((goalsummarydata['data']
                                                           ['play'] *
@@ -747,7 +839,7 @@ class _YourPageState extends State<YourPage> {
                                           borderRadius: BorderRadius.circular(
                                               20.0)), //this right here
                                       title: Container(
-                                        height: 100,
+                                        height: 150,
                                         width: 100,
                                         padding: EdgeInsets.all(8),
                                         alignment: Alignment.center,
@@ -875,7 +967,24 @@ class _YourPageState extends State<YourPage> {
                                     fixedSize: const Size(160, 30),
                                     //////// HERE
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if(numquizcontroller.text.isNotEmpty){
+                                      if(goalname!=null){
+                                        setgoals(userid.toString(), numquizcontroller.text.toString(), goalname);
+                                      }else{
+                                        snackBar = SnackBar(
+                                          content: Text("please select goal period"),
+                                        );
+                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      }
+                                    }else{
+                                      snackBar = SnackBar(
+                                        content: Text("please fill no. of quizzes"),
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    }
+
+                                  },
                                   child: const Text(
                                     "SAVE CHANGES",
                                     style: TextStyle(

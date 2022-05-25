@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,11 @@ class _PrivacyPageState extends State<PrivacyPage> {
   var data;
   var gnotidata;
   int ischecked=0;
+  String PrivacyId="";
   List<Data>? getnotidata;
   //List<Data1>? getnotidata1;
   var snackBar;
+  var updata;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -46,6 +49,34 @@ class _PrivacyPageState extends State<PrivacyPage> {
     });
 
     getprivacy(userid.toString());
+  }
+  updateprivacy(String userid, String privacy_id) async {
+    showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "privacy"), body: {
+      'user_id': userid.toString(),
+      'privacy_id': privacy_id.toString()
+    });
+
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      //final responseJson = json.decode(response.body);//store response as string
+      setState(() {
+        updata = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(updata.length);
+      });
+      getprivacy(userid.toString());
+      var venam = jsonDecode(data!)['data'];
+      print(venam);
+      //last_id
+
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+
   }
   getprivacy(String userid) async {
 
@@ -64,8 +95,8 @@ class _PrivacyPageState extends State<PrivacyPage> {
           print(gnotidata.length);
         });
         onsuccess(getPrivacyResponseFromJson(data).data);
-        var venam = gnotidata(data!)['data'];
-        print(venam.toString());
+        // var venam = gnotidata(data!)['data'];
+        // print(venam.toString());
       } else {
         onsuccess(null);
         snackBar = SnackBar(
@@ -273,59 +304,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                       int index1) {
-                                                    return
-                                                      Column(
-                                                        children: [
-                                                          Container(
-                                                            alignment: Alignment.centerLeft,
-                                                            child:  Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  getnotidata![index].data1![index1].title!,
-                                                                  style:
-                                                                  TextStyle(fontSize: 18),
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: (){
-                                                                    //  ischecked= getnotidata![index].data![index1].isChecked!;
-                                                                    //  if((getnotidata![index].data![index1].isChecked!)==0){
-                                                                    //
-                                                                    //    setState(() {
-                                                                    //      ischecked=1;
-                                                                    //   });
-                                                                    //
-                                                                    // }else{
-                                                                    //   setState(() {
-                                                                    //     ischecked=0;
-                                                                    //   });
-                                                                    //
-                                                                    // }
-                                                                  },
-                                                                  child: getnotidata![index].data1![index1].isChecked== 0?Container(
-                                                                    width: 20,
-                                                                    height: 20,
-                                                                    child: Image.asset(
-                                                                      "assets/images/rdunselected.png",
-                                                                      height: 20,
-                                                                      width: 20,
-                                                                    ),
-                                                                  ):Container(
-                                                                    width: 20,
-                                                                    height: 20,
-                                                                    child: Image.asset(
-                                                                      "assets/images/rdselected.png",
-                                                                      height: 20,
-                                                                      width: 20,
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-
-                                                          ),
-                                                        ],
-                                                      );
+                                                    return ischeck(context, index, index1, getnotidata![index].data1!.length);
 
                                                   }),
                                             )
@@ -365,7 +344,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                               child: const Text(
                                 "GO BACK",
                                 style: TextStyle(
-                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                    color: Colors.white, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -381,16 +360,35 @@ class _PrivacyPageState extends State<PrivacyPage> {
                                 //////// HERE
                               ),
                               onPressed: () {
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (
-                                //             context) => const PhonebookScreen()));
+                                PrivacyId = "";
+                                for (var i = 0; i < getnotidata!.length; i++) {
+                                  List<Data1>? daobj  = getnotidata![i].data1;
+                                  for(var j = 0; j < daobj!.length;j++){
+                                    if(daobj[j].isChecked==1){
+                                      if(PrivacyId.isEmpty){
+                                        PrivacyId = ""+daobj[j].id.toString();
+                                      } else {
+                                        PrivacyId = PrivacyId+","+daobj[j].id.toString();
+                                      }
+                                    }
+                                  }
+                                }
+                                log(PrivacyId);
+                                if(PrivacyId.length>0){
+                                  updateprivacy(userid.toString(), PrivacyId);
+                                } else {
+                                  snackBar = SnackBar(
+                                    content: Text(
+                                        "please select privacy setting"),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
                               },
                               child: const Text(
-                                "LET'S GO!",
+                                "SAVE",
                                 style: TextStyle(
-                                    color: ColorConstants.lightgrey200, fontSize: 14),
+                                    color: Colors.white, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -410,6 +408,84 @@ class _PrivacyPageState extends State<PrivacyPage> {
         ),
       ),
     );
+  }
+  Widget ischeck(BuildContext context,int index,int index1, int length){
+    // ischecked=getnotidata![index].data![index1].isChecked!;
+    List<bool> isChecked = List.generate(length, (index) => false);
+    // if(ischecked==0){
+    //   isChecked[index1]=false;
+    // }else{
+    //   isChecked[index1]=true;
+    // }
+    // ischecked=0;
+    return  Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                getnotidata![index].data1![index1].title!,
+                style:
+                TextStyle(fontSize: 18),
+              ),
+              GestureDetector(
+                onTap: (){
+                  if(getnotidata![index].data1![index1].isChecked==0){
+                    for (var i = 0; i < getnotidata![index].data1!.length; i++) {
+                      var dobj = getnotidata![index].data1![i];
+                      dobj.isChecked = 0;
+                      getnotidata![index].data1!.toSet();
+                    }
+                    getnotidata![index].data1![index1].isChecked = 1;
+                  } else {
+                    getnotidata![index].data1![index1].isChecked = 0;
+                  }
+
+
+                  log("tap"+ getnotidata![index].data1![index1].isChecked.toString());
+                  // isChecked[index1]=!isChecked[index1];
+                  // ischeckfun(ischecked,index,index1);
+                  //
+                  if(ischecked==0){
+                    setState(() {
+                      ischecked=1;
+                    });
+                    log(ischecked.toString());
+                  }else{
+                    setState(() {
+                      ischecked=0;
+                    });
+                    log(ischecked.toString());
+                  }
+                },
+                child: getnotidata![index].data1![index1].isChecked==0?
+                Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/rdunselected.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                ):Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/rdselected.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+
+        ),
+      ],
+    );
+
   }
 }
 

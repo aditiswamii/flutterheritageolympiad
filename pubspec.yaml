@@ -60,15 +60,15 @@ dependencies:
   flip_card:
   package_info_plus:
   device_calendar:
-  intl:
+  intl: ^0.17.0-nullsafety.2
   webview_flutter:
-  syncfusion_flutter_charts:
-  firebase_auth:
+  charts_flutter:
   google_sign_in: ^5.0.1
   change_app_package_name: ^1.0.0
   firebase_messaging: ^11.2.6
   firebase_core: ^1.12.0
   cloud_functions: ^3.2.6
+  uni_links:
 dev_dependencies:
   flutter_test:
     sdk: flutter

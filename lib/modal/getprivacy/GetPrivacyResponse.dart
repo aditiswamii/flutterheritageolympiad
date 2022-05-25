@@ -122,6 +122,9 @@ class Data1 {
   int? _id;
   String? _title;
   int? _isChecked;
+  set id(int? value) {
+    _id = value;
+  }
 
   int? get id => _id;
   String? get title => _title;
@@ -134,5 +137,11 @@ class Data1 {
     map['is_checked'] = _isChecked;
     return map;
   }
+  set title(String? value) {
+    _title = value;
+  }
 
+  set isChecked(int? value) {
+    _isChecked = value;
+  }
 }

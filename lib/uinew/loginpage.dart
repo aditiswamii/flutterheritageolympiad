@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 
-FCM _msgService = FCM();
+
 class LoginScreen extends StatefulWidget{
   LoginScreen({Key? key}) : super(key: key);
 
@@ -43,15 +43,7 @@ class _State extends State<LoginScreen> {
   //bool isLoggedIn = false;
   String emailadd = '';
 
-  firebasefun() async{
-    WidgetsFlutterBinding.ensureInitialized();
 
-    // TODO: Link app with Firebase (use FlutterFire CLI tools)
-    await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-    await _msgService.init();
-  }
   Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print(" --- background message received ---");
     print(message.notification!.title);

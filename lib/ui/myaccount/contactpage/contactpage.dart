@@ -15,7 +15,7 @@ import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+
 import 'dart:convert' as convert;
 
 import '../../../modal/userprofile/GetContactProfileResponse.dart';
