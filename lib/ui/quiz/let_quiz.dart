@@ -23,6 +23,7 @@ import 'dart:convert' as convert;
 
 import '../../modal/getuserleagueresponse/GetUserLeagueResponse.dart';
 import '../../utils/StringConstants.dart';
+import '../duelmode/duelmodeinvite/invitepage.dart';
 import '../duelmode/duelmoderesult/duelmode_result.dart';
 
 class QuizPage extends StatefulWidget{
@@ -45,6 +46,7 @@ class _State extends State<QuizPage> {
   var data;
   var userleagdata;
   var snackBar;
+
   GetUserLeagueResponse? userLeagueR;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,9 +55,10 @@ class _State extends State<QuizPage> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
-    showLoaderDialog(context);
+
     getuserleague(userid.toString());
   }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -76,13 +79,14 @@ class _State extends State<QuizPage> {
   }
 
   getuserleague(String userid) async {
-
+    showLoaderDialog(context);
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
     );
-    Navigator.pop(context);
+
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
@@ -103,7 +107,7 @@ class _State extends State<QuizPage> {
             .showSnackBar(snackBar);
       }
     } else {
-
+      Navigator.pop(context);
       // onsuccess(null);
       print(response.statusCode);
     }
@@ -116,6 +120,57 @@ class _State extends State<QuizPage> {
       });
     }
 
+  }
+
+var datalink;
+  checkquiz(String userid,String type) async {
+   showLoaderDialog(context);
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL+"checkquiz"),body: {
+          'user_id':userid.toString(),
+          'type':type.toString()
+    }
+    );
+
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          datalink = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(datalink.length);
+        });
+        linkshare(datalink.toString());
+      } else if(jsonResponse['status'] == 201 || jsonResponse['status'] == 204){
+       createnew();
+      }
+        else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      // onsuccess(null);
+      print(response.statusCode);
+    }
+
+  }
+  linkshare(String link){
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>DuelModeInvite(seldomain: [], quizspeedid: "", type: "", quiztypeid: "", quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
+  }
+  createnew(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>  DuelModeMain(type: "2",)));
   }
   @override
   void initState() {
@@ -136,6 +191,7 @@ class _State extends State<QuizPage> {
   }
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown
@@ -201,7 +257,7 @@ class _State extends State<QuizPage> {
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
+                    child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -242,10 +298,7 @@ class _State extends State<QuizPage> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  DuelModeMain()));
+                           checkquiz(userid.toString(), "2");
                         },
                         child: Container(
                           height: 150,

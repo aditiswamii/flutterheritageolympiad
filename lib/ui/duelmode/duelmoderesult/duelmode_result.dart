@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/getduelresult/GetDuelResultResponse.dart';
+import 'package:flutterheritageolympiad/ui/classicquiz/answerkey/answerkey.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart';
 
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
@@ -27,7 +28,8 @@ import 'package:http/http.dart' as http;
 
 class DuelModeResult extends StatefulWidget {
   var quizid;
-  DuelModeResult({Key? key, required this.quizid}) : super(key: key);
+  var type;
+  DuelModeResult({Key? key, required this.quizid,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -517,7 +519,7 @@ class _State extends State<DuelModeResult> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AnswerkeyDuel(quizid: widget.quizid)));
+                              builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: "", type: widget.type,)));
                     },
                     child: Container(
                         alignment: Alignment.center,

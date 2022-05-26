@@ -26,7 +26,8 @@ import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 class ResultPage extends StatefulWidget {
   var quizid;
   var savedata;
- ResultPage({Key? key,required this.quizid,required this.savedata}) : super(key: key);
+  var type;
+ ResultPage({Key? key,required this.quizid,required this.savedata,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -263,7 +264,7 @@ String packagename="";
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: widget.savedata,)));
+                            builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: widget.savedata, type: widget.type,)));
                   },
                   child: Container(
                       alignment: Alignment.center,
@@ -293,13 +294,22 @@ String packagename="";
                         //////// HERE
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ClassicQuizMain()));
+                        if(widget.type=="1") {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ClassicQuizMain()));
+                        }
+                        if(widget.type=="2"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuizPage()));
+                        }
+
                       },
-                      child: const Text(
-                        "START AGAIN",
+                      child:  Text(
+                        widget.type=="1"?"START AGAIN":"BACK TO QUIZ",
                         style: TextStyle(color: Colors.black, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),

@@ -19,13 +19,16 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/StringConstants.dart';
+import '../../duelmode/duelmoderesult/duelmode_result.dart';
+
 
 
 class AnswerkeyPage extends StatefulWidget {
   var quizid;
   var saveddata;
-
-  AnswerkeyPage({Key? key, required this.quizid,required this.saveddata}) : super(key: key);
+  var type;
+  AnswerkeyPage({Key? key, required this.quizid,required this.saveddata,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -35,7 +38,7 @@ class _State extends State<AnswerkeyPage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String? data;
-  var domains_length;
+  var answerdata;
   var username;
   var email;
   var country;
@@ -64,15 +67,15 @@ class _State extends State<AnswerkeyPage> {
 
   void getData(String quiz_id) async {
     http.Response response = await http
-        .post(Uri.parse("http://3.108.183.42/api/get_answerkey"), body: {
+        .post(Uri.parse(StringConstants.BASE_URL+"get_answerkey"), body: {
       'quiz_id': quiz_id.toString(),
     });
     if (response.statusCode == 200) {
       data = response.body; //store response as string
       setState(() {
-        domains_length = jsonDecode(
+        answerdata = jsonDecode(
             data!)['data']; //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
+        print(answerdata.length); // just printed length of data
       });
 
       var venam = jsonDecode(data!)['data'];
@@ -89,8 +92,16 @@ class _State extends State<AnswerkeyPage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => ResultPage(quizid: widget.quizid, savedata: widget.saveddata)));
+    if(widget.type=="1")
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>ResultPage(quizid: widget.quizid, savedata: widget.saveddata, type: widget.type,)));
+    if(widget.type=="2")
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  DuelModeResult(quizid: widget.quizid, type: widget.type,)));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -132,7 +143,7 @@ class _State extends State<AnswerkeyPage> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                         decoration: const BoxDecoration(color: Colors.white),
-                        child: domains_length == null || domains_length!.isEmpty
+                        child: answerdata == null || answerdata!.isEmpty
                             ? const Center(
                                 child: CircularProgressIndicator(),
                               )
@@ -140,9 +151,9 @@ class _State extends State<AnswerkeyPage> {
                                 child: ListView.builder(
                                   physics: ClampingScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: domains_length == null
+                                  itemCount: answerdata == null
                                       ? 0
-                                      : domains_length.length,
+                                      : answerdata.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Container(
@@ -198,7 +209,7 @@ class _State extends State<AnswerkeyPage> {
                                 width: 250,
 
                                 alignment: Alignment.center,
-                                child: DialogDispute()),
+                                child: DialogDispute(quizid: widget.quizid, type: widget.type,)),
                           );
                           showDialog(
                               context: context,

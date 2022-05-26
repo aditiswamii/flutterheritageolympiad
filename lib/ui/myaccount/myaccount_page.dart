@@ -57,7 +57,14 @@ class _AccountPageState extends State<MyAccountPage> {
     setState(() {
       userid = prefs.getString("userid");
     });
-
+    if(prefs.getString("flag")!=null){
+      setState(() {
+        username= prefs.getString("name");
+            agegroup= prefs.getString("group");
+            flagicon= prefs.getString("flag");
+            country= prefs.getString("country");
+      });
+    }
     getUserProfile(userid.toString());
     print("$userid");
     //calTheme();
@@ -103,7 +110,15 @@ class _AccountPageState extends State<MyAccountPage> {
         flagicon=jsonDecode['flag_icon'].toString();
       });
 print("flagicon"+flagicon);
+    preference();
     }
+  }
+  preference() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("name", username);
+    prefs.setString("group", agegroup);
+    prefs.setString("flag", flagicon);
+    prefs.setString("country", country);
   }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(

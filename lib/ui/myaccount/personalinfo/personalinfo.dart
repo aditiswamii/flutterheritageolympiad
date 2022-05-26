@@ -206,8 +206,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         countryname=profileresdata!.data!.country!.toString();
       });
 
+
     }
   }
+
+
   _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
       context: context,

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/modal/dualdetailsresponse/GetDualDetailResponse.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 
@@ -30,16 +31,17 @@ class DuelModeInvite extends StatefulWidget {
   var difficultylevelid;
   var quizid;
   var type;
-  var seldomain;
-
+  var link;
+ var seldomain;
+ int typeq;
    DuelModeInvite({Key? key,required this.quizspeedid,required this.quiztypeid,
-     required this.quizid,required this.type,required this.difficultylevelid,required seldomain}) : super(key: key);
+     required this.quizid,required this.type,required this.difficultylevelid,required this.seldomain,required this.link,required this.typeq}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _DuelModeInviteState createState() => _DuelModeInviteState();
 }
 
-class _State extends State<DuelModeInvite> {
+class _DuelModeInviteState extends State<DuelModeInvite> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   var username;
@@ -51,6 +53,10 @@ class _State extends State<DuelModeInvite> {
   var link;
   var gendata;
   var snackBar;
+  var speed;
+  var difficulty;
+  var seldomain;
+
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -58,7 +64,23 @@ class _State extends State<DuelModeInvite> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+   if(widget.typeq==0){
+     setState(() {
+       speed=widget.quizspeedid.toString();
+       difficulty=widget.difficultylevelid.toString();
+       seldomain=widget.seldomain.toString();
+
+     });
+     log(speed.toString());
+     log(widget.typeq.toString());
+     log(widget.quizspeedid.toString());
+     log(widget.difficultylevelid.toString());
+     log(widget.seldomain.toString());
     generatelink(userid.toString(), widget.quizid.toString());
+   }else if(widget.typeq==1){
+    dualdetails(userid.toString(), widget.link.toString());
+   }
+
   }
   void generatelink(String userid,String dualid) async {
     http.Response response =
@@ -66,9 +88,11 @@ class _State extends State<DuelModeInvite> {
       'user_id': userid.toString(),
       'dual_id': dualid.toString()
     });
-    Navigator.pop(context);
+    showLoaderDialog(context);
+
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
@@ -88,14 +112,63 @@ class _State extends State<DuelModeInvite> {
             .showSnackBar(snackBar);
       }
     } else {
-
+      Navigator.pop(context);
       print(response.statusCode);
     }
   }
   onsuccess(gendata){
-    if(gendata['data']!=null)
-      link=gendata['data']['link'];
+    if(gendata['data']!=null) {
+      setState(() {
+        link=gendata['data']['link'].toString();
+      });
+    }
 
+
+  }
+var dualdata;
+  void dualdetails(String userid,String duallink) async {
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL+"dualdetails"), body: {
+      'user_id': userid.toString(),
+      'dual_link': duallink.toString()
+    });
+   showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+
+        //store response as string
+        setState(() {
+          dualdata = jsonResponse; //get all the data from json string superheros
+          // print("domiaindata: "+gendata['data']['link'].toString()); // just printed length of data
+        });
+        setduellinkdetail(getDualDetailResponseFromJson(dualdata!));
+      } else {
+
+        snackBar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+  setduellinkdetail(GetDualDetailResponse obj){
+   if(obj.data!=null){
+     setState(() {
+       seldomain=obj.data!.domain.toString();
+       difficulty=obj.data!.difficulty.toString();
+       speed=obj.data!.quizSpeed.toString();
+       link=obj.data!.link.toString();
+     });
+
+   }
   }
 
   showLoaderDialog(BuildContext context) {
@@ -119,7 +192,8 @@ class _State extends State<DuelModeInvite> {
     super.initState();
     // _locations ;
     BackButtonInterceptor.add(myInterceptor);
-    // _presenter = ClassicQuizPresenter(this);
+    print(widget.seldomain);
+    userdata();
 
   }
   @override
@@ -138,6 +212,13 @@ class _State extends State<DuelModeInvite> {
 
   @override
   Widget build(BuildContext context) {
+    log(widget.typeq.toString());
+    log(widget.quizspeedid.toString());
+    log(widget.difficultylevelid.toString());
+    log(widget.seldomain.toString());
+    log(speed.toString());
+
+   // print(widget.seldomain[0]['name'].toString());
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
@@ -232,7 +313,7 @@ class _State extends State<DuelModeInvite> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>  DuelModeSelectPlayer(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link,)));
                           },
                           child: Text("INVITE",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
                     ),
@@ -267,7 +348,7 @@ class _State extends State<DuelModeInvite> {
                 child: Text(
                   "QUIZ SUMMARY",
                   style: TextStyle(
-                      color: ColorConstants.txt, fontSize: 15),
+                      color: ColorConstants.txt, fontSize: 15,fontWeight: FontWeight.w600),
                 ),
               ),
               Container(
@@ -296,8 +377,8 @@ class _State extends State<DuelModeInvite> {
                                   fontSize: 15,fontWeight: FontWeight.w600),
                             ),
 
-                            Text(
-                              widget.difficultylevelid,
+                           Text(
+                              widget.difficultylevelid.toString(),
                               style: TextStyle(
                                   color: ColorConstants.txt,
                                   fontSize: 15),
@@ -318,8 +399,8 @@ class _State extends State<DuelModeInvite> {
                                   color: ColorConstants.txt,
                                   fontSize: 15,fontWeight: FontWeight.w600),
                             ),
-                            Text(
-                              widget.quizspeedid,
+                             Text(
+                              widget.quizspeedid.toString(),
                               style: TextStyle(
                                   color: ColorConstants.txt,
                                   fontSize: 15),
@@ -342,42 +423,33 @@ class _State extends State<DuelModeInvite> {
                                     fontSize: 15,fontWeight: FontWeight.w600),
                               ),
                             ),
-                              ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-    shrinkWrap: true,
-    itemCount: widget.seldomain == null
-    ? 0
-        : widget.seldomain.length,
-    itemBuilder: (BuildContext context, int index) {
-      return
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            widget.seldomain[index]['name'].toString(), textAlign: TextAlign.left,
-            style: TextStyle(
-                color: ColorConstants.txt,
-                fontSize: 15),
-          ),
-        );
-    }),
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  "Literature and Languages",textAlign: TextAlign.left,
+                                  widget.seldomain.toString(),
                                   style: TextStyle(
                                       color: ColorConstants.txt,
                                       fontSize: 15),
                                 ),
                               ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Performing Arts",textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      color: ColorConstants.txt,
-                                      fontSize: 15),
-                                ),
-                              ),
+    //                           if(seldomain!=null)
+    //                           ListView.builder(
+    //                           physics: const BouncingScrollPhysics(),
+    // shrinkWrap: true,
+    // itemCount: seldomain!.length,
+    // itemBuilder: (BuildContext context, int index) {
+    //   return
+    //     Container(
+    //       alignment: Alignment.centerLeft,
+    //       child: Text(
+    //         seldomain.toString(), textAlign: TextAlign.left,
+    //         style: TextStyle(
+    //             color: ColorConstants.txt,
+    //             fontSize: 15),
+    //       ),
+    //     );
+    // }),
+
                           ],
                         ),
 

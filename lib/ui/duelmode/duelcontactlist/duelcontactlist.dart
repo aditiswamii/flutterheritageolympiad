@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -7,22 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmoderesult/duelmode_result.dart';
-import 'package:flutterheritageolympiad/recycleview/recyckeview.dart';
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
+import 'package:flutterheritageolympiad/modal/getdueluserlist/GetDuelUserListResponse.dart';
+
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:flutterheritageolympiad/utils/stringconstants.dart';
+
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utils/StringConstants.dart';
 import '../../myaccount/contactpage/contactpage.dart';
 import '../duelmodeinvite/invitepage.dart';
 
@@ -34,9 +29,9 @@ class DuelModeSelectPlayer extends StatefulWidget {
   var quizid;
   var type;
   var seldomain;
-
+  var link;
   DuelModeSelectPlayer({Key? key,required this.quizspeedid,required this.quiztypeid,
-    required this.quizid,required this.type,required this.difficultylevelid,required seldomain}) : super(key: key);
+    required this.quizid,required this.type,required this.difficultylevelid,required this.seldomain,required this.link}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -51,6 +46,11 @@ class _State extends State<DuelModeSelectPlayer> {
   var username;
   var country;
   var userid;
+  int ishide =0;
+
+  bool ishideb =false;
+  List<Data>? contactpos;
+  var cont;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -58,12 +58,18 @@ class _State extends State<DuelModeSelectPlayer> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
-    getUserlist(userid.toString());
+    getUserlist(userid.toString(),widget.quizid,0);
   }
-  getUserlist(String userid) async {
+  getUserlist(String userid,String dualid,int is_hide) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "get_all_contacts"),
-        body: {'user_id': userid.toString()});
+        body: {
+          'user_id': userid.toString(),
+          'dual_id': dualid.toString(),
+          'hide_busy': is_hide.toString()
+
+        }
+    );
     showLoaderDialog(context);
 
     print("getUserlistapi");
@@ -79,6 +85,7 @@ class _State extends State<DuelModeSelectPlayer> {
         setState(() {
           contactdata = jsonResponse[
           'data'];
+          oncontactsuccess(getDuelUserListResponseFromJson(data!));
         });
         //get all the data from json string superheros
         print("length" + contactdata.length.toString());
@@ -99,6 +106,12 @@ class _State extends State<DuelModeSelectPlayer> {
       print(response.statusCode);
     }
   }
+  oncontactsuccess(GetDuelUserListResponse duelUserListResponseFromJson){
+    if(duelUserListResponseFromJson.data!=null){
+      contactpos=duelUserListResponseFromJson.data;
+    }
+
+  }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -117,11 +130,79 @@ class _State extends State<DuelModeSelectPlayer> {
       },
     );
   }
+  var invitedata;
+  var snackbar;
+  void sendinvite(String fromid,String toid,String dualid) async {
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL+"send_invitation"), body: {
+      'from_id': fromid.toString(),
+      'to_id': toid.toString(),
+      'dual_id': dualid.toString()
+
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      if (jsonResponse['status'] == 200) {
+        onsuccess();
+        // data = response.body; //store response as string
+        // setState(() {
+        //   invitedata = jsonDecode(
+        //       data!)['data']; //get all the data from json string superheros
+        //   print(invitedata.length); // just printed length of data
+        // });
+        //
+        // var venam = jsonDecode(data!)['data'];
+        // print(venam);
+      }else{
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+      }
+    } else {
+      print(response.statusCode);
+    }
+  }
+  onsuccess(){
+    log(cont.toString());
+    if(cont!=null){
+      AlertDialog errorDialog = AlertDialog(
+        insetPadding: EdgeInsets.all(4),
+          titlePadding: EdgeInsets.all(4),
+          contentPadding:EdgeInsets.all(4),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(
+                  20.0)), //this right here
+          content: Container(
+              height: 230,
+              width: 250,
+              alignment: Alignment.center,
+              child: DialogDuelInviteSent(name: cont!.name, id: cont!.id, status: cont!.status, agegroup: cont!.ageGroup,
+                image: cont!.image, flagicon: cont!.flagIcon, request: cont!.request,)));
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+            Future.delayed(
+              Duration(seconds: 2),
+                  () {
+                Navigator.of(context).pop(true);
+              },
+            );
+          return  errorDialog;
+          }
+         );
+    }
+
+  }
   @override
   void initState() {
     super.initState();
-    // _locations ;
     BackButtonInterceptor.add(myInterceptor);
+    userdata();
+
     // _presenter = ClassicQuizPresenter(this);
 
   }
@@ -134,7 +215,7 @@ class _State extends State<DuelModeSelectPlayer> {
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link, typeq: 0,)));
     // Do some stuff.
     return true;
   }
@@ -155,7 +236,7 @@ class _State extends State<DuelModeSelectPlayer> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child: Container(color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children: <Widget>[
@@ -165,16 +246,24 @@ class _State extends State<DuelModeSelectPlayer> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const WelcomePage()));
-                      },
-                      child: Image.asset("assets/images/home_1.png",
-                          height: 40, width: 40),
+
+                    padding: EdgeInsets.all(5),
+                    child: Center(
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WelcomePage()));
+                          },
+                          child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -193,7 +282,7 @@ class _State extends State<DuelModeSelectPlayer> {
               ),
               Container(
                   alignment: Alignment.centerLeft,
-                  margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                   child: const Text("DUEL MODE",
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
@@ -216,11 +305,22 @@ class _State extends State<DuelModeSelectPlayer> {
                           color: ColorConstants.txt, fontSize: 15),
                     ),
                     Checkbox(
-                      value: this.value,
+                      value: ishideb,
                       onChanged: (value) {
                         setState(() {
-                          this.value = true;
+                          ishideb = value!;
                         });
+                        if(ishideb==true){
+                          setState(() {
+                            ishide=1;
+                          });
+
+                        }else{
+                          setState(() {
+                            ishide=0;
+                          });
+                        getUserlist(userid.toString(), widget.quizid, ishide);
+                        }
                       },
                     )
                   ],
@@ -301,7 +401,8 @@ class _State extends State<DuelModeSelectPlayer> {
                                                 textAlign: TextAlign.center,),
                                             ),
                                             Container(
-                                              height: 20,
+                                              //height: 20,
+                                              width: 150,
                                               child: Row(
                                                 children: [
                                                   if(contactdata[index]['age_group']!=null)
@@ -312,6 +413,7 @@ class _State extends State<DuelModeSelectPlayer> {
                                                   VerticalDivider(color: Colors.black),
                                                   // Text("|"),
                                                   Row(
+
                                                     children: [
                                                       if(contactdata[index]['flag_icon']!=null)
                                                         Container(
@@ -328,10 +430,13 @@ class _State extends State<DuelModeSelectPlayer> {
                                                             )
                                                         ),
                                                       if(contactdata[index]['country']!=null)
-                                                        Text("${contactdata[index]['country']}",style: TextStyle(
-                                                            color: ColorConstants.txt,
-                                                            fontSize: 14),
-                                                          textAlign: TextAlign.center,),
+                                                        Container(margin: EdgeInsets.only(left:5),
+                                                          width: 50,
+                                                          child: Text("${contactdata[index]['country']}",style: TextStyle(
+                                                              color: ColorConstants.txt,
+                                                              fontSize: 14),
+                                                            textAlign: TextAlign.center,),
+                                                        ),
                                                     ],
                                                   ),
                                                 ],
@@ -355,29 +460,22 @@ class _State extends State<DuelModeSelectPlayer> {
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                     BorderRadius.circular(30.0)),
-                                                fixedSize: const Size(100, 40),
+                                                fixedSize: const Size(130, 30),
                                                 //////// HERE
                                               ),
                                               onPressed: () {
-                                                AlertDialog errorDialog = AlertDialog(
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.0)), //this right here
-                                                    title: Container(
-                                                        height: 250,
-                                                        width: 250,
-                                                        alignment: Alignment.center,
-                                                        child: DialogDuelInviteSent()));
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext context) =>
-                                                    errorDialog);
+                                                setState(() {
+                                                  if(contactpos!=null)
+                                                  cont= contactpos![index];
+                                                  //contactpos=contactdata[index];
+                                                });
+
+                                                   sendinvite(userid.toString(), contactdata[index]['id'].toString(), widget.quizid);
                                               },
                                               child: const Text(
                                                 "SEND INVITE",
                                                 style: TextStyle(
-                                                    color: ColorConstants.lightgrey200,
+                                                    color: Colors.white,
                                                     fontSize: 14),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -395,7 +493,7 @@ class _State extends State<DuelModeSelectPlayer> {
                   )
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(0, 120, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -416,7 +514,7 @@ class _State extends State<DuelModeSelectPlayer> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>  DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link, typeq: 0,)));
                       },
                       child: const Text(
                         "GO BACK",

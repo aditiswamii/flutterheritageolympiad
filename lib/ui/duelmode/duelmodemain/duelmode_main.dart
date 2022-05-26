@@ -25,7 +25,8 @@ import '../../../utils/StringConstants.dart';
 import '../../classicquiz/cquizrule/classicquizrule.dart';
 import '../../quiz/let_quiz.dart';
 class DuelModeMain extends StatefulWidget {
-  const DuelModeMain({Key? key}) : super(key: key);
+  var type;
+ DuelModeMain({Key? key,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -129,6 +130,7 @@ class _State extends State<DuelModeMain> {
 
   void createquiz(String userid,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
+    showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"create_duel"), body: {
       'user_id': userid.toString(),
@@ -136,9 +138,10 @@ class _State extends State<DuelModeMain> {
       'quiz_speed_id': quiz_speed_id.toString(),
       'domains': domains.toString()
     });
-    Navigator.pop(context);
+
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
@@ -159,26 +162,48 @@ class _State extends State<DuelModeMain> {
             .showSnackBar(snackbar);
       }
     } else {
-
+      Navigator.pop(context);
       print(response.statusCode);
     }
   }
+  var seldomain="";
+  var  seldomainName="";
+  int i=0;
   onsuccess(createdata){
-    print(createdata['data'].toString());
-    print(createdata['data']['dual_id'].toString());
-    print(createdata['data']['user'].toString());
-    print(createdata['data']['domain'].toString());
-    print(createdata['data']['quiz_speed'].toString());
-    print(createdata['data']['difficulty'].toString());
-    print(createdata['data']['quiz_type'].toString());
-    print(createdata['data']['created_date'].toString());
-if(domaindata['data']!=null)
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>  DuelModeInvite(quizspeedid:createdata['data']['quiz_speed'].toString(),
-              quiztypeid: createdata['data']['quiz_type'].toString(),
-              quizid:createdata['data']['dual_id'].toString(), type: "2", difficultylevelid:createdata['data']['difficulty'].toString(), seldomain: createdata['data']['domain'] ,)));
+
+
+    log (createdata['data'].toString());
+  log(createdata['data']['dual_id'].toString());
+  log(createdata['data']['user'].toString());
+  log("domain: "+createdata['data']['domain'][0]['name']);
+  log(createdata['data']['quiz_speed'].toString());
+  log(createdata['data']['difficulty'].toString());
+  log(createdata['data']['quiz_type'].toString());
+  log(createdata['data']['created_date'].toString());
+  List domain=List.from(createdata['data']['domain']);
+   for (i ; i < domain.length; i++) {
+
+       if(seldomain.isNotEmpty){
+         seldomain = seldomain + "," + domain[i]['id'].toString();
+         seldomainName = seldomainName + "\n" + domain[i]['name'].toString();
+       } else {
+         seldomain = seldomain + "" + domain[i]['id'].toString();
+         seldomainName = seldomainName + "" + domain[i]['name'].toString();
+       }
+
+
+   }
+  log("check");
+  Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>  DuelModeInvite(quizspeedid:createdata['data']['quiz_speed'].toString(),
+            quiztypeid: createdata['data']['quiz_type'].toString(),
+            quizid:createdata['data']['dual_id'].toString(), type: widget.type.toString(),
+            difficultylevelid:createdata['data']['difficulty'].toString(),
+            seldomain: seldomainName, link: "", typeq: 0,)));
+
+
 
 
   }
@@ -199,7 +224,29 @@ if(domaindata['data']!=null)
       },
     );
   }
-
+  hintdialog(BuildContext context,String text) {
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              20.0)),
+      content: Container(
+          child: Text("${text}"
+            ,style:TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
+      ),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("OK"))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -289,13 +336,19 @@ if(domaindata['data']!=null)
                             style: TextStyle(
                                 color: Colors.black, fontSize: 16),
                           ),
-                          Container(
-                            width: 20,
-                            height: 20,
-                            child: Image.asset(
-                              "assets/images/about.png",
-                              height: 20,
+                          GestureDetector(
+                            onTap: (){
+                              hintdialog(context, "Domain: Choose a domain or more to get quizzes on just those themes.");
+
+                            },
+                            child: Container(
                               width: 20,
+                              height: 20,
+                              child: Image.asset(
+                                "assets/images/question.png",
+                                height: 20,
+                                width: 20,
+                              ),
                             ),
                           )
                         ],
@@ -314,10 +367,19 @@ if(domaindata['data']!=null)
                             style: TextStyle(
                                 color: Colors.black, fontSize: 16),
                           ),
-                          Image.asset(
-                            "assets/images/about.png",
-                            height: 20,
-                            width: 20,
+                          GestureDetector(
+                            onTap: (){
+                              hintdialog(context, "The difficulty level is an adjustable setting that controls how challenging the quiz is. Increasing the difficulty level makes the quiz more challenging. Decreasing the difficulty level makes the quiz easier and less challenging. Scores for each question also vary according to the difficulty level\n" +
+                                  "Hard: 3 \n" +
+                                  "Intermediate: 2 \n" +
+                                  "Easy: 1");
+
+                            },
+                            child: Image.asset(
+                              "assets/images/question.png",
+                              height: 20,
+                              width: 20,
+                            ),
                           )
                         ],
                       ),
@@ -423,10 +485,13 @@ if(domaindata['data']!=null)
                           ),
                           GestureDetector(
                             onTap: (){
+                              hintdialog(context, "Quickfire: Each question is timed; 30 seconds; Questions: 20\n" +
+                                  "Regular: Each question is timed: 60 seconds; Questions: 15\n" +
+                                  "Olympiad: Over-all timer: 20 minutes; questions: 100");
 
                             },
                             child: Image.asset(
-                              "assets/images/about.png",
+                              "assets/images/question.png",
                               height: 20,
                               width: 20,
                             ),
@@ -601,7 +666,7 @@ if(domaindata['data']!=null)
                               if(domainnamelist!=null){
                                 if(speedid!=null){
                                   if(difficultylevelid!=null){
-                                    showLoaderDialog(context);
+
 
                                     createquiz(userid.toString(), difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
                                   }
@@ -649,12 +714,44 @@ if(domaindata['data']!=null)
             : SingleChildScrollView(
           child: Column(
             children: [
+              Card(
+                  child: CheckboxListTile(
+                      title: Text("Select All"),
+                      onChanged: (checked) {
+                        setState(
+                              () {
+                            _expanded7 =  checked!;
+
+                          },
+                        );
+                        if(_expanded7==true) {
+                          isChecked = List
+                              .generate(
+                              _len, (index) => true);
+                        }else{
+                          isChecked = List
+                              .generate(
+                              _len, (index) => false);
+                        }
+                        if(_expanded7==true) {
+                          if(!domainnamelist.contains("1,2,3,4,5,6,7,8,9,10,11"))
+                            domainnamelist.addAll(["1","2","3","4","5","6","7","8","9","10","11"]);
+
+                        }
+                        else {
+                          // if(domainnamelist.contains(domainname))
+                          domainnamelist.remove(domaindata);
+                        }
+
+                      },
+                      value: _expanded7 )
+              ),
               ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: domaindata == null
                     ? 0
-                    : _expanded6==false?2:domaindata.length,
+                    : _expanded6==false?2:domaindata['data'].length,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
                     children: [

@@ -139,7 +139,29 @@ class _PrivacyPageState extends State<PrivacyPage> {
     );
   }
 
-
+  hintdialog(BuildContext context,String text) {
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              20.0)),
+      content: Container(
+          child: Text("${text}"
+            ,style:TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
+      ),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("OK"))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -274,7 +296,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                                                   ),
                                                   GestureDetector(
                                                     onTap: (){
-
+                                                    hintdialog(context, "Protect yourself from unwanted interactions without having to block people. Choose who can interact with you.");
                                                     },
                                                     child: Container(
                                                       width: 20,

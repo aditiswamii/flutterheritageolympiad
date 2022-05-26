@@ -20,6 +20,7 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
+import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import '../../utils/StringConstants.dart';
 import '../classicquiz/result/result.dart';
 import 'package:http/http.dart' as http;
@@ -43,6 +44,13 @@ var userid;
 var data;
 var userleagdata;
 var snackBar;
+var myinvdata;
+  var   tournament;
+  List?  contact ;
+  List?  dual;
+  List?  accept;
+  List?   quizroom;
+  List?  quizroom_start;
 GetUserLeagueResponse? userLeagueR;
  userdata() async {
    final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,6 +61,7 @@ GetUserLeagueResponse? userLeagueR;
    });
 
    getuserleague(userid.toString());
+   myinvitation(userid.toString());
 }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -71,7 +80,82 @@ GetUserLeagueResponse? userLeagueR;
       },
     );
   }
+  myinvitation(String userid) async {
+    showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "dashboard"), body: {
+      'user_id': userid.toString(),
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          myinvdata = jsonResponse; //get all the data from json string superheros
+          print(myinvdata.length);
+          print(myinvdata.toString());
+        });
+        onsuccess(myinvdata);
+        // var venam = jsonDecode(data!)['data'];
+        // print(venam);
+        //last_id
 
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  onsuccess(myinvdata){
+  if(myinvdata!=null){
+    tournament=myinvdata['data']['tournament'];
+    dual=List.from(myinvdata['data']['dual']);
+    quizroom=List.from(myinvdata['data']['quizroom']);
+    contact=List.from(myinvdata['data']['contact']);
+    accept=List.from(myinvdata['data']['accept']);
+    quizroom_start=List.from(myinvdata['data']['accept']);
+
+   if(dual!=null && dual!.length>0){
+     AlertDialog errorDialog = AlertDialog(
+         insetPadding: EdgeInsets.all(4),
+         titlePadding: EdgeInsets.all(4),
+         contentPadding:EdgeInsets.all(4),
+         shape: RoundedRectangleBorder(
+             borderRadius:
+             BorderRadius.circular(
+                 20.0)), //this right here
+         content: Container(
+             height:470,
+             width: 250,
+             alignment: Alignment.center,
+             child: DialogDuelInviteReceive(id: dual![0]['id'], image: dual![0]['image'], diffi: dual![0]['difficulty'], index: 0,
+               domainsel:  dual![0]['domain'], link: dual![0]['link'], speed: dual![0]['quiz_speed'], name: dual![0]['name'],)));
+     showDialog(
+         context: context,
+         builder: (BuildContext context){
+           // Future.delayed(
+           //   Duration(seconds: 2),
+           //       () {
+           //     Navigator.of(context).pop(true);
+           //   },
+           // );
+           return  errorDialog;
+         }
+     );
+
+   }
+  }
+  }
   getuserleague(String userid) async {
     showLoaderDialog(context);
     http.Response response = await http.get(
@@ -91,8 +175,8 @@ GetUserLeagueResponse? userLeagueR;
           print(userleagdata.length);
         });
         getuserleagueresponse(getUserLeagueResponseFromJson(data!));
-        var venam = userleagdata(data!)['data'];
-        print(venam.toString());
+        // var venam = userleagdata(data!)['data'];
+        // print(venam.toString());
       } else {
         snackBar = SnackBar(
           content: Text(
@@ -162,7 +246,7 @@ GetUserLeagueResponse? userLeagueR;
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-          child: Text(username.toString(),style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
+          child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
         Container(
           //height: 300,
             width: MediaQuery.of(context).size.width,

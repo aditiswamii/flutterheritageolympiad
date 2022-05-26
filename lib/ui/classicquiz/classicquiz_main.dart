@@ -116,9 +116,32 @@ class _State extends State<ClassicQuizMain> {
       print(response.statusCode);
     }
   }
-
+  hintdialog(BuildContext context,String text) {
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              20.0)),
+      content: Container(
+          child: Text("${text}"
+            ,style:TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
+      ),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("OK"))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   void createquiz(String userid, String quiz_type_id,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
+    showLoaderDialog(context);
     http.Response response =
         await http.post(Uri.parse(StringConstants.BASE_URL+"createquiz"), body: {
       'user_id': userid.toString(),
@@ -129,8 +152,9 @@ class _State extends State<ClassicQuizMain> {
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
-        Navigator.pop(context);
+
       data = response.body; //store response as string
       setState(() {
         domains_length = jsonDecode(
@@ -152,7 +176,7 @@ class _State extends State<ClassicQuizMain> {
         log(quiz_speed_id);
       print(userid);
     } else {
-        Navigator.pop(context);
+
         snackbar = SnackBar(
             content: Text(
               jsonResponse['message'].toString(),
@@ -280,13 +304,18 @@ class _State extends State<ClassicQuizMain> {
                       style: TextStyle(
                           color: Colors.black, fontSize: 16),
                     ),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      child: Image.asset(
-                        "assets/images/about.png",
-                        height: 20,
+                    GestureDetector(
+                      onTap: (){
+                        hintdialog(context, "Domain: Choose a domain or more to get quizzes on just those themes.");
+                      },
+                      child: Container(
                         width: 20,
+                        height: 20,
+                        child: Image.asset(
+                          "assets/images/question.png",
+                          height: 20,
+                          width: 20,
+                        ),
                       ),
                     )
                   ],
@@ -311,38 +340,38 @@ class _State extends State<ClassicQuizMain> {
                       : SingleChildScrollView(
                           child: Column(
                             children: [
-                              // Card(
-                              //     child: CheckboxListTile(
-                              //         title: Text("Select All"),
-                              //         onChanged: (checked) {
-                              //           setState(
-                              //                 () {
-                              //               _expanded7 =  checked!;
-                              //
-                              //             },
-                              //           );
-                              //           if(_expanded7==true) {
-                              //           isChecked = List
-                              //                 .generate(
-                              //                 _len, (index) => true);
-                              //           }else{
-                              //             isChecked = List
-                              //                 .generate(
-                              //                 _len, (index) => false);
-                              //           }
-                              //           if(_expanded7==true) {
-                              //             if(!domainnamelist.contains(domains_length))
-                              //               domainnamelist.addAll(domains_length);
-                              //
-                              //           }
-                              //           else {
-                              //             // if(domainnamelist.contains(domainname))
-                              //             domainnamelist.remove(domains_length);
-                              //           }
-                              //
-                              //         },
-                              //         value: _expanded7 )
-                              // ),
+                              Card(
+                                  child: CheckboxListTile(
+                                      title: Text("Select All"),
+                                      onChanged: (checked) {
+                                        setState(
+                                              () {
+                                            _expanded7 =  checked!;
+
+                                          },
+                                        );
+                                        if(_expanded7==true) {
+                                        isChecked = List
+                                              .generate(
+                                              _len, (index) => true);
+                                        }else{
+                                          isChecked = List
+                                              .generate(
+                                              _len, (index) => false);
+                                        }
+                                        if(_expanded7==true) {
+                                          if(!domainnamelist.contains("1,2,3,4,5,6,7,8,9,10,11"))
+                                            domainnamelist.addAll(["1","2","3","4","5","6","7","8","9","10","11"]);
+
+                                        }
+                                        else {
+                                          // if(domainnamelist.contains(domainname))
+                                          domainnamelist.remove(domains_length);
+                                        }
+
+                                      },
+                                      value: _expanded7 )
+                              ),
                               ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 shrinkWrap: true,
@@ -457,10 +486,18 @@ class _State extends State<ClassicQuizMain> {
                       style: TextStyle(
                           color: Colors.black, fontSize: 16),
                     ),
-                    Image.asset(
-                      "assets/images/about.png",
-                      height: 20,
-                      width: 20,
+                    GestureDetector(
+                      onTap: (){
+                        hintdialog(context, "The difficulty level is an adjustable setting that controls how challenging the quiz is. Increasing the difficulty level makes the quiz more challenging. Decreasing the difficulty level makes the quiz easier and less challenging. Scores for each question also vary according to the difficulty level\n" +
+                            "Hard: 3 \n" +
+                            "Intermediate: 2 \n" +
+                            "Easy: 1");
+                      },
+                      child: Image.asset(
+                        "assets/images/question.png",
+                        height: 20,
+                        width: 20,
+                      ),
                     )
                   ],
                 ),
@@ -566,10 +603,12 @@ class _State extends State<ClassicQuizMain> {
                     ),
                     GestureDetector(
                       onTap: (){
-
+                         hintdialog(context, "Quickfire: Each question is timed; 30 seconds; Questions: 20\n" +
+                             "Regular: Each question is timed: 60 seconds; Questions: 15\n" +
+                             "Olympiad: Over-all timer: 20 minutes; questions: 100");
                       },
                       child: Image.asset(
-                        "assets/images/about.png",
+                        "assets/images/question.png",
                         height: 20,
                         width: 20,
                       ),
@@ -744,7 +783,7 @@ class _State extends State<ClassicQuizMain> {
                         if(domainnamelist!=null){
                           if(speedid!=null){
                             if(difficultylevelid!=null){
-                              showLoaderDialog(context);
+
 
                               createquiz(userid,"1", difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
                             }

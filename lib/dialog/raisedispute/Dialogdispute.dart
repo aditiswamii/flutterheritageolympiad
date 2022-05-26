@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/payment/payment_screen.dart';
-
+import 'package:flutterheritageolympiad/utils/stringconstants.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DialogDispute extends StatefulWidget{
-  const DialogDispute({Key? key}) : super(key: key);
+  var type;
+  var quizid;
+ DialogDispute({Key? key,required this.type,required this.quizid}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -15,6 +21,54 @@ class DialogDispute extends StatefulWidget{
 
 class _State extends State<DialogDispute> {
   TextEditingController descripcontroller= TextEditingController();
+  var data;
+  var raisedata;
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  @override
+  void initState() {
+    super.initState();
+
+    userdata();
+  }
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+    });
+  }
+  void raisedispute(String user_id,String type,String dispute,String tourid,String seesionid,String quizid) async {
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL+"raise_dispute"), body: {
+      'user_id': user_id.toString(),
+      'type': type.toString(),
+      if(widget.type=="4")
+        "tournament_id" : tourid.toString(),
+        "session_id": seesionid.toString(),
+      if(widget.type == "1")
+        "quiz_id": quizid.toString(),
+      'dispute':dispute.toString()
+    });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        raisedata = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(raisedata.length); // just printed length of data
+      });
+
+      var venam = jsonDecode(data!)['data'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,8 +123,19 @@ class _State extends State<DialogDispute> {
                       //////// HERE
                     ),
                     onPressed: () {
+                      if(descripcontroller.text.isNotEmpty){
+                        raisedispute(userid.toString(), widget.type, descripcontroller.text.toString(), "", "",
+                            widget.quizid);
 
-                    },
+                      }else{
+                       var snackbar = SnackBar(
+                            content: Text(
+                             "Please submit your dispute",
+                              textAlign: TextAlign.center,));
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(snackbar);
+                      }
+                        },
                     child: const Text(
                       "SUBMIT",
                       style: TextStyle(

@@ -56,7 +56,7 @@ class _State extends State<DuelModeLink> {
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link, typeq: 0,)));
     // Do some stuff.
     return true;
   }
@@ -77,7 +77,7 @@ class _State extends State<DuelModeLink> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child: Container(color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children:<Widget> [
@@ -127,30 +127,19 @@ class _State extends State<DuelModeLink> {
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt))),
               Container(
+                height: 100,
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(10, 50, 10, 10),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: ColorConstants.lightgrey200,
-                    onPrimary: Colors.white,
-                    elevation: 3,
-                    alignment: Alignment.center,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
-                    fixedSize: const Size(250, 100),
-                    //////// HERE
-                  ),
-                  onPressed: () {
-                    //Clipboard.setData(ClipboardData(text: "$link"));
-
-                  },
-                  child:  Text(
-                    "$link",
-                    style: TextStyle(
-                        color: ColorConstants.txt, fontSize:30),
-                    textAlign: TextAlign.center,
-                  ),
+                decoration: BoxDecoration(
+                  color:  ColorConstants.lightgrey200,
+                  borderRadius: BorderRadius.circular(30)
                 ),
+                  child:  Text(
+                    "${widget.link}",
+                    style: TextStyle(
+                        color: ColorConstants.txt, fontSize:24),
+                    textAlign: TextAlign.center,
+              )
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
@@ -164,60 +153,48 @@ class _State extends State<DuelModeLink> {
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(150, 40),
+                        fixedSize: const Size(150, 50),
                         //////// HERE
                       ),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: "$link"));
                         Clipboard.kTextPlain;
                         Clipboard.getData("$link");
-
-                        // ClipboardManager.copyToClipBoard("your text to copy").then((result) {
-                        //   final snackBar = SnackBar(
-                        //     content: Text('Copied to Clipboard'),
-                        //     action: SnackBarAction(
-                        //       label: 'Undo',
-                        //       onPressed: () {},
-                        //     ),
-                        //   );
-                        //   Scaffold.of(context).showSnackBar(snackBar);
-                        // });
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => DuelModeMain()));
                       },
                       child: const Text(
                         "COPY LINK",
                         style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
+                            color: Colors.white, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.yellow200,
-                        onPrimary: Colors.white,
-                        elevation: 3,
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(150, 40),
-                        //////// HERE
-                      ),
-                      onPressed: () {
-                        //share;
-                        Share.share('$link', subject: 'Share link');
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const WelcomePage()));
-                      },
-                      child: const Text(
-                        "SHARE LINK",
-                        style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
-                        textAlign: TextAlign.center,
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.yellow200,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(150, 50),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          //share;
+                          Share.share('${widget.link}', subject: 'Share link');
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const WelcomePage()));
+                        },
+                        child: const Text(
+                          "SHARE LINK",
+                          style: TextStyle(
+                              color: Colors.white, fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ],
@@ -228,7 +205,7 @@ class _State extends State<DuelModeLink> {
                 margin: const EdgeInsets.fromLTRB(0, 120, 0, 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -246,7 +223,7 @@ class _State extends State<DuelModeLink> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid,)));
+                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link, typeq: 0,)));
                       },
                       child: const Text(
                         "GO BACK",
