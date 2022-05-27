@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.dart';
+
 import 'package:flutterheritageolympiad/modal/getdueluserlist/GetDuelUserListResponse.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
@@ -18,11 +18,13 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../dialog/quizroominvitesent/quizroominvitesent.dart';
 import '../../myaccount/contactpage/contactpage.dart';
-import '../duelmodeinvite/invitepage.dart';
+import '../quizroominvite/quizroominvitepage.dart';
 
 
-class DuelModeSelectPlayer extends StatefulWidget {
+
+class QuizRoomContactList extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
   var difficultylevelid;
@@ -30,14 +32,14 @@ class DuelModeSelectPlayer extends StatefulWidget {
   var type;
   var seldomain;
   var link;
-  DuelModeSelectPlayer({Key? key,required this.quizspeedid,required this.quiztypeid,
+  QuizRoomContactList({Key? key,required this.quizspeedid,required this.quiztypeid,
     required this.quizid,required this.type,required this.difficultylevelid,required this.seldomain,required this.link}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<DuelModeSelectPlayer> {
+class _State extends State<QuizRoomContactList> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   var snackBar;
@@ -134,25 +136,16 @@ class _State extends State<DuelModeSelectPlayer> {
   var snackbar;
   void sendinvite(String fromid,String toid,String dualid) async {
     http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL+"send_invitation"), body: {
+        .post(Uri.parse(StringConstants.BASE_URL+"send_invitation_quiz_room"), body: {
       'from_id': fromid.toString(),
       'to_id': toid.toString(),
-      'dual_id': dualid.toString()
+      'quiz_room_id': dualid.toString()
 
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       if (jsonResponse['status'] == 200) {
         onsuccess();
-        // data = response.body; //store response as string
-        // setState(() {
-        //   invitedata = jsonDecode(
-        //       data!)['data']; //get all the data from json string superheros
-        //   print(invitedata.length); // just printed length of data
-        // });
-        //
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
       }else{
         snackbar = SnackBar(
             content: Text(
@@ -164,6 +157,32 @@ class _State extends State<DuelModeSelectPlayer> {
     } else {
       print(response.statusCode);
     }
+  }
+
+  void roomstatus(String roomid) async {
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL+"room_status"), body: {
+      'room_id': roomid.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      if (jsonResponse['status'] == 200) {
+        onroomstatus();
+      }else{
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+      }
+    } else {
+      print(response.statusCode);
+    }
+  }
+  onroomstatus()
+  {
+
   }
   onsuccess(){
     log(cont.toString());
@@ -180,7 +199,7 @@ class _State extends State<DuelModeSelectPlayer> {
               height: 230,
               width: 250,
               alignment: Alignment.center,
-              child: DialogDuelInviteSent(name: cont!.name, id: cont!.id, status: cont!.status, agegroup: cont!.ageGroup,
+              child: DialogQuizroomInviteSent(name: cont!.name, id: cont!.id, status: cont!.status, agegroup: cont!.ageGroup,
                 image: cont!.image, flagicon: cont!.flagIcon, request: cont!.request,)));
       showDialog(
           context: context,
@@ -195,41 +214,6 @@ class _State extends State<DuelModeSelectPlayer> {
           }
          );
     }
-
-  }
-  var dualstdata;
-  void dualstatus(String dual_id) async {
-    http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL+"dual_status"), body: {
-      'dual_id': dual_id.toString()
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      if (jsonResponse['status'] == 200) {
-        dualstdata=jsonResponse;
-        setState(() {
-          dualstdata=jsonResponse;
-        });
-        ondualstatus(dualstdata['data']['name'],dualstdata['data']['image']);
-      }if (jsonResponse['status'] == 201) {
-
-        ondualstatus("","");
-
-      }
-        else {
-        snackbar = SnackBar(
-            content: Text(
-              jsonResponse['message'].toString(),
-              textAlign: TextAlign.center,));
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbar);
-      }
-    } else {
-      print(response.statusCode);
-    }
-  }
-  ondualstatus(String name,String image)
-  {
 
   }
   @override
@@ -249,7 +233,7 @@ class _State extends State<DuelModeSelectPlayer> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+        MaterialPageRoute(builder: (BuildContext context) => QuizroomInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
           quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link, typeq: 0,)));
     // Do some stuff.
     return true;
@@ -318,14 +302,14 @@ class _State extends State<DuelModeSelectPlayer> {
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                  child: const Text("DUEL MODE",
+                  child: const Text("QUIZ ROOM",
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
-                      "You may choose another player in your\ncontact list to duel with.",
+                      "You may choose minimum 2 other player in\nyour contact list to quiz with.",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt))),
               Container(
@@ -504,8 +488,12 @@ class _State extends State<DuelModeSelectPlayer> {
                                                   cont= contactpos![index];
                                                   //contactpos=contactdata[index];
                                                 });
+                                                   if(contactdata[index]['status'].toString().isNotEmpty && contactdata[index]['status'].toString().contains("Busy") ){
 
-                                                   sendinvite(userid.toString(), contactdata[index]['id'].toString(), widget.quizid);
+                                                   }else{
+                                                     sendinvite(userid.toString(), contactdata[index]['id'].toString(), widget.quizid);
+                                                   }
+
                                               },
                                               child: const Text(
                                                 "SEND INVITE",
@@ -548,7 +536,7 @@ class _State extends State<DuelModeSelectPlayer> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>  DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                builder: (context) =>  QuizroomInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
                                   quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link, typeq: 0,)));
                       },
                       child: const Text(

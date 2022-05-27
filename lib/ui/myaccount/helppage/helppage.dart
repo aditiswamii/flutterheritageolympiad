@@ -177,7 +177,7 @@ class _AccountPageState extends State<HelpPage> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WelcomePage()));
+                                    builder: (context) =>  WelcomePage()));
                           },
                           child: Image.asset(
                             "assets/images/home_1.png",

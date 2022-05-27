@@ -1,38 +1,28 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-
-
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/invitepage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 import 'dart:convert' as convert;
-
-import '../../../modal/createquizresponse/CreateQuizResponse.dart';
 import '../../../modal/domains/GetDomainsResponse.dart';
 import '../../../utils/StringConstants.dart';
-
 import '../../quiz/let_quiz.dart';
-class DuelModeMain extends StatefulWidget {
+import '../quizroominvite/quizroominvitepage.dart';
+class QuizRoomMain extends StatefulWidget {
   var type;
- DuelModeMain({Key? key,required this.type}) : super(key: key);
+ QuizRoomMain({Key? key,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<DuelModeMain> {
+class _State extends State<QuizRoomMain> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   // late ClassicQuizPresenter _presenter;
   var data;
@@ -132,7 +122,7 @@ class _State extends State<DuelModeMain> {
       String  quiz_speed_id,String  domains) async {
     showLoaderDialog(context);
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL+"create_duel"), body: {
+    await http.post(Uri.parse(StringConstants.BASE_URL+"create_quiz_room"), body: {
       'user_id': userid.toString(),
       'difficulty_level_id': difficulty_level_id.toString(),
       'quiz_speed_id': quiz_speed_id.toString(),
@@ -173,7 +163,7 @@ class _State extends State<DuelModeMain> {
 
 
     log (createdata['data'].toString());
-  log(createdata['data']['dual_id'].toString());
+  log(createdata['data']['quiz_room'].toString());
   log(createdata['data']['user'].toString());
   log("domain: "+createdata['data']['domain'][0]['name']);
   log(createdata['data']['quiz_speed'].toString());
@@ -197,9 +187,9 @@ class _State extends State<DuelModeMain> {
   Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) =>  DuelModeInvite(quizspeedid:createdata['data']['quiz_speed'].toString(),
+          builder: (context) =>  QuizroomInvite(quizspeedid:createdata['data']['quiz_speed'].toString(),
             quiztypeid: createdata['data']['quiz_type'].toString(),
-            quizid:createdata['data']['dual_id'].toString(), type: widget.type.toString(),
+            quizid:createdata['data']['quiz_room'].toString(), type: widget.type.toString(),
             difficultylevelid:createdata['data']['difficulty'].toString(),
             seldomain: seldomainName, link: "", typeq: 0,)));
 
@@ -315,14 +305,14 @@ class _State extends State<DuelModeMain> {
                     Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                        child: const Text("DUEL MODE",
+                        child: const Text("QUIZ ROOM",
                             style: TextStyle(
                                 fontSize: 24, color: ColorConstants.txt))),
                     Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                         child: const Text(
-                            "Based on our Olympiad, this mode is for you to\nconstantly improve your performance",
+                            "Step1: Choose the domain,difficulty and the\nspeed of the quiz.",
                             style: TextStyle(
                                 fontSize: 15, color: ColorConstants.txt))),
                     Container(

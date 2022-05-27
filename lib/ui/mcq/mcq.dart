@@ -20,8 +20,10 @@ import '../../../modal/classicquestion/getQuestionResponse.dart';
 import 'dart:convert' as convert;
 
 import '../../../utils/countdowntimer.dart';
-import '../../duelmode/duelmoderesult/duelmode_result.dart';
-import '../../homepage/welcomeback_page.dart';
+
+import '../duelmode/duelmoderesult/duelmode_result.dart';
+import '../homepage/welcomeback_page.dart';
+import '../quizroom/quizroomresult/quizroom_result.dart';
 
 class Mcq extends StatefulWidget{
   var quizid;
@@ -274,6 +276,11 @@ onsuccess(savedata){
           context,
           MaterialPageRoute(
               builder: (context) =>  DuelModeResult(quizid: widget.quizid, type: widget.type,)));
+    }else if(widget.type=="3"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  QuizroomResult(quizid: widget.quizid, type: widget.type,)));
     }
 
 }
@@ -566,48 +573,7 @@ onsuccess(savedata){
                               )),
                         ),
 
-                        // Container(
-                        //   alignment: Alignment.center,
-                        //   child: GestureDetector(
-                        //       onTap: () {
-                        //         if( && currentques['hint']==null)
-                        //         showDialog(
-                        //             context: context,
-                        //             builder: (context) {
-                        //               return GestureDetector(
-                        //                 onTap: (){
-                        //                   Navigator.of(context).pop();
-                        //                 },
-                        //                 child: AlertDialog(
-                        //                   shape:  RoundedRectangleBorder(
-                        //                       borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                        //                   contentPadding: EdgeInsets.all(4),
-                        //                   titleTextStyle: TextStyle(
-                        //                       fontSize: 12, color: ColorConstants.txt),
-                        //                   title:  Image.asset(
-                        //                     "assets/images/hint.png",
-                        //                     height: 50,
-                        //                     width: 100,
-                        //                     alignment: Alignment.center,
-                        //                   ),
-                        //                   content:
-                        //                   Text(
-                        //                     "No Hint Available",
-                        //                     style: TextStyle(color: ColorConstants.txt,fontSize: 18),
-                        //                     textAlign: TextAlign.center,
-                        //                   ),
-                        //                 ),
-                        //               );
-                        //             });
-                        //         // Navigator.pushReplacement(context,
-                        //         //     MaterialPageRoute(builder: (context) => const VjournoMain()));
-                        //       },
-                        //       child: Image.asset(
-                        //         "assets/images/hint.png",
-                        //         height: 50,
-                        //         width: 100,
-                        //       )),
-                        // ),
+
                       Container(
 
                         alignment: Alignment.centerLeft,

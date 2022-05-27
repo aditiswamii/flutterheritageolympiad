@@ -20,7 +20,8 @@ import '../../modal/createquizresponse/CreateQuizResponse.dart';
 import '../../modal/domains/GetDomainsResponse.dart';
 import '../../utils/StringConstants.dart';
 import '../quiz/let_quiz.dart';
-import 'cquizrule/classicquizrule.dart';
+import '../rules/rulepage.dart';
+
 import 'dart:convert' as convert;
 class ClassicQuizMain extends StatefulWidget {
   const ClassicQuizMain({Key? key}) : super(key: key);
@@ -193,7 +194,7 @@ class _State extends State<ClassicQuizMain> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  RulesPage(quizspeedid:quiz_speed_id, quiztypeid: quiz_type_id, quizid: quizid, type: "1" ,)));
+            builder: (context) =>  RulesPage(quizspeedid:quiz_speed_id, quiztypeid: quiz_type_id, quizid: quizid, type: "1", tourid: 0, sessionid: 0 ,)));
   }
 
   showLoaderDialog(BuildContext context) {
@@ -254,7 +255,7 @@ class _State extends State<ClassicQuizMain> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WelcomePage()));
+                                    builder: (context) =>  WelcomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),

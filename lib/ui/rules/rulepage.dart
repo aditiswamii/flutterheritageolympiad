@@ -4,25 +4,15 @@ import 'dart:math';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/modal/classicquestion/ClassicQuestion.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
-
-
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../utils/StringConstants.dart';
-
-
+import '../mcq/mcq.dart';
 
 
 class RulesPage extends StatefulWidget {
@@ -30,7 +20,10 @@ class RulesPage extends StatefulWidget {
   var quizspeedid;
   var quizid;
   var type;
-   RulesPage({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid,required this.type}) : super(key: key);
+  var tourid;
+  var sessionid;
+   RulesPage({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid,
+     required this.type,required this.sessionid,required this.tourid}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -53,16 +46,26 @@ class _State extends State<RulesPage> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+    if(widget.type=="1"){
+      getClassicRule(widget.quiztypeid.toString(),widget.quizspeedid.toString());
+    }else if(widget.type=="2"){
+      getDualRule(widget.quizid.toString());
+    }else if(widget.type=="3"){
+      getQuizroomRule(widget.quizid.toString());
+    }else if(widget.type=="4"){
+      getTourRule(widget.tourid, widget.sessionid);
+    }
+
   }
   @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
-    getData(widget.quiztypeid,widget.quizspeedid);
+
     userdata();
   }
 
-  void getData(String quiz_type_id, String quiz_speed_id) async {
+  void getClassicRule(String quiz_type_id, String quiz_speed_id) async {
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"quiz_rules"),
         body: {
@@ -82,7 +85,67 @@ class _State extends State<RulesPage> {
       print(response.statusCode);
     }
   }
-
+  void getDualRule(String quizid) async {
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL+"duel_rules"),
+        body: {
+          'user_id': userid.toString(),
+          'id': quizid.toString(),
+        });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        ruledata = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(ruledata.length); // just printed length of data
+      });
+      var venam = jsonDecode(data!)['data'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
+  }
+  void getQuizroomRule(String quizid) async {
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL+"quiz_room_rule"),
+        body: {
+          'user_id': userid.toString(),
+          'quiz_room_id': quizid.toString(),
+        });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        ruledata = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(ruledata.length); // just printed length of data
+      });
+      var venam = jsonDecode(data!)['data'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
+  }
+  void getTourRule(int tournament_id,int session_id) async {
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL+"tournament_rule"),
+        body: {
+          'user_id': userid.toString(),
+          'tournament_id': tournament_id.toString(),
+          'session_id': session_id.toString(),
+        });
+    if (response.statusCode == 200) {
+      data = response.body; //store response as string
+      setState(() {
+        ruledata = jsonDecode(
+            data!)['data']; //get all the data from json string superheros
+        print(ruledata.length); // just printed length of data
+      });
+      var venam = jsonDecode(data!)['data'];
+      print(venam);
+    } else {
+      print(response.statusCode);
+    }
+  }
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);

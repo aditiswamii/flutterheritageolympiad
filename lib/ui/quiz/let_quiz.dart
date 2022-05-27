@@ -12,6 +12,8 @@ import 'package:flutterheritageolympiad/ui/classicquiz/domainlist.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:flutterheritageolympiad/ui/quizroom/quizroominvite/quizroominvitepage.dart';
+import 'package:flutterheritageolympiad/ui/quizroom/quizroommain/quizroom_main.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
@@ -172,6 +174,55 @@ var datalink;
         MaterialPageRoute(
             builder: (context) =>  DuelModeMain(type: "2",)));
   }
+  checkquizoom(String userid,String type) async {
+    showLoaderDialog(context);
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL+"checkquiz"),body: {
+      'user_id':userid.toString(),
+      'type':type.toString()
+    }
+    );
+
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          datalink = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(datalink.length);
+        });
+        linkshare(datalink.toString());
+      } else if(jsonResponse['status'] == 201 || jsonResponse['status'] == 204){
+        createnew();
+      }
+      else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      // onsuccess(null);
+      print(response.statusCode);
+    }
+
+  }
+  roomlinkshare(String link){
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>QuizroomInvite(seldomain: [], quizspeedid: "", type: "", quiztypeid: "", quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
+  }
+  createnewroom(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>  QuizRoomMain(type: "3",)));
+  }
   @override
   void initState() {
     super.initState();
@@ -230,7 +281,7 @@ var datalink;
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const WelcomePage()));
+                                      builder: (context) =>  WelcomePage()));
                             },
                             child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                           ),
@@ -329,10 +380,7 @@ var datalink;
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  QuizPage()));
+                         checkquizoom(userid.toString(), "3");
                         },
                         child: Container(
                           height: 150,

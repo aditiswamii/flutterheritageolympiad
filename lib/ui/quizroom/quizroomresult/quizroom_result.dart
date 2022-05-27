@@ -26,10 +26,10 @@ import '../../../utils/StringConstants.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
-class DuelModeResult extends StatefulWidget {
+class QuizroomResult extends StatefulWidget {
   var quizid;
   var type;
-  DuelModeResult({Key? key, required this.quizid,required this.type}) : super(key: key);
+  QuizroomResult({Key? key, required this.quizid,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -37,7 +37,7 @@ class DuelModeResult extends StatefulWidget {
 
 const TWO_PI = 3.14 * 2;
 
-class _State extends State<DuelModeResult> {
+class _State extends State<QuizroomResult> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   late double progressValue;
@@ -54,7 +54,7 @@ class _State extends State<DuelModeResult> {
   String packagename="";
   PackageInfo? packageInfo;
   //GetDuelResultResponse? duelresultr;
-  var duelresultr;
+  var roomresultr;
 
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -84,13 +84,13 @@ class _State extends State<DuelModeResult> {
     });
     print("App Name : ${appName}, App Package Name: ${packagename },App Version: ${version}, App build Number: ${buildNumber}");
   }
-  getDuelResult(String userid, String dualId) async {
+  getDuelResult(String userid, String room_id) async {
     http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "get_dual_result"),
-        body: {'user_id': userid.toString(), 'dual_id': dualId.toString()});
+        Uri.parse(StringConstants.BASE_URL + "get_room_result"),
+        body: {'user_id': userid.toString(), 'room_id': room_id.toString()});
     showLoaderDialog(context);
 
-    print("getDuelResultapi");
+    print("getroomResultapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
@@ -124,10 +124,10 @@ class _State extends State<DuelModeResult> {
     log("log" + jsonResponse.toString());
     if (jsonResponse != null) {
       setState(() {
-        duelresultr = jsonResponse;
+        roomresultr = jsonResponse;
       });
-      print("getdueljsonsuccess" + duelresultr.toString());
-      print("getdueljsonsuccessuser" + duelresultr['user_data'].toString());
+      print("getdueljsonsuccess" + roomresultr.toString());
+      print("getdueljsonsuccessuser" + roomresultr['user_data'].toString());
     }
   }
 
@@ -240,7 +240,7 @@ class _State extends State<DuelModeResult> {
                     style: TextStyle(fontSize: 24, color: ColorConstants.txt),
                     textAlign: TextAlign.center,
                   )),
-              duelresultr != null
+              roomresultr != null
                   ? Container(
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -275,50 +275,50 @@ class _State extends State<DuelModeResult> {
                                 children: [
                                   Center(
                                       child: Text(
-                                    "${duelresultr['user_data']['xp'].toString()} XP",
+                                    "${roomresultr['user_data']['xp'].toString()} XP",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
                                         fontWeight: FontWeight.w600),
                                   )),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           0.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <
                                           10.0)
                                     Center(child: Text("oh boy!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           10.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <
                                           50.0)
                                     Center(child: Text("Don't give up!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                               ['percentage']
                                           .toString()) ==
                                       50.0)
                                     Center(
                                         child: Text("Practice makes perfect!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           50.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <=
                                           90.0)
                                     Center(child: Text("Almost there!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           90.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <=
                                           100.0)
@@ -330,49 +330,49 @@ class _State extends State<DuelModeResult> {
                                 children: [
                                   Center(
                                       child: Text(
-                                          "${duelresultr['user_data']['percentage'].toString()} %",
+                                          "${roomresultr['user_data']['percentage'].toString()} %",
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.black,
                                               fontWeight: FontWeight.w600))),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           0.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <
                                           10.0)
                                     Center(child: Text("oh boy!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           10.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <
                                           50.0)
                                     Center(child: Text("Don't give up!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                               ['percentage']
                                           .toString()) ==
                                       50.0)
                                     Center(
                                         child: Text("Practice makes perfect!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           50.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <=
                                           90.0)
                                     Center(child: Text("Almost there!")),
-                                  if (double.parse(duelresultr['user_data']
+                                  if (double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) >
                                           90.0 &&
-                                      double.parse(duelresultr['user_data']
+                                      double.parse(roomresultr['user_data']
                                                   ['percentage']
                                               .toString()) <=
                                           100.0)
@@ -384,7 +384,7 @@ class _State extends State<DuelModeResult> {
                         ),
                       ))
                   : Container(),
-              duelresultr != null
+              roomresultr != null
                   ? Container(
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       decoration: BoxDecoration(color: Colors.white),
@@ -406,7 +406,7 @@ class _State extends State<DuelModeResult> {
                                 style: TextStyle(color: ColorConstants.txt),
                               ),
                             ),
-                            duelresultr == null
+                            roomresultr == null
                                 ? Center(
                                     child: Container(),
                                   )
@@ -418,7 +418,7 @@ class _State extends State<DuelModeResult> {
                                         physics: ClampingScrollPhysics(
                                             parent: BouncingScrollPhysics()),
                                         shrinkWrap: true,
-                                        itemCount: duelresultr['result'].length,
+                                        itemCount: roomresultr['result'].length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return Container(
@@ -437,7 +437,7 @@ class _State extends State<DuelModeResult> {
                                                 //   ),
                                                 // ),
                                                 percentage: double.parse(
-                                                    (int.parse(duelresultr['result']
+                                                    (int.parse(roomresultr['result']
                                                                         [index][
                                                                     'percentage']
                                                                 .toString()) /
@@ -456,7 +456,7 @@ class _State extends State<DuelModeResult> {
                                                         child: CircleAvatar(
                                                           radius: 30.0,
                                                           backgroundImage: NetworkImage(
-                                                              duelresultr['result']
+                                                              roomresultr['result']
                                                                           [
                                                                           index]
                                                                       ['image']
@@ -468,7 +468,7 @@ class _State extends State<DuelModeResult> {
                                                       ),
                                                       Center(
                                                         child: Text(
-                                                          duelresultr['result']
+                                                          roomresultr['result']
                                                                       [index]
                                                                   ['name']
                                                               .toString(),
@@ -486,7 +486,7 @@ class _State extends State<DuelModeResult> {
                                                 backgroundColor: ColorConstants.lightgrey200,
 
 
-                                                progressBarColor:int.parse(duelresultr['result'][index]['percentage'].toString())<10?ColorConstants.stage1color: int.parse(duelresultr['result'][index]['percentage'].toString())<49?ColorConstants.stage2color:int.parse(duelresultr['result'][index]['percentage'].toString())==50?ColorConstants.stage2color:int.parse(duelresultr['result'][index]['percentage'].toString())<50?ColorConstants.stage3color:int.parse(duelresultr['result'][index]['percentage'].toString())<90?ColorConstants.stage3color:int.parse(duelresultr['result'][index]['percentage'].toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+                                                progressBarColor:int.parse(roomresultr['result'][index]['percentage'].toString())<10?ColorConstants.stage1color: int.parse(roomresultr['result'][index]['percentage'].toString())<49?ColorConstants.stage2color:int.parse(roomresultr['result'][index]['percentage'].toString())==50?ColorConstants.stage2color:int.parse(roomresultr['result'][index]['percentage'].toString())<50?ColorConstants.stage3color:int.parse(roomresultr['result'][index]['percentage'].toString())<90?ColorConstants.stage3color:int.parse(roomresultr['result'][index]['percentage'].toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
                                               ));
                                         })),
                           ],
@@ -494,11 +494,11 @@ class _State extends State<DuelModeResult> {
                       ),
                     )
                   : Container(),
-              duelresultr!=null?Column(
+              roomresultr!=null?Column(
                 children: [
                   GestureDetector(
                     onTap: (){
-                      Share.share("I got " +"${duelresultr['user_data']['xp'].toString()} XP"+" on Cultre App. you can play on "
+                      Share.share("I got " +"${roomresultr['user_data']['xp'].toString()} XP"+" on Cultre App. you can play on "
                           "https://play.google.com/store/apps/details?id=$packagename", subject: 'Share link');
 
                     },

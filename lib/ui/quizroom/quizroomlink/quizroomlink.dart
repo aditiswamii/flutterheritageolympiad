@@ -15,12 +15,13 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../duelcontactlist/duelcontactlist.dart';
-import '../duelmodeinvite/invitepage.dart';
+import '../quizroominvite/quizroominvitepage.dart';
 
 
 
-class DuelModeLink extends StatefulWidget {
+
+
+class QuizroomLink extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
   var difficultylevelid;
@@ -28,14 +29,14 @@ class DuelModeLink extends StatefulWidget {
   var type;
   var seldomain;
   var link;
- DuelModeLink({Key? key,required this.quizspeedid,required this.quiztypeid,
+ QuizroomLink({Key? key,required this.quizspeedid,required this.quiztypeid,
    required this.quizid,required this.type,required this.difficultylevelid,required seldomain,required this.link}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<DuelModeLink> {
+class _State extends State<QuizroomLink> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   String link="cul.tre/ejojkx";
@@ -55,7 +56,7 @@ class _State extends State<DuelModeLink> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+        MaterialPageRoute(builder: (BuildContext context) => QuizroomInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
           quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link, typeq: 0,)));
     // Do some stuff.
     return true;
@@ -222,7 +223,7 @@ class _State extends State<DuelModeLink> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DuelModeInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                builder: (context) => QuizroomInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
                                   quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link, typeq: 0,)));
                       },
                       child: const Text(

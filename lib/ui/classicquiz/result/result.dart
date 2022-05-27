@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/answerkey/answerkey.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
+
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';

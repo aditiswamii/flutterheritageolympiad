@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/dualdetailsresponse/GetDualDetailResponse.dart';
+
+import 'package:flutterheritageolympiad/modal/roomlinkdetailresponse/GetRoomLinkdetailsResponse.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 
@@ -23,9 +24,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../../../utils/StringConstants.dart';
 import '../../quiz/let_quiz.dart';
-import '../duelcontactlist/duelcontactlist.dart';
+import '../quizroomcontactlist/quizroomcontactlist.dart';
+import '../quizroomlink/quizroomlink.dart';
+import '../waitroom/waitroom.dart';
 
-class DuelModeInvite extends StatefulWidget {
+
+class QuizroomInvite extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
   var difficultylevelid;
@@ -34,14 +38,14 @@ class DuelModeInvite extends StatefulWidget {
   var link;
  var seldomain;
  int typeq;
-   DuelModeInvite({Key? key,required this.quizspeedid,required this.quiztypeid,
+   QuizroomInvite({Key? key,required this.quizspeedid,required this.quiztypeid,
      required this.quizid,required this.type,required this.difficultylevelid,required this.seldomain,required this.link,required this.typeq}) : super(key: key);
 
   @override
-  _DuelModeInviteState createState() => _DuelModeInviteState();
+  _QuizroomInviteState createState() => _QuizroomInviteState();
 }
 
-class _DuelModeInviteState extends State<DuelModeInvite> {
+class _QuizroomInviteState extends State<QuizroomInvite> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool value = false;
   var username;
@@ -78,15 +82,15 @@ class _DuelModeInviteState extends State<DuelModeInvite> {
      log(widget.seldomain.toString());
     generatelink(userid.toString(), widget.quizid.toString());
    }else if(widget.typeq==1){
-    dualdetails(userid.toString(), widget.link.toString());
+    roomdetails(userid.toString(), widget.link.toString());
    }
 
   }
-  void generatelink(String userid,String dualid) async {
+  void generatelink(String userid,String room_id) async {
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL+"generate_link"), body: {
+    await http.post(Uri.parse(StringConstants.BASE_URL+"generate_link_quiz_room"), body: {
       'user_id': userid.toString(),
-      'dual_id': dualid.toString()
+      'room_id': room_id.toString()
     });
     showLoaderDialog(context);
 
@@ -125,8 +129,8 @@ class _DuelModeInviteState extends State<DuelModeInvite> {
 
 
   }
-var dualdata;
-  void dualdetails(String userid,String duallink) async {
+var roomdata;
+  void roomdetails(String userid,String duallink) async {
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"dualdetails"), body: {
       'user_id': userid.toString(),
@@ -141,10 +145,10 @@ var dualdata;
 
         //store response as string
         setState(() {
-          dualdata = jsonResponse; //get all the data from json string superheros
+          roomdata = jsonResponse; //get all the data from json string superheros
           // print("domiaindata: "+gendata['data']['link'].toString()); // just printed length of data
         });
-        setduellinkdetail(getDualDetailResponseFromJson(dualdata!));
+        setroomlinkdetail(getRoomLinkdetailsResponseFromJson(roomdata!));
       } else {
 
         snackBar = SnackBar(
@@ -159,7 +163,7 @@ var dualdata;
       print(response.statusCode);
     }
   }
-  setduellinkdetail(GetDualDetailResponse obj){
+  setroomlinkdetail(GetRoomLinkdetailsResponse obj){
    if(obj.data!=null){
      setState(() {
        seldomain=obj.data!.domain.toString();
@@ -279,14 +283,14 @@ var dualdata;
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                  child: const Text("DUEL MODE",
+                  child: const Text("QUIZ ROOM",
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
-                      "Invite someone else to Duel with",
+                      "Step 2: Invite minimum 2 other players to quiz with",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt))),
               Container(
@@ -312,7 +316,7 @@ var dualdata;
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  DuelModeSelectPlayer(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                    builder: (context) =>  QuizRoomContactList(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
                                       quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link,)));
                           },
                           child: Text("INVITE",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
@@ -332,7 +336,7 @@ var dualdata;
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  DuelModeLink(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
+                                    builder: (context) =>  QuizroomLink(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
                                       quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link,)));
                             // Navigator.pushReplacement(
                             //     context,
@@ -432,23 +436,6 @@ var dualdata;
                                       fontSize: 15),
                                 ),
                               ),
-    //                           if(seldomain!=null)
-    //                           ListView.builder(
-    //                           physics: const BouncingScrollPhysics(),
-    // shrinkWrap: true,
-    // itemCount: seldomain!.length,
-    // itemBuilder: (BuildContext context, int index) {
-    //   return
-    //     Container(
-    //       alignment: Alignment.centerLeft,
-    //       child: Text(
-    //         seldomain.toString(), textAlign: TextAlign.left,
-    //         style: TextStyle(
-    //             color: ColorConstants.txt,
-    //             fontSize: 15),
-    //       ),
-    //     );
-    // }),
 
                           ],
                         ),
@@ -456,6 +443,25 @@ var dualdata;
                       ),
                     ],
                   ),
+                ),
+              ),
+
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (BuildContext context) => Waitroom()));
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  child: Center(
+                    child: Text(
+                      "RETURN TO WAITROOM",
+                      style: TextStyle(
+                          color: ColorConstants.txt,
+                          fontSize: 15,fontWeight: FontWeight.w600),
+                    ),
+                  ),
+
                 ),
               ),
               Container(
@@ -487,30 +493,6 @@ var dualdata;
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // ElevatedButton(
-                    //   style: ElevatedButton.styleFrom(
-                    //     primary: ColorConstants.verdigris,
-                    //     onPrimary: Colors.white,
-                    //     elevation: 3,
-                    //     alignment: Alignment.center,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(30.0)),
-                    //     fixedSize: const Size(100, 40),
-                    //     //////// HERE
-                    //   ),
-                    //   onPressed: () {
-                    //     Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (context) => const WelcomePage()));
-                    //   },
-                    //   child: const Text(
-                    //     "LET'S GO!",
-                    //     style: TextStyle(
-                    //         color: ColorConstants.lightgrey200, fontSize: 14),
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

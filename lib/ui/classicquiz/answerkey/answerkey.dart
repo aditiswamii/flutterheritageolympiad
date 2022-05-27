@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/dialog/raisedispute/Dialogdispute.dart';
 import 'package:flutterheritageolympiad/modal/classicquestion/ClassicQuestion.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/questionpageview/mcq.dart';
+
 import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
 
 import 'package:http/http.dart' as http;

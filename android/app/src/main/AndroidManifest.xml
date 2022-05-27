@@ -34,15 +34,15 @@
                     android:pathPrefix="/cul.tre" />
                 <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
-            <intent-filter android:autoVerify="true"
-                android:label="Cultre App">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "example://gizmos” -->
-                <data android:scheme="cultre"
-                    android:host="cultre.app" />
-            </intent-filter>
+<!--            <intent-filter android:autoVerify="true"-->
+<!--                android:label="Cultre App">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                &lt;!&ndash; Accepts URIs that begin with "example://gizmos” &ndash;&gt;-->
+<!--                <data android:scheme="cultre"-->
+<!--                    android:host="cultre.app" />-->
+<!--            </intent-filter>-->
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
