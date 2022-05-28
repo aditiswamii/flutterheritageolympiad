@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../ui/homepage/homeview.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:convert' as convert;
+
+import '../../utils/StringConstants.dart';
+
 
 class DialogQuizRoomInviteReceive extends StatefulWidget{
   var name;
@@ -28,6 +36,8 @@ class _State extends State<DialogQuizRoomInviteReceive> {
   var username;
   var country;
   var userid;
+  var snackBar;
+  HomeView? _view;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -39,42 +49,78 @@ class _State extends State<DialogQuizRoomInviteReceive> {
     speed=widget.speed;
     domainsel=widget.domainsel;
   }
-  // acceptinvite(String userid) async {
-  //   showLoaderDialog(context);
-  //   http.Response response =
-  //   await http.post(Uri.parse(StringConstants.BASE_URL + "accept_invitation"), body: {
-  //     'user_id': userid.toString(),
-  //   });
-  //   var jsonResponse = convert.jsonDecode(response.body);
-  //   if (response.statusCode == 200) {
-  //     Navigator.pop(context);
-  //     if (jsonResponse['status'] == 200) {
-  //       data = response.body;
-  //       //final responseJson = json.decode(response.body);//store response as string
-  //       setState(() {
-  //         myinvdata = jsonResponse; //get all the data from json string superheros
-  //         print(myinvdata.length);
-  //         print(myinvdata.toString());
-  //       });
-  //       onsuccess(myinvdata);
-  //       // var venam = jsonDecode(data!)['data'];
-  //       // print(venam);
-  //       //last_id
-  //
-  //     } else {
-  //       snackBar = SnackBar(
-  //         content: Text(
-  //             jsonResponse['message']),
-  //       );
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(snackBar);
-  //     }
-  //   } else {
-  //     Navigator.pop(context);
-  //     print(response.statusCode);
-  //   }
-  //
-  // }
+
+  acceptrequest(String userid,String link,index,type) async {
+    showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "accept_invitation_quiz_room"), body: {
+      'user_id': userid.toString(),
+      'room_link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        _view!.setRData(type,index,widget.id.toString());
+      }
+      else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message'].toString()),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  rejectrequest(String userid,String link,index,type) async {
+    showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "reject_room_invitation"), body: {
+      'user_id': userid.toString(),
+      'room_link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        _view!.setRData(type,index,widget.id.toString());
+      }
+      else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message'].toString()),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -98,7 +144,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text('Quizroom Invite Received from',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
+                    child: Text('Quizroom Invite Received from',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:16 ,fontWeight: FontWeight.w600),)
                 ),
                 Container(
                     alignment: Alignment.center,
@@ -106,7 +152,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text(widget.name.toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
+                    child: Text(widget.name.toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 16 ),)
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -130,7 +176,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                   child: Text(
                     "QUIZ SUMMARY",
                     style: TextStyle(
-                        color: ColorConstants.txt, fontSize: 16,fontWeight: FontWeight.w600),
+                        color: ColorConstants.txt, fontSize: 14,fontWeight: FontWeight.w600),
                   ),
                 ),
                 Container(
@@ -156,13 +202,13 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                                 "DIFFICULTY:",
                                 style: TextStyle(
                                     color:  ColorConstants.txt,
-                                    fontSize: 14,fontWeight: FontWeight.w600),
+                                    fontSize: 12,fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "$diffi",
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14),
+                                    fontSize: 12),
                               ),
                             ],
                           ),
@@ -177,13 +223,13 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                                 "SPEED:",
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14,fontWeight: FontWeight.w600),
+                                    fontSize: 12,fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "$speed",
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14),
+                                    fontSize: 12),
                               ),
                             ],
                           ),
@@ -200,7 +246,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                                   "DOMAINS SELECTED:",textAlign: TextAlign.left,
                                   style: TextStyle(
                                       color: ColorConstants.txt,
-                                      fontSize: 14,fontWeight: FontWeight.w600),
+                                      fontSize: 12,fontWeight: FontWeight.w600),
                                 ),
                               ),
                               Container(
@@ -209,7 +255,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                                   "$domainsel",textAlign: TextAlign.left,
                                   style: TextStyle(
                                       color: ColorConstants.txt,
-                                      fontSize: 14),
+                                      fontSize: 12),
                                 ),
                               ),
                             ],
@@ -221,7 +267,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -233,14 +279,12 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                           alignment: Alignment.center,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
+                          fixedSize: const Size(100, 30),
                           //////// HERE
                         ),
                         onPressed: () {
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => DuelModeMain()));
+                          rejectrequest(userid.toString(), widget.link.toString(), widget.index.toString(), 2);
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           "REJECT",
@@ -257,14 +301,12 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                           alignment: Alignment.center,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
+                          fixedSize: const Size(100, 30),
                           //////// HERE
                         ),
                         onPressed: () {
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const WelcomePage()));
+                         acceptrequest(userid.toString(), widget.link.toString(), widget.index.toString(), 1);
+                         Navigator.pop(context);
                         },
                         child: const Text(
                           "ACCEPT",

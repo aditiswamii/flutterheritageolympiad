@@ -27,6 +27,7 @@ import '../../modal/getuserleagueresponse/GetUserLeagueResponse.dart';
 import '../../utils/StringConstants.dart';
 import '../duelmode/duelmodeinvite/invitepage.dart';
 import '../duelmode/duelmoderesult/duelmode_result.dart';
+import '../quizroom/waitroom/waitroom.dart';
 
 class QuizPage extends StatefulWidget{
 
@@ -194,9 +195,9 @@ var datalink;
               data!)['data']; //get all the data from json string superheros
           print(datalink.length);
         });
-        linkshare(datalink.toString());
+        roomlinkshare(datalink.toString());
       } else if(jsonResponse['status'] == 201 || jsonResponse['status'] == 204){
-        createnew();
+        createnewroom();
       }
       else {
         snackBar = SnackBar(

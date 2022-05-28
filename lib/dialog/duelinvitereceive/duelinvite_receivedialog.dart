@@ -50,20 +50,18 @@ class _State extends State<DialogDuelInviteReceive> {
     speed=widget.speed;
     domainsel=widget.domainsel;
   }
-  acceptcontact(String userid,String link,index,type) async {
+  acceptdual(String userid,String link,index,type) async {
     showLoaderDialog(context);
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "accept_link_invitation"), body: {
+    await http.post(Uri.parse(StringConstants.BASE_URL + "accept_invitation"), body: {
       'user_id': userid.toString(),
-      'link':link.toString()
+      'dual_link':link.toString()
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
-       _view!.setDData(type,index);
-      } else  if (jsonResponse['status'] == 201) {
-        _view!.setDData(type,index);
+       _view!.setDData(type,index,widget.id.toString());
       }
       else {
         snackBar = SnackBar(
@@ -79,18 +77,18 @@ class _State extends State<DialogDuelInviteReceive> {
     }
 
   }
-  rejectcontact(String userid,String link,index,type) async {
+  rejectdual(String userid,String link,index,type) async {
     showLoaderDialog(context);
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "reject_link_invitation"), body: {
+    await http.post(Uri.parse(StringConstants.BASE_URL + "reject_invitation"), body: {
       'user_id': userid.toString(),
-      'link':link.toString()
+      'dual_link':link.toString()
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
-        _view!.setDData(type,index);
+        _view!.setDData(type,index,widget.id.toString());
       }
       else {
         snackBar = SnackBar(
@@ -146,7 +144,7 @@ class _State extends State<DialogDuelInviteReceive> {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text('Duel Invite Received from',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
+                    child: Text('Duel Invite Received from',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:16 ,fontWeight: FontWeight.w600),)
                 ),
                 Container(
                     alignment: Alignment.center,
@@ -154,7 +152,7 @@ class _State extends State<DialogDuelInviteReceive> {
                     decoration: BoxDecoration(
                         color:Colors.white
                     ),
-                    child: Text(widget.name.toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
+                    child: Text(widget.name.toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 16 ),)
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -178,7 +176,7 @@ class _State extends State<DialogDuelInviteReceive> {
                   child: Text(
                     "QUIZ SUMMARY",
                     style: TextStyle(
-                        color: ColorConstants.txt, fontSize: 16,fontWeight: FontWeight.w600),
+                        color: ColorConstants.txt, fontSize: 14,fontWeight: FontWeight.w600),
                   ),
                 ),
                 Container(
@@ -204,13 +202,13 @@ class _State extends State<DialogDuelInviteReceive> {
                                 "DIFFICULTY:",
                                 style: TextStyle(
                                     color:  ColorConstants.txt,
-                                    fontSize: 14,fontWeight: FontWeight.w600),
+                                    fontSize: 12,fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "$diffi",
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14),
+                                    fontSize: 12),
                               ),
                             ],
                           ),
@@ -225,13 +223,13 @@ class _State extends State<DialogDuelInviteReceive> {
                                 "SPEED:",
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14,fontWeight: FontWeight.w600),
+                                    fontSize: 12,fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "$speed",
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14),
+                                    fontSize: 12),
                               ),
                             ],
                           ),
@@ -248,7 +246,7 @@ class _State extends State<DialogDuelInviteReceive> {
                                   "DOMAINS SELECTED:",textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 14,fontWeight: FontWeight.w600),
+                                    fontSize: 12,fontWeight: FontWeight.w600),
                                 ),
                               ),
                               Container(
@@ -257,7 +255,7 @@ class _State extends State<DialogDuelInviteReceive> {
                                   "$domainsel",textAlign: TextAlign.left,
                                   style: TextStyle(
                                       color: ColorConstants.txt,
-                                      fontSize: 14),
+                                      fontSize: 12),
                                 ),
                               ),
                             ],
@@ -269,7 +267,7 @@ class _State extends State<DialogDuelInviteReceive> {
                   ),
                 ),
             Container(
-               margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -281,7 +279,7 @@ class _State extends State<DialogDuelInviteReceive> {
                       alignment: Alignment.center,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0)),
-                      fixedSize: const Size(100, 40),
+                      fixedSize: const Size(100, 30),
                       //////// HERE
                     ),
                     onPressed: () {
@@ -305,7 +303,7 @@ class _State extends State<DialogDuelInviteReceive> {
                       alignment: Alignment.center,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0)),
-                      fixedSize: const Size(100, 40),
+                      fixedSize: const Size(100, 30),
                       //////// HERE
                     ),
                     onPressed: () {

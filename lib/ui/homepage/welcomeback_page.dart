@@ -15,6 +15,7 @@ import 'package:flutterheritageolympiad/ui/feed/feed.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homeview.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
+import 'package:flutterheritageolympiad/ui/quizroom/waitroom/waitroom.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/SharedObjects.dart';
@@ -1150,10 +1151,100 @@ if(tournament!=null && tournament['tournament_id']>0){
   }
 
   @override
-  void setDData(int type, int index) {
-    // TODO: implement setDData
+  void setDData(int type, int index,String quizid) {
+    if(type == 1){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: quizid, type: "2", tourid: 0, sessionid: 0 ,)));
+
+    }else
+      snackBar = SnackBar(
+        content: Text(
+           "Rejected Successfully"),
+      );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(snackBar);
+      if(dual!=null && dual!.length>index+1){
+      AlertDialog errorDialog = AlertDialog(
+          insetPadding: EdgeInsets.all(4),
+          titlePadding: EdgeInsets.all(4),
+          contentPadding:EdgeInsets.all(4),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(
+                  20.0)), //this right here
+          content: Container(
+              height:470,
+              width: 250,
+              alignment: Alignment.center,
+              child: DialogDuelInviteReceive(id: dual![index+1]['id'], image: dual![index+1]['image'], diffi: dual![index+1]['difficulty'], index: index+1,
+                domainsel:  dual![index+1]['domain'], link: dual![index+1]['link'], speed: dual![index+1]['quiz_speed'], name: dual![index+1]['name'],)));
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+            // Future.delayed(
+            //   Duration(seconds: 2),
+            //       () {
+            //     Navigator.of(context).pop(true);
+            //   },
+            // );
+            return  errorDialog;
+          }
+      );
+
+    }
   }
 
+  @override
+  void setRData(int type, int index, String quizid) {
+    if(type == 1){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  Waitroom(quizid: quizid,)));
+
+    }else
+      snackBar = SnackBar(
+        content: Text(
+            "Rejected Successfully"),
+      );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(snackBar);
+    if(quizroom!=null && quizroom!.length>index+1){
+      AlertDialog errorDialog = AlertDialog(
+          insetPadding: EdgeInsets.all(4),
+          titlePadding: EdgeInsets.all(4),
+          contentPadding:EdgeInsets.all(4),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(
+                  20.0)), //this right here
+          content: Container(
+              height:470,
+              width: 250,
+              alignment: Alignment.center,
+              child: DialogDuelInviteReceive(id: quizroom![index+1]['id'], image: quizroom![index+1]['image'], diffi: quizroom![index+1]['difficulty'], index: index+1,
+                domainsel:  quizroom![index+1]['domain'], link: quizroom![index+1]['link'], speed: quizroom![index+1]['quiz_speed'], name: quizroom![index+1]['name'],)));
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+            // Future.delayed(
+            //   Duration(seconds: 2),
+            //       () {
+            //     Navigator.of(context).pop(true);
+            //   },
+            // );
+            return  errorDialog;
+          }
+      );
+
+    }
+  }
+
+  // Widget quizroomdialog(BuildContext){
+  //
+  // }
 
 
 }

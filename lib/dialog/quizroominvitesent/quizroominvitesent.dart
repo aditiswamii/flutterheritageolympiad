@@ -91,7 +91,7 @@ class _State extends State<DialogQuizroomInviteSent> with WidgetsBindingObserver
                     ),
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (BuildContext context) => Waitroom()));
+                          MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.id.toString(),)));
 
                     },
                     child: const Text(

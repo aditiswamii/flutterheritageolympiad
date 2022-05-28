@@ -449,7 +449,7 @@ var roomdata;
               GestureDetector(
                 onTap: (){
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (BuildContext context) => Waitroom()));
+                      MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.quizid.toString(),)));
                 },
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
