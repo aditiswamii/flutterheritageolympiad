@@ -923,6 +923,53 @@ if(tournament!=null && tournament['tournament_id']>0){
             alignment: Alignment.centerLeft,
             margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
             child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
+
+         // Container(
+         //   child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+         //       shrinkWrap: true,
+         //       physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
+         //
+         //       children: [
+         //         GestureDetector(
+         //           onTap:(){
+         //             Navigator.pushReplacement(
+         //                 context,
+         //                 MaterialPageRoute(
+         //                     builder: (context) => MyAccountPage()));
+         //           },
+         //           child: Container(
+         //             height: 150,
+         //             width: 150,
+         //             color: ColorConstants.red200,
+         //
+         //             child: Column(
+         //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         //               children: [
+         //                 Container(
+         //                   padding: EdgeInsets.all(10),
+         //                   alignment: Alignment.topRight,
+         //                   child: Image.asset("assets/images/mcq_pattern2.png",
+         //                       height: 20,width: 20,alignment: Alignment.topRight),
+         //                 ),
+         //                 Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+         //                 Container(
+         //                   padding: EdgeInsets.all(10),
+         //                   alignment: Alignment.topLeft,
+         //                   child: Image.asset("assets/images/mcq_pattern2.png",
+         //                       height: 20,width: 20,alignment: Alignment.topLeft),
+         //                 ),
+         //               ],
+         //             ),
+         //
+         //           ),
+         //         ),
+         //         ]
+         //   )
+         //
+         //
+         // ),
+
+
           Container(
             //height: 300,
               width: MediaQuery.of(context).size.width,

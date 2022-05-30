@@ -338,9 +338,16 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                                 Container(padding: EdgeInsets.all(4),height: 30, width: 30,
                                                   child: Image.asset("assets/images/month30.png",fit: BoxFit.fill,
                                                   ),),
-                                              Container(padding: EdgeInsets.all(4),height: 30, width: 30,
-                                                child: Image.asset("assets/images/share_feed.png",fit: BoxFit.fill,
-                                                ),),
+                                              GestureDetector(
+                                                onTap:(){
+                                                  Share.share("Tournament: "+"${gettourR!.data![index].title}" +"\n"+"Interval: "
+                                                      + "${gettourR!.data![index].intervalSession}" +"\n"+"Duration: "
+                                                      + "${gettourR!.data![index].duration}"  +"\n"+"you can play tournament on http://cultre.app/"+"${gettourR!.data![index].link}", subject: 'share');
+                                                },
+                                                child: Container(padding: EdgeInsets.all(4),height: 30, width: 30,
+                                                  child: Image.asset("assets/images/share_feed.png",fit: BoxFit.fill,
+                                                  ),),
+                                              ),
                                             ],
                                           )
 
@@ -493,6 +500,13 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                     ),
                                   ],
                                 ),
+                                // if(gettourR!.data![index].waitlist_joined==1){
+                                //   itemView.joinroom.visibility = View.VISIBLE
+                                //   itemView.letsgo.visibility = View.GONE
+                                // } else {
+                                //   itemView.joinroom.visibility = View.GONE
+                                //   itemView.letsgo.visibility = View.VISIBLE
+                                // }
                                 Container(
                                   child: Center(
                                     child: ElevatedButton(
