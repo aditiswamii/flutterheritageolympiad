@@ -17,7 +17,7 @@ import 'package:flutterheritageolympiad/ui/quizroom/quizroommain/quizroom_main.d
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -99,8 +99,8 @@ class _State extends State<QuizPage> {
           print(userleagdata.length);
         });
         getuserleagueresponse(getUserLeagueResponseFromJson(data!));
-        var venam = userleagdata(data!)['data'];
-        print(venam.toString());
+        // var venam = userleagdata(data!)['data'];
+        // print(venam.toString());
       } else {
         snackBar = SnackBar(
           content: Text(
@@ -237,7 +237,7 @@ var datalink;
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>WelcomePage()));
+        builder: (BuildContext context) =>HomePage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -282,7 +282,7 @@ var datalink;
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>  WelcomePage()));
+                                      builder: (context) =>  HomePage()));
                             },
                             child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                           ),
@@ -314,117 +314,104 @@ var datalink;
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 15,color: ColorConstants.txt))),
-                Container(
-                  //height: 300,
-                  width: MediaQuery.of(context).size.width,
-                  //alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                        onTap:(){
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  //  Domainlist()
-                                  ClassicQuizMain()
-                              ));
-                        },
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          color: ColorConstants.red200,
 
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(child: Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
-                              Container(child: Text("you are your own standard!",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
+    Container(
+    child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
+    shrinkWrap: true,
+    physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
 
-                            ],
-                          ),
+    children: [
+      GestureDetector(
+        onTap:(){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  //  Domainlist()
+                  ClassicQuizMain()
+              ));
+        },
+        child: Container(
+          height: 150,
+          width: 150,
+          color: ColorConstants.red200,
 
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                           checkquiz(userid.toString(), "2");
-                        },
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          color:ColorConstants.yellow200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(child: Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+              Container(child: Text("you are your own standard!",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
 
-                          child:  Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(child: Text("DUEL",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
-                              Container(child: Text("[v],real-time match",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
+            ],
+          ),
 
-                            ],
-                          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: (){
+          checkquiz(userid.toString(), "2");
+        },
+        child: Container(
+          height: 150,
+          width: 150,
+          color:ColorConstants.yellow200,
 
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  //height: 300,
-                  width: MediaQuery.of(context).size.width,
-                  //alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                         checkquizoom(userid.toString(), "3");
-                        },
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          color: ColorConstants.blue200,
+          child:  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(child: Text("DUEL",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+              Container(child: Text("[v],real-time match",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
 
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(child: Text("QUIZ ROOM",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
-                              Container(child: Text("Custom group quizzes",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
+            ],
+          ),
 
-                            ],
-                          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          checkquizoom(userid.toString(), "3");
+        },
+        child: Container(
+          height: 150,
+          width: 150,
+          color: ColorConstants.blue200,
 
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  TournamentPage()));
-                        },
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          color: Colors.black26,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(child: Text("QUIZ ROOM",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+              Container(child: Text("Custom group quizzes",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
 
-                          child:  Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(child: Text("TOURNAMENT",style: TextStyle(color:ColorConstants.txt,fontSize: 20),textAlign: TextAlign.center,)),
-                              Container(child: Text("The leagues beckon!",style: TextStyle(color:ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,)),
+            ],
+          ),
 
-                            ],
-                          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  TournamentPage()));
+        },
+        child: Container(
+          height: 150,
+          width: 150,
+          color: Colors.black26,
 
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+          child:  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(child: Text("TOURNAMENT",style: TextStyle(color:ColorConstants.txt,fontSize: 20),textAlign: TextAlign.center,)),
+              Container(child: Text("The leagues beckon!",style: TextStyle(color:ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,)),
+
+            ],
+          ),
+
+        ),
+      ),
+]
+    )),
 
 
               userLeagueR!=null?  Container(

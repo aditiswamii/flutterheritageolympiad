@@ -1,11 +1,12 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
+import 'package:flutterheritageolympiad/widget/deeplink.dart';
+import 'package:provider/provider.dart';
 
 
 import 'dart:async';
@@ -20,6 +21,8 @@ void main() {
     theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
     home: MyApp(),
+
+
   ));
 }
 
@@ -32,81 +35,10 @@ class MyApp extends StatefulWidget {
 
 class _State extends State<MyApp> {
   bool isLoggedIn = false;
-  // String name = '';
-  // bool _initialURILinkHandled = false;
-  // Uri? _initialURI;
-  // Uri? _currentURI;
-  // Object? _err;
+ 
   String link = "";
-  StreamSubscription? _streamSubscription;
+  
 
-  // Future<void> _initURIHandler() async {
-  //   // 1
-  //   if (!_initialURILinkHandled) {
-  //     _initialURILinkHandled = true;
-  //     // 2
-  //    var snackBar = SnackBar(
-  //       content: Text("Invoked _initURIHandler"),
-  //     );
-  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  //     try {
-  //       // 3
-  //       final initialURI = await getInitialUri();
-  //       // 4
-  //       if (initialURI != null) {
-  //         debugPrint("Initial URI received $initialURI");
-  //         if (!mounted) {
-  //           return;
-  //         }
-  //         setState(() {
-  //           _initialURI = initialURI;
-  //         });
-  //       } else {
-  //         debugPrint("Null Initial URI received");
-  //       }
-  //     } on PlatformException { // 5
-  //       debugPrint("Failed to receive initial uri");
-  //     } on FormatException catch (err) { // 6
-  //       if (!mounted) {
-  //         return;
-  //       }
-  //       debugPrint('Malformed Initial URI received');
-  //       setState(() => _err = err);
-  //     }
-  //   }
-  //   log(_initialURI.toString());
-  // }
-  // void _incomingLinkHandler() {
-  //   // 1
-  //   // if (!kIsWeb) {
-  //     // 2
-  //     _streamSubscription = uriLinkStream.listen((Uri? uri) {
-  //       if (!mounted) {
-  //         return;
-  //       }
-  //       debugPrint('Received URI: $uri');
-  //       setState(() {
-  //         _currentURI = uri;
-  //         _err = null;
-  //       });
-  //       // 3
-  //     }, onError: (Object err) {
-  //       if (!mounted) {
-  //         return;
-  //       }
-  //       debugPrint('Error occurred: $err');
-  //       setState(() {
-  //         _currentURI = null;
-  //         if (err is FormatException) {
-  //           _err = err;
-  //         } else {
-  //           _err = null;
-  //         }
-  //       });
-  //     });
-  //   //}
-  //   log(_currentURI.toString());
-  // }
   @override
   void initState() {
     link="";
@@ -114,12 +46,7 @@ class _State extends State<MyApp> {
       link = value!;
     }));
     super.initState();
-
     autoLogIn();
-
-
-    // _initURIHandler();
-    // _incomingLinkHandler();
   }
 
   Future<String?> initUniLinks() async {
@@ -133,12 +60,6 @@ class _State extends State<MyApp> {
       // Handle exception by warning the user their action did not succeed
       // return?
     }
-  }
-
-  @override
-  void dispose() {
-   // _streamSubscription?.cancel();
-    super.dispose();
   }
   void autoLogIn() async {
 
@@ -161,10 +82,17 @@ class _State extends State<MyApp> {
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LoginScreen()))):
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => WelcomePage(link: link,)));
+        builder: (BuildContext context) => HomePage(link: link,)));
   }
   @override
+  void dispose() {
+   // _streamSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+  // final link=Provider.of<Deeplink>(context);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

@@ -22,7 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/StringConstants.dart';
 import '../../modal/feedtagfilter/GetTagFilterResponse.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 class FeedPage extends StatefulWidget {
   var contents;
@@ -113,6 +113,28 @@ class _FeedPageState extends State<FeedPage> {
       }
 
   }
+  //Container(
+  //             decoration: BoxDecoration(
+  //                 color: Colors.white,
+  //                 border: Border.all(
+  //                   color: Colors.grey.withOpacity(0.7),
+  //                   width: 1,
+  //                 )
+  //             ),
+  //             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+  //             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+  //             child: ReadMoreText(
+  //               widget.aboutlrs,
+  //                trimLines: 5,
+  //               style: TextStyle(fontSize: 14,color: ColorConstant.appbar),
+  //               colorClickableText: ColorConstant.appbar,
+  //               trimMode: TrimMode.Line,
+  //               trimCollapsedText: 'Read more',
+  //               trimExpandedText: 'Read less',
+  //               lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: ColorConstant.appbar),
+  //               moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: ColorConstant.appbar),
+  //             ),
+  //           ),
   gettagfilter(String userid ,String searchkey,String type) async {
 
       http.Response response = await http.get(
@@ -190,7 +212,7 @@ class _FeedPageState extends State<FeedPage> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => WelcomePage()));
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     // Do some stuff.
     return true;
   }
@@ -221,22 +243,24 @@ class _FeedPageState extends State<FeedPage> {
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 5.0),
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage()));
-                    },
-                    child: Image.asset("assets/images/home_1.png",
-                        height: 40, width: 40),
+
+                  padding: EdgeInsets.all(5),
+                  child: Center(
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  HomePage()));
+                        },
+                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                      ),
+                    ),
                   ),
                 ),
                 Container(

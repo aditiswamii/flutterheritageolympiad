@@ -7,7 +7,8 @@ import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/phonebook/con
 
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class InviteContactScreen extends StatefulWidget{
@@ -27,11 +28,28 @@ class _State extends State<InviteContactScreen> {
   Color textcolor1=ColorConstants.txt;
  var selected='';
  // int click=0;
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
+  var contactnum;
+  userdata() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+      contactnum=prefs.getString("contactnum");
+    });
 
+
+  }
   @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
+    userdata();
   }
 
   @override
@@ -93,7 +111,7 @@ class _State extends State<InviteContactScreen> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>  WelcomePage()));
+                                            builder: (context) =>  HomePage()));
                                   },
                                   child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                                 ),
@@ -122,7 +140,7 @@ class _State extends State<InviteContactScreen> {
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child:  Text(
-                              "You have 50 contacts.You may remove,block\nor report them",
+                              "You have $contactnum contacts. You may remove, block\nor report them",
                               style: TextStyle(fontSize: 15,
                                   color: ColorConstants.txt)
                           ),

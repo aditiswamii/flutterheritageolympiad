@@ -12,7 +12,7 @@ import 'package:flutterheritageolympiad/ui/myaccount/contactpage/contactpage.dar
 import 'package:flutterheritageolympiad/ui/myaccount/managecontacts/blockcontact/blockcontact.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -275,7 +275,7 @@ class _State extends State<ManageContactScreen> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>  WelcomePage()));
+                                      builder: (context) =>  HomePage()));
                             },
                             child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                           ),

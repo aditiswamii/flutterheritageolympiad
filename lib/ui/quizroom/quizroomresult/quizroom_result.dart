@@ -16,8 +16,9 @@ import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart
 
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,7 +56,7 @@ class _State extends State<QuizroomResult> {
   PackageInfo? packageInfo;
   //GetDuelResultResponse? duelresultr;
   var roomresultr;
-
+  var rankdata;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -66,7 +67,7 @@ class _State extends State<QuizroomResult> {
     print("userdata");
     //calTheme();
 
-    getDuelResult(userid.toString(), widget.quizid.toString());
+    getRoomRank(userid.toString(), widget.quizid.toString());
 
     // getFeed(userid.toString(), "0", "", "", "");
   }
@@ -84,7 +85,8 @@ class _State extends State<QuizroomResult> {
     });
     print("App Name : ${appName}, App Package Name: ${packagename },App Version: ${version}, App build Number: ${buildNumber}");
   }
-  getDuelResult(String userid, String room_id) async {
+
+  getRoomResult(String userid, String room_id) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "get_room_result"),
         body: {'user_id': userid.toString(), 'room_id': room_id.toString()});
@@ -102,13 +104,10 @@ class _State extends State<QuizroomResult> {
         print("length" + resultdata.length.toString());
         print("resdata" + jsonResponse['result'].toString());
         print("resdata" + jsonResponse['result'][0].toString());
-        // print("getduelresult"+getDuelResultResponseFromJson(data!).result.toString());
+
         onsuccess(jsonResponse);
 
-        // print("getduelresult"+getDuelResultResponseFromJson(data!).result.toString());
-        // var venam = jsonDecode(data!)['result'][0]['name'];
-        // print("name"+venam.toString());
-        // log("name"+venam.toString());
+
 
       } else {
         onsuccess(null);
@@ -130,6 +129,123 @@ class _State extends State<QuizroomResult> {
       print("getdueljsonsuccessuser" + roomresultr['user_data'].toString());
     }
   }
+
+  getRoomRank(String userid, String roomid) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "roomrank"),
+        body: {'user_id': userid.toString(), 'room_id': roomid.toString()});
+    showLoaderDialog(context);
+
+    print("getRoomRankapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if(jsonResponse!=null){
+        rankdata = jsonResponse;
+        onrank(rankdata);
+      } else {
+
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+
+  onrank(rankdata){
+    if(rankdata!=null) {
+      if (rankdata['status'] == 200) {
+        if (rankdata['data'] != null) {
+          if (rankdata['data']['name']
+              .toString()
+              .isNotEmpty) {
+            AlertDialog alert = AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+              contentPadding: EdgeInsets.only(top: 10.0),
+              title: Container(child: Column(
+                children: [
+                  Text("${rankdata['data']['message']}", style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,),
+                  Container(
+                    child: Image.network(
+                      "${rankdata['data']['image']}", height: 80, width: 80,),
+                  ),
+                  Text("Congratulations!\nKeep it up!", style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,)
+                ],
+              )),
+              actions: [
+                Container(
+                  padding: EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("", style: TextStyle(color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                      Text("", style: TextStyle(color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                      TextButton(onPressed: () {
+                        Navigator.pop(context);
+                      },
+                          child: Text("CLOSE", style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700))),
+                    ],
+                  ),
+                ),
+              ],
+            );
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              },
+            );
+            getRoomResult(userid.toString(), widget.quizid.toString());
+          }
+
+        }else{
+          getRoomResult(userid.toString(), widget.quizid.toString());
+        }
+      }else{
+        DateTime now = DateTime.now();
+
+        String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
+        if(int.parse(atimenew) > int.parse(rankdata['time'].toString())){
+          getRoomResult(userid.toString(), widget.quizid.toString());
+        }else{
+          Future.delayed(
+            Duration(seconds: 3000),
+                () {
+              getRoomRank(userid.toString(), widget.quizid.toString());
+            },
+          );
+        }
+      }
+
+    }else {
+      Future.delayed(
+        Duration(seconds: 3000),
+            () {
+          getRoomRank(userid.toString(), widget.quizid.toString());
+        },
+      );
+    }
+  }
+
 
 
   showLoaderDialog(BuildContext context) {
@@ -212,7 +328,7 @@ class _State extends State<QuizroomResult> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
+                                    builder: (context) =>  HomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),
@@ -232,6 +348,37 @@ class _State extends State<QuizroomResult> {
                   ),
                 ],
               ),
+              roomresultr==null?Container(
+                child: ListBody(
+
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                        child: const Text(
+                          "AND\n THAT'S A\nWRAP...",
+                          style: TextStyle(fontSize: 24, color: Colors.black),
+                          textAlign: TextAlign.center,
+                        )),
+                    Container(
+                      height: 300,
+                      width: 300,
+                      margin: EdgeInsets.only(top: 40),
+                      child: Lottie.asset("assets/lottie/lottieanim.json"),
+                    ),
+                    Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text("Generating Result...",
+                        style: TextStyle(fontSize: 24, color:Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              )
+                  :ListBody(
+                children: [
+
+
               Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -240,8 +387,7 @@ class _State extends State<QuizroomResult> {
                     style: TextStyle(fontSize: 24, color: ColorConstants.txt),
                     textAlign: TextAlign.center,
                   )),
-              roomresultr != null
-                  ? Container(
+             Container(
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                       alignment: Alignment.topCenter,
@@ -382,10 +528,9 @@ class _State extends State<QuizroomResult> {
                             ),
                           ],
                         ),
-                      ))
-                  : Container(),
-              roomresultr != null
-                  ? Container(
+                      )),
+
+              Container(
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       decoration: BoxDecoration(color: Colors.white),
                       child: Card(
@@ -492,9 +637,9 @@ class _State extends State<QuizroomResult> {
                           ],
                         ),
                       ),
-                    )
-                  : Container(),
-              roomresultr!=null?Column(
+                    ),
+
+             Column(
                 children: [
                   GestureDetector(
                     onTap: (){
@@ -519,7 +664,7 @@ class _State extends State<QuizroomResult> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: "", type: widget.type,)));
+                              builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: "", type: widget.type, tourid: 0, sessionid: 0,)));
                     },
                     child: Container(
                         alignment: Alignment.center,
@@ -563,63 +708,10 @@ class _State extends State<QuizroomResult> {
                     ),
                   ),
                 ],
-              ):Container(),
-              // Container(
-              //   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: ColorConstants.red,
-              //           onPrimary: Colors.white,
-              //           elevation: 3,
-              //           alignment: Alignment.center,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30.0)),
-              //           fixedSize: const Size(100, 40),
-              //           //////// HERE
-              //         ),
-              //         onPressed: () {
-              //           Navigator.pushReplacement(
-              //               context,
-              //               MaterialPageRoute(
-              //                   builder: (context) => QuizPage()));
-              //         },
-              //         child: const Text(
-              //           "GO BACK",
-              //           style: TextStyle(
-              //               color: ColorConstants.lightgrey200, fontSize: 14),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: ColorConstants.verdigris,
-              //           onPrimary: Colors.white,
-              //           elevation: 3,
-              //           alignment: Alignment.center,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30.0)),
-              //           fixedSize: const Size(100, 40),
-              //           //////// HERE
-              //         ),
-              //         onPressed: () {
-              //           // Navigator.pushReplacement(
-              //           //     context,
-              //           //     MaterialPageRoute(
-              //           //         builder: (context) => const DuelModeResultXP()));
-              //         },
-              //         child: const Text(
-              //           "LET'S GO!",
-              //           style: TextStyle(
-              //               color: ColorConstants.lightgrey200, fontSize: 14),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              )
+                ],
+              )
+
             ],
           ),
         ),

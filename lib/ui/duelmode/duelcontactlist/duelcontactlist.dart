@@ -11,13 +11,14 @@ import 'package:flutterheritageolympiad/dialog/duelinvitesent/duelinvite_dialog.
 import 'package:flutterheritageolympiad/modal/getdueluserlist/GetDuelUserListResponse.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../homepage/homepage.dart';
 import '../../myaccount/contactpage/contactpage.dart';
 import '../duelmodeinvite/invitepage.dart';
 
@@ -294,7 +295,7 @@ class _State extends State<DuelModeSelectPlayer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
+                                    builder: (context) =>  HomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),

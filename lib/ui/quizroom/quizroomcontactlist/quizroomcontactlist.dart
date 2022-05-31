@@ -11,7 +11,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/getdueluserlist/GetDuelUserListResponse.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 
 import 'dart:convert' as convert;
@@ -278,7 +278,7 @@ class _State extends State<QuizRoomContactList> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
+                                    builder: (context) =>  HomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),

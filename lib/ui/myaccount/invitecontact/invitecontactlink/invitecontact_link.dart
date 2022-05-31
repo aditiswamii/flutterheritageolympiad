@@ -9,7 +9,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
@@ -125,7 +125,7 @@ class _State extends State<ContactInviteLink> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
+                                    builder: (context) =>  HomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),
@@ -270,30 +270,30 @@ class _State extends State<ContactInviteLink> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.verdigris,
-                        onPrimary: Colors.white,
-                        elevation: 3,
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(100, 40),
-                        //////// HERE
-                      ),
-                      onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const DuelModeSelectPlayer()));
-                      },
-                      child: const Text(
-                        "LET'S GO!",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: ColorConstants.verdigris,
+                    //     onPrimary: Colors.white,
+                    //     elevation: 3,
+                    //     alignment: Alignment.center,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(30.0)),
+                    //     fixedSize: const Size(100, 40),
+                    //     //////// HERE
+                    //   ),
+                    //   onPressed: () {
+                    //     // Navigator.pushReplacement(
+                    //     //     context,
+                    //     //     MaterialPageRoute(
+                    //     //         builder: (context) => const DuelModeSelectPlayer()));
+                    //   },
+                    //   child: const Text(
+                    //     "LET'S GO!",
+                    //     style: TextStyle(
+                    //         color: Colors.white, fontSize: 14),
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

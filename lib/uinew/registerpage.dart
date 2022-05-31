@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/getcitylist/GetCityResponse.dart';
 import 'package:flutterheritageolympiad/modal/getstate/GetStateResponse.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';

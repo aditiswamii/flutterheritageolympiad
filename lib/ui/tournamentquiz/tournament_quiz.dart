@@ -25,7 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/StringConstants.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 class TournamentPage extends StatefulWidget {
 
@@ -153,7 +153,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => WelcomePage()));
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     // Do some stuff.
     return true;
   }
@@ -196,7 +196,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WelcomePage()));
+                              builder: (context) => HomePage()));
                     },
                     child: Image.asset("assets/images/home_1.png",
                         height: 40, width: 40),

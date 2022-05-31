@@ -10,7 +10,7 @@ import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse
 
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +19,7 @@ import 'dart:convert' as convert;
 
 import '../../../modal/userprofile/GetUserProfileResponse.dart';
 import '../../../utils/StringConstants.dart';
+import '../personalinfo/personalinfo.dart';
 import 'chart.dart';
 
 class YourPage extends StatefulWidget {
@@ -51,49 +52,7 @@ class _YourPageState extends State<YourPage> {
   List<num>? xplist;
   GetBadgeResponse? badgeResponse;
   GetXpGainChartResponse? getXpGainChartResponse;
-  // final List<BarChartModel> data = [
-  //   BarChartModel(
-  //     xp: 250,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Color(0xFF47505F)), month: '',
-  //   ),
-  //   BarChartModel(
-  //     year: "2015",
-  //     financial: 300,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Colors.red),
-  //   ),
-  //   BarChartModel(
-  //     year: "2016",
-  //     financial: 100,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Colors.green),
-  //   ),
-  //   BarChartModel(
-  //     year: "2017",
-  //     financial: 450,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Colors.yellow),
-  //   ),
-  //   BarChartModel(
-  //     year: "2018",
-  //     financial: 630,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Colors.lightBlueAccent),
-  //   ),
-  //   BarChartModel(
-  //     year: "2019",
-  //     financial: 1000,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Colors.pink),
-  //   ),
-  //   BarChartModel(
-  //     year: "2020",
-  //     financial: 400,
-  //     color: charts.ColorUtil.fromDartColor
-  //       (Colors.purple),
-  //   ),
-  // ];
+
 
   final List<String> goallist = <String>[
     'Monthly',
@@ -115,13 +74,13 @@ class _YourPageState extends State<YourPage> {
   }
 
   getUserProfile(String userid) async {
-    showLoaderDialog(context);
+
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "user_profile"),
         body: {'user_id': userid.toString()});
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       //final responseJson = json.decode(response.body);//store response as string
       setState(() {
@@ -136,7 +95,7 @@ class _YourPageState extends State<YourPage> {
       var venam = jsonDecode(data!)['data'];
       print(venam);
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -160,7 +119,7 @@ class _YourPageState extends State<YourPage> {
   }
 
   xpgainchart(String userid, String contactid) async {
-    showLoaderDialog(context);
+
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL + "xpgainchart"), body: {
       'user_id': userid.toString(),
@@ -168,7 +127,7 @@ class _YourPageState extends State<YourPage> {
     });
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -193,7 +152,7 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -210,7 +169,7 @@ class _YourPageState extends State<YourPage> {
   }
 
   leaderboardranking(String userid, String month, String contactid) async {
-    showLoaderDialog(context);
+
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "leaderboardranking"),
         body: {
@@ -220,7 +179,7 @@ class _YourPageState extends State<YourPage> {
         });
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -243,7 +202,7 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -253,7 +212,7 @@ class _YourPageState extends State<YourPage> {
   }
 
   getbadges(String userid, String contactid) async {
-    showLoaderDialog(context);
+
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL + "badges"), body: {
       'user_id': userid.toString(),
@@ -261,7 +220,7 @@ class _YourPageState extends State<YourPage> {
     });
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       datab = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -285,7 +244,7 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -299,7 +258,7 @@ class _YourPageState extends State<YourPage> {
   }
 
   setgoals(String userid, String number, String type) async {
-    showLoaderDialog(context);
+
     http.Response response =
         await http.post(Uri.parse(StringConstants.BASE_URL + "goals"), body: {
       'user_id': userid.toString(),
@@ -308,7 +267,7 @@ class _YourPageState extends State<YourPage> {
     });
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -320,6 +279,8 @@ class _YourPageState extends State<YourPage> {
           print("data : " + jsonResponse['data'].toString());
 
           ongoalsuccess(goaldata);
+          numquizcontroller.text="";
+          goalname=null;
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -329,9 +290,14 @@ class _YourPageState extends State<YourPage> {
           content: Text(jsonResponse['message']),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        setState(() {
+          numquizcontroller.text="";
+          goalname=null;
+        });
+
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -341,13 +307,13 @@ class _YourPageState extends State<YourPage> {
   }
 
   goalsummary(String userid) async {
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "goalsummary"),
         body: {'user_id': userid.toString()});
 
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -370,7 +336,7 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -382,23 +348,23 @@ class _YourPageState extends State<YourPage> {
     print("type : " + goalsummarydata['data']['type'].toString());
   }
 
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   @override
   void initState() {
@@ -459,7 +425,7 @@ class _YourPageState extends State<YourPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  WelcomePage()));
+                                  builder: (context) =>  HomePage()));
                         },
                         child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                       ),
@@ -481,7 +447,8 @@ class _YourPageState extends State<YourPage> {
             ),
             Container(
               color: Colors.white70,
-              child: ListBody(
+              child:(prodata==null&&xpdata==null&&leaderdata==null&&goalsummarydata==null&&goaldata==null&&badgedata==null)?Container(height: MediaQuery.of(context).size.height,
+                child: Center(child: CircularProgressIndicator(color: ColorConstants.blue,)),): ListBody(
                 children: [
                   Container(
                       alignment: Alignment.centerLeft,
@@ -517,20 +484,28 @@ class _YourPageState extends State<YourPage> {
                                                 .size
                                                 .width,
                                             alignment: Alignment.topRight,
-                                            child: Container(
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  0, 10, 10, 10),
-                                              height: 20,
-                                              width: 20,
-                                              alignment: Alignment.topRight,
-                                              padding: EdgeInsets.all(4),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  shape: BoxShape.circle),
-                                              child: Image.asset(
-                                                "assets/images/editpen.png",
-                                                height: 20,
-                                                width: 20,
+                                            child: GestureDetector(
+                                              onTap: (){
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>  PersonalInfoScreen()));
+                                              },
+                                              child: Container(
+                                                margin: const EdgeInsets.fromLTRB(
+                                                    0, 10, 10, 10),
+                                                height: 30,
+                                                width: 30,
+                                                alignment: Alignment.topRight,
+                                                padding: EdgeInsets.all(4),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle),
+                                                child: Image.asset(
+                                                  "assets/images/editpen.png",
+                                                  height: 30,
+                                                  width: 30,
+                                                ),
                                               ),
                                             ),
                                           ),

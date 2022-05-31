@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../colors/colors.dart';
 import '../../../utils/StringConstants.dart';
 import '../../rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import '../shopproducts_page.dart';
 
 class ProductList extends StatefulWidget{
@@ -124,7 +124,7 @@ class _State extends State<ProductList>{
           ),
         ),
         child:Container( color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: ListView(
               children: [
 
@@ -134,21 +134,23 @@ class _State extends State<ProductList>{
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
-                       height: 40, width: 40,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,color: Colors.white,
-                      ),
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  WelcomePage()));
-                        },
-                        child: Center(
-                          child: Image.asset(
-                              "assets/images/home_1.png", height: 40, width: 40),
+
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>  HomePage()));
+                            },
+                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          ),
                         ),
                       ),
                     ),

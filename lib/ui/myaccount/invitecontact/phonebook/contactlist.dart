@@ -9,11 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../colors/colors.dart';
 import '../../../../utils/StringConstants.dart';
 import '../../../rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import '../invitecontact.dart';
+import '../invitecontactlink/invitecontact_link.dart';
 class PhonebookPage extends StatefulWidget {
   @override
   _PhonebookPageState createState() => _PhonebookPageState();
@@ -187,7 +188,13 @@ class _PhonebookPageState extends State<PhonebookPage> {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     if (_permissionDenied) return Center(child: Text('Permission denied'));
-    if (_contacts == null) return Center(child: CircularProgressIndicator());
+    if (_contacts == null) return Container(height: MediaQuery.of(context).size.height, decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage("assets/images/debackground.jpg"),
+        fit: BoxFit.cover,
+      ),
+    ),
+        child: Center(child: CircularProgressIndicator()));
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
@@ -222,7 +229,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WelcomePage()));
+                                  builder: (context) => HomePage()));
                         },
                         child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                       ),
@@ -249,7 +256,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
                     style: TextStyle(fontSize: 24, color: ColorConstants.txt))),
             Container(
                 alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   children: [
                     Text("You have",
@@ -303,10 +310,10 @@ class _PhonebookPageState extends State<PhonebookPage> {
                               //////// HERE
                             ),
                             onPressed: () {
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => MyAccountPage()));
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ContactInviteLink()));
                             },
                             child: const Text(
                               "Invite",

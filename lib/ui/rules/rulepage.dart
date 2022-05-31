@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
+import 'dart:io';
+
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/StringConstants.dart';
 import '../mcq/mcq.dart';
@@ -39,6 +42,7 @@ class _State extends State<RulesPage> {
   var country;
   var profilepic;
   var userid;
+  var title;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -46,6 +50,9 @@ class _State extends State<RulesPage> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+    log("test");
+    print("quizid"+widget.quizid.toString());
+    log("quizid"+widget.quizid.toString());
     if(widget.type=="1"){
       getClassicRule(widget.quiztypeid.toString(),widget.quizspeedid.toString());
     }else if(widget.type=="2"){
@@ -61,7 +68,16 @@ class _State extends State<RulesPage> {
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
+    if(widget.type=="1"){
+     title="CLASSIC QUIZ";
+    }else if(widget.type=="2"){
+     title='DUEL QUIZ';
+    }else if(widget.type=="3"){
+      title='QUIZ ROOM';
+    }else if(widget.type=="4"){
+      title='TOURNAMENT';
 
+    }
     userdata();
   }
 
@@ -167,7 +183,39 @@ class _State extends State<RulesPage> {
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
-      body: Container(
+      body: ruledata==null?Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/login_bg.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: ListBody(
+
+          children: [
+            Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                child: const Text(
+                  "Waiting for the other players\nto accept rules...",
+                  style: TextStyle(fontSize: 24, color: Colors.black),
+                  textAlign: TextAlign.center,
+                )),
+            Container(
+              height: 300,
+              width: 300,
+              margin: EdgeInsets.only(top: 40),
+              child: Lottie.asset("assets/lottie/lottieanim.json"),
+            ),
+            Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Text("LOADING",
+                style: TextStyle(fontSize: 24, color:Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
+      ):Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/debackground.jpg"),
@@ -178,11 +226,11 @@ class _State extends State<RulesPage> {
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children:<Widget> [
-
+              if(title!=null)
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
-                  child: const Text("CLASSIC QUIZ",
+                  child: Text("${title}",
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
               Container(
@@ -192,7 +240,39 @@ class _State extends State<RulesPage> {
                       style: TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
 
-              ruledata==null?Container():   Container(
+              Container(
+                child: TweenAnimationBuilder<Duration>(
+                    duration: Duration(seconds: 30),
+                    tween: Tween(begin: Duration(seconds: 30), end: Duration.zero),
+                    onEnd: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  Mcq(quizid:widget.quizid, type: widget.type, tourid: widget.tourid, sessionid: widget.sessionid,)));
+
+                    },
+                    builder: (BuildContext context, Duration value, Widget? child) {
+                      final minutes = value.inMinutes  % 60;
+                      final seconds = value.inSeconds % 60;
+                      return Center(
+                        child: Card(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          elevation: 2,
+                          child: Container(
+                              height: 40,width: 100,
+                              padding:  EdgeInsets.all(5),
+                              alignment: Alignment.center,
+                              child: Text('$minutes:$seconds',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: ColorConstants.txt,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:14))),
+                        ),
+                      );
+                    }),
+              ),
+               Container(
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 decoration: const BoxDecoration(color: Colors.white),
                 child: ruledata == null || ruledata!.isEmpty
@@ -242,38 +322,32 @@ class _State extends State<RulesPage> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: ColorConstants.verdigris,
-                        onPrimary: Colors.white,
-                        elevation: 3,
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(100, 40),
-                        //////// HERE
-                      ),
-                      onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>  MyApp()));
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  Mcq(quizid:widget.quizid, type: widget.type,)));
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>  ClassicQuestion(quizid:widget.quizid)));
-                      },
-                      child: const Text(
-                        "START",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: ColorConstants.verdigris,
+                    //     onPrimary: Colors.white,
+                    //     elevation: 3,
+                    //     alignment: Alignment.center,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(30.0)),
+                    //     fixedSize: const Size(100, 40),
+                    //     //////// HERE
+                    //   ),
+                    //   onPressed: () {
+                    //
+                    //     Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>  Mcq(quizid:widget.quizid, type: widget.type, tourid: widget.tourid, sessionid: widget.sessionid,)));
+                    //
+                    //   },
+                    //   child: const Text(
+                    //     "START",
+                    //     style: TextStyle(
+                    //         color: Colors.white, fontSize: 14),
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

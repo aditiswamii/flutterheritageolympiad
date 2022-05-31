@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/forgetpassword/forgetpassword.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:flutterheritageolympiad/uinew/registerpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -136,7 +136,7 @@ class _State extends State<LoginScreen> {
   }
 Loginuser(jsonDecode){
   Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (BuildContext context) => WelcomePage()));
+      builder: (BuildContext context) => HomePage()));
 }
   showLoaderDialog(BuildContext context){
     AlertDialog alert=AlertDialog(

@@ -21,7 +21,7 @@ import 'package:flutterheritageolympiad/ui/myaccount/privacy/privacy_page.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/yourpage/chart.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/yourpage/yourpage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -153,7 +153,7 @@ print("flagicon"+flagicon);
 
     bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()));
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       // Do some stuff.
       return true;
     }
@@ -199,7 +199,7 @@ print("flagicon"+flagicon);
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => WelcomePage()));
+                                            builder: (context) => HomePage()));
                                   },
                                   child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                                 ),
@@ -653,7 +653,7 @@ print("flagicon"+flagicon);
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => WelcomePage()));
+                                      builder: (context) => HomePage()));
                             },
                             child: const Text(
                               "GO BACK",

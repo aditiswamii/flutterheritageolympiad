@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homeview.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert' as convert;
 
+import '../../ui/rules/rulepage.dart';
 import '../../utils/StringConstants.dart';
 
 class DialogDuelInviteReceive extends StatefulWidget{
@@ -19,15 +21,20 @@ class DialogDuelInviteReceive extends StatefulWidget{
   var image;
   var index;
   var link;
-
+  DialogDuelInviteView? view;
   DialogDuelInviteReceive({Key? key,required this.id,required this.name,required this.image,
-    required this.diffi,required this.domainsel,required this.speed,required this.link,required this.index}) : super(key: key);
-
+    required this.diffi,required this.domainsel,required this.speed,required this.link,required this.index,this.view}) : super(key: key);
+  // listener(int type,int index,String quizid) {
+  //
+  // }
   @override
   _State createState() => _State();
 }
 
+abstract class DialogDuelInviteView{
+  void setDData(int type,int index,String quizid);
 
+}
 class _State extends State<DialogDuelInviteReceive> {
 
   var diffi;
@@ -38,7 +45,7 @@ class _State extends State<DialogDuelInviteReceive> {
  var userid;
  var data;
  var snackBar;
-  HomeView? _view;
+
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -51,7 +58,7 @@ class _State extends State<DialogDuelInviteReceive> {
     domainsel=widget.domainsel;
   }
   acceptdual(String userid,String link,index,type) async {
-    showLoaderDialog(context);
+
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "accept_invitation"), body: {
       'user_id': userid.toString(),
@@ -59,9 +66,16 @@ class _State extends State<DialogDuelInviteReceive> {
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       if (jsonResponse['status'] == 200) {
-       _view!.setDData(type,index,widget.id.toString());
+        print(jsonResponse.toString());
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: widget.id.toString(), type: "2", tourid: 0, sessionid: 0 ,)));
+
+        //  widget.view!.setDData(type,index,widget.id.toString());
+       // Navigator.pop(context);
       }
       else {
         snackBar = SnackBar(
@@ -70,15 +84,17 @@ class _State extends State<DialogDuelInviteReceive> {
         );
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBar);
+        Navigator.pop(context);
       }
     } else {
       Navigator.pop(context);
+
       print(response.statusCode);
     }
 
   }
   rejectdual(String userid,String link,index,type) async {
-    showLoaderDialog(context);
+
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "reject_invitation"), body: {
       'user_id': userid.toString(),
@@ -86,9 +102,10 @@ class _State extends State<DialogDuelInviteReceive> {
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       if (jsonResponse['status'] == 200) {
-        _view!.setDData(type,index,widget.id.toString());
+       // widget.view!.setDData(type,index,widget.id.toString());
+        Navigator.pop(context);
       }
       else {
         snackBar = SnackBar(
@@ -97,10 +114,12 @@ class _State extends State<DialogDuelInviteReceive> {
         );
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBar);
+        Navigator.pop(context);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
+      Navigator.pop(context);
     }
 
   }
@@ -124,7 +143,14 @@ class _State extends State<DialogDuelInviteReceive> {
   @override
   void initState() {
     super.initState();
+
     userdata();
+
+  }
+  @override
+  void dispose() {
+    Navigator.pop(context);
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -283,10 +309,8 @@ class _State extends State<DialogDuelInviteReceive> {
                       //////// HERE
                     ),
                     onPressed: () {
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => DuelModeMain()));
+                      rejectdual(userid.toString(), widget.link, widget.index, 2);
+
                     },
                     child: const Text(
                       "REJECT",
@@ -307,10 +331,8 @@ class _State extends State<DialogDuelInviteReceive> {
                       //////// HERE
                     ),
                     onPressed: () {
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const WelcomePage()));
+                      acceptdual(userid.toString(), widget.link, widget.index, 1);
+
                     },
                     child: const Text(
                       "ACCEPT",

@@ -16,8 +16,9 @@ import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart
 
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,6 +52,7 @@ class _State extends State<DuelModeResult> {
   var resultdata;
   var jsonres;
   var jsonuser;
+  var rankdata;
   String packagename="";
   PackageInfo? packageInfo;
   //GetDuelResultResponse? duelresultr;
@@ -64,11 +66,14 @@ class _State extends State<DuelModeResult> {
       userid = prefs.getString("userid");
     });
     print("userdata");
+    log("test");
+    print("quizid"+widget.quizid.toString());
+    log("quizid"+widget.quizid.toString());
     //calTheme();
 
-    getDuelResult(userid.toString(), widget.quizid.toString());
 
-    // getFeed(userid.toString(), "0", "", "", "");
+    getDuelRank(userid.toString(), widget.quizid.toString());
+
   }
   void getPackage() async {
     packageInfo = await PackageInfo.fromPlatform();
@@ -130,7 +135,121 @@ class _State extends State<DuelModeResult> {
       print("getdueljsonsuccessuser" + duelresultr['user_data'].toString());
     }
   }
+  getDuelRank(String userid, String dualId) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "duelrank"),
+        body: {'user_id': userid.toString(), 'dual_id': dualId.toString()});
+    showLoaderDialog(context);
 
+    print("getDuelRankapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if(jsonResponse!=null){
+        rankdata = jsonResponse;
+        onrank(rankdata);
+      } else {
+
+        log(jsonResponse['message']);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+
+  onrank(rankdata){
+    if(rankdata!=null) {
+      if (rankdata['status'] == 200) {
+        if (rankdata['data'] != null) {
+          if (rankdata['data']['name']
+              .toString()
+              .isNotEmpty) {
+            AlertDialog alert = AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+              contentPadding: EdgeInsets.only(top: 10.0),
+              title: Container(child: Column(
+                children: [
+                  Text("${rankdata['data']['message']}", style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,),
+                  Container(
+                    child: Image.network(
+                      "${rankdata['data']['image']}", height: 80, width: 80,),
+                  ),
+                  Text("Congratulations!\nKeep it up!", style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,)
+                ],
+              )),
+              actions: [
+                Container(
+                  padding: EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("", style: TextStyle(color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                      Text("", style: TextStyle(color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                      TextButton(onPressed: () {
+                        Navigator.pop(context);
+                      },
+                          child: Text("CLOSE", style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700))),
+                    ],
+                  ),
+                ),
+              ],
+            );
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              },
+            );
+            getDuelResult(userid.toString(), widget.quizid.toString());
+          }
+
+        }else{
+          getDuelResult(userid.toString(), widget.quizid.toString());
+        }
+      }else{
+        DateTime now = DateTime.now();
+
+        String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
+        if(int.parse(atimenew) > int.parse(rankdata['time'].toString())){
+          getDuelResult(userid.toString(), widget.quizid.toString());
+        }else{
+          Future.delayed(
+            Duration(seconds: 3000),
+                () {
+              getDuelRank(userid.toString(), widget.quizid.toString());
+            },
+          );
+        }
+      }
+
+    }else {
+      Future.delayed(
+        Duration(seconds: 3000),
+            () {
+          getDuelRank(userid.toString(), widget.quizid.toString());
+        },
+      );
+    }
+  }
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -171,16 +290,19 @@ class _State extends State<DuelModeResult> {
     // Do some stuff.
     return true;
   }
-
+  Future<Future> _refreshdata(BuildContext context) async {
+    log(widget.quizid.toString());
+    return getDuelRank(userid.toString(),widget.quizid.toString());
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      // resizeToAvoidBottomInset: false,
+      // endDrawerEnableOpenDragGesture: true,
+      // endDrawer: MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -188,439 +310,429 @@ class _State extends State<DuelModeResult> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    alignment: Alignment.centerLeft,
+        child: RefreshIndicator(
+          color: Colors.transparent,
+          onRefresh: () => _refreshdata(context),
+          child: Container(
+            color: Colors.white.withAlpha(100),
+            margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: ListView(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      alignment: Alignment.centerLeft,
 
-                    padding: EdgeInsets.all(5),
-                    child: Center(
-                      child: Card(
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
-                          },
-                          child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
-                        ),
+                      padding: EdgeInsets.all(5),
+                      // child: Center(
+                      //   child: Card(
+                      //     elevation: 3,
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(20)
+                      //     ),
+                      //     child: GestureDetector(
+                      //       onTap: () {
+                      //         Navigator.pushReplacement(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) =>  HomePage()));
+                      //       },
+                      //       child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                      //     ),
+                      //   ),
+                      // ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 5.0),
+                      // child: GestureDetector(
+                      //   onTap: () {
+                      //     _scaffoldKey.currentState!.openEndDrawer();
+                      //   },
+                      //   child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
+                      // ),
+                    ),
+                  ],
+                ),
+
+                duelresultr == null?Container(
+                      child: ListBody(
+
+                        children: [
+                          Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                              child: const Text(
+                                "AND\n THAT'S A\nWRAP...",
+                                style: TextStyle(fontSize: 24, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              )),
+                          Container(
+                            height: 300,
+                            width: 300,
+                           margin: EdgeInsets.only(top: 40),
+                            child: Lottie.asset("assets/lottie/lottieanim.json"),
+                          ),
+                          Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Text("Generating Result...",
+                                style: TextStyle(fontSize: 24, color:Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          )
+                        ],
                       ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _scaffoldKey.currentState!.openEndDrawer();
-                      },
-                      child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: const Text(
-                    "YOU\nSCORED....",
-                    style: TextStyle(fontSize: 24, color: ColorConstants.txt),
-                    textAlign: TextAlign.center,
-                  )),
-              duelresultr != null
-                  ? Container(
-                      decoration: BoxDecoration(shape: BoxShape.circle),
-                      margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        height: 150,
-                        width: 150,
-                        child: Stack(
-                          children: <Widget>[
-                            SizedBox(
-                              child: Center(
-                                child: Container(
-                                  height: 150,
-                                  width: 150,
-                                  child: CircularProgressIndicator(
-                                    value: 0.02,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.orange,
+          ):
+                     ListBody(
+                       children: [
+                         Container(
+                             alignment: Alignment.center,
+                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                             child: const Text(
+                               "YOU\nSCORED....",
+                               style: TextStyle(fontSize: 24, color: ColorConstants.txt),
+                               textAlign: TextAlign.center,
+                             )),
+                         Container(
+                            decoration: BoxDecoration(shape: BoxShape.circle),
+                            margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              height: 150,
+                              width: 150,
+                              child: Stack(
+                                children: <Widget>[
+                                  SizedBox(
+                                    child: Center(
+                                      child: Container(
+                                        height: 150,
+                                        width: 150,
+                                        child: CircularProgressIndicator(
+                                          value: 0.02,
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            Colors.orange,
+                                          ),
+                                          color: Colors.red,
+                                          backgroundColor: Colors.red,
+                                          strokeWidth: 20,
+                                        ),
+                                      ),
                                     ),
-                                    color: Colors.red,
-                                    backgroundColor: Colors.red,
-                                    strokeWidth: 20,
                                   ),
-                                ),
-                              ),
-                            ),
-                            FlipCard(
-                              controller: FlipCardController(),
-                              direction: FlipDirection.HORIZONTAL,
-                              front: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                      child: Text(
-                                    "${duelresultr['user_data']['xp'].toString()} XP",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                  )),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          0.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <
-                                          10.0)
-                                    Center(child: Text("oh boy!")),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          10.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <
-                                          50.0)
-                                    Center(child: Text("Don't give up!")),
-                                  if (double.parse(duelresultr['user_data']
-                                              ['percentage']
-                                          .toString()) ==
-                                      50.0)
-                                    Center(
-                                        child: Text("Practice makes perfect!")),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          50.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <=
-                                          90.0)
-                                    Center(child: Text("Almost there!")),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          90.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <=
-                                          100.0)
-                                    Center(child: Text("Keep it up!")),
-                                ],
-                              ),
-                              back: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                      child: Text(
-                                          "${duelresultr['user_data']['percentage'].toString()} %",
+                                  FlipCard(
+                                    controller: FlipCardController(),
+                                    direction: FlipDirection.HORIZONTAL,
+                                    front: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        if(duelresultr['user_data']['xp']!=null)
+                                        Center(
+                                            child: Text(
+                                          "${duelresultr['user_data']['xp'].toString()} XP",
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.black,
-                                              fontWeight: FontWeight.w600))),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          0.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <
-                                          10.0)
-                                    Center(child: Text("oh boy!")),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          10.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <
-                                          50.0)
-                                    Center(child: Text("Don't give up!")),
-                                  if (double.parse(duelresultr['user_data']
-                                              ['percentage']
-                                          .toString()) ==
-                                      50.0)
-                                    Center(
-                                        child: Text("Practice makes perfect!")),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          50.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <=
-                                          90.0)
-                                    Center(child: Text("Almost there!")),
-                                  if (double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) >
-                                          90.0 &&
-                                      double.parse(duelresultr['user_data']
-                                                  ['percentage']
-                                              .toString()) <=
-                                          100.0)
-                                    Center(child: Text("Keep it up!")),
+                                              fontWeight: FontWeight.w600),
+                                        )),
+                                        if(duelresultr['user_data']['xp']==null)
+                                          Center(
+                                              child: Text(
+                                                "${"0"} XP",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w600),
+                                              )),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                0.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <
+                                                10.0)
+                                          Center(child: Text("oh boy!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                10.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <
+                                                50.0)
+                                          Center(child: Text("Don't give up!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                    ['percentage']
+                                                .toString()) ==
+                                            50.0)
+                                          Center(
+                                              child: Text("Practice makes perfect!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                50.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <=
+                                                90.0)
+                                          Center(child: Text("Almost there!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                90.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <=
+                                                100.0)
+                                          Center(child: Text("Keep it up!")),
+                                      ],
+                                    ),
+                                    back: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                            child: Text(
+                                                "${duelresultr['user_data']['percentage'].toString()} %",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w600))),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                0.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <
+                                                10.0)
+                                          Center(child: Text("oh boy!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                10.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <
+                                                50.0)
+                                          Center(child: Text("Don't give up!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                    ['percentage']
+                                                .toString()) ==
+                                            50.0)
+                                          Center(
+                                              child: Text("Practice makes perfect!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                50.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <=
+                                                90.0)
+                                          Center(child: Text("Almost there!")),
+                                        if (double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) >
+                                                90.0 &&
+                                            double.parse(duelresultr['user_data']
+                                                        ['percentage']
+                                                    .toString()) <=
+                                                100.0)
+                                          Center(child: Text("Keep it up!")),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
+                            )),
+
+
+
+                     Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            // if you need this
+                            side: BorderSide(
+                              color: Colors.grey.withOpacity(0.3),
+                              width: 1,
                             ),
-                          ],
-                        ),
-                      ))
-                  : Container(),
-              duelresultr != null
-                  ? Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      decoration: BoxDecoration(color: Colors.white),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.grey.withOpacity(0.3),
-                            width: 1,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                child: Text(
+                                  "YOU SCORED...",
+                                  style: TextStyle(color: ColorConstants.txt),
+                                ),
+                              ),
+                              duelresultr == null
+                                  ? Center(
+                                      child: Container(),
+                                    )
+                                  : Container(
+
+                                      margin:
+                                          const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                      child: ListView.builder(
+                                          physics: ClampingScrollPhysics(
+                                              parent: BouncingScrollPhysics()),
+                                          shrinkWrap: true,
+                                          itemCount: duelresultr['result'].length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    10, 10, 10, 10),
+                                                child: GFProgressBar(
+                                                  // leading: Container(
+                                                  //   // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                                  //   height: 30,
+                                                  //   width: 30,
+                                                  //   child: CircleAvatar(
+                                                  //     radius: 30.0,
+                                                  //     backgroundImage:
+                                                  //     NetworkImage(duelresultr['result'][index]['image'].toString()),
+                                                  //     backgroundColor: Colors.transparent,
+                                                  //   ),
+                                                  // ),
+                                                  percentage: double.parse(
+                                                      (int.parse(duelresultr['result']
+                                                                          [index][
+                                                                      'percentage']
+                                                                  .toString()) /
+                                                              100)
+                                                          .toString()),
+                                                  lineHeight: 30,
+                                                  // alignment: MainAxisAlignment.spaceBetween,
+                                                  child: Container(
+                                                    child: Stack(
+                                                      children: <Widget>[
+                                                        Container(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          height: 30,
+                                                          width: 30,
+                                                          child: CircleAvatar(
+                                                            radius: 30.0,
+                                                            backgroundImage: NetworkImage(
+                                                                duelresultr['result']
+                                                                            [
+                                                                            index]
+                                                                        ['image']
+                                                                    .toString()),
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                          ),
+                                                        ),
+                                                        Center(
+                                                          child: Text(
+                                                            duelresultr['result']
+                                                                        [index]
+                                                                    ['name']
+                                                                .toString(),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                color:
+                                                                    Colors.black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  backgroundColor: ColorConstants.lightgrey200,
+
+
+                                                  progressBarColor:int.parse(duelresultr['result'][index]['percentage'].toString())<10?ColorConstants.stage1color: int.parse(duelresultr['result'][index]['percentage'].toString())<49?ColorConstants.stage2color:int.parse(duelresultr['result'][index]['percentage'].toString())==50?ColorConstants.stage2color:int.parse(duelresultr['result'][index]['percentage'].toString())<50?ColorConstants.stage3color:int.parse(duelresultr['result'][index]['percentage'].toString())<90?ColorConstants.stage3color:int.parse(duelresultr['result'][index]['percentage'].toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+                                                ));
+                                          })),
+                            ],
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                              child: Text(
-                                "YOU SCORED...",
-                                style: TextStyle(color: ColorConstants.txt),
-                              ),
-                            ),
-                            duelresultr == null
-                                ? Center(
-                                    child: Container(),
-                                  )
-                                : Container(
-
-                                    margin:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    child: ListView.builder(
-                                        physics: ClampingScrollPhysics(
-                                            parent: BouncingScrollPhysics()),
-                                        shrinkWrap: true,
-                                        itemCount: duelresultr['result'].length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  10, 10, 10, 10),
-                                              child: GFProgressBar(
-                                                // leading: Container(
-                                                //   // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                                //   height: 30,
-                                                //   width: 30,
-                                                //   child: CircleAvatar(
-                                                //     radius: 30.0,
-                                                //     backgroundImage:
-                                                //     NetworkImage(duelresultr['result'][index]['image'].toString()),
-                                                //     backgroundColor: Colors.transparent,
-                                                //   ),
-                                                // ),
-                                                percentage: double.parse(
-                                                    (int.parse(duelresultr['result']
-                                                                        [index][
-                                                                    'percentage']
-                                                                .toString()) /
-                                                            100)
-                                                        .toString()),
-                                                lineHeight: 30,
-                                                // alignment: MainAxisAlignment.spaceBetween,
-                                                child: Container(
-                                                  child: Stack(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 30,
-                                                        width: 30,
-                                                        child: CircleAvatar(
-                                                          radius: 30.0,
-                                                          backgroundImage: NetworkImage(
-                                                              duelresultr['result']
-                                                                          [
-                                                                          index]
-                                                                      ['image']
-                                                                  .toString()),
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                        ),
-                                                      ),
-                                                      Center(
-                                                        child: Text(
-                                                          duelresultr['result']
-                                                                      [index]
-                                                                  ['name']
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                backgroundColor: ColorConstants.lightgrey200,
-
-
-                                                progressBarColor:int.parse(duelresultr['result'][index]['percentage'].toString())<10?ColorConstants.stage1color: int.parse(duelresultr['result'][index]['percentage'].toString())<49?ColorConstants.stage2color:int.parse(duelresultr['result'][index]['percentage'].toString())==50?ColorConstants.stage2color:int.parse(duelresultr['result'][index]['percentage'].toString())<50?ColorConstants.stage3color:int.parse(duelresultr['result'][index]['percentage'].toString())<90?ColorConstants.stage3color:int.parse(duelresultr['result'][index]['percentage'].toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
-                                              ));
-                                        })),
-                          ],
-                        ),
                       ),
-                    )
-                  : Container(),
-              duelresultr!=null?Column(
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      Share.share("I got " +"${duelresultr['user_data']['xp'].toString()} XP"+" on Cultre App. you can play on "
-                          "https://play.google.com/store/apps/details?id=$packagename", subject: 'Share link');
 
-                    },
-                    child: Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                        child: Text(
-                          "SHARE PERFORMANCE",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              decoration: TextDecoration.underline),
-                          textAlign: TextAlign.center,
-                        )),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: "", type: widget.type,)));
-                    },
-                    child: Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                        child: Text(
-                          "ANSWER KEY",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              decoration: TextDecoration.underline),
-                          textAlign: TextAlign.center,
-                        )),
-                  ),
+               Column(
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        Share.share("I got " +"${duelresultr['user_data']['xp'].toString()} XP"+" on Cultre App. you can play on "
+                            "https://play.google.com/store/apps/details?id=$packagename", subject: 'Share link');
 
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: Colors.white,
-                          elevation: 3,
+                      },
+                      child: Container(
                           alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(170, 30),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => QuizPage()));
-                        },
-                        child: const Text(
-                          "BACK TO QUIZ",
-                          style: TextStyle(color: Colors.black, fontSize: 16),
-                          textAlign: TextAlign.center,
+                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                          child: Text(
+                            "SHARE PERFORMANCE",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                decoration: TextDecoration.underline),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: "", type: widget.type, sessionid: 0, tourid: 0,)));
+                      },
+                      child: Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                          child: Text(
+                            "ANSWER KEY",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                decoration: TextDecoration.underline),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+
+                    Center(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            onPrimary: Colors.white,
+                            elevation: 3,
+                            alignment: Alignment.center,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            fixedSize: const Size(170, 30),
+                            //////// HERE
+                          ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => QuizPage()));
+                          },
+                          child: const Text(
+                            "BACK TO QUIZ",
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ):Container(),
-              // Container(
-              //   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: ColorConstants.red,
-              //           onPrimary: Colors.white,
-              //           elevation: 3,
-              //           alignment: Alignment.center,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30.0)),
-              //           fixedSize: const Size(100, 40),
-              //           //////// HERE
-              //         ),
-              //         onPressed: () {
-              //           Navigator.pushReplacement(
-              //               context,
-              //               MaterialPageRoute(
-              //                   builder: (context) => QuizPage()));
-              //         },
-              //         child: const Text(
-              //           "GO BACK",
-              //           style: TextStyle(
-              //               color: ColorConstants.lightgrey200, fontSize: 14),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: ColorConstants.verdigris,
-              //           onPrimary: Colors.white,
-              //           elevation: 3,
-              //           alignment: Alignment.center,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30.0)),
-              //           fixedSize: const Size(100, 40),
-              //           //////// HERE
-              //         ),
-              //         onPressed: () {
-              //           // Navigator.pushReplacement(
-              //           //     context,
-              //           //     MaterialPageRoute(
-              //           //         builder: (context) => const DuelModeResultXP()));
-              //         },
-              //         child: const Text(
-              //           "LET'S GO!",
-              //           style: TextStyle(
-              //               color: ColorConstants.lightgrey200, fontSize: 14),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-            ],
+                  ],
+                )
+                       ],
+                     )
+              ],
+            ),
           ),
         ),
       ),

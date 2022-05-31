@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert' as convert;
 
+import '../../ui/homepage/homepage.dart';
+import '../../ui/quizroom/waitroom/waitroom.dart';
 import '../../utils/StringConstants.dart';
 
 
@@ -29,6 +31,10 @@ class DialogQuizRoomInviteReceive extends StatefulWidget{
 }
 
 
+abstract class DialogQuizRoomInviteView{
+
+  void setRData(int type,int index,String quizid);
+}
 class _State extends State<DialogQuizRoomInviteReceive> {
   var diffi;
   var speed;
@@ -37,7 +43,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
   var country;
   var userid;
   var snackBar;
-  HomeView? _view;
+  DialogQuizRoomInviteView? _view;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -51,7 +57,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
   }
 
   acceptrequest(String userid,String link,index,type) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "accept_invitation_quiz_room"), body: {
       'user_id': userid.toString(),
@@ -59,9 +65,13 @@ class _State extends State<DialogQuizRoomInviteReceive> {
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       if (jsonResponse['status'] == 200) {
-        _view!.setRData(type,index,widget.id.toString());
+       // _view!.setRData(type,index,widget.id.toString());
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  Waitroom(quizid: widget.id.toString(),)));
       }
       else {
         snackBar = SnackBar(
@@ -70,15 +80,17 @@ class _State extends State<DialogQuizRoomInviteReceive> {
         );
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBar);
+        Navigator.pop(context);
       }
     } else {
       Navigator.pop(context);
+
       print(response.statusCode);
     }
 
   }
   rejectrequest(String userid,String link,index,type) async {
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "reject_room_invitation"), body: {
       'user_id': userid.toString(),
@@ -86,11 +98,13 @@ class _State extends State<DialogQuizRoomInviteReceive> {
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       if (jsonResponse['status'] == 200) {
-        _view!.setRData(type,index,widget.id.toString());
+        Navigator.pop(context);
+       // _view!.setRData(type,index,widget.id.toString());
       }
       else {
+        Navigator.pop(context);
         snackBar = SnackBar(
           content: Text(
               jsonResponse['message'].toString()),
@@ -104,23 +118,23 @@ class _State extends State<DialogQuizRoomInviteReceive> {
     }
 
   }
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
   @override
   void initState() {
     super.initState();
@@ -284,7 +298,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                         ),
                         onPressed: () {
                           rejectrequest(userid.toString(), widget.link.toString(), widget.index.toString(), 2);
-                          Navigator.pop(context);
+
                         },
                         child: const Text(
                           "REJECT",
@@ -306,7 +320,7 @@ class _State extends State<DialogQuizRoomInviteReceive> {
                         ),
                         onPressed: () {
                          acceptrequest(userid.toString(), widget.link.toString(), widget.index.toString(), 1);
-                         Navigator.pop(context);
+
                         },
                         child: const Text(
                           "ACCEPT",

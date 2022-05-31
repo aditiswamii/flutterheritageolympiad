@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -26,6 +27,7 @@ import 'package:uni_links/uni_links.dart';
 
 
 import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
+import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import '../../dialog/quizroominvitereceive/quizroominvite_receivedialog.dart';
 import '../../utils/StringConstants.dart';
 
@@ -37,15 +39,15 @@ import '../rules/rulepage.dart';
 import '../tournamentquiz/tournament_quiz.dart';
 import '../tournamentquiz/waitlist/waitlist.dart';
 
-class WelcomePage extends StatefulWidget{
+class HomePage extends StatefulWidget{
 var link;
-  WelcomePage({Key? key, this.link}) : super(key: key);
+  HomePage({Key? key, this.link}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<WelcomePage> implements HomeView{
+class _State extends State<HomePage> implements DialogDuelInviteView,DialogQuizRoomInviteView{
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 var username;
 var email;
@@ -65,6 +67,27 @@ var myinvdata;
   var shortlink;
   var linkurl;
 GetUserLeagueResponse? userLeagueR;
+
+
+// broadfun(){
+//   FBroadcast.instance().register(Key_Message, (value, callback) {
+//     var data = value;
+//   });     ///Register The Receiver
+//
+//   FBroadcast.instance().broadcast(
+//     "Key_Message",
+//     value: myController.text,
+//   ); ///Sending The Broadcast
+//
+//   //FBroadcast.instance().unregister(this); ///Close The Receiver ondispose
+//
+//   //FBroadcast.instance().stickyBroadcast(
+//   //   Key_Message,
+//   //   value: data,
+//   // );
+// }
+
+
  userdata() async {
    final SharedPreferences prefs = await SharedPreferences.getInstance();
    setState(() {
@@ -72,6 +95,7 @@ GetUserLeagueResponse? userLeagueR;
      country =prefs.getString("country");
      userid= prefs.getString("userid");
    });
+   free(userid.toString());
    getuserleague(userid.toString());
    linkurl=widget.link;
    if(linkurl!="") {
@@ -99,6 +123,29 @@ GetUserLeagueResponse? userLeagueR;
 
 
 }
+  free(String userid) async {
+
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "free"), body: {
+      'user_id': userid.toString(),
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+
+      if (jsonResponse['status'] == 200) {
+
+
+
+
+      } else {
+
+      }
+    } else {
+
+      print(response.statusCode);
+    }
+
+  }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -200,7 +247,7 @@ if(tournament!=null && tournament['tournament_id']>0){
              height:470,
              width: 250,
              alignment: Alignment.center,
-             child: DialogDuelInviteReceive(id: dual![0]['id'], image: dual![0]['image'], diffi: dual![0]['difficulty'], index: 0,
+             child: DialogDuelInviteReceive(id: dual![0]['dual_id'], image: dual![0]['image'], diffi: dual![0]['difficulty'], index: 0,
                domainsel:  dual![0]['domain'], link: dual![0]['link'], speed: dual![0]['quiz_speed'], name: dual![0]['name'],)));
      showDialog(
          context: context,
@@ -228,7 +275,7 @@ if(tournament!=null && tournament['tournament_id']>0){
               height:470,
               width: 250,
               alignment: Alignment.center,
-              child: DialogQuizRoomInviteReceive(id: quizroom![0]['id'], image: quizroom![0]['image'], diffi: quizroom![0]['difficulty'], index: 0,
+              child: DialogQuizRoomInviteReceive(id: quizroom![0]['quiz_room_id'], image: quizroom![0]['image'], diffi: quizroom![0]['difficulty'], index: 0,
                 domainsel:  quizroom![0]['domain'], link: quizroom![0]['link'], speed: quizroom![0]['quiz_speed'], name: quizroom![0]['name'],)));
       showDialog(
           context: context,
@@ -924,210 +971,156 @@ if(tournament!=null && tournament['tournament_id']>0){
             margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
             child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
 
-         // Container(
-         //   child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-         //       shrinkWrap: true,
-         //       physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
-         //
-         //       children: [
-         //         GestureDetector(
-         //           onTap:(){
-         //             Navigator.pushReplacement(
-         //                 context,
-         //                 MaterialPageRoute(
-         //                     builder: (context) => MyAccountPage()));
-         //           },
-         //           child: Container(
-         //             height: 150,
-         //             width: 150,
-         //             color: ColorConstants.red200,
-         //
-         //             child: Column(
-         //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         //               children: [
-         //                 Container(
-         //                   padding: EdgeInsets.all(10),
-         //                   alignment: Alignment.topRight,
-         //                   child: Image.asset("assets/images/mcq_pattern2.png",
-         //                       height: 20,width: 20,alignment: Alignment.topRight),
-         //                 ),
-         //                 Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-         //                 Container(
-         //                   padding: EdgeInsets.all(10),
-         //                   alignment: Alignment.topLeft,
-         //                   child: Image.asset("assets/images/mcq_pattern2.png",
-         //                       height: 20,width: 20,alignment: Alignment.topLeft),
-         //                 ),
-         //               ],
-         //             ),
-         //
-         //           ),
-         //         ),
-         //         ]
-         //   )
-         //
-         //
-         // ),
+         Container(
+           child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
+               shrinkWrap: true,
+               physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
 
+               children: [
+                 GestureDetector(
+                   onTap:(){
+                     Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) => MyAccountPage()));
+                   },
+                   child: Container(
+                     height: 150,
+                     width: 150,
+                     color: ColorConstants.red200,
 
-          Container(
-            //height: 300,
-              width: MediaQuery.of(context).size.width,
-              //alignment: Alignment.center,
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-             children: [
-             GestureDetector(
-               onTap:(){
-                 Navigator.pushReplacement(
-                     context,
-                     MaterialPageRoute(
-                         builder: (context) => MyAccountPage()));
-          },
-                 child: Container(
-                   height: 150,
-                   width: 150,
-              color: ColorConstants.red200,
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topRight,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topRight),
+                         ),
+                         Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topLeft,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topLeft),
+                         ),
+                       ],
+                     ),
 
-                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                       Container(
-                         padding: EdgeInsets.all(10),
-                         alignment: Alignment.topRight,
-                         child: Image.asset("assets/images/mcq_pattern2.png",
-                             height: 20,width: 20,alignment: Alignment.topRight),
-                       ),
-                       Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                       Container(
-                         padding: EdgeInsets.all(10),
-                         alignment: Alignment.topLeft,
-                         child: Image.asset("assets/images/mcq_pattern2.png",
-                             height: 20,width: 20,alignment: Alignment.topLeft),
-                       ),
-                     ],
                    ),
-
                  ),
-               ),
-               GestureDetector(
-                 onTap: (){
-                   Navigator.pushReplacement(
-                       context,
-                       MaterialPageRoute(
-                           builder: (context) => FeedPage(contents: "", seldomain: "", themes: "",)));
-                 },
-                 child: Container(
-                   height: 150,
-                   width: 150,
+                 GestureDetector(
+                   onTap: (){
+                     Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) => FeedPage(contents: "", seldomain: "", themes: "",)));
+                   },
+                   child: Container(
+                     height: 150,
+                     width: 150,
                      color:ColorConstants.yellow200,
 
-                   child:  Column(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                       Container(
-                         padding: EdgeInsets.all(10),
-                         alignment: Alignment.topLeft,
-                         child: Image.asset("assets/images/mcq_pattern2.png",
-                             height: 20,width: 20,alignment: Alignment.topLeft),
-                       ),
-                       Container(child: Text("MY\nFEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                       Container(
-                         padding: EdgeInsets.all(10),
-                         alignment: Alignment.topRight,
-                         child: Image.asset("assets/images/mcq_pattern2.png",
-                             height: 20,width: 20,alignment: Alignment.topRight),
-                       ),
-                     ],
+                     child:  Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topLeft,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topLeft),
+                         ),
+                         Container(child: Text("MY\nFEED",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topRight,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topRight),
+                         ),
+                       ],
+                     ),
+
                    ),
-
                  ),
-               ),
-             ],
-            ),
-          ),
-        Container(
-          //height: 300,
-          width: MediaQuery.of(context).size.width,
-          //alignment: Alignment.center,
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  QuizPage()));
-                },
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  color: ColorConstants.blue200,
+                 GestureDetector(
+                   onTap: () {
+                     Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) =>  QuizPage()));
+                   },
+                   child: Container(
+                     height: 150,
+                     width: 150,
+                     color: ColorConstants.blue200,
 
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        alignment: Alignment.topRight,
-                        child: Image.asset("assets/images/mcq_pattern2.png",
-                            height: 20,width: 20,alignment: Alignment.topRight),
-                      ),
-                      Container(child: Text("TO THE\nQUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        alignment: Alignment.topLeft,
-                        child: Image.asset("assets/images/mcq_pattern2.png",
-                            height: 20,width: 20,alignment: Alignment.topLeft),
-                      ),
-                    ],
-                  ),
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topRight,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topRight),
+                         ),
+                         Container(child: Text("TO THE\nQUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topLeft,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topLeft),
+                         ),
+                       ],
+                     ),
 
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => ResultPage(quizid: "1339", savedata: null, )));
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShopPage()));
-                },
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  color: Colors.black26,
+                   ),
+                 ),
+                 GestureDetector(
+                   onTap: () {
+                     // Navigator.pushReplacement(
+                     //     context,
+                     //     MaterialPageRoute(
+                     //         builder: (context) => ResultPage(quizid: "1339", savedata: null, )));
+                     Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) => ShopPage()));
+                   },
+                   child: Container(
+                     height: 150,
+                     width: 150,
+                     color: Colors.black26,
 
-                  child:  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        alignment: Alignment.topLeft,
-                        child: Image.asset("assets/images/mcq_pattern2.png",
-                            height: 20,width: 20,alignment: Alignment.topLeft),
-                      ),
-                      Container(child: Text("TO THE\nSHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        alignment: Alignment.topCenter,
-                        child: Image.asset("assets/images/mcq_pattern2.png",
-                            height: 20,width: 20,alignment: Alignment.topCenter),
-                      ),
-                    ],
-                  ),
+                     child:  Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topLeft,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topLeft),
+                         ),
+                         Container(child: Text("TO THE\nSHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                         Container(
+                           padding: EdgeInsets.all(10),
+                           alignment: Alignment.topCenter,
+                           child: Image.asset("assets/images/mcq_pattern2.png",
+                               height: 20,width: 20,alignment: Alignment.topCenter),
+                         ),
+                       ],
+                     ),
 
-                ),
-              ),
-            ],
-          ),
-        ),
+                   ),
+                 ),
+                 ]
+           )
+
+
+         ),
+
+
+
 
         userLeagueR!=null?  Container(
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -1225,7 +1218,7 @@ if(tournament!=null && tournament['tournament_id']>0){
               height:470,
               width: 250,
               alignment: Alignment.center,
-              child: DialogDuelInviteReceive(id: dual![index+1]['id'], image: dual![index+1]['image'], diffi: dual![index+1]['difficulty'], index: index+1,
+              child: DialogDuelInviteReceive(id: dual![index+1]['dual_id'], image: dual![index+1]['image'], diffi: dual![index+1]['difficulty'], index: index+1,
                 domainsel:  dual![index+1]['domain'], link: dual![index+1]['link'], speed: dual![index+1]['quiz_speed'], name: dual![index+1]['name'],)));
       showDialog(
           context: context,
@@ -1271,7 +1264,7 @@ if(tournament!=null && tournament['tournament_id']>0){
               height:470,
               width: 250,
               alignment: Alignment.center,
-              child: DialogDuelInviteReceive(id: quizroom![index+1]['id'], image: quizroom![index+1]['image'], diffi: quizroom![index+1]['difficulty'], index: index+1,
+              child: DialogQuizRoomInviteReceive(id: quizroom![index+1]['quiz_room_id'], image: quizroom![index+1]['image'], diffi: quizroom![index+1]['difficulty'], index: index+1,
                 domainsel:  quizroom![index+1]['domain'], link: quizroom![index+1]['link'], speed: quizroom![index+1]['quiz_speed'], name: quizroom![index+1]['name'],)));
       showDialog(
           context: context,
@@ -1289,9 +1282,7 @@ if(tournament!=null && tournament['tournament_id']>0){
     }
   }
 
-  // Widget quizroomdialog(BuildContext){
-  //
-  // }
+
 
 
 }

@@ -23,7 +23,7 @@ import 'dart:convert' as convert;
 
 import '../../../utils/countdowntimer.dart';
 
-import '../../homepage/welcomeback_page.dart';
+import '../../homepage/homepage.dart';
 import '../../rules/rulepage.dart';
 
 class Waitroom extends StatefulWidget {
@@ -172,7 +172,7 @@ class _State extends State<Waitroom> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  WelcomePage()));
+            builder: (context) =>  HomePage()));
   }
   disbandapi(String roomid) async {
     http.Response response = await http.post(
@@ -207,7 +207,7 @@ class _State extends State<Waitroom> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  WelcomePage()));
+            builder: (context) =>  HomePage()));
   }
   getroomstatus(String roomid,String userid) async {
     http.Response response = await http.post(
@@ -248,7 +248,7 @@ class _State extends State<Waitroom> {
          Navigator.pushReplacement(
              context,
              MaterialPageRoute(
-                 builder: (context) =>  WelcomePage()));
+                 builder: (context) =>  HomePage()));
 
        }else if(roomstatusata==1){
          Navigator.pushReplacement(
@@ -343,7 +343,7 @@ var creatorid =0;
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => WelcomePage()));
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     return true;
   }
 

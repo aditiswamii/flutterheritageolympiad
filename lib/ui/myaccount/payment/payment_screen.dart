@@ -4,7 +4,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/cancelplan/cancelplan_dialog.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 
@@ -63,7 +63,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WelcomePage()));
+                                  builder: (context) => HomePage()));
                         },
                         child: Image.asset(
                             "assets/images/home_1.png", height: 40, width: 40),

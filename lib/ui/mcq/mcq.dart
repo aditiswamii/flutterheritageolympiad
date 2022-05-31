@@ -13,6 +13,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../modal/classicquestion/ClassicQuestion.dart';
@@ -22,13 +23,16 @@ import 'dart:convert' as convert;
 import '../../../utils/countdowntimer.dart';
 
 import '../duelmode/duelmoderesult/duelmode_result.dart';
-import '../homepage/welcomeback_page.dart';
+import '../homepage/homepage.dart';
 import '../quizroom/quizroomresult/quizroom_result.dart';
+import '../tournamentquiz/result/tourresult.dart';
 
 class Mcq extends StatefulWidget{
   var quizid;
   var type;
-  Mcq({Key? key,required this.quizid,required this.type}) : super(key: key);
+  var tourid;
+  var sessionid;
+  Mcq({Key? key,required this.quizid,required this.type,required this.sessionid,required this.tourid}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -83,7 +87,12 @@ class _State extends State<Mcq> {
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
-    getQuestions(widget.quizid);
+    if(widget.type=="1"||widget.type=="2"||widget.type=="3"){
+      getQuestions(widget.quizid.toString());
+    }else{
+     getTourQuestions(widget.tourid, widget.sessionid);
+    }
+
     myDuration = Duration(seconds: 0);
     ramdomcolor = (color..shuffle()).first;
   }
@@ -163,8 +172,14 @@ class _State extends State<Mcq> {
 
 
     }
+   if(widget.type=="1"||widget.type=="2"){
+     submitquiz(widget.quizid, answerstring);
+   }else if(widget.type=="3"){
+     submitquizroomquiz(widget.quizid, answerstring);
+   }else if(widget.type=="4"){
+    submittourquiz(widget.tourid, widget.sessionid, answerstring);
+   }
 
-    saveresult(widget.quizid, answerstring);
     print(answerstring);
   }
   void _resetQuiz() {
@@ -183,6 +198,42 @@ class _State extends State<Mcq> {
     await http.post(Uri.parse(StringConstants.BASE_URL+"questions"),
         body: {
           'quiz_id': quiz_id.toString(),
+        });
+    showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        decRes = jsonResponse;
+        quesdata = jsonResponse['data'];
+        setState(() {
+          quesdata = jsonResponse['data'];
+          onquestion(quesdata);
+
+        });
+        print(jsonResponse['data'].toString());
+
+
+      }else{
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
+  void getTourQuestions(int tournament_id,int session_id) async {
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL+"tournament_questions"),
+        body: {
+          'tournament_id': tournament_id.toString(),
+          'session_id': session_id.toString(),
         });
     showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
@@ -233,9 +284,9 @@ class _State extends State<Mcq> {
     reloadques();
   }
   }
-  void saveresult(String quiz_id,String quiz_answer) async {
+  void submitquiz(String quiz_id,String quiz_answer) async {
     http.Response response =
-    await http.post(Uri.parse("http://3.108.183.42/api/save_result"),
+    await http.post(Uri.parse(StringConstants.BASE_URL+"save_result"),
         body: {
           'quiz_id': quiz_id.toString(),
           'quiz_answer': quiz_answer.toString(),
@@ -266,6 +317,79 @@ class _State extends State<Mcq> {
       print(response.statusCode);
     }
   }
+  int quizroomcheck=0;
+  void submitquizroomquiz(String quiz_id,String quiz_answer) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (quizroomcheck == 0) {
+      quizroomcheck = 1;
+      http.Response response =
+      await http.post(Uri.parse(StringConstants.BASE_URL+"save_room_result"),
+          body: {
+            'quiz_id': quiz_id.toString(),
+            'quiz_answer': quiz_answer.toString(),
+            'user_id':prefs.getString("userid").toString()
+          });
+      showLoaderDialog(context);
+      var jsonResponse = convert.jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        resultdata = response.body;
+        if (jsonResponse['status'] == 200) {
+          resultres = jsonDecode(response.body);
+          savedata = jsonDecode(resultdata!)['data'];
+          setState(() {
+            savedata = jsonDecode(resultdata!)['data'];
+          });
+          onsuccess(savedata);
+          print(savedata);
+          print(savedata['quiz_id']);
+          print(jsonDecode(resultdata!)['data']);
+          print(jsonDecode(resultdata!)['data']['quiz_id']);
+          print(jsonDecode(resultdata!)['data']['xp']);
+          print(jsonDecode(resultdata!)['data']['per']);
+        }
+      } else {
+        Navigator.pop(context);
+        print(response.statusCode);
+      }
+    }
+  }
+  void submittourquiz(int tournament_id,int session_id,String quiz_answer) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      http.Response response =
+      await http.post(Uri.parse(StringConstants.BASE_URL+"save_room_result"),
+          body: {
+            'tournament_id': tournament_id.toString(),
+            'session_id': session_id.toString(),
+            'quiz_answer': quiz_answer.toString(),
+            'user_id':prefs.getString("userid").toString()
+          });
+      showLoaderDialog(context);
+      var jsonResponse = convert.jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        resultdata = response.body;
+        if (jsonResponse['status'] == 200) {
+          resultres = jsonDecode(response.body);
+          savedata = jsonDecode(resultdata!)['data'];
+          setState(() {
+            savedata = jsonDecode(resultdata!)['data'];
+          });
+          onsuccess(savedata);
+          print(savedata);
+          print(savedata['quiz_id']);
+          print(jsonDecode(resultdata!)['data']);
+          print(jsonDecode(resultdata!)['data']['quiz_id']);
+          print(jsonDecode(resultdata!)['data']['xp']);
+          print(jsonDecode(resultdata!)['data']['per']);
+        }
+      } else {
+        Navigator.pop(context);
+        print(response.statusCode);
+      }
+
+  }
 onsuccess(savedata){
     countdownTimer!.cancel();
     if(widget.type=="1"){
@@ -281,6 +405,12 @@ onsuccess(savedata){
           context,
           MaterialPageRoute(
               builder: (context) =>  QuizroomResult(quizid: widget.quizid, type: widget.type,)));
+    }else if(widget.type=="4"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  TournamentResult( type: widget.type, sessionid: widget.sessionid, tourid: widget.tourid,)));
+
     }
 
 }
@@ -293,18 +423,22 @@ onsuccess(savedata){
       contentPadding: EdgeInsets.only(top: 10.0),
       title: Text("Do you want to submit?",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
       actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(onPressed: (){
-              countdownTimer!.cancel();
-              PassValue();
-            },
-                child: Text("Yes",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700))),
-            TextButton(onPressed: (){
-              Navigator.pop(context);
-            }, child: Text("No",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700))),
-          ],
+        Container(
+          padding: EdgeInsets.all(4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(onPressed: (){
+                Navigator.pop(context);
+              },
+                  child: Text("No",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700))),
+              TextButton(onPressed: (){
+                countdownTimer!.cancel();
+                PassValue();
+               
+              }, child: Text("Yes",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700))),
+            ],
+          ),
         ),
       ],
     );
@@ -325,7 +459,7 @@ onsuccess(savedata){
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => WelcomePage()));
+        builder: (BuildContext context) => HomePage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -366,18 +500,43 @@ onsuccess(savedata){
           ),
         ],
       ),
-      body: Container(
+      body:currentques==null?Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/login_bg.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: ListBody(
+
+          children: [
+            Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                child: const Text(
+                  "Done! Preparing quiz...",
+                  style: TextStyle(fontSize: 24, color: Colors.black),
+                  textAlign: TextAlign.center,
+                )),
+            Container(
+              height: 300,
+              width: 300,
+              margin: EdgeInsets.only(top: 40),
+              child: Lottie.asset("assets/lottie/lottieanim.json"),
+            ),
+            Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Text("LOADING",
+                style: TextStyle(fontSize: 24, color:Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
+      ): Container(
         decoration:  BoxDecoration(
           color: ramdomcolor,
         ),
-        child: currentques==null? Container(
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
-        ),)
-            : Container(
+        child:  Container(
             margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [
@@ -392,21 +551,24 @@ onsuccess(savedata){
                         color: ColorConstants.lightgrey200
                     ),
                     child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(  margin: EdgeInsets.fromLTRB(0,0,5,0),
-                              child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,)),
-                          Text(
-                            '$minutes:$seconds',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: ramdomcolor,
-                                fontSize: 24),
-                          ),
-                          SizedBox(height: 20),
+                      child: Container(
 
-                        ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(  margin: EdgeInsets.fromLTRB(0,0,5,0),
+                                child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,)),
+                            Text(
+                              '$minutes:$seconds',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: ramdomcolor,
+                                  fontSize: 24),
+                            ),
+                            SizedBox(height: 20),
+
+                          ],
+                        ),
                       ),
                     )),
                 Container(
@@ -517,13 +679,10 @@ onsuccess(savedata){
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                             onPressed: (){
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => const QuizPage()));
+
                             },
                             child: Text("")
-                          //Image.asset("assets/images/left_arrow.png",height: 40,width: 40),
+
                         ),
                       ),
 
@@ -563,8 +722,7 @@ onsuccess(savedata){
                                         ),
                                       );
                                     });
-                                // Navigator.pushReplacement(context,
-                                //     MaterialPageRoute(builder: (context) => const VjournoMain()));
+
                               },
                               child: Image.asset(
                                 "assets/images/hint.png",
@@ -579,19 +737,11 @@ onsuccess(savedata){
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                           onPressed: (){
-                          // _hasBeenPressed1 = false;
-                          //   _hasBeenPressed2 = false;
-                          //   _hasBeenPressed3 = false;
-                          //  _hasBeenPressed4 = false;
-                           // print(correctanswer);
+
                             print("ans:$selectans");
-                            // if(selectans==randomItem['right_option'].toString()){
-                            //   correctanswer="4";
-                            //
-                            // }
+
                             reloadques();
-                           // initState();
-                            // getQuestions(widget.quizid);
+
                           },
                           child: Image.asset("assets/images/rightarrow2.png",height: 40,width: 40),
                         ),

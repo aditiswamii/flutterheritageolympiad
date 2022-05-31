@@ -12,7 +12,7 @@ import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.da
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
 
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 
 import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
@@ -260,7 +260,7 @@ var roomdata;
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
+                                    builder: (context) =>  HomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),

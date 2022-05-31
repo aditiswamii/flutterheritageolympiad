@@ -9,7 +9,7 @@ import 'package:flutterheritageolympiad/modal/getprivacy/GetPrivacyResponse.dart
 
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -224,7 +224,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>  WelcomePage()));
+                                      builder: (context) =>  HomePage()));
                             },
                             child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                           ),

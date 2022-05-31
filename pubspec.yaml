@@ -70,6 +70,10 @@ dependencies:
   cloud_functions: ^3.2.6
   uni_links:
   pull_to_refresh:
+  flutter_local_notifications:
+  fbroadcast_nullsafety: ^2.0.2
+  provider:
+  lottie:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -93,6 +97,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/lottie/lottieanim.json
   fonts:
     - family: Omnes
       fonts:

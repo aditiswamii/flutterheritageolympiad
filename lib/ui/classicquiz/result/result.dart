@@ -17,11 +17,12 @@ import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/SharedObjects.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 
 class ResultPage extends StatefulWidget {
   var quizid;
@@ -89,7 +90,7 @@ String packagename="";
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => WelcomePage()));
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     // Do some stuff.
     return true;
   }
@@ -114,7 +115,33 @@ String packagename="";
           color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 40, 20, 0),
           child: ListView(children: [
-            Container(
+          widget.savedata==null?Container(
+            child: ListBody(
+
+              children: [
+                Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                    child: const Text(
+                      "AND\n THAT'S A\nWRAP...",
+                      style: TextStyle(fontSize: 24, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                Container(
+                  height: 300,
+                  width: 300,
+                  margin: EdgeInsets.only(top: 40),
+                  child: Lottie.asset("assets/lottie/lottieanim.json"),
+                ),
+                Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Text("Generating Result...",
+                    style: TextStyle(fontSize: 24, color:Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ),
+          ):  Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
                 child: Text(
@@ -264,7 +291,7 @@ String packagename="";
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: widget.savedata, type: widget.type,)));
+                            builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: widget.savedata, type: widget.type, sessionid: 0, tourid: 0,)));
                   },
                   child: Container(
                       alignment: Alignment.center,

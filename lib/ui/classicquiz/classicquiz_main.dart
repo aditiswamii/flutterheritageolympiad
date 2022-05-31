@@ -13,7 +13,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 
 import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/invitepage.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modal/createquizresponse/CreateQuizResponse.dart';
@@ -109,10 +109,10 @@ class _State extends State<ClassicQuizMain> {
         print(domains_length.length); // just printed length of data
       });
       var jsondata=getDomainsResponseFromJson(data!).data;
-      var jsondataa=datadomainFromJson(data!).id.toString();
+
       log(jsondata.toString());
-      var venam = jsonDecode(data!)['data'][4]['name'];
-      log(venam);
+      // var venam = jsonDecode(data!)['data'][4]['name'];
+      // log(venam);
     } else {
       print(response.statusCode);
     }
@@ -255,7 +255,7 @@ class _State extends State<ClassicQuizMain> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  WelcomePage()));
+                                    builder: (context) =>  HomePage()));
                           },
                           child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                         ),

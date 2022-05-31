@@ -11,7 +11,7 @@ import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
-import 'package:flutterheritageolympiad/ui/homepage/welcomeback_page.dart';
+import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,7 +53,7 @@ class _State extends State<Result> {
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>WelcomePage()));
+        builder: (BuildContext context) =>HomePage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -91,7 +91,7 @@ class _State extends State<Result> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  WelcomePage()));
+                                  builder: (context) =>  HomePage()));
                         },
                         child:  Image.asset("assets/images/home_1.png",height: 40,width: 40),
                       ),
@@ -124,7 +124,7 @@ class _State extends State<Result> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>  WelcomePage()));
+                            builder: (context) =>  HomePage()));
                   },
                   child: const Text(
                     "GO BACK",
