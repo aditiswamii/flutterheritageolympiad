@@ -146,32 +146,32 @@ GetUserLeagueResponse? userLeagueR;
     }
 
   }
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
   myinvitation(String userid) async {
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "dashboard"), body: {
       'user_id': userid.toString(),
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
         data = response.body;
         //final responseJson = json.decode(response.body);//store response as string
@@ -194,7 +194,7 @@ GetUserLeagueResponse? userLeagueR;
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
 
@@ -413,7 +413,7 @@ if(tournament!=null && tournament['tournament_id']>0){
   }
   var linkdata;
   linkdetails(String userid,String link) async {
-    showLoaderDialog(context);
+   // showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "link_details"), body: {
       'user_id': userid.toString(),
@@ -421,7 +421,7 @@ if(tournament!=null && tournament['tournament_id']>0){
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+    //  Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
         data = response.body;
         //final responseJson = json.decode(response.body);//store response as string
@@ -444,14 +444,14 @@ if(tournament!=null && tournament['tournament_id']>0){
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      //Navigator.pop(context);
       print(response.statusCode);
     }
 
   }
 
   acceptcontact(String userid,String link,index,type) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "accept_link_invitation"), body: {
       'user_id': userid.toString(),
@@ -459,7 +459,7 @@ if(tournament!=null && tournament['tournament_id']>0){
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
         setData(type,index);
       } else  if (jsonResponse['status'] == 201) {
@@ -474,13 +474,13 @@ if(tournament!=null && tournament['tournament_id']>0){
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       print(response.statusCode);
     }
 
   }
   rejectcontact(String userid,String link,index,type) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "reject_link_invitation"), body: {
       'user_id': userid.toString(),
@@ -488,7 +488,7 @@ if(tournament!=null && tournament['tournament_id']>0){
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
         setData(type,index);
       }
@@ -501,7 +501,7 @@ if(tournament!=null && tournament['tournament_id']>0){
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+    //  Navigator.pop(context);
       print(response.statusCode);
     }
 
@@ -773,7 +773,7 @@ if(tournament!=null && tournament['tournament_id']>0){
   }
   var dualinkdata;
   dualdetails(String userid,String link) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "dualdetails"), body: {
       'user_id': userid.toString(),
@@ -781,7 +781,7 @@ if(tournament!=null && tournament['tournament_id']>0){
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
         data = response.body;
         //final responseJson = json.decode(response.body);//store response as string
@@ -804,7 +804,7 @@ if(tournament!=null && tournament['tournament_id']>0){
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       print(response.statusCode);
     }
 
@@ -821,7 +821,7 @@ if(tournament!=null && tournament['tournament_id']>0){
   }
   var quizroomdata;
   quizroomdetail(String userid,String link) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "dualdetails"), body: {
       'user_id': userid.toString(),
@@ -829,7 +829,7 @@ if(tournament!=null && tournament['tournament_id']>0){
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
         data = response.body;
         //final responseJson = json.decode(response.body);//store response as string
@@ -852,7 +852,7 @@ if(tournament!=null && tournament['tournament_id']>0){
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+   //   Navigator.pop(context);
       print(response.statusCode);
     }
 
@@ -868,7 +868,7 @@ if(tournament!=null && tournament['tournament_id']>0){
 
   }
   getuserleague(String userid) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
     );
@@ -876,7 +876,7 @@ if(tournament!=null && tournament['tournament_id']>0){
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
@@ -897,7 +897,7 @@ if(tournament!=null && tournament['tournament_id']>0){
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       // onsuccess(null);
       print(response.statusCode);
     }

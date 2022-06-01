@@ -208,43 +208,45 @@ class _State extends State<RulesPage> {
           ),
         ),
         child:
-        // ruledata==null?Container(
-        //   decoration: const BoxDecoration(
-        //     image: DecorationImage(
-        //       image: AssetImage("assets/images/login_bg.jpg"),
-        //       fit: BoxFit.cover,
-        //     ),
-        //   ),
-        //   child: ListBody(
-        //
-        //     children: [
-        //       Container(
-        //           alignment: Alignment.center,
-        //           margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-        //           child: const Text(
-        //             "Waiting for the other players\nto accept rules...",
-        //             style: TextStyle(fontSize: 24, color: Colors.black),
-        //             textAlign: TextAlign.center,
-        //           )),
-        //       Container(
-        //         height: 300,
-        //         width: 300,
-        //         margin: EdgeInsets.only(top: 40),
-        //         child: Lottie.asset("assets/lottie/lottieanim.json"),
-        //       ),
-        //       Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        //         child: Text("LOADING",
-        //           style: TextStyle(fontSize: 24, color:Colors.black),
-        //           textAlign: TextAlign.center,
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // ):
-        ruledata==null?Container():  Container(
+
+          Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children:<Widget> [
+              if( ruledata==null)
+              Container(
+                height: MediaQuery.of(context).size.height,
+                child: ListBody(
+
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                        child: const Text(
+                          "Waiting for the other players\nto accept rules...",
+                          style: TextStyle(fontSize: 24, color: Colors.black),
+                          textAlign: TextAlign.center,
+                        )),
+                    Container(
+                      height: 300,
+                      width: 300,
+                      margin: EdgeInsets.only(top: 40),
+                      child: Lottie.asset("assets/lottie/lottieanim.json"),
+                    ),
+                    Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text("LOADING",
+                        style: TextStyle(fontSize: 24, color:Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              if( ruledata!=null)
+              ListBody(
+                children: [
+
+
               if(title!=null)
               Container(
                   alignment: Alignment.centerLeft,
@@ -271,8 +273,9 @@ class _State extends State<RulesPage> {
 
                     },
                     builder: (BuildContext context, Duration value, Widget? child) {
-                      final minutes = value.inMinutes  % 60;
-                      final seconds = value.inSeconds % 60;
+                      String strDigits(int n) => n.toString().padLeft(2, '0');
+                      final minutes =  strDigits(value.inMinutes.remainder(60)) ;
+                      final seconds = strDigits(value.inSeconds.remainder(60));
                       return Center(
                         child: Card(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -281,7 +284,7 @@ class _State extends State<RulesPage> {
                               height: 40,width: 100,
                               padding:  EdgeInsets.all(5),
                               alignment: Alignment.center,
-                              child: Text('$minutes:$seconds',
+                              child: Text('${minutes}:${seconds}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: ColorConstants.txt,
@@ -370,7 +373,11 @@ class _State extends State<RulesPage> {
                   ],
                 ),
               ),
+    ],
+    )
+
             ],
+
           ),
         ),
       ),

@@ -39,7 +39,7 @@ class _State extends State<DuelModeMain> {
   var domaindata;
   var createdata;
   bool value = false;
-  static int _len = 11;
+  static int _len = 100;
   bool _expanded5 = false;
   bool _expanded6 = false;
   bool _expanded7 = false;
@@ -734,14 +734,19 @@ class _State extends State<DuelModeMain> {
                               _len, (index) => false);
                         }
                         if(_expanded7==true) {
-                          if(!domainnamelist.contains("1,2,3,4,5,6,7,8,9,10,11"))
-                            domainnamelist.addAll(["1","2","3","4","5","6","7","8","9","10","11"]);
+                          for (int i =0;i<=domaindata['data'].length;i++){
+                            if(!domainnamelist.contains("${i+1}")){
+                              domainnamelist.add("${i+1}");
+                            } else {
+                              // if(domainnamelist.contains(domainname))
+                              domainnamelist.remove("${i+1}");
+                            }
+
+                          }
+
 
                         }
-                        else {
-                          // if(domainnamelist.contains(domainname))
-                          domainnamelist.remove(domaindata);
-                        }
+
 
                       },
                       value: _expanded7 )

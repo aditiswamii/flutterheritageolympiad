@@ -230,7 +230,7 @@ class _State extends State<ClassicQuizMain> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child:domains_length==null?Container(): Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             // physics: const BouncingScrollPhysics(
@@ -360,6 +360,19 @@ class _State extends State<ClassicQuizMain> {
                                               .generate(
                                               _len, (index) => false);
                                         }
+                                        if(_expanded7==true) {
+                                          for (int i =0;i<=domains_length.length;i++){
+                                            if(!domainnamelist.contains("${i+1}")){
+                                              domainnamelist.add("${i+1}");
+                                            } else {
+                                              // if(domainnamelist.contains(domainname))
+                                              domainnamelist.remove("${i+1}");
+                                            }
+
+                                          }
+
+
+                                        }
 
 
                                       },
@@ -368,23 +381,8 @@ class _State extends State<ClassicQuizMain> {
                               ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: domains_length == null
-                                    ? 0
-                                    : _expanded6==false?2:domains_length.length,
+                                itemCount: _expanded6==false?2:domains_length.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  if(_expanded7==true) {
-                                    for (int i =0;i<=domains_length.length;i++){
-                                      if(!domainnamelist.contains("${i+1}")){
-                                        domainnamelist.add("${i+1}");
-                                      } else {
-                                        // if(domainnamelist.contains(domainname))
-                                        domainnamelist.remove(domains_length);
-                                      }
-
-                                    }
-
-
-                                  }
 
                                   return Column(
                                     children: [
