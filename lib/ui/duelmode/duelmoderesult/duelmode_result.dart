@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
-import 'dart:ffi';
+
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flip_card/flip_card.dart';
@@ -710,7 +709,7 @@ class _State extends State<DuelModeResult> {
                             alignment: Alignment.center,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0)),
-                            fixedSize: const Size(170, 30),
+                            fixedSize:  Size(170, 30),
                             //////// HERE
                           ),
                           onPressed: () {

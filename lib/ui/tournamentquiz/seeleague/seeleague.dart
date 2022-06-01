@@ -389,7 +389,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                             ),
 
     Container(
-    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
 
     decoration: BoxDecoration(color: Colors.white),
     child: Card(
@@ -459,7 +459,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
     ),
     ),
                             Container(
-                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
 
                               decoration: BoxDecoration(color: Colors.white),
                               child: Card(
@@ -529,7 +529,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
 
                               decoration: BoxDecoration(color: Colors.white),
                               child: Card(

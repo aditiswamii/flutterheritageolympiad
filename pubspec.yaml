@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.1'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -44,7 +44,7 @@ dependencies:
   flutter_share: ^2.0.0
   shared_preferences:
   shared_preferences_android:
-  share_plus: ^3.0.4
+  share_plus: ^4.0.5
   mvp:
   image_picker: ^0.7.2+1
   http:
@@ -56,7 +56,7 @@ dependencies:
   flutter_downloader:
   json_object_mapper:
   expansion_tile_card:
-  back_button_interceptor:
+  back_button_interceptor: ^6.0.0
   flip_card:
   package_info_plus:
   device_calendar:
