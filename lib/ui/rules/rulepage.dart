@@ -55,25 +55,29 @@ class _State extends State<RulesPage> {
     print("quizid"+widget.quizid.toString());
     log("quizid"+widget.quizid.toString());
     if(widget.type=="1"){
-      Timer(
-          const Duration(seconds: 3),
-              () =>
-              getClassicRule(widget.quiztypeid.toString(),widget.quizspeedid.toString()));
+      // Timer(
+      //     const Duration(seconds: 3),
+      //         () =>
+              getClassicRule(widget.quiztypeid.toString(),widget.quizspeedid.toString());
+    //);
     }else if(widget.type=="2"){
-      Timer(
-          const Duration(seconds: 3),
-              () =>
-              getDualRule(widget.quizid.toString()));
+      // Timer(
+      //     const Duration(seconds: 3),
+      //         () =>
+              getDualRule(widget.quizid.toString());
+    //);
     }else if(widget.type=="3"){
-      Timer(
-          const Duration(seconds: 3),
-              () =>
-              getQuizroomRule(widget.quizid.toString()));
+      // Timer(
+      //     const Duration(seconds: 3),
+      //         () =>
+              getQuizroomRule(widget.quizid.toString());
+    //);
     }else if(widget.type=="4"){
-      Timer(
-          const Duration(seconds: 3),
-      () =>
-          getTourRule(widget.tourid, widget.sessionid));
+      // Timer(
+      //     const Duration(seconds: 3),
+      // () =>
+          getTourRule(widget.tourid, widget.sessionid);
+    //  );
     }
 
   }
@@ -203,39 +207,41 @@ class _State extends State<RulesPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child:  ruledata==null?Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/login_bg.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: ListBody(
-
-            children: [
-              Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-                  child: const Text(
-                    "Waiting for the other players\nto accept rules...",
-                    style: TextStyle(fontSize: 24, color: Colors.black),
-                    textAlign: TextAlign.center,
-                  )),
-              Container(
-                height: 300,
-                width: 300,
-                margin: EdgeInsets.only(top: 40),
-                child: Lottie.asset("assets/lottie/lottieanim.json"),
-              ),
-              Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("LOADING",
-                  style: TextStyle(fontSize: 24, color:Colors.black),
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
-          ),
-        ):Container(
+        child:
+        // ruledata==null?Container(
+        //   decoration: const BoxDecoration(
+        //     image: DecorationImage(
+        //       image: AssetImage("assets/images/login_bg.jpg"),
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        //   child: ListBody(
+        //
+        //     children: [
+        //       Container(
+        //           alignment: Alignment.center,
+        //           margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+        //           child: const Text(
+        //             "Waiting for the other players\nto accept rules...",
+        //             style: TextStyle(fontSize: 24, color: Colors.black),
+        //             textAlign: TextAlign.center,
+        //           )),
+        //       Container(
+        //         height: 300,
+        //         width: 300,
+        //         margin: EdgeInsets.only(top: 40),
+        //         child: Lottie.asset("assets/lottie/lottieanim.json"),
+        //       ),
+        //       Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        //         child: Text("LOADING",
+        //           style: TextStyle(fontSize: 24, color:Colors.black),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ):
+        ruledata==null?Container():  Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children:<Widget> [

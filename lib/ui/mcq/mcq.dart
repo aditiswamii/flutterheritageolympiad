@@ -88,16 +88,17 @@ class _State extends State<Mcq> {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
     if(widget.type=="1"||widget.type=="2"||widget.type=="3"){
-      Timer(
-          const Duration(seconds: 3),
-              () =>
-              getQuestions(widget.quizid.toString())
-      );
+      // Timer(
+      //     const Duration(seconds: 3),
+      //         () =>
+              getQuestions(widget.quizid.toString());
+    //  );
     }else{
-      Timer(
-          const Duration(seconds: 3),
-              () =>
-              getTourQuestions(widget.tourid, widget.sessionid));
+      // Timer(
+      //     const Duration(seconds: 3),
+      //         () =>
+              getTourQuestions(widget.tourid, widget.sessionid);
+   // );
     }
 
     myDuration = Duration(seconds: 0);
@@ -485,39 +486,7 @@ onsuccess(savedata){
     String strDigits(int n) => n.toString().padLeft(2, '0');
    final minutes = strDigits(myDuration.inMinutes.remainder(60));
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
-    return currentques==null?Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/login_bg.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: ListBody(
-
-        children: [
-          Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-              child: const Text(
-                "Done! Preparing quiz...",
-                style: TextStyle(fontSize: 24, color: Colors.black),
-                textAlign: TextAlign.center,
-              )),
-          Container(
-            height: 300,
-            width: 300,
-            margin: EdgeInsets.only(top: 40),
-            child: Lottie.asset("assets/lottie/lottieanim.json"),
-          ),
-          Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Text("LOADING",
-              style: TextStyle(fontSize: 24, color:Colors.black),
-              textAlign: TextAlign.center,
-            ),
-          )
-        ],
-      ),
-    ): Scaffold(
+    return  Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
@@ -543,7 +512,41 @@ onsuccess(savedata){
         decoration:  BoxDecoration(
           color: ramdomcolor,
         ),
-        child:  Container(
+        child:
+        // currentques==null?Container(
+        //   decoration: const BoxDecoration(
+        //     image: DecorationImage(
+        //       image: AssetImage("assets/images/login_bg.jpg"),
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        //   child: ListBody(
+        //
+        //     children: [
+        //       Container(
+        //           alignment: Alignment.center,
+        //           margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+        //           child: const Text(
+        //             "Done! Preparing quiz...",
+        //             style: TextStyle(fontSize: 24, color: Colors.black),
+        //             textAlign: TextAlign.center,
+        //           )),
+        //       Container(
+        //         height: 300,
+        //         width: 300,
+        //         margin: EdgeInsets.only(top: 40),
+        //         child: Lottie.asset("assets/lottie/lottieanim.json"),
+        //       ),
+        //       Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        //         child: Text("LOADING",
+        //           style: TextStyle(fontSize: 24, color:Colors.black),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ):
+        currentques==null?Container():  Container(
             margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [
@@ -594,8 +597,8 @@ onsuccess(savedata){
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child:ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
-                        onPrimary: Colors.white,
+                        primary:  _hasBeenPressed1 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        onPrimary:Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
@@ -622,7 +625,7 @@ onsuccess(savedata){
                   Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        primary:  _hasBeenPressed2 ?  ColorConstants.lightgrey200:ramdomcolor ,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
@@ -652,7 +655,7 @@ onsuccess(savedata){
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child:ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        primary:  _hasBeenPressed3 ?  ColorConstants.lightgrey200:ramdomcolor ,
                         onPrimary: Colors.white,
                         elevation: 3,
                         alignment: Alignment.center,
