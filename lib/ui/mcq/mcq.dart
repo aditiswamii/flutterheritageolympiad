@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
+
 import 'dart:math';
 import 'dart:ui';
 
@@ -88,9 +88,16 @@ class _State extends State<Mcq> {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
     if(widget.type=="1"||widget.type=="2"||widget.type=="3"){
-      getQuestions(widget.quizid.toString());
+      Timer(
+          const Duration(seconds: 3),
+              () =>
+              getQuestions(widget.quizid.toString())
+      );
     }else{
-     getTourQuestions(widget.tourid, widget.sessionid);
+      Timer(
+          const Duration(seconds: 3),
+              () =>
+              getTourQuestions(widget.tourid, widget.sessionid));
     }
 
     myDuration = Duration(seconds: 0);
@@ -585,11 +592,19 @@ onsuccess(savedata){
                 if(currentques['option1'].toString()!="")
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: RaisedButton(
-                      textColor: _hasBeenPressed1 ?  ramdomcolor:ColorConstants.lightgrey200 ,
-                      // 2
-                      color: _hasBeenPressed1 ?  ColorConstants.lightgrey200:ramdomcolor,
-                      onPressed: ()=> {
+                    child:ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+
+                      onPressed: (){
                         setState(() {
                           _hasBeenPressed1 = !_hasBeenPressed1;
                           _hasBeenPressed2=false;
@@ -597,19 +612,27 @@ onsuccess(savedata){
                           _hasBeenPressed4=false;
                           selectans=_hasBeenPressed1 ?  "1":"0";
                           answer[_questionIndex] = 1;
-                        }),
+                        });
 
                       },
-                      child: Text(currentques['option1'], style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option1'], style: TextStyle(fontSize: 18,color:_hasBeenPressed1 ?  ramdomcolor:ColorConstants.lightgrey200 ,),),
                     ),
                   ),
                 if(currentques['option2'].toString()!="")
                   Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: RaisedButton(
-                      textColor: _hasBeenPressed2 ?  ramdomcolor:ColorConstants.lightgrey200 ,
-                      // 2
-                      color: _hasBeenPressed2 ?  ColorConstants.lightgrey200:ramdomcolor ,
-                      onPressed: ()=> {
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+
+                      onPressed: () {
                         setState(() {
                           _hasBeenPressed2 = !_hasBeenPressed2;
                           _hasBeenPressed1=false;
@@ -618,20 +641,28 @@ onsuccess(savedata){
                           selectans=_hasBeenPressed2 ?  "2":"0";
                           answer[_questionIndex] =  _hasBeenPressed2?2:0;
 
-                        }),
+                        });
 
                       },
-                      child: Text(currentques['option2'].toString(), style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option2'].toString(), style: TextStyle(fontSize: 18,color:_hasBeenPressed2 ?  ramdomcolor:ColorConstants.lightgrey200 ,),),
                     ),
                   ),
                 if(currentques['option3'].toString()!="")
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: RaisedButton(
-                      textColor: _hasBeenPressed3 ?  ramdomcolor:ColorConstants.lightgrey200 ,
-                      // 2
-                      color: _hasBeenPressed3 ?  ColorConstants.lightgrey200:ramdomcolor,
-                      onPressed: ()=> {
+                    child:ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+
+                      onPressed: (){
                         setState(() {
                           _hasBeenPressed3 = !_hasBeenPressed3;
                           _hasBeenPressed2=false;
@@ -639,10 +670,10 @@ onsuccess(savedata){
                           _hasBeenPressed4=false;
                           selectans=_hasBeenPressed3 ?  "3":"0";
                           answer[_questionIndex] = 3;
-                        }),
+                        });
 
                       },
-                      child: Text(currentques['option3'].toString(), style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option3'].toString(), style: TextStyle(fontSize: 18,color:_hasBeenPressed3 ?  ramdomcolor:ColorConstants.lightgrey200 ,),),
                     ),
                   ),
                 if(currentques['option4'].toString()!="")
@@ -650,11 +681,19 @@ onsuccess(savedata){
                     decoration: BoxDecoration(
                       color: ramdomcolor,
                     ),
-                    child: RaisedButton(
-                      textColor: _hasBeenPressed4 ?  ramdomcolor:ColorConstants.lightgrey200 ,
-                      // 2
-                      color: _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
-                      onPressed: ()=> {
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:  _hasBeenPressed4 ?  ColorConstants.lightgrey200:ramdomcolor ,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+
+                      onPressed: () {
                         setState(() {
                           _hasBeenPressed4 = !_hasBeenPressed4;
                           _hasBeenPressed2=false;
@@ -662,10 +701,10 @@ onsuccess(savedata){
                           _hasBeenPressed1=false;
                           selectans=_hasBeenPressed4 ?  "4":"0";
                           answer[_questionIndex] = 4;
-                        }),
+                        });
 
                       },
-                      child: Text(currentques['option4'].toString(), style: TextStyle(fontSize: 18),),
+                      child: Text(currentques['option4'].toString(), style: TextStyle(fontSize: 18,color: _hasBeenPressed4 ?  ramdomcolor:ColorConstants.lightgrey200 ,),),
                     ),
                   ),
 

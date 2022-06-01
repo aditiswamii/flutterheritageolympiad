@@ -360,15 +360,7 @@ class _State extends State<ClassicQuizMain> {
                                               .generate(
                                               _len, (index) => false);
                                         }
-                                        if(_expanded7==true) {
-                                          if(!domainnamelist.contains("1,2,3,4,5,6,7,8,9,10,11"))
-                                            domainnamelist.addAll(["1","2","3","4","5","6","7","8","9","10","11"]);
 
-                                        }
-                                        else {
-                                          // if(domainnamelist.contains(domainname))
-                                          domainnamelist.remove(domains_length);
-                                        }
 
                                       },
                                       value: _expanded7 )
@@ -380,6 +372,20 @@ class _State extends State<ClassicQuizMain> {
                                     ? 0
                                     : _expanded6==false?2:domains_length.length,
                                 itemBuilder: (BuildContext context, int index) {
+                                  if(_expanded7==true) {
+                                    for (int i =0;i<=domains_length.length;i++){
+                                      if(!domainnamelist.contains("${i+1}")){
+                                        domainnamelist.add("${i+1}");
+                                      } else {
+                                        // if(domainnamelist.contains(domainname))
+                                        domainnamelist.remove(domains_length);
+                                      }
+
+                                    }
+
+
+                                  }
+
                                   return Column(
                                     children: [
                                       Card(
