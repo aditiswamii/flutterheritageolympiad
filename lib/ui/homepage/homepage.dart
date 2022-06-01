@@ -98,7 +98,7 @@ GetUserLeagueResponse? userLeagueR;
    free(userid.toString());
    getuserleague(userid.toString());
    linkurl=widget.link;
-   if(linkurl!="") {
+   if(linkurl!="" ||linkurl.toString().isNotEmpty) {
      setState(() {
        shortlink = linkurl.toString().substring(18);
      });
@@ -1136,20 +1136,47 @@ if(tournament!=null && tournament['tournament_id']>0){
                 ),
               ),
           child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: Column(
+            child:userLeagueR!.data!.goalsummery==null?Container(child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Text("Your Activity Summary",
+                      style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
+                  ),
+
+
+                    Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: GFProgressBar(
+                          percentage:0.0,
+                          lineHeight: 20,
+                          alignment: MainAxisAlignment.spaceBetween,
+                          backgroundColor: Colors.black12,
+                          progressBarColor: Colors.black12,
+                        )
+                    ),
+
+
+                  Container(
+                    child: Text("Quizzes Done",
+                      style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
+                  ),
+                ]
+            ),): Column(
               children: [
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Text("Your Activity Summary",
                     style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
                 ),
+
                 if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
                 Container(
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: GFProgressBar(
                       percentage:
                       (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
-                      lineHeight: 30,
+                      lineHeight: 20,
                       alignment: MainAxisAlignment.spaceBetween,
                       child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 18, color: Colors.white),
@@ -1158,6 +1185,7 @@ if(tournament!=null && tournament['tournament_id']>0){
                       progressBarColor: ColorConstants.verdigris,
                     )
                 ),
+
                 if((userLeagueR!.data!.goalsummery!.play!*100/userLeagueR!.data!.goalsummery!.total!)>=1)
                 Container(
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),

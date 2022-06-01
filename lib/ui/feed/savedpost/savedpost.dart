@@ -19,6 +19,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -360,14 +361,25 @@ class _SavedPostState extends State<SavedPost> {
                                         Container(
                                           margin: const EdgeInsets.fromLTRB(
                                               0, 10, 0, 10),
-                                          child: Text(
+                                          child: ReadMoreText(
                                             savefdata![index].description!,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black,
-                                                fontFamily: "Nunito"),
+                                            trimLines: 5,
                                             textAlign: TextAlign.justify,
+                                            style: TextStyle(fontSize: 14,color:Colors.black,),
+                                            colorClickableText: Colors.black,
+                                            trimMode: TrimMode.Line,
+                                            trimCollapsedText: 'Read more',
+                                            trimExpandedText: 'Read less',
+                                            lessStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.blue,
+                                                fontFamily: "Nunito"),
+                                            moreStyle:TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.blue,
+                                                fontFamily: "Nunito"),
                                           ),
+
                                         ),
                                         Container(
                                           height: 32,

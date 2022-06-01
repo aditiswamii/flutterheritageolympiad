@@ -478,7 +478,39 @@ onsuccess(savedata){
     String strDigits(int n) => n.toString().padLeft(2, '0');
    final minutes = strDigits(myDuration.inMinutes.remainder(60));
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
-    return  Scaffold(
+    return currentques==null?Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/login_bg.jpg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: ListBody(
+
+        children: [
+          Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+              child: const Text(
+                "Done! Preparing quiz...",
+                style: TextStyle(fontSize: 24, color: Colors.black),
+                textAlign: TextAlign.center,
+              )),
+          Container(
+            height: 300,
+            width: 300,
+            margin: EdgeInsets.only(top: 40),
+            child: Lottie.asset("assets/lottie/lottieanim.json"),
+          ),
+          Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Text("LOADING",
+              style: TextStyle(fontSize: 24, color:Colors.black),
+              textAlign: TextAlign.center,
+            ),
+          )
+        ],
+      ),
+    ): Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
       endDrawer: MySideMenuDrawer(),
@@ -500,39 +532,7 @@ onsuccess(savedata){
           ),
         ],
       ),
-      body:currentques==null?Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: ListBody(
-
-          children: [
-            Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-                child: const Text(
-                  "Done! Preparing quiz...",
-                  style: TextStyle(fontSize: 24, color: Colors.black),
-                  textAlign: TextAlign.center,
-                )),
-            Container(
-              height: 300,
-              width: 300,
-              margin: EdgeInsets.only(top: 40),
-              child: Lottie.asset("assets/lottie/lottieanim.json"),
-            ),
-            Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Text("LOADING",
-                style: TextStyle(fontSize: 24, color:Colors.black),
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
-        ),
-      ): Container(
+      body: Container(
         decoration:  BoxDecoration(
           color: ramdomcolor,
         ),
@@ -673,7 +673,7 @@ onsuccess(savedata){
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
                   child: Row(
                     // crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,

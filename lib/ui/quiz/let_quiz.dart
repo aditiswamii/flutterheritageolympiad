@@ -62,34 +62,34 @@ class _State extends State<QuizPage> {
     getuserleague(userid.toString());
   }
 
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   getuserleague(String userid) async {
-    showLoaderDialog(context);
+
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
     );
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
@@ -110,7 +110,7 @@ class _State extends State<QuizPage> {
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       // onsuccess(null);
       print(response.statusCode);
     }
@@ -127,7 +127,7 @@ class _State extends State<QuizPage> {
 
 var datalink;
   checkquiz(String userid,String type) async {
-   showLoaderDialog(context);
+
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL+"checkquiz"),body: {
           'user_id':userid.toString(),
@@ -137,7 +137,7 @@ var datalink;
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
@@ -159,7 +159,7 @@ var datalink;
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       // onsuccess(null);
       print(response.statusCode);
     }
@@ -176,7 +176,7 @@ var datalink;
             builder: (context) =>  DuelModeMain(type: "2",)));
   }
   checkquizoom(String userid,String type) async {
-    showLoaderDialog(context);
+
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL+"checkquiz"),body: {
       'user_id':userid.toString(),
@@ -208,7 +208,7 @@ var datalink;
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       // onsuccess(null);
       print(response.statusCode);
     }
@@ -414,7 +414,7 @@ var datalink;
     )),
 
 
-              userLeagueR!=null?  Container(
+                userLeagueR!=null?  Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   decoration: BoxDecoration(
                       color: Colors.white),
@@ -428,20 +428,47 @@ var datalink;
                       ),
                     ),
                     child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Column(
+                      child:userLeagueR!.data!.goalsummery==null?Container(child: Column(
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Text("YOUR OVERALL PERFORMANCE",
+                              child: Text("Your Activity Summary",
                                 style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
                             ),
+
+
+                            Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: GFProgressBar(
+                                  percentage:0.0,
+                                  lineHeight: 20,
+                                  alignment: MainAxisAlignment.spaceBetween,
+                                  backgroundColor: Colors.black12,
+                                  progressBarColor: Colors.black12,
+                                )
+                            ),
+
+
+                            Container(
+                              child: Text("Quizzes Done",
+                                style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
+                            ),
+                          ]
+                      ),): Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Text("Your Activity Summary",
+                                style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
+                            ),
+
                             if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
                               Container(
                                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: GFProgressBar(
                                     percentage:
                                     (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
-                                    lineHeight: 30,
+                                    lineHeight: 20,
                                     alignment: MainAxisAlignment.spaceBetween,
                                     child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
                                       style: TextStyle(fontSize: 18, color: Colors.white),
@@ -450,6 +477,7 @@ var datalink;
                                     progressBarColor: ColorConstants.verdigris,
                                   )
                               ),
+
                             if((userLeagueR!.data!.goalsummery!.play!*100/userLeagueR!.data!.goalsummery!.total!)>=1)
                               Container(
                                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),

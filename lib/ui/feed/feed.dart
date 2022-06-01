@@ -17,6 +17,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -74,67 +75,55 @@ class _FeedPageState extends State<FeedPage> {
         'domain_id': domain_id.toString(),
         'theme_id': theme_id.toString()
       });
-
+    var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         Navigator.pop(context);
         data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          feeddata = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(feeddata.length);
-          // for (Map user in responseJson) {
-          //   _userDetails.add(Data.fromJson(user));
-          // }// just printed length of data
-        });
+        if (jsonResponse['status'] == 200) {
+          //final responseJson = json.decode(response.body);//store response as string
+          setState(() {
+            feeddata = jsonDecode(
+                data!)['data']; //get all the data from json string superheros
+            print(feeddata.length);
+            // for (Map user in responseJson) {
+            //   _userDetails.add(Data.fromJson(user));
+            // }// just printed length of data
+          });
 
-        var venam = jsonDecode(data!)['data'];
-        print(venam);
-        print(jsonDecode(data!)['last_id']);
-        //last_id
-        print(jsonDecode(data!)['data'][0]['id']);
-        print(jsonDecode(data!)['data'][0]['type']);
-        print(jsonDecode(data!)['data'][0]['tags']);
-        print(jsonDecode(data!)['data'][0]['title']);
-        print(jsonDecode(data!)['data'][0]['description']);
-        print(jsonDecode(data!)['data'][0]['external_link']);
-        print(jsonDecode(data!)['data'][0]['video_link']);
-        print(jsonDecode(data!)['data'][0]['placeholder_image']);
-        print(jsonDecode(data!)['data'][0]['savepost']);
-        print(jsonDecode(data!)['data'][0]['is_saved']);
-        print(jsonDecode(data!)['data'][0]['share']);
-        print(jsonDecode(data!)['data'][0]['media_type']);
-        print(jsonDecode(data!)['data'][0]['media']);
-        print(jsonDecode(data!)['data'][0]['media_type']);
-        print(jsonDecode(data!)['data'][0]['media_type']);
-      } else {
+          var venam = jsonDecode(data!)['data'];
+          print(venam);
+          print(jsonDecode(data!)['last_id']);
+          //last_id
+          print(jsonDecode(data!)['data'][0]['id']);
+          print(jsonDecode(data!)['data'][0]['type']);
+          print(jsonDecode(data!)['data'][0]['tags']);
+          print(jsonDecode(data!)['data'][0]['title']);
+          print(jsonDecode(data!)['data'][0]['description']);
+          print(jsonDecode(data!)['data'][0]['external_link']);
+          print(jsonDecode(data!)['data'][0]['video_link']);
+          print(jsonDecode(data!)['data'][0]['placeholder_image']);
+          print(jsonDecode(data!)['data'][0]['savepost']);
+          print(jsonDecode(data!)['data'][0]['is_saved']);
+          print(jsonDecode(data!)['data'][0]['share']);
+          print(jsonDecode(data!)['data'][0]['media_type']);
+          print(jsonDecode(data!)['data'][0]['media']);
+          print(jsonDecode(data!)['data'][0]['media_type']);
+          print(jsonDecode(data!)['data'][0]['media_type']);
+        }else{
+          snackBar = SnackBar(
+            content: Text(
+                jsonResponse['message']),
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(snackBar);
+        }
+      }else {
         Navigator.pop(context);
         print(response.statusCode);
       }
 
   }
-  //Container(
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 border: Border.all(
-  //                   color: Colors.grey.withOpacity(0.7),
-  //                   width: 1,
-  //                 )
-  //             ),
-  //             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-  //             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-  //             child: ReadMoreText(
-  //               widget.aboutlrs,
-  //                trimLines: 5,
-  //               style: TextStyle(fontSize: 14,color: ColorConstant.appbar),
-  //               colorClickableText: ColorConstant.appbar,
-  //               trimMode: TrimMode.Line,
-  //               trimCollapsedText: 'Read more',
-  //               trimExpandedText: 'Read less',
-  //               lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: ColorConstant.appbar),
-  //               moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: ColorConstant.appbar),
-  //             ),
-  //           ),
+
   gettagfilter(String userid ,String searchkey,String type) async {
 
       http.Response response = await http.get(
@@ -453,14 +442,25 @@ class _FeedPageState extends State<FeedPage> {
                                         Container(
                                           margin: const EdgeInsets.fromLTRB(
                                               0, 10, 0, 10),
-                                          child: Text(
+                                          child: ReadMoreText(
                                             tagfdata![index].description!,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black,
-                                                fontFamily: "Nunito"),
+                                            trimLines: 5,
                                             textAlign: TextAlign.justify,
+                                            style: TextStyle(fontSize: 14,color:Colors.black,),
+                                            colorClickableText: Colors.black,
+                                            trimMode: TrimMode.Line,
+                                            trimCollapsedText: 'Read more',
+                                            trimExpandedText: 'Read less',
+                                            lessStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.blue,
+                                                fontFamily: "Nunito"),
+                                            moreStyle:TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.blue,
+                                                fontFamily: "Nunito"),
                                           ),
+
                                         ),
                                         Container(
                                           height: 32,
@@ -687,14 +687,24 @@ class _FeedPageState extends State<FeedPage> {
                                           Container(
                                             margin: const EdgeInsets.fromLTRB(
                                                 0, 10, 0, 10),
-                                            child: Text(
+                                            child: ReadMoreText(
                                               jsonDecode(data!)['data'][index]
-                                                  ['description'],
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                  fontFamily: "Nunito"),
+                                              ['description'],
+                                              trimLines: 5,
                                               textAlign: TextAlign.justify,
+                                              style: TextStyle(fontSize: 14,color:Colors.black,),
+                                              colorClickableText: Colors.black,
+                                              trimMode: TrimMode.Line,
+                                              trimCollapsedText: 'Read more',
+                                              trimExpandedText: 'Read less',
+                                              lessStyle: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.blue,
+                                                  fontFamily: "Nunito"),
+                                              moreStyle:TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.blue,
+                                                  fontFamily: "Nunito"),
                                             ),
                                           ),
                                           Container(

@@ -18,6 +18,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/filtertour/filtertour.dart';
 import 'package:flutterheritageolympiad/ui/tournamentquiz/waitlist/waitlist.dart';
 import 'package:flutterheritageolympiad/utils/countdowntimer.dart';
+import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:intl/intl.dart';
 
 import 'package:share_plus/share_plus.dart';
@@ -27,6 +28,8 @@ import '../../../utils/StringConstants.dart';
 
 import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
+
+import 'leaguerank/leaguerank.dart';
 class TournamentPage extends StatefulWidget {
 
   TournamentPage({Key? key}) : super(key: key);
@@ -38,7 +41,7 @@ class TournamentPage extends StatefulWidget {
 class _TournamentPageState extends State<TournamentPage> with TickerProviderStateMixin{
   TextEditingController controller = TextEditingController();
   PageController _pageController = PageController();
-  AnimationController? _controller;
+ // AnimationController? _controller;
   // TextEditingController controller = TextEditingController();
   // List<Data> _searchResult = [];
   // List<Data> _userDetails = [];
@@ -51,6 +54,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   var tourdata;
   var data;
   var snackBar;
+  var _expanded=false;
   GetTournamentResponse? gettourR;
   Timer? countdownTimer;
   Duration myDuration = Duration(days: 1);
@@ -62,11 +66,11 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
       country = prefs.getString("country");
       userid = prefs.getString("userid");
     });
-   showLoaderDialog(context);
+   // showLoaderDialog(context);
     getTour(userid.toString(),"");
   }
   getTour(String userid,String search) async {
-    Navigator.pop(context);
+
     if (search != "") {
       http.Response response =
       await http.get(
@@ -119,24 +123,24 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
     }
  }
 
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
   @override
   void initState() {
     super.initState();
@@ -147,8 +151,9 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+   //  _controller!.dispose();
     super.dispose();
-    _controller!.dispose();
+
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
@@ -235,45 +240,218 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                             fontSize: 14,
                             color: Colors.black54,
                             fontFamily: "Nunito"))),
-                Card(
-                  child: ListTile(
-                    leading: Icon(Icons.search),
-                    title: TextFormField(
-                      controller: controller,
-                      textInputAction: TextInputAction.search,
-                      onFieldSubmitted: onSearchTextChanged,
-                      decoration: InputDecoration(
-                          hintText: 'Search', border: InputBorder.none),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      // if you need this
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: 1,
+                      ),
                     ),
-                    trailing: controller.text.isNotEmpty
-                        ? IconButton(
-                      icon: Icon(Icons.cancel),
-                      onPressed: () {
-                        controller.clear();
-                        onSearchTextChanged('');
-                      },
-                    )
-                        : IconButton(
-                      icon: Icon(Icons.cancel,color: Colors.white,),
-                      onPressed: () {
-                        controller.clear();
-                        onSearchTextChanged('');
-                      },
+                    child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: Column(
+                          children: [
+                            // Container(
+                            //   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            //   child: Text("Your Activity Summary",
+                            //     style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
+                            // ),
+
+
+                              //  Container(
+                              //    width: MediaQuery.of(context).size.width,
+                              //     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //       children: [
+                              //         Container(
+                              //           width: 30,
+                              //           height: 20,
+                              //           decoration: BoxDecoration(
+                              //             color:Colors.red,
+                              //            borderRadius: BorderRadius.only(topLeft: Radius.elliptical(20, 20),
+                              //              bottomLeft:Radius.elliptical(20, 20),topRight:  Radius.elliptical(-20, -20),bottomRight:Radius.elliptical(-20, -20) )
+                              //           ),
+                              //
+                              //         ),
+                              //         Container( width: 30,   height: 20,
+                              //           decoration: BoxDecoration(
+                              //             color:Colors.deepOrange,
+                              //
+                              //           ),
+                              //
+                              //         ),
+                              //         Container( width: 30,   height: 20,
+                              //           decoration: BoxDecoration(
+                              //             color:Colors.orange,
+                              //           ),
+                              //
+                              //         ),
+                              //         Container( width: 30,   height: 20,
+                              //           decoration: BoxDecoration(
+                              //             color:Colors.green,
+                              //           ),
+                              //
+                              //         ),
+                              //         Container( width: 30,   height: 20,
+                              //           decoration: BoxDecoration(
+                              //             color:ColorConstants.verdigris,
+                              //               borderRadius: BorderRadius.only(topRight: Radius.elliptical(20, 20),bottomRight:Radius.elliptical(20, 20))
+                              //           ),
+                              //
+                              //         ),
+                              //       ],
+                              //     )
+                              // ),
+                            _expanded==false? Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 30,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      _expanded=true;
+
+                                    });
+
+                                  },
+                                  child: Container(
+
+                                    margin: EdgeInsets.all(4),
+                                    child: Center(
+                                        child:Image.asset(
+                                          'assets/images/down_arrow.png',
+                                          height: 10,width: 10,
+                                          color: ColorConstants.txt,
+                                        )
+                                    ),
+                                  ),
+                                )
+                            ):Container(
+                                width: MediaQuery.of(context).size.width,
+                              //  height: 40,
+                                child: Container(
+
+                                  margin: EdgeInsets.all(4),
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      Container(
+                                        height: 100,
+                                      ),
+                                      Center(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.white,
+                                            onPrimary: Colors.white,
+                                            elevation: 3,
+                                            alignment: Alignment.center,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0)),
+                                            fixedSize: const Size(120, 30),
+                                            //////// HERE
+                                          ),
+                                          onPressed: () {
+                                            // _controller!.dispose();
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>  LeagueRank()));
+                                          },
+                                          child: const Text(
+                                            "SEE LEAGUE",
+                                            style: TextStyle(
+                                                color: ColorConstants.txt, fontSize: 14),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: (){
+                                          setState(() {
+                                            _expanded=false;
+                                          });
+
+
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                          child: Center(
+                                              child:Image.asset(
+                                                'assets/images/down_arrow_small.png',
+                                                height: 10,width: 10,
+                                                color: ColorConstants.txt,
+                                              )
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                            ),
+
+
+                            // Container(
+                            //   child: Text("Quizzes Done",
+                            //     style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
+                            // ),
+                          ]
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  child: Card(
+                    child: ListTile(
+                      visualDensity: VisualDensity(vertical: -4,horizontal: -4),
+                      tileColor: Colors.black12.withAlpha(30),
+                      leading: Icon(Icons.search),
+                      title: TextFormField(
+                        controller: controller,
+                        textInputAction: TextInputAction.search,
+                        onFieldSubmitted: onSearchTextChanged,
+                        decoration: InputDecoration(
+
+                            hintText: 'Search', border: InputBorder.none),
+                      ),
+                      trailing: controller.text.isNotEmpty
+                          ? IconButton(
+                        icon: Icon(Icons.cancel),
+                        onPressed: () {
+                          controller.clear();
+                          onSearchTextChanged('');
+                        },
+                      )
+                          : IconButton(
+                        icon: Icon(Icons.cancel,color: Colors.white,),
+                        onPressed: () {
+                          controller.clear();
+                          onSearchTextChanged('');
+                        },
+                      ),
                     ),
                   ),
                 ),
                GestureDetector(
                        onTap: (){
+                         // _controller!.dispose();
                          Navigator.pushReplacement(
                              context,
                              MaterialPageRoute(
                                  builder: (context) => FilterTour()));
                        },
                   child: Card(
+
                     child: Container(margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       height: 50,
                       width: MediaQuery.of(context).size.width,
                       child: ListTile(
+                        tileColor:  Colors.black12.withAlpha(30),
                         trailing:
                                     Image.asset("assets/images/right_arrow.png",
                                         height: 20, width: 20),
@@ -521,7 +699,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                         //////// HERE
                                       ),
                                       onPressed: () {
-                                        _controller!.dispose();
+                                        // _controller!.dispose();
                                         Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(builder: (BuildContext context) => TourRoomWaitlist( tourid: gettourR!.data![index].id.toString(), sessionid: gettourR!.data![index].sessions![index].id.toString(),)));
                                       },
@@ -643,12 +821,12 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
      final DateFormat formatter = DateFormat('HH:mm:ss');
       final String formatted = formatter.format(dateTime);
       final int sec = dateTime.millisecond;
-      _controller = AnimationController(
-          vsync: this,
-          duration: Duration(minutes: dateTime.minute,seconds: dateTime.second,milliseconds: dateTime.millisecond) // gameData.levelClock is a user entered number elsewhere in the applciation
-      );
-
-      _controller!.forward();
+      // _controller = AnimationController(
+      //     vsync: this,
+      //     duration: Duration(minutes: dateTime.minute,seconds: dateTime.second,milliseconds: dateTime.millisecond) // gameData.levelClock is a user entered number elsewhere in the applciation
+      // );
+      //
+      // _controller!.forward();
 
       Duration clockTimer = Duration(hours: dateTime.hour);
 
