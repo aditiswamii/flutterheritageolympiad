@@ -279,8 +279,8 @@ class _YourPageState extends State<YourPage> {
           print("data : " + jsonResponse['data'].toString());
 
           ongoalsuccess(goaldata);
-          numquizcontroller.text="";
-          goalname=null;
+          // numquizcontroller.text="";
+          // goalname=null;
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -290,10 +290,10 @@ class _YourPageState extends State<YourPage> {
           content: Text(jsonResponse['message']),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        setState(() {
-          numquizcontroller.text="";
-          goalname=null;
-        });
+        // setState(() {
+        //   numquizcontroller.text="";
+        //   goalname=null;
+        // });
 
       }
     } else {
@@ -755,8 +755,7 @@ class _YourPageState extends State<YourPage> {
                                             Container(
                                                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                                 child: GFProgressBar(
-                                                  percentage:
-                                                  (goalsummarydata['data']['play']!/goalsummarydata['data']['total']!)*(0.3).toDouble(),
+                                                  percentage:1.0,
                                                   lineHeight: 30,
                                                   alignment: MainAxisAlignment.spaceBetween,
                                                   child: Text('${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}', textAlign: TextAlign.left,
@@ -767,17 +766,12 @@ class _YourPageState extends State<YourPage> {
                                                 )
                                             ),
 
-                                          if (((goalsummarydata['data']
-                                                          ['play'] *
-                                                      100) /
-                                                  (goalsummarydata['data']
-                                                      ['total'])) >=
-                                              1)
+                                          if (((goalsummarydata['data']['play'] * 100) / (goalsummarydata['data']['total'])) >= 1)
                                             Container(
                                                 margin: EdgeInsets.fromLTRB(
                                                     10, 10, 10, 10),
                                                 child: GFProgressBar(
-                                                  percentage: 1.0,
+                                                  percentage:  (goalsummarydata['data']['play']!/goalsummarydata['data']['total']!)*(0.3).toDouble(),
                                                   lineHeight: 20,
                                                   alignment: MainAxisAlignment
                                                       .spaceBetween,

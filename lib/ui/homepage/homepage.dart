@@ -95,8 +95,7 @@ GetUserLeagueResponse? userLeagueR;
      country =prefs.getString("country");
      userid= prefs.getString("userid");
    });
-   free(userid.toString());
-   getuserleague(userid.toString());
+
    linkurl=widget.link;
    if(linkurl!="" ||linkurl.toString().isNotEmpty) {
      setState(() {
@@ -120,7 +119,8 @@ GetUserLeagueResponse? userLeagueR;
    if(widget.link!=""){
 
    }
-
+   free(userid.toString());
+   getuserleague(userid.toString());
 
 }
   free(String userid) async {

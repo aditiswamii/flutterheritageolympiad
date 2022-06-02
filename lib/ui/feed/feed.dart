@@ -66,7 +66,7 @@ class _FeedPageState extends State<FeedPage> {
 
   getFeed(String userid, String feed_page_id, String feed_type_id,
       String domain_id, String theme_id) async {
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
       http.Response response =
           await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
         'user_id': userid.toString(),
@@ -77,7 +77,7 @@ class _FeedPageState extends State<FeedPage> {
       });
     var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
-        Navigator.pop(context);
+        // Navigator.pop(context);
         data = response.body;
         if (jsonResponse['status'] == 200) {
           //final responseJson = json.decode(response.body);//store response as string
@@ -118,7 +118,7 @@ class _FeedPageState extends State<FeedPage> {
               .showSnackBar(snackBar);
         }
       }else {
-        Navigator.pop(context);
+        // Navigator.pop(context);
         print(response.statusCode);
       }
 
@@ -129,11 +129,11 @@ class _FeedPageState extends State<FeedPage> {
       http.Response response = await http.get(
           Uri.parse(StringConstants.BASE_URL + "tagfilter?searchkey=$searchkey&type=$type&user_id=$userid")
       );
-      showLoaderDialog(context);
+      // showLoaderDialog(context);
       var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         data = response.body;
-        Navigator.pop(context);
+        // Navigator.pop(context);
         if (jsonResponse['status'] == 200) {
           setState(() {
             tagdata = jsonDecode(
@@ -153,7 +153,7 @@ class _FeedPageState extends State<FeedPage> {
               .showSnackBar(snackBar);
         }
       } else {
-        Navigator.pop(context);
+        // Navigator.pop(context);
         // onsuccess(null);
         print(response.statusCode);
       }
@@ -166,26 +166,64 @@ class _FeedPageState extends State<FeedPage> {
     });
     print(tagfdata.toString());
   }
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   onsuccessfeed() {}
+//0 unsave 1 save
+  savepost(String userid ,String feed_id,String type) async {
+
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "savefeed"),body: {
+          'user_id':userid.toString(),
+            'feed_id':feed_id.toString(),
+             'type':type.toString()
+    }
+    );
+    // showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      data = response.body;
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      } else {
+       
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+     
+      print(response.statusCode);
+    }
+
+  }
   @override
   void initState() {
     super.initState();
@@ -391,6 +429,7 @@ class _FeedPageState extends State<FeedPage> {
                               ),
                               child: ListBody(
                                 children: [
+                                  if(tagfdata![index].media!=null)
                                   Container(
                                     height: 300,
                                     child: PageView.builder(
@@ -614,6 +653,8 @@ class _FeedPageState extends State<FeedPage> {
                             shrinkWrap: true,
                             itemCount: jsonDecode(data!)['data'].length,
                             itemBuilder: (BuildContext context, int index) {
+                              var ischecked=jsonDecode(data!)['data'][index]['is_saved'];
+                              var check= ischecked==1?true:false;
                               return Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
@@ -625,6 +666,8 @@ class _FeedPageState extends State<FeedPage> {
                                 ),
                                 child: ListBody(
                                   children: [
+                                    if(jsonDecode(data!)['data']
+                                    [index]['media_type'].toString().isNotEmpty)
                                     Container(
                                       height: 300,
                                       child: PageView.builder(
@@ -723,6 +766,7 @@ class _FeedPageState extends State<FeedPage> {
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index1) {
+
                                                   return GestureDetector(
                                                     onTap: (){
                                                       gettagfilter(userid.toString(),jsonDecode(
@@ -765,18 +809,23 @@ class _FeedPageState extends State<FeedPage> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
+
                                                 Container(
                                                   child: Row(
                                                     children: [
                                                       GestureDetector(
-                                                        onTap: () {},
+                                                        onTap: () {
+                                                          setState(() {
+                                                            check=!check;
+                                                            check==true?ischecked=1:ischecked=0;
+                                                          });
+                                                          check=!check;
+                                                          check==true?ischecked=1:ischecked=0;
+                                                          savepost(userid.toString(), jsonDecode(data!)['data'][index]['id'].toString(),
+                                                              ischecked.toString() );
+                                                        },
                                                         child: Container(
-                                                            child: jsonDecode(data!)['data']
-                                                                            [
-                                                                            index]
-                                                                        [
-                                                                        'is_saved'] !=
-                                                                    1
+                                                            child: ischecked != 1
                                                                 ? Image.asset(
                                                                     "assets/images/folder_2.png",
                                                                     height: 30,

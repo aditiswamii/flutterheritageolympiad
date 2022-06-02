@@ -5,6 +5,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterheritageolympiad/ui/classicquiz/domainlist.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../modal/Domains.dart';
 import '../../modal/createquizresponse/CreateQuizResponse.dart';
 import '../../modal/domains/GetDomainsResponse.dart';
 import '../../utils/StringConstants.dart';
@@ -30,7 +32,7 @@ class ClassicQuizMain extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<ClassicQuizMain> {
+class _State extends State<ClassicQuizMain> with ChangeNotifier{
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
  // late ClassicQuizPresenter _presenter;
   var data;
@@ -59,10 +61,14 @@ class _State extends State<ClassicQuizMain> {
   var profilepic;
   var userid;
   var domainname;
+  var click=false;
+  List<Domain>? databean=[].cast<Domain>().toList(growable: true);
   var domainnamelist =[].toList(growable: true);
   String domain="";
   var selectedIndexes = [];
   List<bool> isChecked = List.generate(_len, (index) => false);
+  String seldomain="";
+  List<Domain>? clist =[].cast<Domain>().toList(growable: true);
   // String _getTitle() =>
   //     "Checkbox Demo : Checked = ${isChecked.where((check) => check == true)}, Unchecked = ${isChecked.where((check) => check == false)}";
 
@@ -100,22 +106,75 @@ class _State extends State<ClassicQuizMain> {
   void getDomains() async {
     http.Response response =
         await http.get(Uri.parse(StringConstants.BASE_URL+"domains"));
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      data = response.body; //store response as string
-      setState(() {
-        domains_length = jsonDecode(
-            data!)['data'];
-        //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
-      });
-      var jsondata=getDomainsResponseFromJson(data!).data;
+      if (jsonResponse['status'] == 200) {
 
-      log(jsondata.toString());
-      // var venam = jsonDecode(data!)['data'][4]['name'];
-      // log(venam);
+        data = response.body; //store response as string
+        // setState(() {
+        //   domains_length = jsonDecode(
+        //       data!)['data'];
+        //
+        //   print(domains_length.length);
+        // });
+        // var jsondata = getDomainsResponseFromJson(data!).data;
+        //
+        // log(jsondata.toString());
+
+
+          var domains_length = jsonDecode(
+              data!)['data'];
+
+List? jsarray=List.from(domains_length);
+        setState(() {
+          jsarray;
+        });
+    if (jsarray.isNotEmpty) {
+    var sobj = Domain(0,"Select All",false);
+
+    //clist!.add(sobj);
+    setState(() {
+      clist!.add(sobj);
+    });
+    for (int i=0; i <  jsarray.length;i++) {
+    var jobj =jsarray[i];
+    var sobj = Domain(jobj['id'],jobj['name'],false);
+
+   // clist!.add(sobj);
+    setState(() {
+      clist!.add(sobj);
+    });
+    }
+   setDomain(clist);
     } else {
+      snackbar = SnackBar(
+          content: Text(
+            "domain data is not available",
+            textAlign: TextAlign.center,));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackbar);
+    }
+      }else{
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+      }
+    }else {
       print(response.statusCode);
     }
+  }
+
+  setDomain(List<Domain>? clist){
+    if(clist!=null){
+      setState(() {
+        databean=clist;
+      });
+
+    }
+
   }
   hintdialog(BuildContext context,String text) {
     AlertDialog alert = AlertDialog(
@@ -216,6 +275,7 @@ class _State extends State<ClassicQuizMain> {
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
@@ -230,7 +290,7 @@ class _State extends State<ClassicQuizMain> {
             fit: BoxFit.cover,
           ),
         ),
-        child:domains_length==null?Container(): Container(
+        child:databean==null?Container(): Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             // physics: const BouncingScrollPhysics(
@@ -322,163 +382,57 @@ class _State extends State<ClassicQuizMain> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // if you need this
-                    side: BorderSide(
-                      color: Colors.grey.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: domains_length == null || domains_length!.isEmpty
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Card(
-                                  child: CheckboxListTile(
-                                      title: Text("Select All"),
-                                      onChanged: (checked) {
-                                        setState(
-                                              () {
-                                            _expanded7 =  checked!;
+            databean==null?Container():  Container(
+              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+    // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
+    child: Card(
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(5),
+    // if you need this
+    side: BorderSide(
+    color: Colors.grey.withOpacity(0.3),
+    width: 1,
+    ),
+    ),
+              child: Column(
 
-                                          },
-                                        );
-                                        if(_expanded7==true) {
-                                        isChecked = List
-                                              .generate(
-                                              _len, (index) => true);
-                                        }else{
-                                          isChecked = List
-                                              .generate(
-                                              _len, (index) => false);
-                                        }
-                                        if(_expanded7==true) {
-                                          for (int i =0;i<=domains_length.length;i++){
-                                            if(!domainnamelist.contains("${i+1}")){
-                                              domainnamelist.add("${i+1}");
-                                            } else {
-                                              // if(domainnamelist.contains(domainname))
-                                              domainnamelist.remove("${i+1}");
-                                            }
+                children: [
 
-                                          }
+                  ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: databean!.length,
+    itemBuilder: (BuildContext context, int index) {
+      return Card(child:
+      domainrow(context, index, databean!.length));
 
+    }),
+                  // GestureDetector(
+                  //   onTap: (){
+                  //     setState(() {
+                  //       click=!click;
+                  //     });
+                  //
+                  //   },
+                  //   child: Container(
+                  //     width: MediaQuery.of(context).size.width,
+                  //     child: Center(
+                  //                              child:click==false?Image.asset(
+                  //                                'assets/images/down_arrow.png',
+                  //                                height: 20,width: 20,
+                  //                                color: ColorConstants.txt,
+                  //                              ):
+                  //           Image.asset(
+                  //             'assets/images/down_arrow_small.png',
+                  //             height: 20,width: 20,
+                  //             color: ColorConstants.txt,
+                  //           ),
+                  //                            ),
+                  //   ),
+                  // ),
+                ],
+              ),),),
 
-                                        }
-
-
-                                      },
-                                      value: _expanded7 )
-                              ),
-                              ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: _expanded6==false?2:domains_length.length,
-                                itemBuilder: (BuildContext context, int index) {
-
-                                  return Column(
-                                    children: [
-                                      Card(
-                                          child: CheckboxListTile(
-                                            visualDensity: VisualDensity(vertical: -4,horizontal: 4),
-                                              title: Text(jsonDecode(data!)['data']
-                                                  [index]['name']),
-                                              onChanged: (checked) {
-                                                setState(
-                                                  () {
-                                                    isChecked[index] = checked!;
-
-                                                  },
-                                                );
-                                                if(isChecked[index]==true) {
-                                                  domainname=jsonDecode(data!)['data']
-                                                  [index]['id'];
-
-                                                  setState(() {
-                                                    domainname=jsonDecode(data!)['data']
-                                                    [index]['id'];
-                                                  });
-                                                    if(!domainnamelist.contains(domainname))
-                                                      domainnamelist.add(domainname);
-
-                                                 }
-                                                else {
-
-                                                 // if(domainnamelist.contains(domainname))
-                                                    domainnamelist.remove(domainname);
-                                                }
-
-
-                                              },
-                                              value: isChecked[index])
-                                          ),
-                                      //
-                                    ],
-                                  );
-                                },
-                              ),
-                             _expanded6==false? Container(
-                                width: MediaQuery.of(context).size.width,
-                               height: 50,
-                               child: GestureDetector(
-                                 onTap: (){
-                                   setState(() {
-                                     _expanded6=true;
-
-                                   });
-
-                                 },
-                                 child: Container(
-
-                                   margin: EdgeInsets.all(4),
-                                   child: Center(
-                                     child:Image.asset(
-                                       'assets/images/down_arrow.png',
-                                       height: 20,width: 20,
-                                       color: ColorConstants.txt,
-                                     )
-                                   ),
-                                 ),
-                               )
-                              ):Container(
-                                 width: MediaQuery.of(context).size.width,
-                                 height: 50,
-                                 child: GestureDetector(
-                                   onTap: (){
-                                     setState(() {
-                                       _expanded6=false;
-                                     });
-
-
-                                   },
-                                   child: Container(
-
-                                     margin: EdgeInsets.all(4),
-                                     child: Center(
-                                         child:Image.asset(
-                                           'assets/images/down_arrow_small.png',
-                                           height: 20,width: 20,
-                                           color: ColorConstants.txt,
-                                         )
-                                     ),
-                                   ),
-                                 )
-                             ),
-
-
-                            ],
-                          ),
-                        ),
-                ),
-              ),
 
               Container(
                 alignment: Alignment.center,
@@ -785,12 +739,33 @@ class _State extends State<ClassicQuizMain> {
                         log(domainnamelist.toString());
                         log("${domainnamelist.toString()}");
                         log(_getTitle());
-                        if(domainnamelist!=null){
+
+                        seldomain="";
+                        for (int i=0;i <  databean!.length;i++) {
+                        if(!databean![i].issel!) {
+                        if (databean![i].id != 0) {
+                        if (seldomain.isNotEmpty) {
+                          setState(() {
+                            seldomain = seldomain + "," + databean![i].id.toString();
+                          });
+
+                        } else {
+                          setState(() {
+                            seldomain = seldomain + "" + databean![i].id.toString();
+                          });
+
+                        }
+                        }
+                        }
+
+                        }
+                        print(seldomain);
+                        if(seldomain.isNotEmpty){
                           if(speedid!=null){
                             if(difficultylevelid!=null){
 
 
-                              createquiz(userid,"1", difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
+                              createquiz(userid,"1", difficultylevelid, speedid,seldomain);
                             }
                           }
 
@@ -815,4 +790,85 @@ class _State extends State<ClassicQuizMain> {
       ),
     );
   }
+
+  Widget domainrow(BuildContext context,int index, int length){
+  int ischecked=0;
+    bool? issel = databean![0].issel;
+
+    return  Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                databean![index].name!,
+                style:
+                TextStyle(fontSize: 18),
+              ),
+              GestureDetector(
+                onTap: (){
+
+                    accept(index);
+
+                },
+                child: databean![index].issel==false?
+                Container(
+                width: 20,
+                height: 20,
+                child: Image.asset(
+                  "assets/images/check_box_with_tick.png",
+                  height: 20,
+                  width: 20,
+                ),
+              ):Container(
+                width: 20,
+                height: 20,
+                child: Image.asset(
+                  "assets/images/check_box.png",
+                  height: 20,
+                  width: 20,
+                ),
+              ),
+              )
+            ],
+          ),
+
+        ),
+      ],
+    );
+
+  }
+
+  void accept(int index) {
+    Domain? domain;
+    if(index==0){
+      bool? issel = !databean![0].issel!;
+      for (int i=0; i < databean!.length;i++) {
+        domain = databean![i];
+        domain.issel = issel;
+        databean![i] = domain;
+      }
+      updateData(databean!.toList());
+    } else {
+      Domain domain  = getItem(index);
+      domain.issel = !domain.issel!;
+      databean![index] = domain;
+      updateData(databean!.toList());
+    }
+  }
+  void updateData(List<Domain> list) {
+    setState(() {
+      databean!.clear();
+      databean!.addAll(list);
+    });
+
+
+    notifyListeners(); // To rebuild the Widget
+  }
+  Domain getItem(int pos) {
+    return databean!.elementAt(pos);
+  }
+
 }

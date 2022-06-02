@@ -603,7 +603,7 @@ onsuccess(savedata){
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0.0)),
-                        fixedSize: const Size(100, 40),
+                       // fixedSize: const Size(100, 40),
                         //////// HERE
                       ),
 
@@ -631,7 +631,7 @@ onsuccess(savedata){
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0.0)),
-                        fixedSize: const Size(100, 40),
+                      //  fixedSize: const Size(100, 40),
                         //////// HERE
                       ),
 
@@ -661,7 +661,7 @@ onsuccess(savedata){
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0.0)),
-                        fixedSize: const Size(100, 40),
+                      //  fixedSize: const Size(100, 40),
                         //////// HERE
                       ),
 
@@ -692,7 +692,7 @@ onsuccess(savedata){
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0.0)),
-                        fixedSize: const Size(100, 40),
+                       // fixedSize: const Size(100, 40),
                         //////// HERE
                       ),
 
