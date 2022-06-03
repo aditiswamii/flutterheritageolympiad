@@ -508,12 +508,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                       20,
                                   alignment: Alignment.center,
                                   child: click1 == false
-                                      ? Text(
-                                          "|",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24),
-                                        )
+                                      ? VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                       : Image.asset(
                                           "assets/images/trianglewhite.png"),
                                 ),
@@ -522,12 +517,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                       20,
                                   alignment: Alignment.center,
                                   child: click2 == false
-                                      ? Text(
-                                          "|",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24),
-                                        )
+                                      ? VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                       : Image.asset(
                                           "assets/images/trianglewhite.png"),
                                 ),
@@ -536,12 +526,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                       20,
                                   alignment: Alignment.center,
                                   child: click3 == false
-                                      ? Text(
-                                          "|",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24),
-                                        )
+                                      ? VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                       : Image.asset(
                                           "assets/images/trianglewhite.png"),
                                 ),
@@ -666,12 +651,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                       20,
                                   alignment: Alignment.center,
                                   child: click6 == false
-                                      ? Text(
-                                          "|",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24),
-                                        )
+                                      ? VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                       : Image.asset(
                                           "assets/images/trianglewhite.png"),
                                 ),
@@ -680,12 +660,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                       20,
                                   alignment: Alignment.center,
                                   child: click7 == false
-                                      ? Text(
-                                          "|",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24),
-                                        )
+                                      ? VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                       : Image.asset(
                                           "assets/images/trianglewhite.png"),
                                 ),
@@ -694,12 +669,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                       20,
                                   alignment: Alignment.center,
                                   child: click8 == false
-                                      ? Text(
-                                          "|",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24),
-                                        )
+                                      ? VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                       : Image.asset(
                                           "assets/images/trianglewhite.png"),
                                 ),

@@ -441,22 +441,13 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click1==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click1==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click2==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click2==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click3==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click3==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
 
                         ],
@@ -557,22 +548,14 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                         children: [
                           Container( width:  MediaQuery.of(context).size.width/3-20,
                             alignment: Alignment.center,
-                            child: click6==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click6==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
+                                :Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container( width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click7==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click7==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container( width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click8==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click8==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
 
                         ],

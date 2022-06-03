@@ -471,14 +471,14 @@ var datalink;
                                     lineHeight: 20,
                                     alignment: MainAxisAlignment.spaceBetween,
                                     child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                                      style: TextStyle(fontSize: 18, color: Colors.white),
+                                      style: TextStyle(fontSize: 14, color: Colors.white),
                                     ),
                                     backgroundColor: Colors.black12,
                                     progressBarColor: ColorConstants.verdigris,
                                   )
                               ),
 
-                            if((userLeagueR!.data!.goalsummery!.play!*100/userLeagueR!.data!.goalsummery!.total!)>=1)
+                            if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)>=1)
                               Container(
                                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: GFProgressBar(

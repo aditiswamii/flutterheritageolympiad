@@ -160,7 +160,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
   }
   void createquiz(String userid,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
-    showLoaderDialog(context);
+    //showLoaderDialog(context);
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"create_quiz_room"), body: {
       'user_id': userid.toString(),
@@ -171,7 +171,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      //Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
@@ -192,7 +192,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
             .showSnackBar(snackbar);
       }
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -238,22 +238,22 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
 
   }
 
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],),
-    );
-    showDialog(barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],),
+  //   );
+  //   showDialog(barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
   hintdialog(BuildContext context,String text) {
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
@@ -429,22 +429,13 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click1==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click1==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click2==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click2==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click3==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click3==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
 
                         ],
@@ -545,22 +536,13 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
                         children: [
                           Container( width:  MediaQuery.of(context).size.width/3-20,
                             alignment: Alignment.center,
-                            child: click6==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click6==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container( width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click7==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click7==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container( width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click8==false?Text(
-                              "|",
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ):Image.asset("assets/images/trianglewhite.png"),
+                            child: click8==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
 
                         ],
@@ -719,7 +701,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
                                   if(difficultylevelid!=null){
 
 
-                                    createquiz(userid.toString(), difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
+                                    createquiz(userid.toString(), difficultylevelid, speedid,seldomain);
                                   }
                                 }
 

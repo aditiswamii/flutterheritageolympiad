@@ -158,7 +158,7 @@ class _FilterPageState extends State<FilterPage> {
 
   calTheme() async{
     themes = "";
-    if (intangible == 1) {
+    if (tangible == 1) {
       if(themes.contains("1")){
         setState(() {
           themes += "";
@@ -196,22 +196,22 @@ class _FilterPageState extends State<FilterPage> {
 
           themes += "2";
         });
-        themes += "2";
+
       }
       print(themes);
       getDomains(themes);
     }
-    if (tangible == 1) {
+    if (intangible == 1) {
       if (themes.isNotEmpty) {
         setState(() {
           themes += ",3";
         });
-        themes += ",3";
+
       } else {
         setState(() {
           themes += "3";
         });
-        themes += "3";
+
       }
       print(themes);
       getDomains(themes);
@@ -248,15 +248,26 @@ class _FilterPageState extends State<FilterPage> {
                               fontSize: 22,
                               color: Colors.black,
                               fontFamily: "Nunito"))),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: const Text("RESET ALL",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black54,
-                              fontFamily: "Nunito",
-                              decoration: TextDecoration.underline))),
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      themes="";
+                      tangible=1;
+                      intangible=0;
+                      natural=0;
+                    });
+
+                  },
+                    child: Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: const Text("RESET ALL",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black54,
+                                fontFamily: "Nunito",
+                                decoration: TextDecoration.underline))),
+                  ),
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -484,7 +495,6 @@ class _FilterPageState extends State<FilterPage> {
                                   ListView.builder(
                                     physics: const BouncingScrollPhysics(),
                                     shrinkWrap: true,
-                                    reverse: true,
                                     itemCount: domains_length.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {

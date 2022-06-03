@@ -157,46 +157,67 @@ class _FilterTourState extends State<FilterTour> {
     return true;
   }
 
-  // calTheme() async{
-  //   themes = "";
-  //   if (intangible == 1) {
-  //     setState(() {
-  //       themes += "1";
-  //     });
-  //     print(themes);
-  //     getDomains(themes);
-  //   }
-  //   if (natural == 1) {
-  //     if (themes.isNotEmpty) {
-  //       setState(() {
-  //         themes += ",2";
-  //       });
-  //
-  //     } else {
-  //       setState(() {
-  //         themes += "2";
-  //       });
-  //       themes += "2";
-  //     }
-  //     print(themes);
-  //     getDomains(themes);
-  //   }
-  //   if (tangible == 1) {
-  //     if (themes.isNotEmpty) {
-  //       setState(() {
-  //         themes += ",3";
-  //       });
-  //       themes += ",3";
-  //     } else {
-  //       setState(() {
-  //         themes += "3";
-  //       });
-  //       themes += "3";
-  //     }
-  //     print(themes);
-  //     getDomains(themes);
-  //   }
-  // }
+  calTheme() async{
+    themes = "";
+    if (tangible == 1) {
+      if(themes.contains("1")){
+        setState(() {
+          themes += "";
+        });
+
+      }else{
+        setState(() {
+          themes += "1";
+        });
+      }
+
+      print(themes);
+      getDomains(themes);
+    }
+    if (natural == 1) {
+      if (themes.isNotEmpty) {
+        if(themes.contains("2")){
+          setState(() {
+            themes +="";
+          });
+
+        }else{
+          setState(() {
+            themes += ",2";
+          });
+
+        }
+        setState(() {
+          themes += ",2";
+        });
+
+      } else {
+
+        setState(() {
+
+          themes += "2";
+        });
+
+      }
+      print(themes);
+      getDomains(themes);
+    }
+    if (intangible == 1) {
+      if (themes.isNotEmpty) {
+        setState(() {
+          themes += ",3";
+        });
+
+      } else {
+        setState(() {
+          themes += "3";
+        });
+
+      }
+      print(themes);
+      getDomains(themes);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -270,13 +291,13 @@ class _FilterTourState extends State<FilterTour> {
                                       tangible = 1;
                                     });
                                   }
-                                  setState(() {
-                                    intangible = 0;
-                                    natural = 0;
-                                    themes = "1";
-                                  });
-                                  getDomains("$themes");
-                                  // calTheme();
+                                  // setState(() {
+                                  //   intangible = 0;
+                                  //   natural = 0;
+                                  //   themes = "1";
+                                  // });
+                                  // getDomains("$themes");
+                                   calTheme();
                                 },
                                 child: tangible == 1
                                     ? Image.asset("assets/images/tangible.png",
@@ -310,20 +331,20 @@ class _FilterTourState extends State<FilterTour> {
                                     setState(() {
                                       natural = 0;
                                     });
-                                    // calTheme();
+
                                   } else {
                                     natural = 1;
                                     setState(() {
                                       natural = 1;
                                     });
                                   }
-                                  setState(() {
-                                    intangible = 0;
-                                    tangible = 0;
-                                    themes = "2";
-                                  });
-                                  getDomains("$themes");
-                                  // calTheme();
+                                  // setState(() {
+                                  //   intangible = 0;
+                                  //   tangible = 0;
+                                  //   themes = "2";
+                                  // });
+                                  // getDomains("$themes");
+                                   calTheme();
                                   // getDomains(themes);
                                 },
                                 child: natural == 1
@@ -364,14 +385,14 @@ class _FilterTourState extends State<FilterTour> {
                                       intangible = 1;
                                     });
                                   }
-                                  setState(() {
-                                    natural = 0;
-                                    tangible = 0;
-                                    themes = "3";
-                                  });
-
-                                  getDomains("$themes");
-                                  // getDomains(themes);
+                                  // setState(() {
+                                  //   natural = 0;
+                                  //   tangible = 0;
+                                  //   themes = "3";
+                                  // });
+                                  //
+                                  // getDomains("$themes");
+                                calTheme();
                                 },
                                 child: intangible == 1
                                     ? Image.asset(
