@@ -1,18 +1,24 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:device_calendar/device_calendar.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:flutterheritageolympiad/ui/feed/feedpresenter.dart';
+import 'package:flutterheritageolympiad/ui/feed/feedview.dart';
 import 'package:flutterheritageolympiad/ui/feed/filterpage/filterpage.dart';
+import 'package:flutterheritageolympiad/ui/feed/imageview.dart';
 import 'package:flutterheritageolympiad/ui/feed/savedpost/savedpost.dart';
 
-
+import 'package:flutterheritageolympiad/modal/feedresponse/GetFeedResponse.dart' as Feedresponse;
+import 'package:flutterheritageolympiad/modal/feedtagfilter/GetTagFilterResponse.dart' as TagFilterResponse;
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:flutterheritageolympiad/utils/apppreference.dart';
@@ -29,13 +35,13 @@ class FeedPage extends StatefulWidget {
   var contents;
   var themes;
   var seldomain;
-  FeedPage({Key? key,required this.seldomain,required this.contents,required this.themes}) : super(key: key);
+  FeedPage({Key? key, this.seldomain, this.contents, this.themes}) : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
-class _FeedPageState extends State<FeedPage> {
+class _FeedPageState extends State<FeedPage> with ChangeNotifier{
   TextEditingController controller = TextEditingController();
   PageController _pageController = PageController();
   // TextEditingController controller = TextEditingController();
@@ -51,8 +57,13 @@ class _FeedPageState extends State<FeedPage> {
   var data;
   var snackBar;
   var tagdata;
+  bool rlshow=true;
   List<Data>?tagfdata;
   int activePage = 1;
+  int feed_page_id  = 0;
+
+  List<Feedresponse.Data>? databean = [].cast<Feedresponse.Data>().toList(
+      growable: true);
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -66,7 +77,7 @@ class _FeedPageState extends State<FeedPage> {
 
   getFeed(String userid, String feed_page_id, String feed_type_id,
       String domain_id, String theme_id) async {
-    // showLoaderDialog(context);
+     // showLoaderDialog(context);
       http.Response response =
           await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
         'user_id': userid.toString(),
@@ -77,7 +88,7 @@ class _FeedPageState extends State<FeedPage> {
       });
     var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
-        // Navigator.pop(context);
+         // Navigator.pop(context);
         data = response.body;
         if (jsonResponse['status'] == 200) {
           //final responseJson = json.decode(response.body);//store response as string
@@ -85,9 +96,7 @@ class _FeedPageState extends State<FeedPage> {
             feeddata = jsonDecode(
                 data!)['data']; //get all the data from json string superheros
             print(feeddata.length);
-            // for (Map user in responseJson) {
-            //   _userDetails.add(Data.fromJson(user));
-            // }// just printed length of data
+            onsuccessfeed(Feedresponse.getFeedResponseFromJson(data));
           });
 
           var venam = jsonDecode(data!)['data'];
@@ -118,22 +127,133 @@ class _FeedPageState extends State<FeedPage> {
               .showSnackBar(snackBar);
         }
       }else {
-        // Navigator.pop(context);
+         // Navigator.pop(context);
         print(response.statusCode);
       }
 
   }
 
+
+  onsuccessfeed(Feedresponse.GetFeedResponse feedResponse) {
+    if(feedResponse!=null){
+      if(feedResponse.data!=null) {
+        if (feedResponse.data!.length > 0) {
+          rlshow=true;
+          setState(() {
+            feed_page_id =
+            feedResponse.data![feedResponse.data!.length - 1].id!;
+            databean = feedResponse.data;
+          });
+        }else{
+          rlshow=false;
+          snackBar = const SnackBar(
+            content: Text(
+                "There is no more feed"),
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(snackBar);
+        }
+      }
+
+
+    }
+
+  }
+  loadmoreapi(String userid, String feed_page_id, String feed_type_id,
+      String domain_id, String theme_id) async {
+    // showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
+      'user_id': userid.toString(),
+      'feed_page_id': feed_page_id.toString(),
+      'feed_type_id': feed_type_id.toString(),
+      'domain_id': domain_id.toString(),
+      'theme_id': theme_id.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          feeddata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(feeddata.length);
+          onloadsuccess(Feedresponse.getFeedResponseFromJson(data));
+        });
+
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+        print(jsonDecode(data!)['last_id']);
+        //last_id
+        print(jsonDecode(data!)['data'][0]['id']);
+        print(jsonDecode(data!)['data'][0]['type']);
+        print(jsonDecode(data!)['data'][0]['tags']);
+        print(jsonDecode(data!)['data'][0]['title']);
+        print(jsonDecode(data!)['data'][0]['description']);
+        print(jsonDecode(data!)['data'][0]['external_link']);
+        print(jsonDecode(data!)['data'][0]['video_link']);
+        print(jsonDecode(data!)['data'][0]['placeholder_image']);
+        print(jsonDecode(data!)['data'][0]['savepost']);
+        print(jsonDecode(data!)['data'][0]['is_saved']);
+        print(jsonDecode(data!)['data'][0]['share']);
+        print(jsonDecode(data!)['data'][0]['media_type']);
+        print(jsonDecode(data!)['data'][0]['media']);
+        print(jsonDecode(data!)['data'][0]['media_type']);
+        print(jsonDecode(data!)['data'][0]['media_type']);
+      }else{
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    }else {
+      // Navigator.pop(context);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
+    }
+
+  }
+  onloadsuccess(Feedresponse.GetFeedResponse obj){
+    if(obj!=null){
+      if(obj.data!=null){
+        if(obj.data!.length>0){
+          rlshow=true;
+          if(obj.lastId.toString()!="") {
+
+            setState(() {
+            feed_page_id= obj.data![obj.data!.length-1].id!;
+          });
+          }
+
+          updateData(obj.data!);
+        }else{
+          rlshow=false;
+          snackBar = const SnackBar(
+            content: Text(
+               "There is no more feed"),
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(snackBar);
+        }
+      }
+    }
+
+  }
   gettagfilter(String userid ,String searchkey,String type) async {
 
       http.Response response = await http.get(
           Uri.parse(StringConstants.BASE_URL + "tagfilter?searchkey=$searchkey&type=$type&user_id=$userid")
       );
-      // showLoaderDialog(context);
+       // showLoaderDialog(context);
       var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         data = response.body;
-        // Navigator.pop(context);
+         // Navigator.pop(context);
         if (jsonResponse['status'] == 200) {
           setState(() {
             tagdata = jsonDecode(
@@ -153,41 +273,57 @@ class _FeedPageState extends State<FeedPage> {
               .showSnackBar(snackBar);
         }
       } else {
-        // Navigator.pop(context);
+         // Navigator.pop(context);
         // onsuccess(null);
-        print(response.statusCode);
+        if (kDebugMode) {
+          print(response.statusCode);
+        }
       }
 
   }
   onsuccess(List<Data>? list){
+   if(list!=null) {
+     if (list.length > 0) {
+       rlshow=true;
+       setState(() {
+         feed_page_id = list[list.length - 1].id!;
+         tagfdata = list;
+       });
+     }else{
+       rlshow=false;
+       snackBar = const SnackBar(
+         content: Text(
+             "There is no more feed"),
+       );
+       ScaffoldMessenger.of(context)
+           .showSnackBar(snackBar);
+     }
+   }
 
-    setState(() {
-      tagfdata=list ;
-    });
     print(tagfdata.toString());
   }
-  // showLoaderDialog(BuildContext context) {
-  //   AlertDialog alert = AlertDialog(
-  //     content: new Row(
-  //       children: [
-  //         CircularProgressIndicator(),
-  //         Container(
-  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-  //       ],
-  //     ),
-  //   );
-  //   showDialog(
-  //     barrierDismissible: false,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.transparent,
+      content:
+          Container(
+            height: 80,width: 80,
+              child: const Center(child: CircularProgressIndicator())),
 
-  onsuccessfeed() {}
+
+
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 //0 unsave 1 save
-  savepost(String userid ,String feed_id,String type) async {
+  savepost(String userid ,String feed_id,int  type,int pos) async {
 
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "savefeed"),body: {
@@ -196,13 +332,13 @@ class _FeedPageState extends State<FeedPage> {
              'type':type.toString()
     }
     );
-    // showLoaderDialog(context);
+     //showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       data = response.body;
       // Navigator.pop(context);
       if (jsonResponse['status'] == 200) {
-
+        updateItem(type, pos);
         snackBar = SnackBar(
           content: Text(
               jsonResponse['message']),
@@ -210,7 +346,7 @@ class _FeedPageState extends State<FeedPage> {
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBar);
       } else {
-       
+
         snackBar = SnackBar(
           content: Text(
               jsonResponse['message']),
@@ -219,16 +355,31 @@ class _FeedPageState extends State<FeedPage> {
             .showSnackBar(snackBar);
       }
     } else {
-     
+
       print(response.statusCode);
     }
 
+  }
+  Event buildEvent(String? title,String? description) {
+    return Event(
+      title: title!,
+      description: description!,
+      location: 'Cultre App',
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(Duration(minutes: 30)),
+      allDay: false,
+      iosParams: IOSParams(
+        reminder: Duration(minutes: 40),
+      ),
+
+    );
   }
   @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
     userdata();
+//    _presenter = FeedPresenter(this);
   }
 
   @override
@@ -246,13 +397,14 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -262,16 +414,16 @@ class _FeedPageState extends State<FeedPage> {
         ),
         child: Container(
           color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerLeft,
 
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Center(
                     child: Card(
                       elevation: 3,
@@ -291,9 +443,9 @@ class _FeedPageState extends State<FeedPage> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 5.0),
+                  padding: const EdgeInsets.only(right: 5.0),
                   child: GestureDetector(
                     onTap: () {
                       _scaffoldKey.currentState!.openEndDrawer();
@@ -319,30 +471,30 @@ class _FeedPageState extends State<FeedPage> {
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: Text(username,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontFamily: "Nunito"))),
                 Card(
                   child: ListTile(
-                    leading: Icon(Icons.search),
+                    leading: const Icon(Icons.search),
                     title: TextFormField(
                       controller: controller,
                       textInputAction: TextInputAction.search,
                       onFieldSubmitted: onSearchTextChanged,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: 'Search', border: InputBorder.none),
                     ),
                     trailing: controller.text.isNotEmpty
                         ? IconButton(
-                            icon: Icon(Icons.cancel),
+                            icon: const Icon(Icons.cancel),
                             onPressed: () {
                               controller.clear();
                               onSearchTextChanged('');
                             },
                           )
                         : IconButton(
-                      icon: Icon(Icons.cancel,color: Colors.white,),
+                      icon: const Icon(Icons.cancel,color: Colors.white,),
                       onPressed: () {
                         controller.clear();
                         onSearchTextChanged('');
@@ -367,8 +519,8 @@ class _FeedPageState extends State<FeedPage> {
                           width: 150,
                           child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("SET FILTER",
-                              style: TextStyle(
+                              const Text("SET FILTER",
+                              style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
                                   fontFamily: "Nunito")),
@@ -392,8 +544,8 @@ class _FeedPageState extends State<FeedPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("SAVED POST",
-                                  style: TextStyle(
+                              const Text("SAVED POST",
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.black,
                                       fontFamily: "Nunito")),
@@ -413,7 +565,7 @@ class _FeedPageState extends State<FeedPage> {
                     child:  Container(
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: ListView.builder(
-                          physics: ClampingScrollPhysics(
+                          physics: const ClampingScrollPhysics(
                               parent: BouncingScrollPhysics()),
                           shrinkWrap: true,
                           itemCount: tagdata.length,
@@ -430,25 +582,32 @@ class _FeedPageState extends State<FeedPage> {
                               child: ListBody(
                                 children: [
                                   if(tagfdata![index].media!=null)
-                                  Container(
-                                    height: 300,
-                                    child: PageView.builder(
-                                        itemCount: tagfdata![index].media!.length,
-                                        pageSnapping: true,
-                                        controller: _pageController,
-                                        onPageChanged: (page) {
-                                          setState(() {
-                                            activePage = page;
-                                          });
-                                        },
-                                        itemBuilder: (context, pagePosition) {
-                                          return Container(
+                                Container(
+                                  height: 300,
+                                  child: PageView.builder(
+                                      itemCount: tagfdata![index].media!.length,
+                                      pageSnapping: true,
+                                      controller: _pageController,
+                                      onPageChanged: (page) {
+                                        setState(() {
+                                          activePage = page;
+                                        });
+                                      },
+                                      itemBuilder: (context, pagePosition) {
+                                        return  GestureDetector(
+                                          onTap:(){
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(builder: (BuildContext context) =>
+                                                    ImageviewFeed(gallery: tagfdata![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
+                                                      seldomain: widget.seldomain, image: tagfdata![index].media![pagePosition],)));
+                                          },
+                                          child: Container(
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: NetworkImage(tagfdata![index].media![pagePosition]),
                                                     fit: BoxFit.contain)),
                                             child: Container(
-                                              margin: EdgeInsets.all(10),
+                                              margin: const EdgeInsets.all(10),
                                               alignment:
                                               Alignment.bottomCenter,
                                               height: 40,
@@ -460,9 +619,10 @@ class _FeedPageState extends State<FeedPage> {
                                                       tagfdata![index].media!.length,
                                                       activePage)),
                                             ),
-                                          );
-                                        }),
-                                  ),
+                                          ),
+                                        );
+                                      }),
+                                ),
                                   Container(
                                     margin: const EdgeInsets.fromLTRB(
                                         10, 10, 10, 10),
@@ -473,7 +633,7 @@ class _FeedPageState extends State<FeedPage> {
                                               0, 10, 0, 10),
                                           child: Text(
                                               tagfdata![index].title!,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.black,
                                                   fontFamily: "Nunito")),
@@ -485,16 +645,16 @@ class _FeedPageState extends State<FeedPage> {
                                             tagfdata![index].description!,
                                             trimLines: 5,
                                             textAlign: TextAlign.justify,
-                                            style: TextStyle(fontSize: 14,color:Colors.black,),
+                                            style: const TextStyle(fontSize: 14,color:Colors.black,),
                                             colorClickableText: Colors.black,
                                             trimMode: TrimMode.Line,
                                             trimCollapsedText: 'Read more',
                                             trimExpandedText: 'Read less',
-                                            lessStyle: TextStyle(
+                                            lessStyle: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.blue,
                                                 fontFamily: "Nunito"),
-                                            moreStyle:TextStyle(
+                                            moreStyle:const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.blue,
                                                 fontFamily: "Nunito"),
@@ -506,7 +666,7 @@ class _FeedPageState extends State<FeedPage> {
 
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                              physics: ClampingScrollPhysics(
+                                              physics: const ClampingScrollPhysics(
                                                   parent:
                                                   BouncingScrollPhysics()),
                                               shrinkWrap: true,
@@ -534,10 +694,10 @@ class _FeedPageState extends State<FeedPage> {
                                                       ),
                                                     ),
                                                     child: Container(
-                                                      padding: EdgeInsets.all(4),
+                                                      padding: const EdgeInsets.all(4),
                                                       child: Center(
                                                         child: Text(tagfdata![index].tags![index1],
-                                                          style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
+                                                          style: const TextStyle(color: Colors.white),textAlign: TextAlign.center,),
                                                       ),
                                                     ),
                                                   ),
@@ -640,7 +800,7 @@ class _FeedPageState extends State<FeedPage> {
                   ),
                 )
                     :
-                feeddata==null? Center(
+                databean==null? Center(
                   child: Container(
 
                   ),
@@ -648,12 +808,12 @@ class _FeedPageState extends State<FeedPage> {
                     :  Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: ListView.builder(
-                            physics: ClampingScrollPhysics(
-                                parent: BouncingScrollPhysics()),
+                            physics: const ClampingScrollPhysics(
+                                parent: const BouncingScrollPhysics()),
                             shrinkWrap: true,
-                            itemCount: jsonDecode(data!)['data'].length,
+                            itemCount: databean!.length,
                             itemBuilder: (BuildContext context, int index) {
-                              var ischecked=jsonDecode(data!)['data'][index]['is_saved'];
+                              var ischecked=databean![index].isSaved;
                               var check= ischecked==1?true:false;
                               return Card(
                                 shape: RoundedRectangleBorder(
@@ -666,13 +826,12 @@ class _FeedPageState extends State<FeedPage> {
                                 ),
                                 child: ListBody(
                                   children: [
-                                    if(jsonDecode(data!)['data']
-                                    [index]['media_type'].toString().isNotEmpty)
+                                    if(databean![index].mediaType
+                                    .toString().isNotEmpty)
                                     Container(
                                       height: 300,
                                       child: PageView.builder(
-                                          itemCount: jsonDecode(data!)['data']
-                                                  [index]['media']
+                                          itemCount: databean![index].media!
                                               .length,
                                           pageSnapping: true,
                                           controller: _pageController,
@@ -682,31 +841,36 @@ class _FeedPageState extends State<FeedPage> {
                                             });
                                           },
                                           itemBuilder: (context, pagePosition) {
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          jsonDecode(data!)[
-                                                                          'data']
-                                                                      [index]
-                                                                  ['media']
-                                                              [pagePosition]),
-                                                      fit: BoxFit.contain)),
+                                            return GestureDetector(
+                                              onTap:(){
+                                                Navigator.of(context).pushReplacement(
+                                                    MaterialPageRoute(builder: (BuildContext context) =>
+                                                        ImageviewFeed(gallery: databean![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
+                                                          seldomain: widget.seldomain, image:databean![index].media![pagePosition],)));
+                                              },
                                               child: Container(
-                                                margin: EdgeInsets.all(10),
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                height: 40,
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: indicators(
-                                                        jsonDecode(data!)[
-                                                                    'data']
-                                                                [index]['media']
-                                                            .length,
-                                                        activePage)),
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(
+                                                            databean![index].media!
+
+                                                                [pagePosition]),
+                                                        fit: BoxFit.contain)),
+                                                child: Container(
+                                                  margin: const EdgeInsets.all(10),
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  height: 40,
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: indicators(
+                                                          databean![index].media!
+
+                                                              .length,
+                                                          activePage)),
+                                                ),
                                               ),
                                             );
                                           }),
@@ -720,9 +884,8 @@ class _FeedPageState extends State<FeedPage> {
                                             margin: const EdgeInsets.fromLTRB(
                                                 0, 10, 0, 10),
                                             child: Text(
-                                                jsonDecode(data!)['data'][index]
-                                                    ['title'],
-                                                style: TextStyle(
+                                                databean![index].title!,
+                                                style: const TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.black,
                                                     fontFamily: "Nunito")),
@@ -731,20 +894,20 @@ class _FeedPageState extends State<FeedPage> {
                                             margin: const EdgeInsets.fromLTRB(
                                                 0, 10, 0, 10),
                                             child: ReadMoreText(
-                                              jsonDecode(data!)['data'][index]
-                                              ['description'],
+                                              databean![index].description!
+                                              ,
                                               trimLines: 5,
                                               textAlign: TextAlign.justify,
-                                              style: TextStyle(fontSize: 14,color:Colors.black,),
+                                              style: const TextStyle(fontSize: 14,color:Colors.black,),
                                               colorClickableText: Colors.black,
                                               trimMode: TrimMode.Line,
                                               trimCollapsedText: 'Read more',
                                               trimExpandedText: 'Read less',
-                                              lessStyle: TextStyle(
+                                              lessStyle: const TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.blue,
                                                   fontFamily: "Nunito"),
-                                              moreStyle:TextStyle(
+                                              moreStyle:const TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.blue,
                                                   fontFamily: "Nunito"),
@@ -755,13 +918,13 @@ class _FeedPageState extends State<FeedPage> {
 
                                             child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                                physics: ClampingScrollPhysics(
+                                                physics: const ClampingScrollPhysics(
                                                     parent:
                                                         BouncingScrollPhysics()),
                                                 shrinkWrap: true,
                                                 itemCount:
-                                                    jsonDecode(data!)['data']
-                                                            [index]['tags']
+                                                databean![index].tags!
+
                                                         .length,
                                                 itemBuilder:
                                                     (BuildContext context,
@@ -769,9 +932,7 @@ class _FeedPageState extends State<FeedPage> {
 
                                                   return GestureDetector(
                                                     onTap: (){
-                                                      gettagfilter(userid.toString(),jsonDecode(
-                                                          data!)['data']
-                                                      [index]['tags']
+                                                      gettagfilter(userid.toString(),databean![index].tags!
                                                       [index1].toString(), "0");
                                                               },
                                                     child: Card(
@@ -789,12 +950,10 @@ class _FeedPageState extends State<FeedPage> {
                                                         ),
                                                       ),
                                                       child: Container(
-                                                        padding: EdgeInsets.all(4),
+                                                        padding: const EdgeInsets.all(4),
                                                         child: Center(
-                                                          child: Text(jsonDecode(
-                                                                      data!)['data']
-                                                                  [index]['tags']
-                                                              [index1],style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
+                                                          child: Text(databean![index].tags!
+                                                              [index1],style: const TextStyle(color: Colors.white),textAlign: TextAlign.center,),
                                                         ),
                                                       ),
                                                     ),
@@ -821,8 +980,8 @@ class _FeedPageState extends State<FeedPage> {
                                                           });
                                                           check=!check;
                                                           check==true?ischecked=1:ischecked=0;
-                                                          savepost(userid.toString(), jsonDecode(data!)['data'][index]['id'].toString(),
-                                                              ischecked.toString() );
+                                                          savepost(userid.toString(), databean![index].id.toString(),
+                                                              ischecked==1?0:1,index );
                                                         },
                                                         child: Container(
                                                             child: ischecked != 1
@@ -846,15 +1005,11 @@ class _FeedPageState extends State<FeedPage> {
                                                                 .fromLTRB(
                                                             5, 0, 0, 0),
                                                         child: Text(
-                                                            jsonDecode(data!)[
-                                                                            'data']
-                                                                        [index]
-                                                                    ['savepost']
+                                                            databean![index].savepost
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 14,
-                                                                color: jsonDecode(data!)['data'][index][
-                                                                            'is_saved'] !=
+                                                                color: databean![index].isSaved!=
                                                                         1
                                                                     ? Colors
                                                                         .black54
@@ -871,7 +1026,8 @@ class _FeedPageState extends State<FeedPage> {
                                                     children: [
                                                       GestureDetector(
                                                           onTap: () {
-                                                            // Share.share(jsonDecode(data!)['data'][index]['external_link'], subject: 'Share link');
+                                                            log("cal click");
+                                                            buildEvent( databean![index].title!, databean![index].description!);
                                                           },
                                                           child: Image.asset(
                                                             "assets/images/calendary.png",
@@ -881,10 +1037,7 @@ class _FeedPageState extends State<FeedPage> {
                                                       GestureDetector(
                                                           onTap: () {
                                                             Share.share(
-                                                                jsonDecode(data!)[
-                                                                            'data']
-                                                                        [index][
-                                                                    'external_link'],
+                                                                databean![index].externalLink!,
                                                                 subject:
                                                                     'Share link');
                                                           },
@@ -912,6 +1065,9 @@ class _FeedPageState extends State<FeedPage> {
                               );
                             }),
                       ),
+                if(feeddata!=null)
+                  Visibility(child:showmore(context),visible: rlshow,replacement: const SizedBox.shrink(),)
+
               ]),
             ),
           ]),
@@ -919,11 +1075,31 @@ class _FeedPageState extends State<FeedPage> {
       ),
     );
   }
+  Widget showmore(BuildContext context){
 
+    return
+      Column(
+        children: [
+          if(feed_page_id!=databean![0].id)
+          GestureDetector(
+          onTap: (){
+            loadmoreapi(userid.toString(), feed_page_id.toString(), "", "", "");
+          },
+          child: Container(
+            child: const Center(child: Text("Show More",
+              style: TextStyle(color: Colors.black,fontSize: 18),textAlign: TextAlign.center,)),
+          ),
+    ),
+    if(feed_page_id==databean![0].id)
+    Container()
+        ],
+      );
+
+  }
   List<Widget> indicators(imagesLength, currentIndex) {
     return List<Widget>.generate(imagesLength, (index) {
       return Container(
-        margin: EdgeInsets.all(3),
+        margin: const EdgeInsets.all(3),
         width: 10,
         height: 10,
         decoration: BoxDecoration(
@@ -950,5 +1126,51 @@ class _FeedPageState extends State<FeedPage> {
     log(text);
 
     setState(() {});
+  }
+
+
+
+  void updateData(List<Feedresponse.Data> list) {
+    setState(() {
+      databean!.addAll(list);
+    });
+
+
+    notifyListeners(); // To rebuild the Widget
+  }
+
+
+  void cleanData() {
+    setState(() {
+      databean!.clear();
+    });
+
+
+    notifyListeners();
+  }
+
+  void updateItem(int type, int pos) {
+    Feedresponse.Data? data = databean![pos];
+    data.isSaved = type;
+    if (type == 1) {
+      setState(() {
+        data.savepost= (data.savepost!) + 1;
+      });
+
+    } else {
+      setState(() {
+        data.savepost= (data.savepost!) - 1;
+      });
+
+    }
+    setState(() {
+      databean![pos] = data;
+    });
+
+    notifyListeners();
+  }
+
+  Feedresponse.Data getItem(int pos) {
+    return databean!.elementAt(pos);
   }
 }

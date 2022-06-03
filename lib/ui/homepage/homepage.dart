@@ -15,6 +15,7 @@ import 'package:flutterheritageolympiad/modal/getuserleagueresponse/GetUserLeagu
 import 'package:flutterheritageolympiad/ui/feed/feed.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homeview.dart';
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
+import 'package:flutterheritageolympiad/ui/myaccount/yourpage/yourpage.dart';
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/quizroom/waitroom/waitroom.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
@@ -95,7 +96,8 @@ GetUserLeagueResponse? userLeagueR;
      country =prefs.getString("country");
      userid= prefs.getString("userid");
    });
-
+   free(userid.toString());
+   getuserleague(userid.toString());
    linkurl=widget.link;
    if(linkurl!="" ||linkurl.toString().isNotEmpty) {
      setState(() {
@@ -119,8 +121,7 @@ GetUserLeagueResponse? userLeagueR;
    if(widget.link!=""){
 
    }
-   free(userid.toString());
-   getuserleague(userid.toString());
+
 
 }
   free(String userid) async {
@@ -1015,7 +1016,7 @@ if(tournament!=null && tournament['tournament_id']>0){
                      Navigator.pushReplacement(
                          context,
                          MaterialPageRoute(
-                             builder: (context) => FeedPage(contents: "", seldomain: "", themes: "",)));
+                             builder: (context) => FeedPage()));
                    },
                    child: Container(
                      height: 150,
@@ -1130,10 +1131,7 @@ if(tournament!=null && tournament['tournament_id']>0){
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
                 // if you need this
-                side: BorderSide(
-                  color: Colors.grey.withOpacity(0.3),
-                  width: 1,
-                ),
+
               ),
           child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child:userLeagueR!.data!.goalsummery==null?Container(child: Column(
@@ -1210,6 +1208,35 @@ if(tournament!=null && tournament['tournament_id']>0){
           ),
         ),
       ):Container(),
+
+        Container(
+          child: Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                onPrimary: Colors.white,
+                elevation: 3,
+                alignment: Alignment.center,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                fixedSize: const Size(140, 40),
+                //////// HERE
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  YourPage()));
+              },
+              child: const Text(
+                "TO MY PAGE",
+                style: TextStyle(
+                    color: Colors.black, fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
         ]
         ),
         ),

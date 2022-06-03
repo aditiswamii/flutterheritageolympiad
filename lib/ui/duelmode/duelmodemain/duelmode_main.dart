@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert' as convert;
 
+import '../../../modal/Domains.dart';
 import '../../../modal/createquizresponse/CreateQuizResponse.dart';
 import '../../../modal/domains/GetDomainsResponse.dart';
 import '../../../utils/StringConstants.dart';
@@ -32,7 +33,7 @@ class DuelModeMain extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<DuelModeMain> {
+class _State extends State<DuelModeMain> with ChangeNotifier {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   // late ClassicQuizPresenter _presenter;
   var data;
@@ -67,7 +68,12 @@ class _State extends State<DuelModeMain> {
   String domainid="";
   var selectedIndexes = [];
 
+  var click = false;
+  List<Domain>? databean = [].cast<Domain>().toList(growable: true);
+
   List<bool> isChecked = List.generate(_len, (index) => false);
+  String seldomain = "";
+  List<Domain>? clist = [].cast<Domain>().toList(growable: true);
   // String _getTitle() =>
   //     "Checkbox Demo : Checked = ${isChecked.where((check) => check == true)}, Unchecked = ${isChecked.where((check) => check == false)}";
 
@@ -115,6 +121,35 @@ class _State extends State<DuelModeMain> {
           domaindata = jsonResponse;
           print(domaindata['data'].length); // just printed length of data
         });
+        List? jsarray = List.from(domaindata['data']);
+        setState(() {
+          jsarray;
+        });
+        if (jsarray.isNotEmpty) {
+          var sobj = Domain(0, "Select All", false);
+
+          //clist!.add(sobj);
+          setState(() {
+            clist!.add(sobj);
+          });
+          for (int i = 0; i < jsarray.length; i++) {
+            var jobj = jsarray[i];
+            var sobj = Domain(jobj['id'], jobj['name'], false);
+
+            // clist!.add(sobj);
+            setState(() {
+              clist!.add(sobj);
+            });
+          }
+          setDomain(clist);
+        } else {
+          snackbar = SnackBar(
+              content: Text(
+                "domain data is not available",
+                textAlign: TextAlign.center,
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        }
       }else{
         snackbar = SnackBar(
             content: Text(
@@ -125,6 +160,13 @@ class _State extends State<DuelModeMain> {
       }
     }else {
       print(response.statusCode);
+    }
+  }
+  setDomain(List<Domain>? clist) {
+    if (clist != null) {
+      setState(() {
+        databean = clist;
+      });
     }
   }
 
@@ -166,7 +208,7 @@ class _State extends State<DuelModeMain> {
       print(response.statusCode);
     }
   }
-  var seldomain="";
+
   var  seldomainName="";
   int i=0;
   onsuccess(createdata){
@@ -663,12 +705,33 @@ class _State extends State<DuelModeMain> {
                               log(domainnamelist.toString());
                               log("${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
                               log(_getTitle());
-                              if(domainnamelist!=null){
+                              seldomain = "";
+                              for (int i = 0; i < databean!.length; i++) {
+                                if (!databean![i].issel!) {
+                                  if (databean![i].id != 0) {
+                                    if (seldomain.isNotEmpty) {
+                                      setState(() {
+                                        seldomain = seldomain +
+                                            "," +
+                                            databean![i].id.toString();
+                                      });
+                                    } else {
+                                      setState(() {
+                                        seldomain = seldomain +
+                                            "" +
+                                            databean![i].id.toString();
+                                      });
+                                    }
+                                  }
+                                }
+                              }
+                              print(seldomain);
+                              if(seldomain.isNotEmpty){
                                 if(speedid!=null){
                                   if(difficultylevelid!=null){
 
 
-                                    createquiz(userid.toString(), difficultylevelid, speedid,"${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
+                                    createquiz(userid.toString(), difficultylevelid, speedid,seldomain);
                                   }
                                 }
 
@@ -695,8 +758,12 @@ class _State extends State<DuelModeMain> {
   }
   Widget domainwidget(domaindata){
    // List<bool> isChecked = List<bool>.filled(domaindata.length, false);
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+    return  databean == null
+        ? Container()
+        : Container(
+
+      margin:
+      const EdgeInsets.fromLTRB(10, 0, 10, 0),
       // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -707,178 +774,127 @@ class _State extends State<DuelModeMain> {
             width: 1,
           ),
         ),
-        child: domaindata == null || domaindata!.isEmpty
-            ? const Center(
-          child: CircularProgressIndicator(),
-        )
-            : SingleChildScrollView(
-          child: Column(
-            children: [
-              Card(
-                  child: CheckboxListTile(
-                      title: Text("Select All"),
-                      onChanged: (checked) {
-                        setState(
-                              () {
-                            _expanded7 =  checked!;
-
-                          },
-                        );
-                        if(_expanded7==true) {
-                          isChecked = List
-                              .generate(
-                              _len, (index) => true);
-                        }else{
-                          isChecked = List
-                              .generate(
-                              _len, (index) => false);
-                        }
-                        if(_expanded7==true) {
-                          for (int i =0;i<=domaindata['data'].length;i++){
-                            if(!domainnamelist.contains("${i+1}")){
-                              domainnamelist.add("${i+1}");
-                            } else {
-                              // if(domainnamelist.contains(domainname))
-                              domainnamelist.remove("${i+1}");
-                            }
-
-                          }
-
-
-                        }
-
-
-                      },
-                      value: _expanded7 )
-              ),
-              ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: domaindata == null
-                    ? 0
-                    : _expanded6==false?2:domaindata['data'].length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: [
-                      Card(
-                          child: CheckboxListTile(
-                              title: Text(domaindata['data']
-                              [index]['name']),
-                              onChanged: (checked) {
-                                setState(
-                                      () {
-                                        isChecked[index] = checked!;
-
-                                  },
-                                );
-                                if(isChecked[index]==true) {
-                                  domainname=domaindata['data']
-                                  [index]['id'];
-                                  domainid=domaindata['data'][index]['id'].toString();
-
-                                  setState(() {
-                                    domainname=domaindata['data']
-                                    [index]['id'];
-                                    domainid=domaindata['data'][index]['id'].toString();
-                                  });
-                                  if(!domainnamelist.contains(domainname))
-                                    {
-                                      domainnamelist.add(domainname);
-                                      domainid=domainid;
-                                    }else{
-                                    domainid=domainid+","+domainid;
-                                  }
-
-
-                                }
-                                else {
-
-                                  // if(domainnamelist.contains(domainname))
-                                  domainnamelist.remove(domainname);
-                                }
-
-
-                              },
-                              value: isChecked[index])
-                      ),
-                      //
-                    ],
-                  );
-                },
-              ),
-              _expanded6==false? Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      // if you need this
-                      side: BorderSide(
-                        color: Colors.grey.withOpacity(0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child:GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          _expanded6=true;
-
-                        });
-
-                      },
-                      child: Container(
-
-                        margin: EdgeInsets.all(4),
-                        child: Center(
-                            child:Image.asset(
-                              'assets/images/down_arrow.png',
-                              height: 20,width: 20,
-                              color: ColorConstants.txt,
-                            )
-                        ),
-                      ),
-                    ),
+        child: Column(
+          children: [
+            Container(
+              height:click==false?MediaQuery.of(context).size.height/6:MediaQuery.of(context).size.height/2,
+              child: ListView.builder(
+                  physics:
+                  const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: databean!.length,
+                  itemBuilder: (BuildContext context,
+                      int index) {
+                    return Card(
+                        child: domainrow(context,
+                            index, databean!.length));
+                  }),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  click = !click;
+                });
+              },
+              child: Container(
+                width: MediaQuery.of(context)
+                    .size
+                    .width,
+                child: Center(
+                  child: click == false
+                      ? Image.asset(
+                    'assets/images/down_arrow.png',
+                    height: 20,
+                    width: 20,
+                    color: ColorConstants.txt,
                   )
-              ):Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      // if you need this
-                      side: BorderSide(
-                        color: Colors.grey.withOpacity(0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child:GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          _expanded6=false;
-                        });
-
-
-                      },
-                      child: Container(
-
-                        margin: EdgeInsets.all(4),
-                        child: Center(
-                            child:Image.asset(
-                              'assets/images/down_arrow_small.png',
-                              height: 20,width: 20,
-                              color: ColorConstants.txt,
-                            )
-                        ),
-                      ),
-                    ),
-                  )
+                      : Image.asset(
+                    'assets/images/down_arrow_small.png',
+                    height: 20,
+                    width: 20,
+                    color: ColorConstants.txt,
+                  ),
+                ),
               ),
-
-
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+  Widget domainrow(BuildContext context, int index, int length) {
+    int ischecked = 0;
+    bool? issel = databean![0].issel;
+
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                databean![index].name!,
+                style: TextStyle(fontSize: 18),
+              ),
+              GestureDetector(
+                onTap: () {
+                  accept(index);
+                },
+                child: databean![index].issel == false
+                    ? Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/check_box_with_tick.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                )
+                    : Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/check_box.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+  void accept(int index) {
+    Domain? domain;
+    if (index == 0) {
+      bool? issel = !databean![0].issel!;
+      for (int i = 0; i < databean!.length; i++) {
+        domain = databean![i];
+        domain.issel = issel;
+        databean![i] = domain;
+      }
+      updateData(databean!.toList());
+    } else {
+      Domain domain = getItem(index);
+      domain.issel = !domain.issel!;
+      databean![index] = domain;
+      updateData(databean!.toList());
+    }
+  }
+
+  void updateData(List<Domain> list) {
+    setState(() {
+      databean!.clear();
+      databean!.addAll(list);
+    });
+
+    notifyListeners(); // To rebuild the Widget
+  }
+
+  Domain getItem(int pos) {
+    return databean!.elementAt(pos);
   }
 }

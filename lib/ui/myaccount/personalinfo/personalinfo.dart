@@ -75,7 +75,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
-     showLoaderDialog(context);
+
     getProfile(userid.toString());
   }
   showLoaderDialog(BuildContext context) {
@@ -108,8 +108,9 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       var jsonResponse =
       convert.jsonDecode(response.body); //store response as string
       setState(() {
+        citydata = response.body;
         citylength = getCityResponseFromJson(citydata!);
-        // just printed length of data
+        jsonDecode(citydata!)['cities'];
       });
       var venam = jsonDecode(citydata!)['cities'].toString();
       var venamid = jsonDecode(citydata!)['cities'][4]['id'].toString();
@@ -128,15 +129,16 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     if (response.statusCode == 200) {
       datacoun = response.body; //store response as string
       setState(() {
+        datacoun = response.body;
         countlength = getCountryListFromJson(
             datacoun!); //get all the data from json string superheros
-        // just printed length of data
+        jsonDecode(datacoun!)['countries'];
       });
       //getState(GetStateResponse);
       var venam = jsonDecode(datacoun!)['countries'].toString();
       var venamid = jsonDecode(datacoun!)['countries'][4]['id'].toString();
       print(venam);
-      print(countlength.length);
+
       print(getCountryListFromJson(datacoun!).countries.toString());
       print(venamid);
     } else {
@@ -150,9 +152,10 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     if (response.statusCode == 200) {
       datastate = response.body; //store response as string
       setState(() {
+        datastate = response.body;
         statelength = getStateResponseFromJson(
             datastate!); //get all the data from json string superheros
-        // just printed length of data
+        jsonDecode(datastate!)['states'];
       });
       var venam = jsonDecode(datastate!)['states'].toString();
       var venamid = jsonDecode(datastate!)['states'][4]['id'].toString();
@@ -165,7 +168,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     }
   }
   getProfile(String userid) async {
-    Navigator.pop(context);
+
 
       http.Response response =
       await http.get(
@@ -175,9 +178,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         data = response.body;
         //final responseJson = json.decode(response.body);//store response as string
         setState(() {
+          data = response.body;
           prodata = jsonDecode(
               data!)['data']; //get all the data from json string superheros
           print(prodata.length);
+          getCountry(GetCountryList);
           onsuccess(getProfileResponseFromJson(data!));
         });
 
@@ -275,20 +280,27 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
 
 
         });
-    print(response.request);
-    print(utf8.decode(response.bodyBytes));
-    String responseapi = response.body.toString().replaceAll("\n","");
-    var _data = convert.jsonDecode(responseapi);
-    print(_data);
+
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      data = response.body;
       Navigator.pop(context);
-      var jsonResponse = convert.jsonDecode(response.body);
-      showLoaderDialog(context);
-      getProfile(userid.toString());
-      //store response as string
-      onupdate();
+      data = response.body;
+      if(jsonResponse['status']==200){
+
+
+
+        getProfile(userid.toString());
+        //store response as string
+        onupdate();
+      }else{
+        snackBar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
     } else {
+      Navigator.pop(context);
       print("profileupdate:"+response.statusCode.toString());
     }
   }
@@ -582,7 +594,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                           parent: BouncingScrollPhysics()),
                                       shrinkWrap: true,
                                       itemCount:
-                                      jsonDecode(datacoun!)['countries'].length,
+                                      jsonDecode(datacoun!)[
+                                      'countries'].length,
                                       itemBuilder: (BuildContext context, int index) {
                                         return Column(
                                           children: [

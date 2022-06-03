@@ -142,6 +142,15 @@ class Data {
   String? get mediaType => _mediaType;
   List<String>? get media => _media;
 
+  set isSaved(int? value) {
+    _isSaved=value;
+
+  }
+  set savepost(int? value) {
+    _savepost=value;
+
+  }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;

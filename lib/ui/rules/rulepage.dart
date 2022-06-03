@@ -1,11 +1,12 @@
-import 'dart:async';
+
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
+
 
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ import '../../../utils/StringConstants.dart';
 import '../mcq/mcq.dart';
 
 
+// ignore: must_be_immutable
 class RulesPage extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
@@ -34,7 +36,7 @@ class RulesPage extends StatefulWidget {
 }
 
 class _State extends State<RulesPage> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
   String? data;
   var ruledata;
@@ -98,12 +100,12 @@ class _State extends State<RulesPage> {
     userdata();
   }
 
-  void getClassicRule(String quiz_type_id, String quiz_speed_id) async {
+  void getClassicRule(String quizTypeId, String quizSpeedId) async {
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"quiz_rules"),
         body: {
-          'quiz_type_id': quiz_type_id.toString(),
-          'quiz_speed_id': quiz_speed_id.toString()
+          'quiz_type_id': quizTypeId.toString(),
+          'quiz_speed_id': quizSpeedId.toString()
         });
     if (response.statusCode == 200) {
       data = response.body; //store response as string
@@ -118,12 +120,12 @@ class _State extends State<RulesPage> {
       print(response.statusCode);
     }
   }
-  void getDualRule(String quizid) async {
+  void getDualRule(String quizId) async {
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"duel_rules"),
         body: {
           'user_id': userid.toString(),
-          'id': quizid.toString(),
+          'id': quizId.toString(),
         });
     if (response.statusCode == 200) {
       data = response.body; //store response as string
@@ -186,7 +188,7 @@ class _State extends State<RulesPage> {
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>QuizPage()));
+        builder: (BuildContext context) =>const QuizPage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -199,7 +201,7 @@ class _State extends State<RulesPage> {
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -210,7 +212,7 @@ class _State extends State<RulesPage> {
         child:
 
           Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children:<Widget> [
               if( ruledata==null)
@@ -230,11 +232,11 @@ class _State extends State<RulesPage> {
                     Container(
                       height: 300,
                       width: 300,
-                      margin: EdgeInsets.only(top: 40),
+                      margin: const EdgeInsets.only(top: 40),
                       child: Lottie.asset("assets/lottie/lottieanim.json"),
                     ),
                     Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text("LOADING",
+                      child: const Text("LOADING",
                         style: TextStyle(fontSize: 24, color:Colors.black),
                         textAlign: TextAlign.center,
                       ),
@@ -252,7 +254,7 @@ class _State extends State<RulesPage> {
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: Text("${title}",
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
@@ -263,8 +265,8 @@ class _State extends State<RulesPage> {
 
               Container(
                 child: TweenAnimationBuilder<Duration>(
-                    duration: Duration(seconds: 30),
-                    tween: Tween(begin: Duration(seconds: 30), end: Duration.zero),
+                    duration:  const Duration(seconds: kDebugMode?5:30),
+                    tween: Tween(begin: const Duration(seconds:  kDebugMode?5:30), end: Duration.zero),
                     onEnd: () {
                       Navigator.pushReplacement(
                           context,
@@ -282,11 +284,11 @@ class _State extends State<RulesPage> {
                           elevation: 2,
                           child: Container(
                               height: 40,width: 100,
-                              padding:  EdgeInsets.all(5),
+                              padding:  const EdgeInsets.all(5),
                               alignment: Alignment.center,
                               child: Text('${minutes}:${seconds}',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: ColorConstants.txt,
                                       fontWeight: FontWeight.bold,
                                       fontSize:14))),
@@ -309,7 +311,7 @@ class _State extends State<RulesPage> {
                         ? 0
                         : ruledata.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container( margin:  EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      return Container( margin:  const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Text("${index+1})""${jsonDecode(data!)['data'][index]}"));
                     },
                   ),
@@ -335,7 +337,7 @@ class _State extends State<RulesPage> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ClassicQuizMain()));
+                                builder: (context) => const ClassicQuizMain()));
                       },
                       child: const Text(
                         "GO BACK",

@@ -75,6 +75,8 @@ dependencies:
   provider:
   lottie:
   readmore:
+  photo_view:
+  add_2_calendar:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -27,6 +27,7 @@ import '../../modal/getuserleagueresponse/GetUserLeagueResponse.dart';
 import '../../utils/StringConstants.dart';
 import '../duelmode/duelmodeinvite/invitepage.dart';
 import '../duelmode/duelmoderesult/duelmode_result.dart';
+import '../myaccount/yourpage/yourpage.dart';
 import '../quizroom/waitroom/waitroom.dart';
 
 class QuizPage extends StatefulWidget{
@@ -332,15 +333,17 @@ var datalink;
               ));
         },
         child: Container(
+          padding: EdgeInsets.all(4),
           height: 150,
           width: 150,
-          color: ColorConstants.red200,
+          color: Colors.black26,
 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(child: Text("CLASSIC",style: TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
-              Container(child: Text("you are your own standard!",style: TextStyle(color: Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
+              Container(child: Text("CLASSIC",style: TextStyle(color: ColorConstants.heading,fontSize: 18,fontFamily: 'Nunito'),textAlign: TextAlign.center,)),
+              Container(
+                  child: Text("you are your own standard!",style: TextStyle(color: ColorConstants.heading,fontSize: 12,fontFamily: 'Nunito'),textAlign: TextAlign.center,)),
 
             ],
           ),
@@ -397,13 +400,13 @@ var datalink;
         child: Container(
           height: 150,
           width: 150,
-          color: Colors.black26,
+          color: ColorConstants.red200,
 
           child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(child: Text("TOURNAMENT",style: TextStyle(color:ColorConstants.txt,fontSize: 20),textAlign: TextAlign.center,)),
-              Container(child: Text("The leagues beckon!",style: TextStyle(color:ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,)),
+              Container(child: Text("TOURNAMENT",style: TextStyle(color:Colors.white,fontSize: 20),textAlign: TextAlign.center,)),
+              Container(child: Text("The leagues beckon!",style: TextStyle(color:Colors.white,fontSize: 12),textAlign: TextAlign.center,)),
 
             ],
           ),
@@ -422,17 +425,14 @@ var datalink;
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       // if you need this
-                      side: BorderSide(
-                        color: Colors.grey.withOpacity(0.3),
-                        width: 1,
-                      ),
+
                     ),
                     child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child:userLeagueR!.data!.goalsummery==null?Container(child: Column(
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Text("Your Activity Summary",
+                              child: Text("YOUR OVERALL PERFORMANCE",
                                 style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
                             ),
 
@@ -458,7 +458,7 @@ var datalink;
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Text("Your Activity Summary",
+                              child: Text("YOUR OVERALL PERFORMANCE",
                                 style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
                             ),
 
@@ -502,6 +502,34 @@ var datalink;
                     ),
                   ),
                 ):Container(),
+                Container(
+                  child: Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        fixedSize: const Size(140, 40),
+                        //////// HERE
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  YourPage()));
+                      },
+                      child: const Text(
+                        "TO MY PAGE",
+                        style: TextStyle(
+                            color: Colors.black, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
               ]
           ),
         ),

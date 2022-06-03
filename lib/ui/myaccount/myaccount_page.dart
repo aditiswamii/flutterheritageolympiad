@@ -81,16 +81,17 @@ class _AccountPageState extends State<MyAccountPage> {
     if (response.statusCode == 200) {
      // Navigator.pop(context);
       data = response.body;
-      //final responseJson = json.decode(response.body);//store response as string
+      prodata = jsonDecode(
+          data!)['data'];
       setState(() {
         prodata = jsonDecode(
             data!)['data']; //get all the data from json string superheros
-        print(prodata.length);
-        print(prodata.toString());
-        print("userdata"+prodata['user'].toString());
+
         onsuccess(prodata['user']);
       });
-
+      print(prodata.length);
+      print(prodata.toString());
+      print("userdata"+prodata['user'].toString());
       var venam = jsonDecode(data!)['data'];
       print(venam);
     } else {

@@ -83,12 +83,12 @@ class _FilterPageState extends State<FilterPage> {
   void getDomains(String theme_id) async {
     http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL + "feed_domains?theme_id=$theme_id"));
-    showLoaderDialog(context);
+   // showLoaderDialog(context);
     if (response.statusCode == 200) {
       domainname="";
       domainnamelist.clear();
       isChecked.every((element) => false);
-      Navigator.pop(context);
+     // Navigator.pop(context);
       data = response.body; //store response as string
       setState(() {
         domains_length = jsonDecode(data!)['data'];
@@ -111,29 +111,29 @@ class _FilterPageState extends State<FilterPage> {
       // var text = domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
       // log(text);
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       print(response.statusCode);
     }
   }
 
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   onsuccessfeed() {}
   @override
@@ -156,46 +156,67 @@ class _FilterPageState extends State<FilterPage> {
     return true;
   }
 
-  // calTheme() async{
-  //   themes = "";
-  //   if (intangible == 1) {
-  //     setState(() {
-  //       themes += "1";
-  //     });
-  //     print(themes);
-  //     getDomains(themes);
-  //   }
-  //   if (natural == 1) {
-  //     if (themes.isNotEmpty) {
-  //       setState(() {
-  //         themes += ",2";
-  //       });
-  //
-  //     } else {
-  //       setState(() {
-  //         themes += "2";
-  //       });
-  //       themes += "2";
-  //     }
-  //     print(themes);
-  //     getDomains(themes);
-  //   }
-  //   if (tangible == 1) {
-  //     if (themes.isNotEmpty) {
-  //       setState(() {
-  //         themes += ",3";
-  //       });
-  //       themes += ",3";
-  //     } else {
-  //       setState(() {
-  //         themes += "3";
-  //       });
-  //       themes += "3";
-  //     }
-  //     print(themes);
-  //     getDomains(themes);
-  //   }
-  // }
+  calTheme() async{
+    themes = "";
+    if (intangible == 1) {
+      if(themes.contains("1")){
+        setState(() {
+          themes += "";
+        });
+
+      }else{
+        setState(() {
+          themes += "1";
+        });
+      }
+
+      print(themes);
+      getDomains(themes);
+    }
+    if (natural == 1) {
+      if (themes.isNotEmpty) {
+        if(themes.contains("2")){
+          setState(() {
+            themes +="";
+          });
+
+        }else{
+          setState(() {
+            themes += ",2";
+          });
+
+        }
+        setState(() {
+          themes += ",2";
+        });
+
+      } else {
+
+        setState(() {
+
+          themes += "2";
+        });
+        themes += "2";
+      }
+      print(themes);
+      getDomains(themes);
+    }
+    if (tangible == 1) {
+      if (themes.isNotEmpty) {
+        setState(() {
+          themes += ",3";
+        });
+        themes += ",3";
+      } else {
+        setState(() {
+          themes += "3";
+        });
+        themes += "3";
+      }
+      print(themes);
+      getDomains(themes);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -269,13 +290,13 @@ class _FilterPageState extends State<FilterPage> {
                                       tangible = 1;
                                     });
                                   }
-                                  setState(() {
-                                    intangible = 0;
-                                    natural = 0;
-                                    themes = "1";
-                                  });
-                                  getDomains("$themes");
-                                  // calTheme();
+                                  // setState(() {
+                                  //   intangible = 0;
+                                  //   natural = 0;
+                                  //   themes = "1";
+                                  // });
+                                  // getDomains("$themes");
+                                   calTheme();
                                 },
                                 child: tangible == 1
                                     ? Image.asset("assets/images/tangible.png",
@@ -316,13 +337,13 @@ class _FilterPageState extends State<FilterPage> {
                                       natural = 1;
                                     });
                                   }
-                                  setState(() {
-                                    intangible = 0;
-                                    tangible = 0;
-                                    themes = "2";
-                                  });
-                                  getDomains("$themes");
-                                  // calTheme();
+                                  // setState(() {
+                                  //   intangible = 0;
+                                  //   tangible = 0;
+                                  //   themes = "2";
+                                  // });
+                                 // getDomains("$themes");
+                                   calTheme();
                                   // getDomains(themes);
                                 },
                                 child: natural == 1
@@ -363,14 +384,14 @@ class _FilterPageState extends State<FilterPage> {
                                       intangible = 1;
                                     });
                                   }
-                                  setState(() {
-                                    natural = 0;
-                                    tangible = 0;
-                                    themes = "3";
-                                  });
-
-                                  getDomains("$themes");
-                                  // getDomains(themes);
+                                  // setState(() {
+                                  //   natural = 0;
+                                  //   tangible = 0;
+                                  //   themes = "3";
+                                  // });
+                                  //
+                                  // getDomains("$themes");
+                                calTheme();
                                 },
                                 child: intangible == 1
                                     ? Image.asset(
