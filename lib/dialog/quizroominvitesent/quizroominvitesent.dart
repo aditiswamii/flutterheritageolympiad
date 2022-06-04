@@ -12,8 +12,9 @@ class DialogQuizroomInviteSent extends StatefulWidget{
   var flagicon;
   var status;
   var request;
+  var quizid;
   DialogQuizroomInviteSent({Key? key,required this.name,required this.id,required this.agegroup,
-    required this.flagicon,required this.image,required this.request,required this.status}) : super(key: key);
+    required this.flagicon,required this.image,required this.request,required this.status,required this.quizid}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -30,7 +31,7 @@ class _State extends State<DialogQuizroomInviteSent> with WidgetsBindingObserver
             // Navigator.pop(context);
           },
           child: Container(
-              height: 230,
+              height: 300,
               width: 250,
               alignment: Alignment.center,
               margin: EdgeInsets.fromLTRB(20,10,20,10),
@@ -86,12 +87,12 @@ class _State extends State<DialogQuizroomInviteSent> with WidgetsBindingObserver
                       shape: RoundedRectangleBorder(
                           borderRadius:
                           BorderRadius.circular(30.0)),
-                      fixedSize: const Size(130, 30),
+                      fixedSize: const Size(170, 30),
                       //////// HERE
                     ),
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.id.toString(),)));
+                          MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.quizid.toString(),)));
 
                     },
                     child: const Text(

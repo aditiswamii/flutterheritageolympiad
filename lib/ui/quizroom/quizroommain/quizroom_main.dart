@@ -15,6 +15,7 @@ import '../../../modal/domains/GetDomainsResponse.dart';
 import '../../../utils/StringConstants.dart';
 import '../../quiz/let_quiz.dart';
 import '../quizroominvite/quizroominvitepage.dart';
+
 class QuizRoomMain extends StatefulWidget {
   var type;
  QuizRoomMain({Key? key,required this.type}) : super(key: key);
@@ -24,7 +25,7 @@ class QuizRoomMain extends StatefulWidget {
 }
 
 class _State extends State<QuizRoomMain> with ChangeNotifier{
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   // late ClassicQuizPresenter _presenter;
   var data;
   var domaindata;
@@ -71,11 +72,9 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
   @override
   void initState() {
     super.initState();
-    // _locations ;
     BackButtonInterceptor.add(myInterceptor);
-    // _presenter = ClassicQuizPresenter(this);
     userdata();
-    getDomains();
+
   }
   @override
   void dispose() {
@@ -96,14 +95,14 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
+    getDomains();
   }
   void getDomains() async {
     http.Response response =
     await http.get(Uri.parse(StringConstants.BASE_URL+"domains"));
-
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       data = response.body;
-      var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
         //store response as string
         setState(() {
@@ -199,6 +198,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
 
   var  seldomainName="";
   int i=0;
+
   onsuccess(createdata){
 
 

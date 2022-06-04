@@ -29,8 +29,9 @@ class QuizroomLink extends StatefulWidget {
   var type;
   var seldomain;
   var link;
+
  QuizroomLink({Key? key,required this.quizspeedid,required this.quiztypeid,
-   required this.quizid,required this.type,required this.difficultylevelid,required seldomain,required this.link}) : super(key: key);
+   required this.quizid,required this.type,required this.difficultylevelid,required this.link,required this.seldomain}) : super(key: key);
 
   @override
   _State createState() => _State();

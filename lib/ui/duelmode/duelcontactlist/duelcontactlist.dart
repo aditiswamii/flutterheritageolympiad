@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../homepage/homepage.dart';
 import '../../myaccount/contactpage/contactpage.dart';
+import '../../rules/rulepage.dart';
 import '../duelmodeinvite/invitepage.dart';
 
 
@@ -229,8 +230,15 @@ class _State extends State<DuelModeSelectPlayer> {
       print(response.statusCode);
     }
   }
-  ondualstatus(String name,String image)
+  ondualstatus(String? name,String? image)
   {
+    if(name!=null){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: widget.quizid, type: "2", tourid: 0, sessionid: 0 ,)));
+
+    }
 
   }
   @override
@@ -395,13 +403,13 @@ class _State extends State<DuelModeSelectPlayer> {
                             child: Column(
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       if(contactdata[index]['image']!="")
                                         Container(
-                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          padding: EdgeInsets.all(5),
                                           height: 90,
                                           width: 90,
                                           child:
@@ -414,7 +422,7 @@ class _State extends State<DuelModeSelectPlayer> {
                                         ),
                                       if(contactdata[index]['image']=="")
                                         Container(
-                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          padding: EdgeInsets.all(5),
                                           height: 90,
                                           width: 90,
                                           child:
@@ -426,7 +434,7 @@ class _State extends State<DuelModeSelectPlayer> {
                                         ),
                                       // Image.asset("assets/profile.png",height: 100,width: 100,),
                                       Container(
-                                        width: 150,
+                                        width: 170,
                                         margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
                                         child: Column(
                                           children: [
@@ -437,8 +445,8 @@ class _State extends State<DuelModeSelectPlayer> {
                                                 textAlign: TextAlign.center,),
                                             ),
                                             Container(
-                                              //height: 20,
-                                              width: 150,
+                                              height: 20,
+                                              width: 170,
                                               child: Row(
                                                 children: [
                                                   if(contactdata[index]['age_group']!=null)
@@ -446,7 +454,8 @@ class _State extends State<DuelModeSelectPlayer> {
                                                         color: ColorConstants.txt,
                                                         fontSize: 14),
                                                       textAlign: TextAlign.center,),
-                                                  VerticalDivider(color: Colors.black),
+                                                  Container(  margin: EdgeInsets.only(left:5,right: 5),
+                                                      child: VerticalDivider(color: Colors.black,thickness: 1,width: 1,)),
                                                   // Text("|"),
                                                   Row(
 
@@ -466,12 +475,13 @@ class _State extends State<DuelModeSelectPlayer> {
                                                             )
                                                         ),
                                                       if(contactdata[index]['country']!=null)
-                                                        Container(margin: EdgeInsets.only(left:5),
-                                                          width: 50,
+                                                        Container(
+                                                          margin: EdgeInsets.only(left:5),
+                                                          width: 70,
                                                           child: Text("${contactdata[index]['country']}",style: TextStyle(
                                                               color: ColorConstants.txt,
                                                               fontSize: 14),
-                                                            textAlign: TextAlign.center,),
+                                                            textAlign: TextAlign.left,),
                                                         ),
                                                     ],
                                                   ),
@@ -480,6 +490,7 @@ class _State extends State<DuelModeSelectPlayer> {
                                             ),
                                             if(contactdata[index]['status']!=null)
                                               Container(
+                                                width: 170,
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   "${contactdata[index]['status']}",

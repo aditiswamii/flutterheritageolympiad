@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
@@ -187,7 +188,7 @@ var datalink;
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
@@ -197,7 +198,9 @@ var datalink;
           print(datalink.length);
         });
         roomlinkshare(datalink.toString());
+
       } else if(jsonResponse['status'] == 201 || jsonResponse['status'] == 204){
+
         createnewroom();
       }
       else {
@@ -216,8 +219,10 @@ var datalink;
 
   }
   roomlinkshare(String link){
+    log(link);
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>QuizroomInvite(seldomain: [], quizspeedid: "", type: "", quiztypeid: "", quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
+        builder: (BuildContext context) =>QuizroomInvite(seldomain: [], quizspeedid: "", type: "", quiztypeid: "",
+          quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
   }
   createnewroom(){
     Navigator.pushReplacement(
@@ -305,16 +310,17 @@ var datalink;
                 ),
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: const Text("LET'S QUIZ,",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: const Text("LET'S QUIZ,",style: TextStyle(fontSize: 22,color: ColorConstants.txt))),
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
+                    child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",
+                        style: TextStyle(fontSize: 18,color: ColorConstants.txt))),
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 15,color: ColorConstants.txt))),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: const Text("Leagues are available only in Tournament\nmode.",style: TextStyle(fontSize: 14,color: ColorConstants.txt))),
 
     Container(
     child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
@@ -352,9 +358,9 @@ var datalink;
       ),
       GestureDetector(
         onTap: (){
-          checkquiz(userid.toString(), "2");
+          checkquiz(userid.toString(), "duel");
         },
-        child: Container(
+        child: Container( padding: EdgeInsets.all(4),
           height: 150,
           width: 150,
           color:ColorConstants.yellow200,
@@ -372,9 +378,9 @@ var datalink;
       ),
       GestureDetector(
         onTap: () {
-          checkquizoom(userid.toString(), "3");
+          checkquizoom(userid.toString(), "quizroom");
         },
-        child: Container(
+        child: Container( padding: EdgeInsets.all(4),
           height: 150,
           width: 150,
           color: ColorConstants.blue200,
@@ -397,7 +403,7 @@ var datalink;
               MaterialPageRoute(
                   builder: (context) =>  TournamentPage()));
         },
-        child: Container(
+        child: Container( padding: EdgeInsets.all(4),
           height: 150,
           width: 150,
           color: ColorConstants.red200,

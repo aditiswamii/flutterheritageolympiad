@@ -60,7 +60,8 @@ class _QuizroomInviteState extends State<QuizroomInvite> {
   var speed;
   var difficulty;
   var seldomain;
-
+  var roomid;
+  int select=1;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -73,7 +74,8 @@ class _QuizroomInviteState extends State<QuizroomInvite> {
        speed=widget.quizspeedid.toString();
        difficulty=widget.difficultylevelid.toString();
        seldomain=widget.seldomain.toString();
-
+       roomid=widget.quizid.toString();
+       link=widget.link;
      });
      log(speed.toString());
      log(widget.typeq.toString());
@@ -142,13 +144,11 @@ var roomdata;
       Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
-
-        //store response as string
         setState(() {
           roomdata = jsonResponse; //get all the data from json string superheros
-          // print("domiaindata: "+gendata['data']['link'].toString()); // just printed length of data
+
         });
-        setroomlinkdetail(getRoomLinkdetailsResponseFromJson(roomdata!));
+        setroomlinkdetail(getRoomLinkdetailsResponseFromJson(data!));
       } else {
 
         snackBar = SnackBar(
@@ -163,16 +163,22 @@ var roomdata;
       print(response.statusCode);
     }
   }
-  setroomlinkdetail(GetRoomLinkdetailsResponse obj){
-   if(obj.data!=null){
-     setState(() {
-       seldomain=obj.data!.domain.toString();
-       difficulty=obj.data!.difficulty.toString();
-       speed=obj.data!.quizSpeed.toString();
-       link=obj.data!.link.toString();
-     });
-
-   }
+  setroomlinkdetail(GetRoomLinkdetailsResponse? obj) {
+    if (obj != null) {
+      if (obj.data != null) {
+        setState(() {
+          seldomain = obj.data!.domain.toString().replaceAll(",", "\n");
+          difficulty = obj.data!.difficulty.toString();
+          speed = obj.data!.quizSpeed.toString();
+          link = obj.data!.link.toString();
+          roomid=obj.data!.quizRoomId.toString();
+        });
+      }
+      log("linkresponse: "+seldomain);
+      log("linkresponse: "+difficulty);
+      log("linkresponse: "+speed);
+      log("linkresponse: "+link);
+    }
   }
 
   showLoaderDialog(BuildContext context) {
@@ -296,65 +302,96 @@ var roomdata;
               Container(
                 width: 350,
                 alignment: Alignment.center,
-                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 30),
                 child:Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+
                       height: 150,
                       width: 150,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                           shape: BoxShape.rectangle,
-                          color: ColorConstants.lightgrey200
+                          color: select==1?ColorConstants.verdigris:ColorConstants.lightgrey200
                       ),
                       child: GestureDetector(
                           onTap: () {
+                            setState(() {
+                              select=1;
+                            });
+
                             //ColorConstants.myfeed;
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  QuizRoomContactList(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link,)));
-                          },
-                          child: Text("INVITE",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+                              },
+                          child: Center(child: Text("INVITE",style: TextStyle(color:select==1?Colors.white: Colors.black,fontSize: 20),textAlign: TextAlign.center,))),
                     ),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+
                       height: 150,
                       width: 150,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
-                          color: ColorConstants.lightgrey200
+                          color: select==2?ColorConstants.verdigris:ColorConstants.lightgrey200
                       ),
                       child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  QuizroomLink(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link,)));
-                            // Navigator.pushReplacement(
+                            setState(() {
+                              select=2;
+                            });
+
+                             // Navigator.pushReplacement(
                             //     context,
                             //     MaterialPageRoute(
                             //         builder: (context) => const AlmostTherePage()));
                           },
-                          child: Text("GET A LINK",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+                          child: Center(child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,))),
                     ),
                   ],
+                ),
+              ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.quizid.toString(),)));
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: Center(
+                    child: Card(
+                      color: ColorConstants.stage5color,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        // if you need this
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: const Text(
+                          "RETURN TO WAITROOM",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  ),
+
                 ),
               ),
               Container(
                 child: Text(
                   "QUIZ SUMMARY",
                   style: TextStyle(
-                      color: ColorConstants.txt, fontSize: 15,fontWeight: FontWeight.w600),
+                      color: ColorConstants.txt, fontSize: 15),
                 ),
               ),
+              Divider(thickness: 1,height: 1,color: Colors.black,),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 decoration: const BoxDecoration(color: Colors.white),
@@ -372,47 +409,58 @@ var roomdata;
                     children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Row(
-                             children: [
-                            Text(
-                              "DIFFICULTY: ",
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15,fontWeight: FontWeight.w600),
-                            ),
+                        child: Column(
+                          children: [
+                            Row(
+                                 children: [
+                                Text(
+                                  "DIFFICULTY: ",
+                                  style: TextStyle(
+                                      color: ColorConstants.txt,
+                                      fontSize: 15),
+                                ),
 
-                           Text(
-                              widget.difficultylevelid.toString(),
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15),
-                            ),
+                               Text(
+                                  difficulty.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15),
+                                ),
 
+                              ],
+                            ),
+                            Divider(thickness: 1,height: 1,color: Colors.black,)
                           ],
                         ),
 
                       ),
                       Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        child: Row(
-
+                        child: Column(
                           children: [
-                            Text(
-                              "SPEED: ",
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15,fontWeight: FontWeight.w600),
+                            Row(
+
+                              children: [
+                                Text(
+                                  "SPEED: ",
+                                  style: TextStyle(
+                                      color: ColorConstants.txt,
+                                      fontSize: 15),
+                                ),
+                                 Text(
+                                 speed.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15),
+                                ),
+                              ],
                             ),
-                             Text(
-                              widget.quizspeedid.toString(),
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15),
-                            ),
+                            Divider(thickness: 1,height: 1,color: Colors.black,)
                           ],
                         ),
 
                       ),
+
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -424,15 +472,15 @@ var roomdata;
                                 "DOMAINS SELECTED:",textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 15,fontWeight: FontWeight.w600),
+                                    fontSize: 15),
                               ),
                             ),
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  widget.seldomain.toString(),
+                                 seldomain.toString(),
                                   style: TextStyle(
-                                      color: ColorConstants.txt,
+                                      color: Colors.black,
                                       fontSize: 15),
                                 ),
                               ),
@@ -446,28 +494,11 @@ var roomdata;
                 ),
               ),
 
-              GestureDetector(
-                onTap: (){
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.quizid.toString(),)));
-                },
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: Center(
-                    child: Text(
-                      "RETURN TO WAITROOM",
-                      style: TextStyle(
-                          color: ColorConstants.txt,
-                          fontSize: 15,fontWeight: FontWeight.w600),
-                    ),
-                  ),
 
-                ),
-              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -490,6 +521,43 @@ var roomdata;
                         "GO BACK",
                         style: TextStyle(
                             color: ColorConstants.lightgrey200, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: ColorConstants.verdigris,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+                      onPressed: () {
+                        log(seldomain);
+                       if(select==1){
+                         Navigator.pushReplacement(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) =>  QuizRoomContactList(type: widget.type, quizid: roomid, difficultylevelid: difficulty,
+                                   quiztypeid: widget.quiztypeid, seldomain: seldomain, quizspeedid: speed, link:link,)));
+
+                       }else{
+                         Navigator.pushReplacement(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) =>  QuizroomLink(type: widget.type, quizid: roomid, difficultylevelid:difficulty,
+                                   quiztypeid: widget.quiztypeid, seldomain: seldomain, quizspeedid: speed, link: link,)));
+
+                       }
+
+                      },
+                      child: const Text(
+                        "LET'S GO!",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),

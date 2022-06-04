@@ -72,12 +72,12 @@ class _State extends State<Waitroom> {
         body: {'room_id': roomid.toString(),
           'user_id': id.toString(),
         });
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("deleteuserapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
@@ -92,7 +92,7 @@ class _State extends State<Waitroom> {
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -102,12 +102,12 @@ class _State extends State<Waitroom> {
         Uri.parse(StringConstants.BASE_URL + "start_room"),
         body: {'room_id': roomid.toString()
         });
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("startroomapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
@@ -122,7 +122,7 @@ class _State extends State<Waitroom> {
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -140,12 +140,12 @@ class _State extends State<Waitroom> {
           'room_id': roomid.toString(),
           'user_id': id.toString(),
         });
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("leaveroomapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
             onleaveitem();
@@ -164,7 +164,7 @@ class _State extends State<Waitroom> {
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -179,12 +179,12 @@ class _State extends State<Waitroom> {
         Uri.parse(StringConstants.BASE_URL + "disband_quiz"),
         body: {'quiz_room_id': roomid.toString()
         });
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("disband_quizapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
          ondisband();
@@ -199,7 +199,7 @@ class _State extends State<Waitroom> {
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -215,12 +215,12 @@ class _State extends State<Waitroom> {
         body: {'room_id': roomid.toString(),
           'user_id': userid.toString(),
         });
-    showLoaderDialog(context);
+
 
     print("roomstatusapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       if (jsonResponse['status'] == 200) {
         var roomstatusata=jsonResponse['data'];
@@ -238,7 +238,7 @@ class _State extends State<Waitroom> {
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -260,7 +260,7 @@ class _State extends State<Waitroom> {
     }
     final stream =
     Stream<int>.periodic(const Duration(
-        seconds: 1), (count) => count).take(5);
+        seconds: 1), (count) => count).take(10);
 
     stream.forEach(getroomstatus(widget.quizid.toString(),userid.toString()));
   }
@@ -268,15 +268,15 @@ class _State extends State<Waitroom> {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "room_user"),
         body: {'room_id': roomid.toString()});
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("getWaitRoomapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
-        //final responseJson = json.decode(response.body);//store response as string
+
         roomdata =
             jsonResponse['data']; //get all the data from json string superheros
         print("length" + roomdata.length.toString());
@@ -292,7 +292,7 @@ class _State extends State<Waitroom> {
         log(jsonResponse['message']);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -315,24 +315,24 @@ var creatorid =0;
     stream.forEach(getWaitRoom(widget.quizid.toString()));
   }
 
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -373,7 +373,7 @@ var creatorid =0;
       body: getroomuserlist == null?
       Container(
         height: MediaQuery.of(context).size.height,
-        child: CircularProgressIndicator(color: Colors.white,),):  Container(
+        child: Center(child: CircularProgressIndicator(color: Colors.white,)),):  Container(
         child: Container(
           child: ListView(children: [
             Container(
@@ -676,10 +676,10 @@ var creatorid =0;
                             //////// HERE
                           ),
                           onPressed: () {
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => ClassicQuizMain()));
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => QuizPage()));
                           },
                           child: const Text(
                             "GO BACK",
@@ -705,7 +705,7 @@ var creatorid =0;
                             //////// HERE
                           ),
                           onPressed: () {
-                                 if(addeduser>=1){
+                                 if(addeduser>=2){
                                    AlertDialog alert=AlertDialog(
                                      shape: RoundedRectangleBorder(
                                          borderRadius: BorderRadius.all(Radius.circular(32.0))),

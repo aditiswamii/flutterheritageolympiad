@@ -196,16 +196,16 @@ class _State extends State<QuizRoomContactList> {
               BorderRadius.circular(
                   20.0)), //this right here
           content: Container(
-              height: 230,
+              height:300,
               width: 250,
               alignment: Alignment.center,
               child: DialogQuizroomInviteSent(name: cont!.name, id: cont!.id, status: cont!.status, agegroup: cont!.ageGroup,
-                image: cont!.image, flagicon: cont!.flagIcon, request: cont!.request,)));
+                image: cont!.image, flagicon: cont!.flagIcon, request: cont!.request, quizid: widget.quizid.toString(),)));
       showDialog(
           context: context,
           builder: (BuildContext context){
             Future.delayed(
-              Duration(seconds: 2),
+              Duration(seconds: 5),
                   () {
                 Navigator.of(context).pop(true);
               },
@@ -378,13 +378,13 @@ class _State extends State<QuizRoomContactList> {
                             child: Column(
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       if(contactdata[index]['image']!="")
                                         Container(
-                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          padding: EdgeInsets.all(5),
                                           height: 90,
                                           width: 90,
                                           child:
@@ -397,7 +397,7 @@ class _State extends State<QuizRoomContactList> {
                                         ),
                                       if(contactdata[index]['image']=="")
                                         Container(
-                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                          padding: EdgeInsets.all(5),
                                           height: 90,
                                           width: 90,
                                           child:
@@ -409,7 +409,7 @@ class _State extends State<QuizRoomContactList> {
                                         ),
                                       // Image.asset("assets/profile.png",height: 100,width: 100,),
                                       Container(
-                                        width: 150,
+                                        width: 170,
                                         margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
                                         child: Column(
                                           children: [
@@ -420,8 +420,8 @@ class _State extends State<QuizRoomContactList> {
                                                 textAlign: TextAlign.center,),
                                             ),
                                             Container(
-                                              //height: 20,
-                                              width: 150,
+                                              height: 20,
+                                              width: 170,
                                               child: Row(
                                                 children: [
                                                   if(contactdata[index]['age_group']!=null)
@@ -429,7 +429,8 @@ class _State extends State<QuizRoomContactList> {
                                                         color: ColorConstants.txt,
                                                         fontSize: 14),
                                                       textAlign: TextAlign.center,),
-                                                  VerticalDivider(color: Colors.black),
+                                                  Container(  margin: EdgeInsets.only(left:5,right: 5),
+                                                      child: VerticalDivider(color: Colors.black,thickness: 1,width: 1,)),
                                                   // Text("|"),
                                                   Row(
 
@@ -449,12 +450,13 @@ class _State extends State<QuizRoomContactList> {
                                                             )
                                                         ),
                                                       if(contactdata[index]['country']!=null)
-                                                        Container(margin: EdgeInsets.only(left:5),
-                                                          width: 50,
+                                                        Container(
+                                                          margin: EdgeInsets.only(left:5),
+                                                          width: 70,
                                                           child: Text("${contactdata[index]['country']}",style: TextStyle(
                                                               color: ColorConstants.txt,
                                                               fontSize: 14),
-                                                            textAlign: TextAlign.center,),
+                                                            textAlign: TextAlign.left,),
                                                         ),
                                                     ],
                                                   ),
@@ -463,6 +465,7 @@ class _State extends State<QuizRoomContactList> {
                                             ),
                                             if(contactdata[index]['status']!=null)
                                               Container(
+                                                width: 170,
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   "${contactdata[index]['status']}",

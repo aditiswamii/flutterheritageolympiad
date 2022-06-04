@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
-// ignore: must_be_immutable
+
 class BadgeDialog extends StatefulWidget {
   String? title;
   String? image;

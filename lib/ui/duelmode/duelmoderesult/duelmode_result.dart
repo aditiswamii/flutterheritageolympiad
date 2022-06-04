@@ -9,19 +9,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/getduelresult/GetDuelResultResponse.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/answerkey/answerkey.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart';
 
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:flutterheritageolympiad/ui/classicquiz/answerkey/answerkey.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../utils/StringConstants.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -32,13 +27,13 @@ class DuelModeResult extends StatefulWidget {
   DuelModeResult({Key? key, required this.quizid,required this.type}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _DuelModeResultState createState() => _DuelModeResultState();
 }
 
 const TWO_PI = 3.14 * 2;
 
-class _State extends State<DuelModeResult> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _DuelModeResultState extends State<DuelModeResult> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
   late double progressValue;
   final size = 200.0;
@@ -167,43 +162,74 @@ class _State extends State<DuelModeResult> {
               .isNotEmpty) {
             AlertDialog alert = AlertDialog(
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0))),
-              contentPadding: EdgeInsets.only(top: 10.0),
+              contentPadding: const EdgeInsets.only(top: 10.0),
               title: Container(child: Column(
                 children: [
-                  Text("${rankdata['data']['message']}", style: TextStyle(
+                  Text("${rankdata['data']['message']}", style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      fontWeight: FontWeight.w700),
+                      ),
                     textAlign: TextAlign.center,),
                   Container(
-                    child: Image.network(
-                      "${rankdata['data']['image']}", height: 80, width: 80,),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image: rankdata['data']['rank']==1?const AssetImage("assets/images/artwork1.png"):
+                        rankdata['data']['rank']==2?const AssetImage("assets/images/artwork2.png"):rankdata['data']['rank']==3?const AssetImage("assets/images/artwork3.png"):const AssetImage("assets/images/artwork1.png"))
+                    ),
+                    child:rankdata['data']['image'] != ""
+                        ? Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 80,
+                        width: 80,
+                        child: CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage: NetworkImage("${rankdata['data']['image']}"),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    )
+                        : Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 80,
+                        width: 80,
+                        child: const CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage:
+                          AssetImage("assets/images/placeholder.png"),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    ),
                   ),
-                  Text("Congratulations!\nKeep it up!", style: TextStyle(
+                  const Text("Congratulations!\nKeep it up!", style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      fontWeight: FontWeight.w700),
+                     ),
                     textAlign: TextAlign.center,)
                 ],
               )),
               actions: [
                 Container(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("", style: TextStyle(color: Colors.black,
+                      const Text("", style: TextStyle(color: Colors.black,
                           fontSize: 16,
                           fontWeight: FontWeight.w700)),
-                      Text("", style: TextStyle(color: Colors.black,
+                      const Text("", style: TextStyle(color: Colors.black,
                           fontSize: 16,
                           fontWeight: FontWeight.w700)),
                       TextButton(onPressed: () {
                         Navigator.pop(context);
                       },
-                          child: Text("CLOSE", style: TextStyle(
+                          child: const Text("CLOSE", style: TextStyle(
                               color: Colors.red,
                               fontSize: 16,
                               fontWeight: FontWeight.w700))),
@@ -227,12 +253,24 @@ class _State extends State<DuelModeResult> {
       }else{
         DateTime now = DateTime.now();
 
-        String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
-        if(int.parse(atimenew) > int.parse(rankdata['time'].toString())){
+        String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}:${now.minute.toString().padLeft(2,'0')}:${now.second.toString().padLeft(2,'0')}";
+
+        log(atimenew);
+        String atime=atimenew.substring(11);
+        String ranktime=rankdata['time'].toString().substring(11);
+        var newatime= (int.parse(atime.substring(0,2)) * 3600) +(int.parse(atime.substring(6,8)) * 60 )+(int.parse(atime.substring(6,8)) * 1);
+        var newranktime=(int.parse(ranktime.substring(0,2)) * 3600) +(int.parse(ranktime.substring(6,8)) * 60 )+(int.parse(ranktime.substring(6,8)) * 1);
+
+        if(newatime > newranktime){
           getDuelResult(userid.toString(), widget.quizid.toString());
         }else{
+          // final stream =
+          // Stream<int>.periodic(const Duration(
+          //     seconds: 30), (count) => count).take(10);
+          //
+          // stream.forEach( getDuelRank(userid.toString(), widget.quizid.toString()));
           Future.delayed(
-            Duration(seconds: 3000),
+            const Duration(seconds: 30),
                 () {
               getDuelRank(userid.toString(), widget.quizid.toString());
             },
@@ -242,7 +280,7 @@ class _State extends State<DuelModeResult> {
 
     }else {
       Future.delayed(
-        Duration(seconds: 3000),
+        const Duration(seconds: 30),
             () {
           getDuelRank(userid.toString(), widget.quizid.toString());
         },
@@ -252,11 +290,11 @@ class _State extends State<DuelModeResult> {
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
-      content: new Row(
+      content: Row(
         children: [
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: const EdgeInsets.only(left: 7), child: const Text("Loading...")),
         ],
       ),
     );
@@ -285,7 +323,7 @@ class _State extends State<DuelModeResult> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     // Do some stuff.
     return true;
   }
@@ -303,50 +341,28 @@ class _State extends State<DuelModeResult> {
       // endDrawerEnableOpenDragGesture: true,
       // endDrawer: MySideMenuDrawer(),
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: RefreshIndicator(
           color: Colors.transparent,
           onRefresh: () => _refreshdata(context),
           child: Container(
             color: Colors.white.withAlpha(100),
-            margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: ListView(
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerLeft,
 
-                      padding: EdgeInsets.all(5),
-                      // child: Center(
-                      //   child: Card(
-                      //     elevation: 3,
-                      //     shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(20)
-                      //     ),
-                      //     child: GestureDetector(
-                      //       onTap: () {
-                      //         Navigator.pushReplacement(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //                 builder: (context) =>  HomePage()));
-                      //       },
-                      //       child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
-                      //     ),
-                      //   ),
-                      // ),
+                      padding: const EdgeInsets.all(5),
+
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 5.0),
+                      padding: const EdgeInsets.only(right: 5.0),
                       // child: GestureDetector(
                       //   onTap: () {
                       //     _scaffoldKey.currentState!.openEndDrawer();
@@ -357,34 +373,50 @@ class _State extends State<DuelModeResult> {
                   ],
                 ),
 
-                duelresultr == null?Container(
-                      child: ListBody(
 
-                        children: [
-                          Container(
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-                              child: const Text(
-                                "AND\n THAT'S A\nWRAP...",
-                                style: TextStyle(fontSize: 24, color: Colors.black),
-                                textAlign: TextAlign.center,
-                              )),
-                          Container(
-                            height: 300,
-                            width: 300,
-                           margin: EdgeInsets.only(top: 40),
-                            child: Lottie.asset("assets/lottie/lottieanim.json"),
-                          ),
-                          Container( margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Text("Generating Result...",
-                                style: TextStyle(fontSize: 24, color:Colors.black),
+                duelresultr == null?Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/debackground.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: ListBody(
+
+                    children: [
+                      Container(
+                        color:Colors.white.withAlpha(100),
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                          child: const Text(
+                            "AND\n THAT'S A\nWRAP...",
+                            style: TextStyle(fontSize: 22, color: Colors.black),
                             textAlign: TextAlign.center,
-                          ),
-                          )
-                        ],
+                          )),
+                      Container(
+                        height: 300,
+                        width: 300,
+                        margin: const EdgeInsets.only(top: 40),
+                        child: Lottie.asset("assets/lottie/lottieanim.json"),
                       ),
-          ):
-                     ListBody(
+                      Container(   color:Colors.white.withAlpha(100),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: const Text("Generating Result...",
+                          style: TextStyle(fontSize: 18, color:Colors.black),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                          child: const Text(
+                            "Pull to refresh",
+                            style: TextStyle(fontSize: 14, color: Colors.black),
+                            textAlign: TextAlign.center,
+                          )),
+                    ],
+                  ),
+                ):  ListBody(
                        children: [
                          Container(
                              alignment: Alignment.center,
@@ -395,22 +427,24 @@ class _State extends State<DuelModeResult> {
                                textAlign: TextAlign.center,
                              )),
                          Container(
-                            decoration: BoxDecoration(shape: BoxShape.circle),
+                            decoration: const BoxDecoration(shape: BoxShape.circle),
                             margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                             alignment: Alignment.topCenter,
                             child: SizedBox(
-                              height: 150,
-                              width: 150,
+                              height: 170,
+                              width: 170,
                               child: Stack(
                                 children: <Widget>[
                                   SizedBox(
                                     child: Center(
                                       child: Container(
-                                        height: 150,
-                                        width: 150,
+                                        height: 170,
+                                        width: 170,
                                         child: CircularProgressIndicator(
-                                          value: 0.02,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                          value: (double.parse(duelresultr['user_data']
+                                          ['percentage']
+                                              .toString())/(100)),
+                                          valueColor: const AlwaysStoppedAnimation<Color>(
                                             Colors.orange,
                                           ),
                                           color: Colors.red,
@@ -430,13 +464,13 @@ class _State extends State<DuelModeResult> {
                                         Center(
                                             child: Text(
                                           "${duelresultr['user_data']['xp'].toString()} XP",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.black,
                                               fontWeight: FontWeight.w600),
                                         )),
                                         if(duelresultr['user_data']['xp']==null)
-                                          Center(
+                                          const Center(
                                               child: Text(
                                                 "${"0"} XP",
                                                 style: TextStyle(
@@ -446,28 +480,28 @@ class _State extends State<DuelModeResult> {
                                               )),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
-                                                    .toString()) >
+                                                    .toString()) >=
                                                 0.0 &&
                                             double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) <
                                                 10.0)
-                                          Center(child: Text("oh boy!")),
+                                          const Center(child: Text("oh boy!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
-                                                    .toString()) >
+                                                    .toString()) >=
                                                 10.0 &&
                                             double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) <
                                                 50.0)
-                                          Center(child: Text("Don't give up!")),
+                                          const Center(child: Text("Don't give up!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                     ['percentage']
                                                 .toString()) ==
                                             50.0)
-                                          Center(
-                                              child: Text("Practice makes perfect!")),
+                                          const Center(
+                                              child: Text("Practice makes perfect!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) >
@@ -476,7 +510,7 @@ class _State extends State<DuelModeResult> {
                                                         ['percentage']
                                                     .toString()) <=
                                                 90.0)
-                                          Center(child: Text("Almost there!")),
+                                          const Center(child: Text("Almost there!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) >
@@ -485,7 +519,7 @@ class _State extends State<DuelModeResult> {
                                                         ['percentage']
                                                     .toString()) <=
                                                 100.0)
-                                          Center(child: Text("Keep it up!")),
+                                          const Center(child: Text("Keep it up!",style: TextStyle(color: Colors.black))),
                                       ],
                                     ),
                                     back: Column(
@@ -494,34 +528,34 @@ class _State extends State<DuelModeResult> {
                                         Center(
                                             child: Text(
                                                 "${duelresultr['user_data']['percentage'].toString()} %",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w600))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
-                                                    .toString()) >
+                                                    .toString()) >=
                                                 0.0 &&
                                             double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) <
                                                 10.0)
-                                          Center(child: Text("oh boy!")),
+                                          const Center(child: Text("oh boy!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
-                                                    .toString()) >
+                                                    .toString()) >=
                                                 10.0 &&
                                             double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) <
                                                 50.0)
-                                          Center(child: Text("Don't give up!")),
+                                          const Center(child: Text("Don't give up!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                     ['percentage']
                                                 .toString()) ==
                                             50.0)
-                                          Center(
-                                              child: Text("Practice makes perfect!")),
+                                          const Center(
+                                              child: Text("Practice makes perfect!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) >
@@ -530,7 +564,7 @@ class _State extends State<DuelModeResult> {
                                                         ['percentage']
                                                     .toString()) <=
                                                 90.0)
-                                          Center(child: Text("Almost there!")),
+                                          const Center(child: Text("Almost there!",style: TextStyle(color: Colors.black))),
                                         if (double.parse(duelresultr['user_data']
                                                         ['percentage']
                                                     .toString()) >
@@ -539,7 +573,7 @@ class _State extends State<DuelModeResult> {
                                                         ['percentage']
                                                     .toString()) <=
                                                 100.0)
-                                          Center(child: Text("Keep it up!")),
+                                          const Center(child: Text("Keep it up!",style: TextStyle(color: Colors.black),)),
                                       ],
                                     ),
                                   ),
@@ -551,21 +585,18 @@ class _State extends State<DuelModeResult> {
 
                      Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        decoration: BoxDecoration(color: Colors.white),
+                        decoration: const BoxDecoration(color: Colors.white),
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                             // if you need this
-                            side: BorderSide(
-                              color: Colors.grey.withOpacity(0.3),
-                              width: 1,
-                            ),
+
                           ),
                           child: Column(
                             children: [
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                                child: Text(
+                                margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                child: const Text(
                                   "YOU SCORED...",
                                   style: TextStyle(color: ColorConstants.txt),
                                 ),
@@ -579,27 +610,17 @@ class _State extends State<DuelModeResult> {
                                       margin:
                                           const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                       child: ListView.builder(
-                                          physics: ClampingScrollPhysics(
+                                          physics: const ClampingScrollPhysics(
                                               parent: BouncingScrollPhysics()),
                                           shrinkWrap: true,
                                           itemCount: duelresultr['result'].length,
                                           itemBuilder:
                                               (BuildContext context, int index) {
                                             return Container(
-                                                margin: EdgeInsets.fromLTRB(
+                                                margin: const EdgeInsets.fromLTRB(
                                                     10, 10, 10, 10),
                                                 child: GFProgressBar(
-                                                  // leading: Container(
-                                                  //   // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                                  //   height: 30,
-                                                  //   width: 30,
-                                                  //   child: CircleAvatar(
-                                                  //     radius: 30.0,
-                                                  //     backgroundImage:
-                                                  //     NetworkImage(duelresultr['result'][index]['image'].toString()),
-                                                  //     backgroundColor: Colors.transparent,
-                                                  //   ),
-                                                  // ),
+
                                                   percentage: double.parse(
                                                       (int.parse(duelresultr['result']
                                                                           [index][
@@ -638,7 +659,7 @@ class _State extends State<DuelModeResult> {
                                                                 .toString(),
                                                             textAlign:
                                                                 TextAlign.left,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 fontSize: 16,
                                                                 color:
                                                                     Colors.black),
@@ -669,7 +690,7 @@ class _State extends State<DuelModeResult> {
                       child: Container(
                           alignment: Alignment.center,
                           margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                          child: Text(
+                          child: const Text(
                             "SHARE PERFORMANCE",
                             style: TextStyle(
                                 fontSize: 18,
@@ -688,7 +709,7 @@ class _State extends State<DuelModeResult> {
                       child: Container(
                           alignment: Alignment.center,
                           margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                          child: Text(
+                          child: const Text(
                             "ANSWER KEY",
                             style: TextStyle(
                                 fontSize: 18,
@@ -700,7 +721,7 @@ class _State extends State<DuelModeResult> {
 
                     Center(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
@@ -709,17 +730,17 @@ class _State extends State<DuelModeResult> {
                             alignment: Alignment.center,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0)),
-                            fixedSize:  Size(170, 30),
+                            fixedSize:  const Size(170, 30),
                             //////// HERE
                           ),
                           onPressed: () {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => QuizPage()));
+                                    builder: (context) => HomePage()));
                           },
                           child: const Text(
-                            "BACK TO QUIZ",
+                            "BACK TO HOME",
                             style: TextStyle(color: Colors.black, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),

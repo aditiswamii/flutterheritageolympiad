@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.flutterheritageolympiad",
+  "applicationId": "com.heritageolympiad.quiz",
   "variantName": "processDebugResources",
   "elements": [
     {

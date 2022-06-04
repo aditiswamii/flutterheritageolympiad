@@ -181,9 +181,9 @@ class _State extends State<Mcq> {
 
     }
    if(widget.type=="1"||widget.type=="2"){
-     submitquiz(widget.quizid, answerstring);
+     submitquiz(widget.quizid.toString(), answerstring);
    }else if(widget.type=="3"){
-     submitquizroomquiz(widget.quizid, answerstring);
+     submitquizroomquiz(widget.quizid.toString(), answerstring);
    }else if(widget.type=="4"){
     submittourquiz(widget.tourid, widget.sessionid, answerstring);
    }

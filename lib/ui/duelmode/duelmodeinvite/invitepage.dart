@@ -56,7 +56,8 @@ class _DuelModeInviteState extends State<DuelModeInvite> {
   var speed;
   var difficulty;
   var seldomain;
-
+  int select=1;
+  var duelid;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -69,7 +70,8 @@ class _DuelModeInviteState extends State<DuelModeInvite> {
        speed=widget.quizspeedid.toString();
        difficulty=widget.difficultylevelid.toString();
        seldomain=widget.seldomain.toString();
-
+       duelid=widget.quizid.toString();
+       link=widget.link.toString();
      });
      log(speed.toString());
      log(widget.typeq.toString());
@@ -144,7 +146,7 @@ var dualdata;
           dualdata = jsonResponse; //get all the data from json string superheros
           // print("domiaindata: "+gendata['data']['link'].toString()); // just printed length of data
         });
-        setduellinkdetail(getDualDetailResponseFromJson(dualdata!));
+        setduellinkdetail(getDualDetailResponseFromJson(data!));
       } else {
 
         snackBar = SnackBar(
@@ -159,16 +161,18 @@ var dualdata;
       print(response.statusCode);
     }
   }
-  setduellinkdetail(GetDualDetailResponse obj){
-   if(obj.data!=null){
-     setState(() {
-       seldomain=obj.data!.domain.toString();
-       difficulty=obj.data!.difficulty.toString();
-       speed=obj.data!.quizSpeed.toString();
-       link=obj.data!.link.toString();
-     });
-
-   }
+  setduellinkdetail(GetDualDetailResponse? obj){
+    if(obj!=null) {
+      if (obj.data != null) {
+        setState(() {
+          seldomain = obj.data!.domain.toString().replaceAll(",", "\n");
+          difficulty = obj.data!.difficulty.toString();
+          speed = obj.data!.quizSpeed.toString();
+          link = obj.data!.link.toString();
+          duelid = obj.data!.dualId.toString();
+        });
+      }
+    }
   }
 
   showLoaderDialog(BuildContext context) {
@@ -302,20 +306,18 @@ var dualdata;
                       padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                       height: 150,
                       width: 150,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                           shape: BoxShape.rectangle,
-                          color: ColorConstants.lightgrey200
+                          color: select==1?ColorConstants.yellow200:ColorConstants.lightgrey200
                       ),
                       child: GestureDetector(
                           onTap: () {
+                            setState(() {
+                              select=1;
+                            });
                             //ColorConstants.myfeed;
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  DuelModeSelectPlayer(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: widget.link,)));
-                          },
-                          child: Text("INVITE",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+                             },
+                          child: Text("INVITE",style: TextStyle(color: select==1?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -323,23 +325,18 @@ var dualdata;
                       padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                       height: 150,
                       width: 150,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         shape: BoxShape.rectangle,
-                          color: ColorConstants.lightgrey200
+                          color: select==2?ColorConstants.yellow200:ColorConstants.lightgrey200
                       ),
                       child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  DuelModeLink(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                      quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link,)));
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => const AlmostTherePage()));
+                            setState(() {
+                              select=2;
+                            });
+
                           },
-                          child: Text("GET A LINK",style: TextStyle(color: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+                          child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
                     ),
                   ],
                 ),
@@ -348,9 +345,10 @@ var dualdata;
                 child: Text(
                   "QUIZ SUMMARY",
                   style: TextStyle(
-                      color: ColorConstants.txt, fontSize: 15,fontWeight: FontWeight.w600),
+                      color: ColorConstants.txt, fontSize: 15),
                 ),
               ),
+              Divider(thickness: 1,height: 1,color: Colors.black,),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 decoration: const BoxDecoration(color: Colors.white),
@@ -368,43 +366,54 @@ var dualdata;
                     children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Row(
-                             children: [
-                            Text(
-                              "DIFFICULTY: ",
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15,fontWeight: FontWeight.w600),
-                            ),
+                        child: Column(
+                          children: [
+                            Row(
+                                 children: [
+                                Text(
+                                  "DIFFICULTY: ",
+                                  style: TextStyle(
+                                      color: ColorConstants.txt,
+                                      fontSize: 15),
+                                ),
 
-                           Text(
-                              widget.difficultylevelid.toString(),
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15),
-                            ),
+                               Text(
+                                  difficulty.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15),
+                                ),
 
+                              ],
+                            ),
+                            Divider(thickness: 1,height: 1,color: Colors.black,),
                           ],
                         ),
 
                       ),
+
                       Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        child: Row(
-
+                        child: Column(
                           children: [
-                            Text(
-                              "SPEED: ",
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15,fontWeight: FontWeight.w600),
+                            Row(
+
+                              children: [
+                                Text(
+                                  "SPEED: ",
+                                  style: TextStyle(
+                                      color: ColorConstants.txt,
+                                      fontSize: 15),
+                                ),
+                                 Text(
+                                  speed.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15),
+                                ),
+                              ],
                             ),
-                             Text(
-                              widget.quizspeedid.toString(),
-                              style: TextStyle(
-                                  color: ColorConstants.txt,
-                                  fontSize: 15),
-                            ),
+                            Divider(thickness: 1,height: 1,color: Colors.black,),
                           ],
                         ),
 
@@ -420,15 +429,15 @@ var dualdata;
                                 "DOMAINS SELECTED:",textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: ColorConstants.txt,
-                                    fontSize: 15,fontWeight: FontWeight.w600),
+                                    fontSize: 15),
                               ),
                             ),
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  widget.seldomain.toString(),
+                                  seldomain.toString(),
                                   style: TextStyle(
-                                      color: ColorConstants.txt,
+                                      color: Colors.black,
                                       fontSize: 15),
                                 ),
                               ),
@@ -461,7 +470,7 @@ var dualdata;
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -483,34 +492,49 @@ var dualdata;
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color: ColorConstants.lightgrey200, fontSize: 14),
+                            color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // ElevatedButton(
-                    //   style: ElevatedButton.styleFrom(
-                    //     primary: ColorConstants.verdigris,
-                    //     onPrimary: Colors.white,
-                    //     elevation: 3,
-                    //     alignment: Alignment.center,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(30.0)),
-                    //     fixedSize: const Size(100, 40),
-                    //     //////// HERE
-                    //   ),
-                    //   onPressed: () {
-                    //     Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (context) => const WelcomePage()));
-                    //   },
-                    //   child: const Text(
-                    //     "LET'S GO!",
-                    //     style: TextStyle(
-                    //         color: ColorConstants.lightgrey200, fontSize: 14),
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: ColorConstants.verdigris,
+                        onPrimary: Colors.white,
+                        elevation: 3,
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        fixedSize: const Size(100, 40),
+                        //////// HERE
+                      ),
+                      onPressed: () {
+                        if(select==1){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  DuelModeSelectPlayer(type: widget.type, quizid: duelid, difficultylevelid: difficulty,
+                                    quiztypeid: widget.quiztypeid, seldomain: seldomain, quizspeedid: speed, link: link,)));
+
+                        }else{
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  DuelModeLink(type: widget.type, quizid: duelid, difficultylevelid: difficulty,
+                                    quiztypeid: widget.quiztypeid, seldomain: seldomain, quizspeedid: speed, link: link,)));
+
+                        }
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const WelcomePage()));
+                      },
+                      child: const Text(
+                        "LET'S GO!",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ],
                 ),
               ),
