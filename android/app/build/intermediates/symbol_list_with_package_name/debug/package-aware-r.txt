@@ -380,6 +380,10 @@ color bright_foreground_inverse_material_dark
 color bright_foreground_inverse_material_light
 color bright_foreground_material_dark
 color bright_foreground_material_light
+color browser_actions_bg_grey
+color browser_actions_divider_color
+color browser_actions_text_color
+color browser_actions_title_color
 color button_material_dark
 color button_material_light
 color common_google_signin_btn_text_dark
@@ -521,6 +525,8 @@ dimen abc_text_size_subhead_material
 dimen abc_text_size_subtitle_material_toolbar
 dimen abc_text_size_title_material
 dimen abc_text_size_title_material_toolbar
+dimen browser_actions_context_menu_max_width
+dimen browser_actions_context_menu_min_padding
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
 dimen compat_button_padding_horizontal_material
@@ -757,6 +763,11 @@ id auto
 id beginning
 id blocking
 id bottom
+id browser_actions_header_text
+id browser_actions_menu_item_icon
+id browser_actions_menu_item_text
+id browser_actions_menu_items
+id browser_actions_menu_view
 id buttonPanel
 id cancel_action
 id center_vertical
@@ -925,6 +936,9 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout browser_actions_context_menu_page
+layout browser_actions_context_menu_row
+layout chrome_custom_tab
 layout custom_dialog
 layout notification_action
 layout notification_action_tombstone
@@ -995,6 +1009,11 @@ string common_google_play_services_wear_update_text
 string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
+string copy_toast_msg
+string default_web_client_id
+string fallback_menu_item_copy_link
+string fallback_menu_item_open_in_browser
+string fallback_menu_item_share_link
 string fcm_fallback_notification_channel_label
 string flutter_downloader_notification_canceled
 string flutter_downloader_notification_channel_description
@@ -1004,6 +1023,12 @@ string flutter_downloader_notification_failed
 string flutter_downloader_notification_in_progress
 string flutter_downloader_notification_paused
 string flutter_downloader_notification_started
+string gcm_defaultSenderId
+string google_api_key
+string google_app_id
+string google_crash_reporting_api_key
+string google_storage_bucket
+string project_id
 string search_menu_title
 string status_bar_notification_info_overflow
 style AlertDialog_AppCompat
@@ -1417,4 +1442,5 @@ styleable ViewBackgroundHelper android_background backgroundTint backgroundTintM
 styleable ViewStubCompat android_id android_layout android_inflatedId
 xml flutter_image_picker_file_paths
 xml flutter_share_file_paths
+xml image_share_filepaths
 xml provider_paths

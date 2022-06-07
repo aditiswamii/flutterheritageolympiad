@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterheritageolympiad/fcm/fcm.dart';
 
 import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:flutterheritageolympiad/uinew/loginpage.dart';
@@ -14,9 +17,12 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
+import 'fcm/messagehandler.dart';
 
-void main() {
 
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp( MaterialApp(
     theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
@@ -37,16 +43,25 @@ class _State extends State<MyApp> {
   bool isLoggedIn = false;
  
   String link = "";
-  
-
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+ // final PushNotificationService _notif = PushNotificationService(_fcm);
+  String title = "Notif Title";
   @override
   void initState() {
+
+   // _notif.initialise();
     link="";
     initUniLinks().then((value) => setState(() {
       link = value!;
     }));
     super.initState();
+    testFunc();
     autoLogIn();
+
+  }
+  testFunc() async {
+   // await Firebase.initializeApp();
+    title = await PushNotificationService(_fcm).initialise();
   }
 
   Future<String?> initUniLinks() async {

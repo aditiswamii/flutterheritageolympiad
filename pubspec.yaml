@@ -65,8 +65,6 @@ dependencies:
   charts_flutter:
   google_sign_in: ^5.0.1
   change_app_package_name: ^1.0.0
-  firebase_messaging: ^11.2.6
-  firebase_core: ^1.12.0
   cloud_functions: ^3.2.6
   uni_links:
   pull_to_refresh:
@@ -77,6 +75,11 @@ dependencies:
   readmore:
   photo_view:
   add_2_calendar:
+  firebase_core: ^1.12.0
+  firebase_auth:
+  cloud_firestore:
+  firebase_messaging: ^11.2.6
+  twitter_login: ^4.2.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

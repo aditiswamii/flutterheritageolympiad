@@ -20,6 +20,7 @@ import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../../../modal/Domains.dart';
 import '../../../modal/domains/GetDomainsResponse.dart';
 
 import 'dart:convert' as convert;
@@ -31,7 +32,7 @@ class FilterPage extends StatefulWidget {
   _FilterPageState createState() => _FilterPageState();
 }
 
-class _FilterPageState extends State<FilterPage> {
+class _FilterPageState extends State<FilterPage> with ChangeNotifier {
   TextEditingController controller = TextEditingController();
   PageController _pageController = PageController();
   // TextEditingController controller = TextEditingController();
@@ -48,7 +49,7 @@ class _FilterPageState extends State<FilterPage> {
   var domains_length;
   var domains_rev;
   var domainnamelist = [].toList(growable: true);
-  var seldomain;
+  String seldomain="";
   String domain = "";
   var selectedIndexes = [];
   static int _len = 11;
@@ -65,8 +66,11 @@ class _FilterPageState extends State<FilterPage> {
   var singleb = false;
   var modulesb = false;
   var collectionb = false;
-  var themes = "";
-  var contents = "";
+  String themes = "";
+  String contents = "";
+  var click = false;
+  List<Domain>? databean = [].cast<Domain>().toList(growable: true);
+  List<Domain>? clist = [].cast<Domain>().toList(growable: true);
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -79,41 +83,112 @@ class _FilterPageState extends State<FilterPage> {
 
     // getFeed(userid.toString(), "0", "", "", "");
   }
-
-  void getDomains(String theme_id) async {
+var snackbar;
+  var domaindata;
+  void getDomains(String themeId) async {
+    databean!.clear();
     http.Response response = await http.get(
-        Uri.parse(StringConstants.BASE_URL + "feed_domains?theme_id=$theme_id"));
+        Uri.parse(StringConstants.BASE_URL + "feed_domains?theme_id=$themeId"));
    // showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      domainname="";
-      domainnamelist.clear();
-      isChecked.every((element) => false);
-     // Navigator.pop(context);
-      data = response.body; //store response as string
-      setState(() {
-        domains_length = jsonDecode(data!)['data'];
-        domains_rev = domains_length.reversed;
-        //get all the data from json string superheros
-        print(domains_length.length); // just printed length of data
-      });
-      var jsondata = getDomainsResponseFromJson(data!).data;
-      //var jsondataa=datadomainFromJson(data!).id.toString();
-      log(jsondata.toString());
-      var venam = jsonDecode(data!)['data'];
-      log(venam.toString());
-      // log("tang " + tangible.toString());
-      // log("intang " + intangible.toString());
-      // log("natu " + natural.toString());
-      // log("themeid" + theme_id);
-      // log("contents" + contents);
-      //  log("domainid"+domainnamelist.toString().replaceAll("[", "").replaceAll("]", ""));
-      // log("seldomain"+seldomain);
-      // var text = domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
-      // log(text);
+     //  domainname="";
+     //  domainnamelist.clear();
+     //  isChecked.every((element) => false);
+     // // Navigator.pop(context);
+     //  data = response.body; //store response as string
+     //  setState(() {
+     //    domains_length = jsonDecode(data!)['data'];
+     //    domains_rev = domains_length.reversed;
+     //    //get all the data from json string superheros
+     //    print(domains_length.length); // just printed length of data
+     //  });
+     //  var jsondata = getDomainsResponseFromJson(data!).data;
+     //  //var jsondataa=datadomainFromJson(data!).id.toString();
+     //  log(jsondata.toString());
+     //  var venam = jsonDecode(data!)['data'];
+     //  log(venam.toString());
+     //
+      if (jsonResponse['status'] == 200) {
+        seldomain=="";
+        databean!.clear();
+        //store response as string
+        setState(() {
+          domaindata = jsonResponse;
+          print(domaindata['data'].length); // just printed length of data
+        });
+        List? jsarray = List.from(domaindata['data']);
+        setState(() {
+          jsarray;
+        });
+        if (jsarray.isNotEmpty) {
+          var sobj = Domain(0, "Select All", false);
+
+          //clist!.add(sobj);
+          setState(() {
+            clist!.add(sobj);
+          });
+          for (int i = 0; i < jsarray.length; i++) {
+            var jobj = jsarray[i];
+            var sobj = Domain(jobj['id'], jobj['name'], false);
+
+            // clist!.add(sobj);
+            setState(() {
+              clist!.add(sobj);
+            });
+          }
+          setDomain(clist);
+        } else {
+          snackbar = SnackBar(
+              content: Text(
+                "domain data is not available",
+                textAlign: TextAlign.center,
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        }
+      }else{
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+      }
     } else {
      // Navigator.pop(context);
       print(response.statusCode);
     }
+  }
+  int i =0;
+  var seldomainName="";
+  setDomain(List<Domain>? clist) {
+    for (i ; i < clist!.length; i++) {
+
+      if(seldomain.toString().isNotEmpty){
+        setState(() {
+          seldomain = seldomain.toString() + "," + clist[i].id.toString();
+          seldomainName = seldomainName + "\n" + clist[i].name.toString();
+        });
+
+      } else {
+        setState(() {
+          seldomain = seldomain.toString() + "" + clist[i].id.toString();
+          seldomainName = seldomainName + "" + clist[i].name.toString();
+        });
+
+      }
+
+
+    }
+   // cleanData();
+    // databean!.addAll(clist!);
+    if (clist != null) {
+      setState(() {
+
+        databean = clist;
+      });
+    }
+
   }
 
   // showLoaderDialog(BuildContext context) {
@@ -146,6 +221,7 @@ class _FilterPageState extends State<FilterPage> {
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+    cleanData();
     super.dispose();
   }
 
@@ -155,13 +231,36 @@ class _FilterPageState extends State<FilterPage> {
     // Do some stuff.
     return true;
   }
-
+  hintdialog(BuildContext context,String text) {
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              20.0)),
+      content: Container(
+          child: Text("${text}"
+            ,style:TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
+      ),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("Close"))
+      ],
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   calTheme() async{
+
     themes = "";
     if (tangible == 1) {
       if(themes.contains("1")){
         setState(() {
-          themes += "";
+          themes.replaceAll("1", "");
         });
 
       }else{
@@ -177,7 +276,7 @@ class _FilterPageState extends State<FilterPage> {
       if (themes.isNotEmpty) {
         if(themes.contains("2")){
           setState(() {
-            themes +="";
+            themes.replaceAll("2", "");
           });
 
         }else{
@@ -186,9 +285,7 @@ class _FilterPageState extends State<FilterPage> {
           });
 
         }
-        setState(() {
-          themes += ",2";
-        });
+
 
       } else {
 
@@ -203,9 +300,17 @@ class _FilterPageState extends State<FilterPage> {
     }
     if (intangible == 1) {
       if (themes.isNotEmpty) {
-        setState(() {
-          themes += ",3";
-        });
+        if(themes.contains("3")){
+          setState(() {
+            themes.replaceAll("3", "");
+          });
+
+        }else{
+          setState(() {
+            themes += ",3";
+          });
+
+        }
 
       } else {
         setState(() {
@@ -270,12 +375,32 @@ class _FilterPageState extends State<FilterPage> {
                   ),
                   Container(
                       alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: const Text("THEMES",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontFamily: "Nunito"))),
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("THEMES",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontFamily: "Nunito")),
+                          GestureDetector(
+                            onTap: (){
+                              hintdialog(context, "Themes: Choose a theme.");
+
+                            },
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              child: Image.asset(
+                                "assets/images/question.png",
+                                height: 20,
+                                width: 20,
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
@@ -395,13 +520,6 @@ class _FilterPageState extends State<FilterPage> {
                                       intangible = 1;
                                     });
                                   }
-                                  // setState(() {
-                                  //   natural = 0;
-                                  //   tangible = 0;
-                                  //   themes = "3";
-                                  // });
-                                  //
-                                  // getDomains("$themes");
                                 calTheme();
                                 },
                                 child: intangible == 1
@@ -450,112 +568,8 @@ class _FilterPageState extends State<FilterPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        // if you need this
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: domains_length == null || domains_length!.isEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 35,
-                                    child: CheckboxListTile(
-                                        visualDensity:
-                                            VisualDensity(vertical: -4),
-                                        title: Text(
-                                          "Select All",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        onChanged: (checked) {
-                                          setState(
-                                            () {
-                                              isChecked.every((element) => checked!);
-                                              allselect = checked!;
-                                            },
-                                          );
-                                         // allselect = checked!;
-                                        },
-                                        value: allselect),
-                                  ),
-                                  Divider(
-                                    color: Colors.grey,
-                                  ),
-                                  ListView.builder(
-                                    physics: const BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: domains_length.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Container(
-                                            height: 35,
-                                            child: CheckboxListTile(
-                                                visualDensity:
-                                                    VisualDensity(vertical: -4),
-                                                title: Text(
-                                                  jsonDecode(data!)['data']
-                                                      [index]['name'],
-                                                  style:
-                                                      TextStyle(fontSize: 14),
-                                                ),
-                                                onChanged: (checked) {
-                                                  setState(
-                                                    () {
-                                                      isChecked[index] =
-                                                          checked!;
-                                                    },
-                                                  );
-                                                  if (isChecked[index] ==
-                                                      true) {
-                                                    domainname = jsonDecode(
-                                                            data!)['data']
-                                                        [index]['id'];
+                  domainwidget(domaindata),
 
-                                                    setState(() {
-                                                      domainname = jsonDecode(
-                                                              data!)['data']
-                                                          [index]['id'];
-                                                    });
-                                                    if (!domainnamelist
-                                                        .contains(domainname))
-                                                      domainnamelist
-                                                          .add(domainname);
-                                                    //seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
-                                                  } else {
-
-                                                    // if(domainnamelist.contains(domainname))
-                                                    domainnamelist
-                                                        .remove(domainname);
-
-                                                  }
-                                                },
-                                                value: isChecked[index]),
-                                          ),
-                                          Divider(
-                                            color: Colors.grey,
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                    ),
-                  ),
                   Container(
                       color: Colors.white,
                       alignment: Alignment.centerLeft,
@@ -791,7 +805,7 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                           onPressed: () {
 
-    seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+
     log("tang " + tangible.toString());
     log("intang " + intangible.toString());
     log("natu " + natural.toString());
@@ -822,7 +836,30 @@ class _FilterPageState extends State<FilterPage> {
                             //////// HERE
                           ),
                           onPressed: () {
-                            seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+
+                            // seldomain=domainnamelist.toString().replaceAll("[", "").replaceAll("]", "");
+
+                            seldomain = "";
+                            for (int i = 0; i < databean!.length; i++) {
+                              if (!databean![i].issel!) {
+                                if (databean![i].id != 0) {
+                                  if (seldomain.isNotEmpty) {
+                                    setState(() {
+                                      seldomain = seldomain +
+                                          "," +
+                                          databean![i].id.toString();
+                                    });
+                                  } else {
+                                    setState(() {
+                                      seldomain = seldomain +
+                                          "" +
+                                          databean![i].id.toString();
+                                    });
+                                  }
+                                }
+                              }
+                            }
+                            print(seldomain);
                             log("tang " + tangible.toString());
                             log("intang " + intangible.toString());
                             log("natu " + natural.toString());
@@ -830,6 +867,7 @@ class _FilterPageState extends State<FilterPage> {
                             log("contents" + contents);
                             log("domainid"+domainnamelist.toString().replaceAll("[", "").replaceAll("]", ""));
                             log("seldomain"+seldomain);
+                            //
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -852,5 +890,127 @@ class _FilterPageState extends State<FilterPage> {
         ),
       ),
     );
+  }
+  Widget domainwidget(domaindata){
+
+    // List<bool> isChecked = List<bool>.filled(domaindata.length, false);
+    return  databean == null
+        ? Container()
+        : Container(
+
+      margin:
+      const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          // if you need this
+          side: BorderSide(
+            color: Colors.grey.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+
+              child: ListView.builder(
+                  physics:
+                  const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: databean!.length,
+                  itemBuilder: (BuildContext context,
+                      int index) {
+                    return Card(
+                        child: domainrow(context,
+                            index, databean!.length));
+                  }),
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+  Widget domainrow(BuildContext context, int index, int length) {
+    int ischecked = 0;
+    bool? issel = databean![0].issel;
+
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                databean![index].name!,
+                style: TextStyle(fontSize: 18),
+              ),
+              GestureDetector(
+                onTap: () {
+                  accept(index);
+                },
+                child: databean![index].issel == false
+                    ? Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/check_box_with_tick.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                )
+                    : Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    "assets/images/check_box.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+  void accept(int index) {
+    Domain? domain;
+    if (index == 0) {
+      bool? issel = !databean![0].issel!;
+      for (int i = 0; i < databean!.length; i++) {
+        domain = databean![i];
+        domain.issel = issel;
+        databean![i] = domain;
+      }
+      updateData(databean!.toList());
+    } else {
+      Domain domain = getItem(index);
+      domain.issel = !domain.issel!;
+      databean![index] = domain;
+      updateData(databean!.toList());
+    }
+  }
+
+  void updateData(List<Domain> list) {
+
+    setState(() {
+      databean!.clear();
+      databean!.addAll(list);
+    });
+
+    notifyListeners(); // To rebuild the Widget
+  }
+
+  Domain getItem(int pos) {
+    return databean!.elementAt(pos);
+  }
+  void cleanData(){
+    databean!.clear();
+
+    notifyListeners();
   }
 }

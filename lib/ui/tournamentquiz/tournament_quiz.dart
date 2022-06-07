@@ -31,8 +31,10 @@ import 'dart:convert' as convert;
 
 import 'leaguerank/leaguerank.dart';
 class TournamentPage extends StatefulWidget {
-
-  TournamentPage({Key? key}) : super(key: key);
+  var contents;
+  var themes;
+  var seldomain;
+  TournamentPage({Key? key, this.seldomain, this.contents, this.themes}) : super(key: key);
 
   @override
   _TournamentPageState createState() => _TournamentPageState();
@@ -122,7 +124,41 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
     }
  }
+  joinroom(String userid,int tournamentId, int sessionId ,int pos) async {
+  http.Response response = await http.post(
+  Uri.parse(StringConstants.BASE_URL + "join_tournament"),
+  body: {
+    'user_id':userid.toString(),
+    'tournament_id': tournamentId.toString(),
+    'session_id': sessionId.toString()});
 
+
+  print("getTourRoomapi");
+  var jsonResponse = convert.jsonDecode(response.body);
+  if (response.statusCode == 200) {
+
+  data = response.body;
+  if (jsonResponse['status'] == 200) {
+  //final responseJson = json.decode(response.body);//store response as string
+    setJoined(pos);
+  } else {
+    snackBar = SnackBar(
+        content: Text(
+          jsonResponse['message'].toString(),
+          textAlign: TextAlign.center,));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(snackBar);
+  log(jsonResponse['message']);
+  }
+  } else {
+
+  print(response.statusCode);
+  }
+}
+
+  setJoined(int pos) {
+    getTour(userid.toString(),"");
+   }
   // showLoaderDialog(BuildContext context) {
   //   AlertDialog alert = AlertDialog(
   //     content: new Row(
@@ -685,6 +721,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                 //   itemView.joinroom.visibility = View.GONE
                                 //   itemView.letsgo.visibility = View.VISIBLE
                                 // }
+                                 if(gettourR!.data![index].waitlistJoined!=1)
                                 Container(
                                   child: Center(
                                     child: ElevatedButton(
@@ -699,9 +736,36 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                         //////// HERE
                                       ),
                                       onPressed: () {
-                                        // _controller!.dispose();
-                                        Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(builder: (BuildContext context) => TourRoomWaitlist( tourid: gettourR!.data![index].id.toString(), sessionid: gettourR!.data![index].sessions![index].id.toString(),)));
+                                        joinroom(userid.toString(), gettourR!.data![index].id!, gettourR!.data![index].sessions![index].id!, index);
+                                     },
+                                      child: const Text(
+                                        "JOIN WAITLIST",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if(gettourR!.data![index].waitlistJoined==1)
+                                Container(
+                                  child: Center(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: ColorConstants.verdigris,
+                                        onPrimary: Colors.white,
+                                        elevation: 3,
+                                        alignment: Alignment.center,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(30.0)),
+                                        fixedSize: const Size(100, 40),
+                                        //////// HERE
+                                      ),
+                                      onPressed: () {
+                                      Navigator.of(context).pushReplacement(
+                                             MaterialPageRoute(builder: (BuildContext context) =>
+                                                 TourRoomWaitlist( tourid: gettourR!.data![index].id!, sessionid: gettourR!.data![index].sessions![index].id!)));
+
                                       },
                                       child: const Text(
                                         "WAITLIST",

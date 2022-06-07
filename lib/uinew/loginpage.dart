@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:flutterheritageolympiad/uinew/registerpage.dart';
 import 'package:flutterheritageolympiad/uinew/signuppage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 
 import '../fcm/fcm.dart';
@@ -355,6 +357,7 @@ Loginuser(jsonDecode){
                       padding: EdgeInsets.all(4),
                       child: GestureDetector(
                         onTap: () {
+                          twitterlogin();
                           // Navigator.pushReplacement(
                           //     context,
                           //     MaterialPageRoute(
@@ -376,6 +379,40 @@ Loginuser(jsonDecode){
           ),
         ),),
     );
+  }
+
+  twitterlogin() async {
+    final twitterLogin = TwitterLogin(
+      // Consumer API keys
+      apiKey: 'LYAl31FIc1RVG8re8sBEzAX3Y',
+      // Consumer API Secret keys
+      apiSecretKey: 'LqBKt1XAk7SVQIY5UpSBjKdKHkohcuk8mvclkRTRIXRXaYgLRV',
+      // Registered Callback URLs in TwitterApp
+      // Android is a deeplink
+      // iOS is a URLScheme
+      redirectURI: 'https://cultre.app/twittercall',
+    );
+    final authResult = await twitterLogin.login();
+    switch (authResult.status!) {
+      case TwitterLoginStatus.loggedIn:
+        print("succ");
+        return await FirebaseAuth.instance.signInWithCredential(
+          TwitterAuthProvider.credential(
+            accessToken: authResult.authToken!,
+            secret: authResult.authTokenSecret!,
+          ),
+        );
+      // success
+        break;
+      case TwitterLoginStatus.cancelledByUser:
+        print("cancel");
+      // cancel
+        break;
+      case TwitterLoginStatus.error:
+        print("error");
+      // error
+        break;
+    }
   }
 // // function to implement the google signin
 //

@@ -26,6 +26,7 @@ class _Application extends State<FCM> {
     });
   }
 
+
   Future<void> setupInteractedMessage() async {
 
     RemoteMessage? initialMessage =
@@ -82,8 +83,8 @@ class _Application extends State<FCM> {
   }
 
   void _handleMessage(RemoteMessage message) {
-    var notification_type = message.data["type"];
-     if(notification_type=='tournament'){
+    var notificationType = message.data["type"];
+     if(notificationType=='tournament'){
 
     }
   }

@@ -27,8 +27,8 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class TourRoomWaitlist extends StatefulWidget {
-  var tourid;
-  var sessionid;
+  int? tourid;
+  int? sessionid;
   TourRoomWaitlist({Key? key, required this.tourid,required this.sessionid}) : super(key: key);
 
   @override
@@ -46,6 +46,7 @@ class _State extends State<TourRoomWaitlist> {
   var userid;
   var data;
   var roomdata;
+  var snackbar;
   String packagename="";
   PackageInfo? packageInfo;
 
@@ -63,11 +64,11 @@ class _State extends State<TourRoomWaitlist> {
     //calTheme();
 
     //getTourRoom(widget.tourid, widget.sessionid);
-    getTourRoom("86", "1343");
+    getTourRoom(widget.tourid!, widget.sessionid!);
     // getFeed(userid.toString(), "0", "", "", "");
   }
 
-  getTourRoom(String tournamentId, String sessionId) async {
+  getTourRoom(int tournamentId, int sessionId) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "tournamentuserlist"),
         body: {'tournament_id': tournamentId.toString(), 'session_id': sessionId.toString()});
@@ -83,7 +84,7 @@ class _State extends State<TourRoomWaitlist> {
         roomdata = jsonResponse[
         'data']; //get all the data from json string superheros
         print("length" + roomdata.length.toString());
-        onsuccess(jsonResponse);
+
         onsuccess(getTourRoomlistFromJson(data));
       } else {
        // onsuccess(null);
@@ -105,6 +106,52 @@ class _State extends State<TourRoomWaitlist> {
 
     }
   }
+
+  exittour(String userid,int tournamentId, int sessionId) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "exitfromtournament"),
+        body: {
+          'user_id': userid.toString(),
+          'tournament_id': tournamentId.toString(),
+          'session_id': sessionId.toString()});
+
+
+    print("getTourRoomapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+
+        onexittour();
+
+      } else {
+        snackbar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbar);
+        log(jsonResponse['message']);
+      }
+    } else {
+
+      print(response.statusCode);
+    }
+  }
+
+  onexittour() {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => TournamentPage()));
+  }
+
+
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -158,21 +205,21 @@ class _State extends State<TourRoomWaitlist> {
       body: Container(
        color: ColorConstants.red,
         child: Container(
-
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-Container(
-  alignment: Alignment.center,
-  child: Image.asset("assets/images/pattern1.png",height: 30,width: 30,),
-),
+         Container(
+          alignment: Alignment.center,
+         child: Image.asset("assets/images/pattern1.png",height: 30,width: 30,),
+          ),
               Container(
                 alignment: Alignment.topLeft,
                 child: Image.asset("assets/images/pattern1.png",height: 30,width: 30,),
               ),
               Container(
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: const Text(
                     "PLAYER JOINED....",
                     style: TextStyle(fontSize: 24, color: Colors.white),
@@ -189,7 +236,7 @@ Container(
     physics: ClampingScrollPhysics(
     parent: BouncingScrollPhysics()),
     shrinkWrap: true,
-    itemCount: jsonDecode(data!)['data'].length,
+    itemCount:  getTourRoomlistt!.data!.length,
     itemBuilder: (BuildContext context, int index) {
       return Card(
           shape: RoundedRectangleBorder(
@@ -221,11 +268,69 @@ Container(
                                .transparent,
                          ),
                        ),
+            Container(
+              width: 170,
+              margin: EdgeInsets.fromLTRB(10, 10, 20, 10),
+              child: Column(
+                children: [
+                  Container(alignment: Alignment.centerLeft,
+                    child: Text("${ getTourRoomlistt!.data![index].name}",style: TextStyle(
+                        color: ColorConstants.txt,
+                        fontSize: 16,fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,),
+                  ),
+                  Container(
+                    height: 20,
+                    width: 170,
+                    child: Row(
+                      children: [
+                        if( getTourRoomlistt!.data![index].ageGroup!.isNotEmpty)
+                          Text("${getTourRoomlistt!.data![index].ageGroup}",style: TextStyle(
+                              color: ColorConstants.txt,
+                              fontSize: 14),
+                            textAlign: TextAlign.center,),
+                        Container(  margin: EdgeInsets.only(left:5,right: 5),
+                            child: VerticalDivider(color: Colors.black,thickness: 1,width: 1,)),
+                        // Text("|"),
+                        Row(
+
+                          children: [
+                            if(getTourRoomlistt!.data![index].flagIcon!.isNotEmpty)
+                              Container(
+                                  height: 20,width: 20,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle
+                                  ),
+                                  child:
+                                  CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundImage:
+                                    NetworkImage("${getTourRoomlistt!.data![index].flagIcon}"),
+                                    backgroundColor: Colors.transparent,
+                                  )
+                              ),
+                            if(getTourRoomlistt!.data![index].country!.isNotEmpty)
+                              Container(
+                                margin: EdgeInsets.only(left:5),
+                                width: 70,
+                                child: Text("${getTourRoomlistt!.data![index].country}",style: TextStyle(
+                                    color: ColorConstants.txt,
+                                    fontSize: 14),
+                                  textAlign: TextAlign.left,),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                      ],
                    ),
                  )
 
                 ],
+              ),
+      ),
+      ]
               )
           ));
     }
@@ -240,6 +345,7 @@ Container(
                 child: Image.asset("assets/images/mcq_pattern_3.png",height: 50,width: 50,),
               ),
               Container(
+                alignment: Alignment.bottomCenter,
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -284,10 +390,7 @@ Container(
                         //////// HERE
                       ),
                       onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const DuelModeResultXP()));
+                       exittour(userid.toString(), widget.tourid!, widget.sessionid!);
                       },
                       child: const Text(
                         "EXIT WAITROOM",

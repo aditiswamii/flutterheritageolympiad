@@ -17,6 +17,7 @@
             <data android:mimeType="vnd.android.cursor.item/event" />
         </intent>
     </queries>
+<!--    <application android:name="com.heritageolympiad.quiz.Application"/>-->
     <application
         android:label="flutterheritageolympiad"
         android:requestLegacyExternalStorage="true"
@@ -39,7 +40,15 @@
                     android:pathPrefix="/cul.tre" />
                 <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <!-- Registered Callback URLs in TwitterApp -->
+                <data android:scheme="https://cultre.app/twittercall" /> <!-- host is option -->
+            </intent-filter>
 <!--            <intent-filter android:autoVerify="true"-->
 <!--                android:label="Cultre App">-->
 <!--                <action android:name="android.intent.action.VIEW" />-->
@@ -70,6 +79,10 @@
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
                 android:value="high_importance_channel" />
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
