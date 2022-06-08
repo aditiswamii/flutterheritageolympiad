@@ -551,6 +551,7 @@ onsuccess(savedata){
             child: ListView(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                         margin: EdgeInsets.fromLTRB(0,20,0,0),
