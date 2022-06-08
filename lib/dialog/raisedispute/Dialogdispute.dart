@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +32,17 @@ class _State extends State<DialogDispute> {
   @override
   void initState() {
     super.initState();
-
+    BackButtonInterceptor.add(myInterceptor);
     userdata();
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.pop(context);
+    return true;
   }
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

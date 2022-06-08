@@ -39,7 +39,7 @@ class _State extends State<ProductList>{
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
-    showLoaderDialog(context);
+
     getproduct("", "") ;
   }
   getproduct(String userid ,String searchkey) async {
@@ -47,7 +47,7 @@ class _State extends State<ProductList>{
       http.Response response = await http.get(
         Uri.parse(StringConstants.BASE_URL+"get_all_products")
       );
-      Navigator.pop(context);
+
       if (response.statusCode == 200) {
         data = response.body; //store response as string
         setState(() {
@@ -62,29 +62,29 @@ class _State extends State<ProductList>{
         print(response.statusCode);
       }
     } catch (e) {
-      Navigator.pop(context);
+
       log(e.toString());
     }
   }
   onsuccess(){
 
   }
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],),
-    );
-    showDialog(barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],),
+  //   );
+  //   showDialog(barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
   @override
   void initState() {
     super.initState();
@@ -239,7 +239,14 @@ class _State extends State<ProductList>{
                                                         onTap: (){
                                                           Share.share(jsonDecode(data!)['data'][index]['link'], subject: 'Share link');
                                                         },
-                                                        child: Text("AMAZON",style: TextStyle(fontSize: 14,color: Colors.orange,fontFamily: "Nunito"))),
+                                                        child: Container(
+                                                          padding: EdgeInsets.all(5),
+                                                          decoration: BoxDecoration(
+                                                            color:  Colors.orange,
+                                                            borderRadius: BorderRadius.circular(20), 
+                                                          ),
+                                                            
+                                                            child: Text("PURCHASE",style: TextStyle(fontSize: 14,color: Colors.white,fontFamily: "Nunito")))),
                                                   ],
                                                 ),
                                               ),

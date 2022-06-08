@@ -447,7 +447,7 @@ class _YourPageState extends State<YourPage> {
             ),
             Container(
               color: Colors.white70,
-              child:(prodata==null&&xpdata==null&&leaderdata==null&&goalsummarydata==null&&goaldata==null&&badgedata==null)?Container(height: MediaQuery.of(context).size.height,
+              child:(prodata==null&&xpdata==null&&leaderdata==null&&goalsummarydata==null&&goaldata==null)?Container(height: MediaQuery.of(context).size.height,
                 child: Center(child: CircularProgressIndicator(color: ColorConstants.blue,)),): ListBody(
                 children: [
                   Container(

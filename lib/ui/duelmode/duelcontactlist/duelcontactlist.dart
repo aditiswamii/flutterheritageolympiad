@@ -61,6 +61,8 @@ class _State extends State<DuelModeSelectPlayer> {
       userid= prefs.getString("userid");
     });
     getUserlist(userid.toString(),widget.quizid,0);
+    dualstatus(widget.quizid.toString());
+
   }
   getUserlist(String userid,String dualid,int is_hide) async {
     http.Response response = await http.post(
@@ -104,12 +106,16 @@ class _State extends State<DuelModeSelectPlayer> {
         log(jsonResponse['message']);
       }
     } else {
+
       Navigator.pop(context);
       print(response.statusCode);
     }
   }
   oncontactsuccess(GetDuelUserListResponse duelUserListResponseFromJson){
     if(duelUserListResponseFromJson.data!=null){
+      Future.delayed(Duration(seconds: 5),(){
+        dualstatus(widget.quizid.toString());
+      });
       contactpos=duelUserListResponseFromJson.data;
     }
 
@@ -146,15 +152,7 @@ class _State extends State<DuelModeSelectPlayer> {
     if (response.statusCode == 200) {
       if (jsonResponse['status'] == 200) {
         onsuccess();
-        // data = response.body; //store response as string
-        // setState(() {
-        //   invitedata = jsonDecode(
-        //       data!)['data']; //get all the data from json string superheros
-        //   print(invitedata.length); // just printed length of data
-        // });
-        //
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
+
       }else{
         snackbar = SnackBar(
             content: Text(
@@ -200,10 +198,11 @@ class _State extends State<DuelModeSelectPlayer> {
 
   }
   var dualstdata;
-  void dualstatus(String dual_id) async {
+
+   dualstatus(String dualId) async {
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL+"dual_status"), body: {
-      'dual_id': dual_id.toString()
+      'dual_id': dualId.toString()
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -213,7 +212,7 @@ class _State extends State<DuelModeSelectPlayer> {
           dualstdata=jsonResponse;
         });
         ondualstatus(dualstdata['data']['name'],dualstdata['data']['image']);
-      }if (jsonResponse['status'] == 201) {
+      }else if (jsonResponse['status'] == 201) {
 
         ondualstatus("","");
 
@@ -230,14 +229,73 @@ class _State extends State<DuelModeSelectPlayer> {
       print(response.statusCode);
     }
   }
-  ondualstatus(String? name,String? image)
-  {
-    if(name!=null){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: widget.quizid, type: "2", tourid: 0, sessionid: 0 ,)));
+  ondualstatus(String? name,String? image) {
+    if(name!="" ){
 
+      AlertDialog alert = AlertDialog(
+          insetPadding: EdgeInsets.all(4),
+          titlePadding: EdgeInsets.all(4),
+          contentPadding:EdgeInsets.all(4),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(
+                  20.0)),
+        content: Container(
+          height: 180,
+          width: 250,
+          alignment: Alignment.center,
+          child: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.fromLTRB(20,10,20,10),
+            height: 180,
+            width: 250,
+            child: Column(
+              children: [
+               Text("Duel Request Accepted!!" ,style: TextStyle(
+                fontSize: 14, color: ColorConstants.txt)),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  height: 80,
+                  width: 80,
+                  child:image==""? CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage:AssetImage("assets/images/placeholder.png"),
+                    backgroundColor: Colors.transparent,
+                  ):
+                  CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage:
+                    NetworkImage(image.toString()),
+                    backgroundColor: Colors.transparent,
+                  ),
+                ),
+                Text("$name", style: TextStyle(
+                    fontSize: 18, color: ColorConstants.txt,fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+        ),
+      );
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+      Future.delayed(Duration(seconds: 2),() {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: widget.quizid, type: "2", tourid: 0, sessionid: 0 ,)));
+
+      });
+
+
+    }else if(name=="" && image==""){
+    Future.delayed(Duration(seconds: 5),(){
+      dualstatus(widget.quizid.toString());
+    });
     }
 
   }

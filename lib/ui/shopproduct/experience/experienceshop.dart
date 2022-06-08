@@ -59,11 +59,11 @@ class _ExperiencePageState extends State<ExperiencePage> {
       http.Response response = await http.get(
           Uri.parse(StringConstants.BASE_URL + "exp")
       );
-      showLoaderDialog(context);
+
       var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         data = response.body;
-        Navigator.pop(context);
+
         if (jsonResponse['status'] == 200) {
           setState(() {
             expdata = jsonDecode(
@@ -83,7 +83,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
               .showSnackBar(snackBar);
         }
       } else {
-        Navigator.pop(context);
+
         // onsuccess(null);
         print(response.statusCode);
       }
@@ -91,11 +91,11 @@ class _ExperiencePageState extends State<ExperiencePage> {
       http.Response response = await http.get(
           Uri.parse(StringConstants.BASE_URL + "exp?search=" + searchkey)
       );
-      showLoaderDialog(context);
+
       var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         data = response.body;
-        Navigator.pop(context);
+
         if (jsonResponse['status'] == 200) {
           setState(() {
             expdata = jsonDecode(
@@ -115,7 +115,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
               .showSnackBar(snackBar);
         }
       } else {
-        Navigator.pop(context);
+
         // onsuccess(null);
         print(response.statusCode);
       }
@@ -319,7 +319,12 @@ class _ExperiencePageState extends State<ExperiencePage> {
                                                   onTap: (){
                                                     Share.share(experdata![index].link.toString(), subject: 'Share link');
                                                   },
-                                                    child: Text("REGISTER",style: TextStyle(fontSize: 14,color: Colors.orange,fontFamily: "Nunito"))),
+                                                    child: Container(
+                                                        padding: EdgeInsets.all(5),
+                                                        decoration: BoxDecoration(
+                                                          color:  Colors.orange,
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),child: Text("REGISTER",style: TextStyle(fontSize: 14,color: Colors.white,fontFamily: "Nunito")))),
                                               ],
                                             ),
                                           ),

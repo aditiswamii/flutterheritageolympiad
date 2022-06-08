@@ -185,14 +185,14 @@ String packagename="";
                             Center(child: Text("${widget.savedata["xp"]} XP")),
 
                             if (double.parse(widget.savedata["per"]
-                                .toString()) >
+                                .toString()) >=
                                 0.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
                                     10.0)
                               const Center(child: Text("oh boy!")),
                             if (double.parse(widget.savedata["per"]
-                                .toString()) >
+                                .toString()) >=
                                 10.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
@@ -224,14 +224,14 @@ String packagename="";
                           children: [
                             Center(child: Text("${widget.savedata["per"]} %")),
                             if (double.parse(widget.savedata["per"]
-                                .toString()) >
+                                .toString()) >=
                                 0.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
                                     10.0)
                               const Center(child: Text("oh boy!")),
                             if (double.parse(widget.savedata["per"]
-                                .toString()) >
+                                .toString()) >=
                                 10.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
@@ -273,7 +273,7 @@ String packagename="";
                   },
                   child: Container(
                       alignment: Alignment.center,
-                      margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                      margin: const EdgeInsets.fromLTRB(0, 40, 0, 5),
                       child: const Text(
                         "SHARE PERFORMANCE",
                         style: TextStyle(

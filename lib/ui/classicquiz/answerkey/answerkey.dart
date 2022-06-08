@@ -5,7 +5,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/dialog/raisedispute/Dialogdispute.dart';
-import 'package:flutterheritageolympiad/modal/classicquestion/ClassicQuestion.dart';
+
 
 import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
 import 'dart:convert' as convert;
@@ -29,7 +29,7 @@ import '../../tournamentquiz/result/tourresult.dart';
 class AnswerkeyPage extends StatefulWidget {
   var quizid;
   var saveddata;
-  var type;
+  String? type;
   var tourid;
   var sessionid;
   AnswerkeyPage({Key? key, required this.quizid,required this.saveddata,
@@ -144,33 +144,32 @@ class _State extends State<AnswerkeyPage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    if(widget.type=="1"){
+    if(widget.type=="1")
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>ResultPage(quizid: widget.quizid, savedata: widget.saveddata, type: widget.type,)));
 
-    }else if(widget.type=="2"){
+   if(widget.type=="2")
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  DuelModeResult(quizid: widget.quizid, type: widget.type,)));
 
-        }else if(widget.type=="3"){
+       if(widget.type=="3")
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>  QuizroomResult(quizid: widget.quizid, type: widget.type,)));
 
-    }else if(widget.type=="4"){
+     if(widget.type=="4")
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>  TournamentResult( type: widget.type, sessionid: widget.sessionid, tourid: widget.tourid,)));
 
-    }
-        print(BackButtonInterceptor.describe()); // Do some stuff.
-    return true;
+      return true;
+
   }
 
   @override

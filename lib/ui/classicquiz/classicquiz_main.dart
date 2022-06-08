@@ -203,7 +203,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
 
   void createquiz(String userid, String quiz_type_id,
       String difficulty_level_id, String quiz_speed_id, String domains) async {
-    showLoaderDialog(context);
+
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL + "createquiz"), body: {
       'user_id': userid.toString(),
@@ -214,7 +214,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       if (jsonResponse['status'] == 200) {
         data = response.body; //store response as string
         setState(() {
@@ -245,7 +245,7 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }

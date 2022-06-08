@@ -10,6 +10,8 @@ import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../uinew/loginpage.dart';
+import '../feed/feed.dart';
+import '../feed/savedpost/savedpost.dart';
 
 void main() {
 
@@ -84,15 +86,20 @@ class _State extends State<MySideMenuDrawer> {
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                   title: const Text('My Feed',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  //Navigator.pop(context);
-
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FeedPage()));
                 },
               ),
               ListTile(
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                 title: const Text('Saved Posts',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SavedPost()));
 
                 },
               ),

@@ -172,7 +172,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
 
   void createquiz(String userid,String  difficulty_level_id,
       String  quiz_speed_id,String  domains) async {
-    showLoaderDialog(context);
+
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"create_duel"), body: {
       'user_id': userid.toString(),
@@ -183,7 +183,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
 
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
@@ -204,7 +204,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
             .showSnackBar(snackbar);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }

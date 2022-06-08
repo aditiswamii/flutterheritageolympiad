@@ -57,11 +57,9 @@ class _State extends State<RulesPage> {
     log("test");
     print("quizid"+widget.quizid.toString());
     log("quizid"+widget.quizid.toString());
-    if(widget.type=="1"){
-
-              getClassicRule(widget.quiztypeid.toString(),widget.quizspeedid.toString());
-
-    }else if(widget.type=="2"){
+    if(widget.type=="1") {
+      getClassicRule(widget.quiztypeid.toString(),widget.quizspeedid.toString());
+    } else if(widget.type=="2"){
 
               getDualRule(widget.quizid.toString());
 
@@ -210,7 +208,6 @@ class _State extends State<RulesPage> {
             children:<Widget> [
                 ruledata!=null? Visibility(
                   visible: visiblility,
-                  maintainState: true,
                   replacement:  ListBody(
 
                     children: [
@@ -254,39 +251,55 @@ class _State extends State<RulesPage> {
                         style: TextStyle(
                             fontSize: 24, color: ColorConstants.txt))),
 
-              Container(
-                  child: TweenAnimationBuilder<Duration>(
-                      duration:  const Duration(seconds: kDebugMode?5:30),
-                      tween: Tween(begin: const Duration(seconds:  kDebugMode?5:30), end: Duration.zero),
-                      onEnd: () {
-                        setState(() {
-                          visiblility=false;
-                        });
+              TweenAnimationBuilder<Duration>(
+                  duration:  const Duration(seconds: kDebugMode?5:30),
+                  tween: Tween(begin: const Duration(seconds:  kDebugMode?5:30), end: Duration.zero),
+                  onEnd: () {
 
-                        Future.delayed(
-                            const Duration(seconds: 3),
-                                () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>  Mcq(quizid:widget.quizid, type: widget.type, tourid: widget.tourid, sessionid: widget.sessionid,)));
+                   if(widget.type!="1") {
+                     setState(() {
+                       visiblility=false;
+                     });
+                     Future.delayed(
+                         const Duration(seconds: 3),
+                             () {
+                           Navigator.pushReplacement(
+                               context,
+                               MaterialPageRoute(
+                                   builder: (context) =>
+                                       Mcq(quizid: widget.quizid,
+                                         type: widget.type,
+                                         tourid: widget.tourid,
+                                         sessionid: widget.sessionid,)));
+                         });
+                   }else{
+                     Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) =>
+                                 Mcq(quizid: widget.quizid,
+                                   type: widget.type,
+                                   tourid: widget.tourid,
+                                   sessionid: widget.sessionid,)));
+                   }
 
-                            });
 
-
-
-
-                      },
-                      builder: (BuildContext context, Duration value, Widget? child) {
-                        String strDigits(int n) => n.toString().padLeft(2, '0');
-                        final minutes =  strDigits(value.inMinutes.remainder(60)) ;
-                        final seconds = strDigits(value.inSeconds.remainder(60));
-                        return Center(
-                          child: Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                            elevation: 2,
-                            child: Container(
-                                height: 40,width: 100,
+                  },
+                  builder: (BuildContext context, Duration value, Widget? child) {
+                    String strDigits(int n) => n.toString().padLeft(2, '0');
+                    final minutes =  strDigits(value.inMinutes.remainder(60)) ;
+                    final seconds = strDigits(value.inSeconds.remainder(60));
+                    return Container(
+                      height: 50,
+                      width: 150,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(  margin: EdgeInsets.fromLTRB(0,0,5,0),
+                                child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ColorConstants.red,)),
+                            Container(
+                                height: 35,width: 100,
                                 padding:  const EdgeInsets.all(5),
                                 alignment: Alignment.center,
                                 child: Text('${minutes}:${seconds}',
@@ -295,10 +308,11 @@ class _State extends State<RulesPage> {
                                         color: ColorConstants.txt,
                                         fontWeight: FontWeight.bold,
                                         fontSize:14))),
-                          ),
-                        );
-                      }),
-              ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
                ListBody(
                    children: [
                      Container(
