@@ -6,6 +6,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
@@ -26,10 +27,13 @@ import '../../../utils/StringConstants.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
+import '../../mcq/mcq.dart';
+
 class TourRoomWaitlist extends StatefulWidget {
   int? tourid;
   int? sessionid;
-  TourRoomWaitlist({Key? key, required this.tourid,required this.sessionid}) : super(key: key);
+  String type="";
+  TourRoomWaitlist({Key? key, required this.tourid,required this.sessionid,required this.type}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -205,12 +209,13 @@ class _State extends State<TourRoomWaitlist> {
       body: Container(
        color: ColorConstants.red,
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+          child: Stack(
+          //  mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
          Container(
-          alignment: Alignment.center,
+           margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          alignment: Alignment.topRight,
          child: Image.asset("assets/images/pattern1.png",height: 30,width: 30,),
           ),
               Container(
@@ -218,19 +223,86 @@ class _State extends State<TourRoomWaitlist> {
                 child: Image.asset("assets/images/pattern1.png",height: 30,width: 30,),
               ),
               Container(
-                  alignment: Alignment.center,
+
+                  alignment: Alignment.topCenter,
                   margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: const Text(
-                    "PLAYER JOINED....",
-                    style: TextStyle(fontSize: 24, color: Colors.white),
+                    "Tournament Start In",
+                    style: TextStyle(fontSize: 18, color: Colors.white,fontStyle: FontStyle.normal),
                     textAlign: TextAlign.center,
                   )),
+
               getTourRoomlistt==null? Center(
     child: Container(
 
     ),
     )
         :  Container(
+                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                width: 130,
+                margin: EdgeInsets.fromLTRB(0,60,0,0),
+                child: Center(
+                    child: Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      elevation: 2,
+                      child: Container(
+
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(  margin: EdgeInsets.fromLTRB(0,0,0,0),
+                                child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ColorConstants.red,)),
+                            Container(
+                              child: TweenAnimationBuilder<Duration>(
+                                  duration:   Duration(seconds:getTourRoomlistt!.remaningtimestamp!),
+                                  tween: Tween(begin:  Duration(seconds:getTourRoomlistt!.remaningtimestamp! ),
+                                      end: Duration.zero),
+                                  onEnd: () {
+                                    log("sessid:",error: {widget.sessionid.toString()});
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>  Mcq(quizid:"", type: widget.type, tourid: widget.tourid, sessionid: widget.sessionid,)));
+
+                                  },
+                                  builder: (BuildContext context, Duration value, Widget? child) {
+                                    String strDigits(int n) => n.toString().padLeft(2, '0');
+                                    final minutes =  strDigits(value.inMinutes.remainder(1000)) ;
+                                    final seconds = strDigits(value.inSeconds.remainder(60));
+                                    return Container(
+                                      height: 40,width: 80,
+                                      padding:  const EdgeInsets.all(5),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '$minutes:$seconds',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.red,
+                                            fontSize: 18,fontStyle: FontStyle.normal),
+                                      ),);
+                                  }),
+                            ),
+
+                            SizedBox(height: 20),
+
+                          ],
+                        ),
+                      ),
+                    )),
+              ),
+              Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: const Text(
+                    "PLAYER JOINED....",
+                    style: TextStyle(fontSize: 18, color: Colors.white,fontStyle: FontStyle.normal),
+                    textAlign: TextAlign.center,
+                  )),
+              Container(
     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
     child: ListView.builder(
     physics: ClampingScrollPhysics(
@@ -239,114 +311,119 @@ class _State extends State<TourRoomWaitlist> {
     itemCount:  getTourRoomlistt!.data!.length,
     itemBuilder: (BuildContext context, int index) {
       return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            // if you need this
-            side: BorderSide(
-              color: Colors.grey.withOpacity(0.2),
-              width: 1,
-            ),
-          ),
-          child: Container(margin: const EdgeInsets.fromLTRB(
-              10, 10, 10, 10),
-              child: ListBody(
-                children: [
-                 Container(
-                   child: Row(
-                     children: [
-                       Container(
-                         alignment: Alignment
-                             .centerLeft,
-                         height: 80,
-                         width: 80,
-                         child: CircleAvatar(
-                           radius: 80.0,
-                           backgroundImage: NetworkImage(
-                               getTourRoomlistt!.data![index].image.toString()),
-                           backgroundColor:
-                           Colors
-                               .transparent,
-                         ),
-                       ),
-            Container(
-              width: 170,
-              margin: EdgeInsets.fromLTRB(10, 10, 20, 10),
-              child: Column(
-                children: [
-                  Container(alignment: Alignment.centerLeft,
-                    child: Text("${ getTourRoomlistt!.data![index].name}",style: TextStyle(
-                        color: ColorConstants.txt,
-                        fontSize: 16,fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  // if you need this
+                  side: BorderSide(
+                    color: Colors.grey.withOpacity(0.2),
+                    width: 1,
                   ),
-                  Container(
-                    height: 20,
-                    width: 170,
-                    child: Row(
+                ),
+                child: Container(margin: const EdgeInsets.fromLTRB(
+                    10, 10, 10, 10),
+                    child: ListBody(
                       children: [
-                        if( getTourRoomlistt!.data![index].ageGroup!.isNotEmpty)
-                          Text("${getTourRoomlistt!.data![index].ageGroup}",style: TextStyle(
+                       Container(
+                         child: Row(
+                           children: [
+                             Container(
+                               alignment: Alignment
+                                   .centerLeft,
+                               height: 80,
+                               width: 80,
+                               child: CircleAvatar(
+                                 radius: 80.0,
+                                 backgroundImage: NetworkImage(
+                                     getTourRoomlistt!.data![index].image.toString()),
+                                 backgroundColor:
+                                 Colors
+                                     .transparent,
+                               ),
+                             ),
+                  Container(
+                    width: 170,
+                    margin: EdgeInsets.fromLTRB(10, 10, 20, 10),
+                    child: Column(
+                      children: [
+                        Container(alignment: Alignment.centerLeft,
+                          child: Text("${ getTourRoomlistt!.data![index].name}",style: TextStyle(
                               color: ColorConstants.txt,
-                              fontSize: 14),
+                              fontSize: 16,fontStyle: FontStyle.normal),
                             textAlign: TextAlign.center,),
-                        Container(  margin: EdgeInsets.only(left:5,right: 5),
-                            child: VerticalDivider(color: Colors.black,thickness: 1,width: 1,)),
-                        // Text("|"),
-                        Row(
-
-                          children: [
-                            if(getTourRoomlistt!.data![index].flagIcon!.isNotEmpty)
-                              Container(
-                                  height: 20,width: 20,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle
-                                  ),
-                                  child:
-                                  CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                    NetworkImage("${getTourRoomlistt!.data![index].flagIcon}"),
-                                    backgroundColor: Colors.transparent,
-                                  )
-                              ),
-                            if(getTourRoomlistt!.data![index].country!.isNotEmpty)
-                              Container(
-                                margin: EdgeInsets.only(left:5),
-                                width: 70,
-                                child: Text("${getTourRoomlistt!.data![index].country}",style: TextStyle(
-                                    color: ColorConstants.txt,
-                                    fontSize: 14),
-                                  textAlign: TextAlign.left,),
-                              ),
-                          ],
                         ),
+                        Container(
+                          height: 20,
+                          width: 170,
+                          child: Row(
+                            children: [
+                              if( getTourRoomlistt!.data![index].ageGroup!.isNotEmpty)
+                                Text("${getTourRoomlistt!.data![index].ageGroup}",style: TextStyle(
+                                    color: ColorConstants.txt,
+                                    fontSize: 14,fontStyle: FontStyle.normal),
+                                  textAlign: TextAlign.center,),
+                              Container(  margin: EdgeInsets.only(left:5,right: 5),
+                                  child: VerticalDivider(color: Colors.black,thickness: 1,width: 1,)),
+                              // Text("|"),
+                              Row(
+
+                                children: [
+                                  if(getTourRoomlistt!.data![index].flagIcon!.isNotEmpty)
+                                    Container(
+                                        height: 20,width: 20,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle
+                                        ),
+                                        child:
+                                        CircleAvatar(
+                                          radius: 20.0,
+                                          backgroundImage:
+                                          NetworkImage("${getTourRoomlistt!.data![index].flagIcon}"),
+                                          backgroundColor: Colors.transparent,
+                                        )
+                                    ),
+                                  if(getTourRoomlistt!.data![index].country!.isNotEmpty)
+                                    Container(
+                                      margin: EdgeInsets.only(left:5),
+                                      width: 70,
+                                      child: Text("${getTourRoomlistt!.data![index].country}",style: TextStyle(
+                                          color: ColorConstants.txt,
+                                          fontSize: 14,fontStyle: FontStyle.normal),
+                                        textAlign: TextAlign.left,),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                           ],
+                         ),
+                       )
+
                       ],
                     ),
-                  ),
-                     ],
-                   ),
-                 )
-
-                ],
-              ),
       ),
       ]
-              )
-          ));
+                    )
+                ));
     }
     )
     ),
+            ],
+          ),
+        ),
               Container(
-                alignment: Alignment.topLeft,
-                child: Image.asset("assets/images/mcq_pattern_3.png",height: 50,width: 50,),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 60),
+                alignment: Alignment.bottomLeft,
+                child: Image.asset("assets/images/mcq_pattern_3.png",height: 60,width: 60,),
               ),
               Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
                 alignment: Alignment.bottomRight,
-                child: Image.asset("assets/images/mcq_pattern_3.png",height: 50,width: 50,),
+                child: Image.asset("assets/images/mcq_pattern_3.png",height: 70,width: 70,),
               ),
               Container(
                 alignment: Alignment.bottomCenter,
-                margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -360,7 +437,7 @@ class _State extends State<TourRoomWaitlist> {
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(120, 40),
+                        fixedSize: const Size(120, 30),
                         //////// HERE
                       ),
                       onPressed: () {
@@ -372,7 +449,7 @@ class _State extends State<TourRoomWaitlist> {
                       child: const Text(
                         "GO BACK",
                         style: TextStyle(
-                            color:  Colors.white, fontSize: 14),
+                            color:  Colors.white, fontSize: 12,fontStyle: FontStyle.normal),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -386,7 +463,7 @@ class _State extends State<TourRoomWaitlist> {
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0)),
-                        fixedSize: const Size(120, 40),
+                        fixedSize: const Size(120, 30),
                         //////// HERE
                       ),
                       onPressed: () {
@@ -395,7 +472,7 @@ class _State extends State<TourRoomWaitlist> {
                       child: const Text(
                         "EXIT WAITROOM",
                         style: TextStyle(
-                            color: Colors.white, fontSize: 14),
+                            color: Colors.white, fontSize: 12,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                         textAlign: TextAlign.center,
                       ),
                     ),

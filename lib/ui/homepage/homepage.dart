@@ -221,7 +221,7 @@ if(tournament!=null && tournament['tournament_id']>0){
   Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) =>  TourRoomWaitlist(sessionid: tournament['session_id'], tourid: tournament['tournament_id'],)));
+          builder: (context) =>  TourRoomWaitlist(sessionid: tournament['session_id'], tourid: tournament['tournament_id'], type: '4',)));
 }
  else  if(quizroom_start!=null && quizroom_start!.length>0){
      Navigator.pushReplacement(

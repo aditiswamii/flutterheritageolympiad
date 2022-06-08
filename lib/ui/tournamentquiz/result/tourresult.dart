@@ -16,6 +16,7 @@ import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart
 import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
 import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -284,10 +285,12 @@ class _State extends State<TournamentResult> {
                         SizedBox(
                           child: Center(
                             child: Container(
-                              height: 150,
-                              width: 150,
+                              height: 170,
+                              width: 170,
                               child: CircularProgressIndicator(
-                                value: 0.02,
+                                value:(double.parse(tourresultr['user_data']
+                                ['percentage']
+                                    .toString())/(100)),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   Colors.orange,
                                 ),
@@ -582,10 +585,10 @@ class _State extends State<TournamentResult> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => QuizPage()));
+                                  builder: (context) => TournamentPage()));
                         },
                         child: const Text(
-                          "BACK TO QUIZ",
+                          "BACK TO TOUR",
                           style: TextStyle(color: Colors.black, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -597,62 +600,7 @@ class _State extends State<TournamentResult> {
 
                 ],
               )
-              // Container(
-              //   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: ColorConstants.red,
-              //           onPrimary: Colors.white,
-              //           elevation: 3,
-              //           alignment: Alignment.center,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30.0)),
-              //           fixedSize: const Size(100, 40),
-              //           //////// HERE
-              //         ),
-              //         onPressed: () {
-              //           Navigator.pushReplacement(
-              //               context,
-              //               MaterialPageRoute(
-              //                   builder: (context) => QuizPage()));
-              //         },
-              //         child: const Text(
-              //           "GO BACK",
-              //           style: TextStyle(
-              //               color: ColorConstants.lightgrey200, fontSize: 14),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: ColorConstants.verdigris,
-              //           onPrimary: Colors.white,
-              //           elevation: 3,
-              //           alignment: Alignment.center,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30.0)),
-              //           fixedSize: const Size(100, 40),
-              //           //////// HERE
-              //         ),
-              //         onPressed: () {
-              //           // Navigator.pushReplacement(
-              //           //     context,
-              //           //     MaterialPageRoute(
-              //           //         builder: (context) => const DuelModeResultXP()));
-              //         },
-              //         child: const Text(
-              //           "LET'S GO!",
-              //           style: TextStyle(
-              //               color: ColorConstants.lightgrey200, fontSize: 14),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+
             ],
           ),
         ),

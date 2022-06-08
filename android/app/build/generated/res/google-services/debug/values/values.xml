@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">996536312413-l4uljrnuhq8ci89rec4g4fn5iic9nm4a.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">996536312413</string>
+    <string name="google_api_key" translatable="false">AIzaSyCA45SEP0RVCkh0m-ZAKE6CgUi49MfPfmw</string>
+    <string name="google_app_id" translatable="false">1:996536312413:android:10e948f7dea194aa6f63b4</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCA45SEP0RVCkh0m-ZAKE6CgUi49MfPfmw</string>
+    <string name="google_storage_bucket" translatable="false">cultre-mobile-app.appspot.com</string>
+    <string name="project_id" translatable="false">cultre-mobile-app</string>
+</resources>

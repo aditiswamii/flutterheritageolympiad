@@ -550,37 +550,42 @@ onsuccess(savedata){
             margin: EdgeInsets.fromLTRB(20,0,20,0),
             child: ListView(
               children: [
-                Container(
-                    margin: EdgeInsets.fromLTRB(0,20,0,0),
-                    height: 40,
-                    width: 70,
+                Row(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.fromLTRB(0,20,0,0),
+                        width: 130,
+                        height: 50,
+                        child: Center(
+                          child: Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            elevation: 2,
+                            child: Container(
 
-                    // margin:EdgeInsets.fromLTRB(70, 10, 70, 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: ColorConstants.lightgrey200
-                    ),
-                    child: Center(
-                      child: Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(  margin: EdgeInsets.fromLTRB(0,0,5,0),
+                                      child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,)),
+                                  Container(  height: 40,width: 80,
+                                    padding:  const EdgeInsets.all(5),
+                                    child: Text(
+                                      '$minutes:$seconds',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: ramdomcolor,
+                                          fontSize: 24),
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
 
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(  margin: EdgeInsets.fromLTRB(0,0,5,0),
-                                child: Image.asset("assets/images/clock_green.png",width: 20,height: 20,color: ramdomcolor,)),
-                            Text(
-                              '$minutes:$seconds',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: ramdomcolor,
-                                  fontSize: 24),
+                                ],
+                              ),
                             ),
-                            SizedBox(height: 20),
-
-                          ],
-                        ),
-                      ),
-                    )),
+                          ),
+                        )),
+                  ],
+                ),
                 Container(
                     margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
                     child: Text(currentques['question'].toString(),
