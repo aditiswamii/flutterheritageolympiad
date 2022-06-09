@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/question/GetQuestionResponse.dart';
 import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
@@ -14,6 +15,7 @@ import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
 import 'package:flutterheritageolympiad/utils/stringconstants.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -90,6 +92,7 @@ class _State extends State<Mcq> {
   bool prevarrow = false;
   GetQuestionResponse? questionR;
   int wholequiztime = 0;
+  bool lltype1=true;
   @override
   void initState() {
     super.initState();
@@ -107,7 +110,8 @@ class _State extends State<Mcq> {
     }
 
     myDuration = Duration(seconds: 0);
-    ramdomcolor = (color..shuffle()).first;
+   // ramdomcolor = (color..shuffle()).first;
+    ramdomcolor = ColorConstants.red_ques;
   }
 
   showLoaderDialog(BuildContext context) {
@@ -175,7 +179,8 @@ class _State extends State<Mcq> {
       _hasBeenPressed2 = false;
       _hasBeenPressed3 = false;
       _hasBeenPressed4 = false;
-      ramdomcolor = (color..shuffle()).first;
+      //ramdomcolor = (color..shuffle()).first;
+      ramdomcolor = ColorConstants.red_ques;
     });
     if (!(countdownTimer == null)) {
       setState(() => countdownTimer!.cancel());
@@ -200,11 +205,30 @@ class _State extends State<Mcq> {
       //PassValue();
 
     }
+    if(currentques!.quesType==2){
+      setState(() {
+        ramdomcolor = ColorConstants.yellow_ques;
+        lltype1=false;
+      });
+
+    }else if(currentques!.quesType==3){
+      setState(() {
+        ramdomcolor = ColorConstants.blue_ques;
+        lltype1=true;
+      });
+
+    }else{
+      setState(() {
+        ramdomcolor = ColorConstants.red_ques;
+        lltype1=true;
+      });
+
+    }
   }
 
   PassValue() {
     answerstring = "";
-    for (var i = 0; i < answer.length; i++) {
+    for (int i = 0; i < answer.length; i++) {
       if (answerstring.isEmpty) {
         answerstring = answer[i].toString();
       } else {
@@ -229,10 +253,10 @@ class _State extends State<Mcq> {
     });
   }
 
-  List<Color> color = <Color>[
-    Color(0xFFED313B),
-    //  Color(0xFF2da79e)
-  ];
+  // List<Color> color = <Color>[
+  //   Color(0xFFED313B),
+  //   //  Color(0xFF2da79e)
+  // ];
 
   void getQuestions(String quizId) async {
     http.Response response = await http
@@ -730,15 +754,17 @@ class _State extends State<Mcq> {
                               )),
                         ],
                       ),
+
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                          child: Text(
-                            currentques!.question!,
-                            style: TextStyle(
-                                color: ColorConstants.lightgrey200,
-                                fontSize: 18),
-                            textAlign: TextAlign.center,
-                          )),
+                          child:
+                          Text( Bidi.stripHtmlIfNeeded(currentques!.question!),
+                              style: TextStyle(
+                                  color: ColorConstants.lightgrey200,
+                                  fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
 
                       if (currentques!.questionMedia!.isNotEmpty)
                         Container(
@@ -750,158 +776,264 @@ class _State extends State<Mcq> {
                               alignment: Alignment.center,
                             )),
 
-                      if (currentques!.option1!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: _hasBeenPressed1
-                                  ? ColorConstants.lightgrey200
-                                  : ramdomcolor,
-                              onPrimary: Colors.white,
-                              elevation: 3,
-                              alignment: Alignment.center,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0.0)),
-                              // fixedSize: const Size(100, 40),
-                              //////// HERE
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _hasBeenPressed1 = !_hasBeenPressed1;
-                                _hasBeenPressed2 = false;
-                                _hasBeenPressed3 = false;
-                                _hasBeenPressed4 = false;
-                                selectans = _hasBeenPressed1 ? "1" : "0";
-                                answer[_questionindex] = 1;
-                              });
-                            },
-                            child: Text(
-                              currentques!.option1!,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: _hasBeenPressed1
-                                    ? ramdomcolor
-                                    : ColorConstants.lightgrey200,
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (currentques!.option2!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: _hasBeenPressed2
-                                  ? ColorConstants.lightgrey200
-                                  : ramdomcolor,
-                              onPrimary: Colors.white,
-                              elevation: 3,
-                              alignment: Alignment.center,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0.0)),
-                              //  fixedSize: const Size(100, 40),
-                              //////// HERE
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _hasBeenPressed2 = !_hasBeenPressed2;
-                                _hasBeenPressed1 = false;
-                                _hasBeenPressed3 = false;
-                                _hasBeenPressed4 = false;
-                                selectans = _hasBeenPressed2 ? "2" : "0";
-                                answer[_questionindex] = _hasBeenPressed2 ? 2 : 0;
-                              });
-                            },
-                            child: Text(
-                              currentques!.option2.toString(),
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: _hasBeenPressed2
-                                    ? ramdomcolor
-                                    : ColorConstants.lightgrey200,
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (currentques!.option3!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: _hasBeenPressed3
-                                  ? ColorConstants.lightgrey200
-                                  : ramdomcolor,
-                              onPrimary: Colors.white,
-                              elevation: 3,
-                              alignment: Alignment.center,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0.0)),
-                              //  fixedSize: const Size(100, 40),
-                              //////// HERE
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _hasBeenPressed3 = !_hasBeenPressed3;
-                                _hasBeenPressed2 = false;
-                                _hasBeenPressed1 = false;
-                                _hasBeenPressed4 = false;
-                                selectans = _hasBeenPressed3 ? "3" : "0";
-                                answer[_questionindex] = 3;
-                              });
-                            },
-                            child: Text(
-                              currentques!.option3.toString(),
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: _hasBeenPressed3
-                                    ? ramdomcolor
-                                    : ColorConstants.lightgrey200,
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (currentques!.option4!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          decoration: BoxDecoration(
-                            color: ramdomcolor,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: _hasBeenPressed4
-                                  ? ColorConstants.lightgrey200
-                                  : ramdomcolor,
-                              onPrimary: Colors.white,
-                              elevation: 3,
-                              alignment: Alignment.center,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0.0)),
-                              // fixedSize: const Size(100, 40),
-                              //////// HERE
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _hasBeenPressed4 = !_hasBeenPressed4;
-                                _hasBeenPressed2 = false;
-                                _hasBeenPressed3 = false;
-                                _hasBeenPressed1 = false;
-                                selectans = _hasBeenPressed4 ? "4" : "0";
-                                answer[_questionindex] = 4;
-                              });
-                            },
-                            child: Text(
-                              currentques!.option4!.toString(),
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: _hasBeenPressed4
-                                    ? ramdomcolor
-                                    : ColorConstants.lightgrey200,
-                              ),
-                            ),
-                          ),
-                        ),
 
+                        Visibility(
+                          visible: lltype1,
+                          replacement: ListBody(
+                           children: [
+                             Container(
+                               child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
+                                   shrinkWrap: true,
+                                   physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
+
+                                   children: [
+
+                                     if (currentques!.option1!.isNotEmpty)
+                                     Container(
+                                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                       child: ElevatedButton(
+                                         style: ElevatedButton.styleFrom(
+                                           primary: _hasBeenPressed1
+                                               ? ColorConstants.lightgrey200
+                                               : ramdomcolor,
+                                           onPrimary: Colors.white,
+                                           elevation: 3,
+                                           side: BorderSide(
+                                             width: 1.0,
+                                             color: Colors.white,
+                                           ),
+                                           alignment: Alignment.center,
+                                           shape: RoundedRectangleBorder(
+                                               borderRadius: BorderRadius.circular(0.0)),
+                                            fixedSize:  Size(150, 150),
+                                           //////// HERE
+                                         ),
+                                         onPressed: () {
+                                           setState(() {
+                                             _hasBeenPressed1 = !_hasBeenPressed1;
+                                             _hasBeenPressed2 = false;
+                                             _hasBeenPressed3 = false;
+                                             _hasBeenPressed4 = false;
+                                             selectans = _hasBeenPressed1 ? "1" : "0";
+                                             answer[_questionindex-1] = _hasBeenPressed1 ? 1 : 0;
+                                           });
+                                         },
+                                         child: Text(
+                                           currentques!.option1!,
+                                           style: TextStyle(
+                                             fontSize: 18,
+                                             color: _hasBeenPressed1
+                                                 ? ramdomcolor
+                                                 : ColorConstants.lightgrey200,
+                                           ),
+                                         ),
+                                       ),
+                                     ),
+
+                                     if (currentques!.option2!.isNotEmpty)
+                                       Container(
+                                         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                         child: ElevatedButton(
+                                           style: ElevatedButton.styleFrom(
+                                             primary: _hasBeenPressed2
+                                                 ? ColorConstants.lightgrey200
+                                                 : ramdomcolor,
+                                             onPrimary: Colors.white,
+                                             elevation: 3,
+                                             alignment: Alignment.center,
+                                             side: BorderSide(
+                                               width: 1.0,
+                                               color: Colors.white,
+                                             ),
+
+                                             shape: RoundedRectangleBorder(
+                                                 borderRadius: BorderRadius.circular(0.0)),
+                                             fixedSize:  Size(150, 150),
+                                             //////// HERE
+                                           ),
+                                           onPressed: () {
+                                             setState(() {
+                                               _hasBeenPressed2 = !_hasBeenPressed2;
+                                               _hasBeenPressed1 = false;
+                                               _hasBeenPressed3 = false;
+                                               _hasBeenPressed4 = false;
+                                               selectans = _hasBeenPressed2 ? "2" : "0";
+                                               answer[_questionindex-1] = _hasBeenPressed2 ? 2 : 0;
+                                             });
+                                           },
+                                           child: Text(
+                                             currentques!.option2.toString(),
+                                             style: TextStyle(
+                                               fontSize: 18,
+                                               color: _hasBeenPressed2
+                                                   ? ramdomcolor
+                                                   : ColorConstants.lightgrey200,
+                                             ),
+                                           ),
+                                         ),
+                                       ),
+                                     ]
+                        ),
+                             )
+                            ]
+                          ),
+                          child: ListBody(
+                            children: [
+                              if (currentques!.option1!.isNotEmpty)
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: _hasBeenPressed1
+                                        ? ColorConstants.lightgrey200
+                                        : ramdomcolor,
+                                    onPrimary: Colors.white,
+                                    elevation: 3,
+                                    alignment: Alignment.center,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(0.0)),
+                                    // fixedSize: const Size(100, 40),
+                                    //////// HERE
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _hasBeenPressed1 = !_hasBeenPressed1;
+                                      _hasBeenPressed2 = false;
+                                      _hasBeenPressed3 = false;
+                                      _hasBeenPressed4 = false;
+                                      selectans = _hasBeenPressed1 ? "1" : "0";
+                                      answer[_questionindex-1] =  _hasBeenPressed1 ? 1 : 0;
+                                    });
+                                  },
+                                  child: Text(
+                                    currentques!.option1!,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: _hasBeenPressed1
+                                          ? ramdomcolor
+                                          : ColorConstants.lightgrey200,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                      if (currentques!.option2!.isNotEmpty)
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: _hasBeenPressed2
+                                    ? ColorConstants.lightgrey200
+                                    : ramdomcolor,
+                                onPrimary: Colors.white,
+                                elevation: 3,
+                                alignment: Alignment.center,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                //  fixedSize: const Size(100, 40),
+                                //////// HERE
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _hasBeenPressed2 = !_hasBeenPressed2;
+                                  _hasBeenPressed1 = false;
+                                  _hasBeenPressed3 = false;
+                                  _hasBeenPressed4 = false;
+                                  selectans = _hasBeenPressed2 ? "2" : "0";
+                                  answer[_questionindex-1] = _hasBeenPressed2 ? 2 : 0;
+                                });
+                              },
+                              child: Text(
+                                currentques!.option2.toString(),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: _hasBeenPressed2
+                                      ? ramdomcolor
+                                      : ColorConstants.lightgrey200,
+                                ),
+                              ),
+                            ),
+                          ),
+                      if (currentques!.option3!.isNotEmpty)
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: _hasBeenPressed3
+                                    ? ColorConstants.lightgrey200
+                                    : ramdomcolor,
+                                onPrimary: Colors.white,
+                                elevation: 3,
+                                alignment: Alignment.center,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                //  fixedSize: const Size(100, 40),
+                                //////// HERE
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _hasBeenPressed3 = !_hasBeenPressed3;
+                                  _hasBeenPressed2 = false;
+                                  _hasBeenPressed1 = false;
+                                  _hasBeenPressed4 = false;
+                                  selectans = _hasBeenPressed3 ? "3" : "0";
+                                  answer[_questionindex-1] = _hasBeenPressed3 ? 3 : 0;
+                                });
+                              },
+                              child: Text(
+                                currentques!.option3.toString(),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: _hasBeenPressed3
+                                      ? ramdomcolor
+                                      : ColorConstants.lightgrey200,
+                                ),
+                              ),
+                            ),
+                          ),
+                      if (currentques!.option4!.isNotEmpty)
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            decoration: BoxDecoration(
+                              color: ramdomcolor,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: _hasBeenPressed4
+                                    ? ColorConstants.lightgrey200
+                                    : ramdomcolor,
+                                onPrimary: Colors.white,
+                                elevation: 3,
+                                alignment: Alignment.center,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                // fixedSize: const Size(100, 40),
+                                //////// HERE
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _hasBeenPressed4 = !_hasBeenPressed4;
+                                  _hasBeenPressed2 = false;
+                                  _hasBeenPressed3 = false;
+                                  _hasBeenPressed1 = false;
+                                  selectans = _hasBeenPressed4 ? "4" : "0";
+                                  answer[_questionindex-1] = _hasBeenPressed4 ? 4 : 0;
+                                });
+                              },
+                              child: Text(
+                                currentques!.option4!.toString(),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: _hasBeenPressed4
+                                      ? ramdomcolor
+                                      : ColorConstants.lightgrey200,
+                                ),
+                              ),
+                            ),
+                          ),
+                            ],
+                          ),
+                        ),
                       Container(
                         margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
                         child: Row(

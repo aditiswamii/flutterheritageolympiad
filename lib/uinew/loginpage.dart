@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -304,6 +305,7 @@ Loginuser(jsonDecode){
                       ],
                     ),
                   )),
+              if(Platform.isAndroid)
               Container(margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
                   child: Container(
@@ -317,9 +319,35 @@ Loginuser(jsonDecode){
                         child: Row(
                           children: [
                             Image.asset("assets/images/google_512.png",height: 20,width: 20,),
-                            Text("Sign in with Google", style: TextStyle(
-                                decoration: TextDecoration.underline,fontSize: 16,
-                                color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text("Sign in with Google", style: TextStyle(
+                                  decoration: TextDecoration.underline,fontSize: 16,
+                                  color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            ),
+                          ],
+                        ),
+                      )),
+                ),
+              ),
+              if(Platform.isIOS)
+              Container(margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(4),
+                      padding: EdgeInsets.all(4),
+                      child: GestureDetector(
+                        onTap: () {
+                          // signupgoogle(context);
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset("assets/images/applelogo.png",height: 20,width: 20,),
+                            Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text("Sign in with Apple", style: TextStyle(
+                                  decoration: TextDecoration.underline,fontSize: 16,
+                                  color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            ),
                           ],
                         ),
                       )),
@@ -341,9 +369,11 @@ Loginuser(jsonDecode){
                         child: Row(
                           children: [
                             Image.asset("assets/images/facebook_512.png",height: 20,width: 20,),
-                            Text("Sign in with Facebook", style: TextStyle(
-                                decoration: TextDecoration.underline,fontSize: 16,
-                                color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text("Sign in with Facebook", style: TextStyle(
+                                  decoration: TextDecoration.underline,fontSize: 16,
+                                  color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            ),
                           ],
                         ),
                       )),
@@ -366,9 +396,11 @@ Loginuser(jsonDecode){
                         child: Row(
                           children: [
                             Image.asset("assets/images/twitter_icon.png",height: 20,width: 20,),
-                            Text("Sign in with twitter", style: TextStyle(
-                                decoration: TextDecoration.underline,fontSize: 16,
-                                color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text("Sign in with twitter", style: TextStyle(
+                                  decoration: TextDecoration.underline,fontSize: 16,
+                                  color: ColorConstants.txt),textAlign: TextAlign.center,),
+                            ),
                           ],
                         ),
                       )),

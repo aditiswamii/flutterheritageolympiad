@@ -139,11 +139,11 @@ String packagename="";
             ),
           ):  Container(
                 alignment: Alignment.center,
-                margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                 child: const Text(
                   "YOU\nSCORED...",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 18,
                       color: ColorConstants.txt,
                       fontFamily: "Nunito"),
                   textAlign: TextAlign.center,
@@ -182,7 +182,11 @@ String packagename="";
                         front: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(child: Text("${widget.savedata["xp"]} XP")),
+                            Center(child: Text("${widget.savedata["xp"]} XP",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.deepOrange,fontWeight: FontWeight.w600,
+                                  fontFamily: "Nunito"),)),
 
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >=
@@ -190,72 +194,115 @@ String packagename="";
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
                                     10.0)
-                              const Center(child: Text("oh boy!")),
+                              const Center(child: Text("oh boy!",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: ColorConstants.txt,fontWeight: FontWeight.w600,
+                                    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >=
                                 10.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
                                     50.0)
-                              const Center(child: Text("Don't give up!")),
+                              const Center(child: Text("Don't give up!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) ==
                                 50.0)
                               const Center(
-                                  child: Text("Practice makes perfect!")),
+                                  child: Text("Practice makes perfect!",
+                                    style: TextStyle(
+                                        fontSize: 12,fontWeight: FontWeight.w600,
+                                        color: ColorConstants.txt,
+                                        fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >
                                 50.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <=
                                     90.0)
-                              const Center(child: Text("Almost there!")),
+                              const Center(child: Text("Almost there!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >
                                 90.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <=
                                     100.0)
-                              const Center(child: Text("Keep it up!")),
+                              const Center(child: Text("Keep it up!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                           ],
                         ),
                         back: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(child: Text("${widget.savedata["per"]} %")),
+                            Center(child: Text("${widget.savedata["per"]} %",style: TextStyle(
+    fontSize: 24,
+    color: Colors.deepOrange,fontWeight: FontWeight.w600,
+    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >=
                                 0.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
                                     10.0)
-                              const Center(child: Text("oh boy!")),
+                              const Center(child: Text("oh boy!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >=
                                 10.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <
                                     50.0)
-                              const Center(child: Text("Don't give up!")),
+                              const Center(child: Text("Don't give up!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) ==
                                 50.0)
                               const Center(
-                                  child: Text("Practice makes perfect!")),
+                                  child: Text("Practice makes perfect!",
+                                    style: TextStyle(
+                                        fontSize: 12,fontWeight: FontWeight.w600,
+                                        color: ColorConstants.txt,
+                                        fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >
                                 50.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <=
                                     90.0)
-                              const Center(child: Text("Almost there!")),
+                              const Center(child: Text("Almost there!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                             if (double.parse(widget.savedata["per"]
                                 .toString()) >
                                 90.0 &&
                                 double.parse(widget.savedata["per"]
                                     .toString()) <=
                                     100.0)
-                              const Center(child: Text("Keep it up!")),
+                              const Center(child: Text("Keep it up!",
+                                style: TextStyle(
+                                    fontSize: 12,fontWeight: FontWeight.w600,
+                                    color: ColorConstants.txt,
+                                    fontFamily: "Nunito"),)),
                           ],
                         ),
                       ),
