@@ -2,13 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 
-void main() {
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: DialogDuelWon(),
-  ));
-}
+
 class DialogDuelWon extends StatefulWidget{
   const DialogDuelWon({Key? key}) : super(key: key);
 
