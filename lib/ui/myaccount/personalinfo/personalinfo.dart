@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -247,19 +249,27 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         'image',
         _image!.path));
     request.send().then((response) {
-
+ log('userid : '+userid.toString());
+ log('mobile : '+mobile.toString());
+ log('first_name : '+first_name.toString());
+ log('dob : '+dob.toString());
+ log('state_id : '+state_id.toString());
+ log('city_id : '+city_id.toString());
+ log('gender : '+gender.toString());
+ log('last_name : '+last_name.toString());
+ log('image : '+image.toString());
       //print("rrrrr=>"+response.statusCode.toString());
 
       if (response.statusCode == 200) {
-        Navigator.pop(context);
-        showLoaderDialog(context);
+        // Navigator.pop(context);
+        // showLoaderDialog(context);
         getProfile(userid.toString());
         //store response as string
         onupdate();
         print("Uploaded!");
 
       }else{
-        Navigator.pop(context);
+        // Navigator.pop(context);
         print("uploadfile response:"+response.statusCode.toString());
       }
     });
@@ -276,14 +286,20 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
           'state_id': state_id.toString(),
           'city_id': city_id.toString(),
           'gender': gender.toString(),
-          'last_name': last_name.toString(),
-
-
+          'last_name': last_name.toString()
         });
-
+    log('userid : '+userid.toString());
+    log('mobile : '+mobile.toString());
+    log('first_name : '+first_name.toString());
+    log('dob : '+dob.toString());
+    log('state_id : '+state_id.toString());
+    log('city_id : '+city_id.toString());
+    log('gender : '+gender.toString());
+    log('last_name : '+last_name.toString());
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      log(jsonResponse.toString());
+      // Navigator.pop(context);
       data = response.body;
       if(jsonResponse['status']==200){
 
@@ -300,7 +316,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       }
 
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print("profileupdate:"+response.statusCode.toString());
     }
   }
@@ -963,28 +979,43 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           //////// HERE
                         ),
                         onPressed: () {
+                          log(dob.toString());
+                          log(dobdate.toString());
+                          String strDigits(int n) => n.toString().padLeft(2, '0');
+                          log("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}");
+                          // if(dob==null)
+                          //   {
+                          //     var newdate= DateTime.parse(dobdate);
+                          //     final DateFormat formatter = DateFormat('dd-mm-yyyy');
+                          //     final String formatted = formatter.format(newdate);
+                          //
+                          //    setState(() {
+                          //      dob="$formatted";
+                          //    });
+                          //   }
+                          // log(dob.toString());
                           // Navigator.of(context).pop();
                           if (validateMobile(mobileno.toString())) {
                             if (validateName(firstname)) {
                               if (_image != null) {
-                                showLoaderDialog(context);
+                               // showLoaderDialog(context);
                                 uploadFile(
                                     userid.toString(),
                                     mobileno.toString(),
                                     firstname.toString(),
-                                    dob.toString(),
+                                    dobdate.toString(),
                                     stateid.toString(),
                                     cityid.toString(),
                                     gendername.toString(),
                                     lastname.toString(),
                                     _image!);
                               } else {
-                                showLoaderDialog(context);
+                               // showLoaderDialog(context);
                                 profileupdateapi(
                                     userid.toString(),
                                     mobileno.toString(),
                                     firstname.toString(),
-                                    dob.toString(),
+                                    dobdate.toString(),
                                     stateid.toString(),
                                     cityid.toString(),
                                     gendername.toString(),

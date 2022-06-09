@@ -251,10 +251,12 @@ class _YourPageState extends State<YourPage> {
 
   onbadgesuccess(badgedata) {
     //  xplist=List.from(xpdata['data']['mnth']);
-    if (badgedata != null) print("badgedata : " + badgedata['data'].toString());
-    print("badgedata : " + badgedata['data'][0]['image'].toString());
-    print("badgedata : " + badgedata['data'][0]['title'].toString());
-    print("badgedata : " + badgedata['data'][0]['description'].toString());
+    if (badgedata != null) {
+      print("badgedata : " + badgedata['data'].toString());
+      print("badgedata : " + badgedata['data'][0]['image'].toString());
+      print("badgedata : " + badgedata['data'][0]['title'].toString());
+      print("badgedata : " + badgedata['data'][0]['description'].toString());
+    }
   }
 
   setgoals(String userid, String number, String type) async {
@@ -365,7 +367,112 @@ class _YourPageState extends State<YourPage> {
   //     },
   //   );
   // }
+  var badgedetaildata;
+  getbadgedetails(String userid,String badgesId) async {
 
+    http.Response response =
+    await http.post(
+        Uri.parse(StringConstants.BASE_URL + "badges_details"),body: {
+      'user_id':userid.toString(),
+      'badges_id':badgesId.toString()
+    });
+
+    if (response.statusCode == 200) {
+
+      datab = response.body;
+      var jsonResponse = convert.jsonDecode(response.body);
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          badgedetaildata =
+              jsonResponse; //get all the data from json string superheros
+          print(badgedetaildata.length);
+          print(badgedetaildata.toString());
+          print(badgedetaildata['data'].toString());
+
+          // onbadgesuccess(badgedata);
+          onbadgedetails(badgedetaildata);
+        });
+
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+      }else{
+        snackBar =
+            SnackBar(
+              content: Text(
+                  jsonResponse['message']),
+            );
+        ScaffoldMessenger
+            .of(context)
+            .showSnackBar(
+            snackBar);
+      }
+    }else {
+
+      print(response.statusCode);
+    }
+
+  }
+  onbadgedetails(badgedetaildata){
+    //  xplist=List.from(xpdata['data']['mnth']);
+    if (badgedata != null) print("badgedata : " + badgedetaildata['data'].toString());
+    print("badgedata : " + badgedetaildata['data']['image'].toString());
+    print("badgedata : " + badgedetaildata['data']['title'].toString());
+    print("badgedata : " + badgedetaildata['data']['description'].toString());
+    if(badgedetaildata!=null){
+      AlertDialog alert = AlertDialog(
+        insetPadding: EdgeInsets.all(4),
+        titlePadding: EdgeInsets.all(4),
+        contentPadding:EdgeInsets.all(4),
+        shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(
+                20.0)),
+        content: Container(
+          height: 180,
+          width: 250,
+          alignment: Alignment.center,
+          child: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.fromLTRB(20,10,20,10),
+            height: 180,
+            width: 250,
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  height: 80,
+                  width: 80,
+                  child:
+                  CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage:
+                    NetworkImage(badgedetaildata['data']['image'].toString()),
+                    backgroundColor: Colors.transparent,
+                  ),
+                ),
+                Text(badgedetaildata['data']['title'].toString() ,style: TextStyle(
+                    fontSize: 18, color: ColorConstants.txt,fontWeight: FontWeight.w600)),
+                Text(badgedetaildata['data']['message'].toString(), style: TextStyle(
+                  fontSize: 18, color: ColorConstants.txt,),textAlign: TextAlign.center,),
+              ],
+            ),
+          ),
+        ),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+            Future.delayed(
+              Duration(seconds: 3),
+                  () {
+                Navigator.of(context).pop(true);
+              },
+            );
+            return  alert;
+          }
+      );
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -634,13 +741,18 @@ class _YourPageState extends State<YourPage> {
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
-                                                return Padding(
-                                                  padding: EdgeInsets.all(5),
-                                                  child: Container(
-                                                         height: 50,
-                                                    width: MediaQuery.of(context).size.width,
-                                                    child: Image.network(
-                                                        "${badgedata['data'][index]['image'].toString()}", height: 50,width: 50,),
+                                                return GestureDetector(
+                                                  onTap: (){
+                                                    getbadgedetails(userid.toString(),badgedata['data'][index]['id'].toString());
+                                                  },
+                                                  child: Padding(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Container(
+                                                           height: 50,
+                                                      width: MediaQuery.of(context).size.width,
+                                                      child: Image.network(
+                                                          "${badgedata['data'][index]['image'].toString()}", height: 50,width: 50,),
+                                                    ),
                                                   ),
                                                 );
                                               }),
@@ -747,26 +859,22 @@ class _YourPageState extends State<YourPage> {
                                                     color: ColorConstants.txt,
                                                     fontSize: 16)),
                                           ),
-                                          if(((goalsummarydata['data']
-                                          ['play'] *
-                                              100) /
-                                              (goalsummarydata['data']
-                                              ['total']))<1)
+                                          if((goalsummarydata['data']['play'] / (goalsummarydata['data']['total'])) >= 1 )
                                             Container(
                                                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                                 child: GFProgressBar(
                                                   percentage:1.0,
-                                                  lineHeight: 30,
+                                                  lineHeight: 20,
                                                   alignment: MainAxisAlignment.spaceBetween,
                                                   child: Text('${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}', textAlign: TextAlign.left,
-                                                    style: TextStyle(fontSize: 18, color: Colors.white),
+                                                    style: TextStyle(fontSize: 14, color: Colors.white),
                                                   ),
                                                   backgroundColor: Colors.black12,
                                                   progressBarColor: ColorConstants.verdigris,
                                                 )
                                             ),
 
-                                          if (((goalsummarydata['data']['play'] * 100) / (goalsummarydata['data']['total'])) >= 1)
+                                          if (((goalsummarydata['data']['play'] ) / (goalsummarydata['data']['total'])) < 1)
                                             Container(
                                                 margin: EdgeInsets.fromLTRB(
                                                     10, 10, 10, 10),
