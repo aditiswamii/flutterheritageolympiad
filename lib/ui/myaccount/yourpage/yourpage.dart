@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
@@ -7,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/badgeresponse/GetBadgeResponse.dart';
+import 'package:flutterheritageolympiad/modal/leaderboardrank/GetLeaderboardRank.dart';
+import 'package:flutterheritageolympiad/modal/leaguerank/GetLeagueRankResponse.dart';
 import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse.dart';
 
 import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
@@ -53,7 +56,7 @@ class _YourPageState extends State<YourPage> {
   List<num>? xplist;
   GetBadgeResponse? badgeResponse;
   GetXpGainChartResponse? getXpGainChartResponse;
-
+  GetLeaderboardRank? getleaderboardR;
 
   final List<String> goallist = <String>[
     'Monthly',
@@ -75,52 +78,84 @@ class _YourPageState extends State<YourPage> {
   }
 
   getUserProfile(String userid) async {
-
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "user_profile"),
         body: {'user_id': userid.toString()});
-
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-
       data = response.body;
-      //final responseJson = json.decode(response.body);//store response as string
-      setState(() {
-        prodata = jsonDecode(
-            data!)['data']; //get all the data from json string superheros
-        print(prodata.length);
-        print(prodata.toString());
-        print("profileuserdata" + prodata['user'].toString());
-        onsuccess(prodata['user']);
-      });
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          prodata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(prodata.length);
+          print(prodata.toString());
+          print("profileuserdata" + prodata['user'].toString());
+          onsuccess(prodata['user']);
+        });
 
-      var venam = jsonDecode(data!)['data'];
-      print(venam);
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+      } else {
+        snackBar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } else {
-
       print(response.statusCode);
     }
   }
 
-  onsuccess(jsonDecode) {
-    if (jsonDecode != null) {
+  onsuccess(prodataa) {
+    if (prodataa != null) {
       setState(() {
         // userprofileresdata=jsonDecode;
         username =
-            "${jsonDecode['name'][0].toUpperCase() + jsonDecode['name'].substring(1)}";
-        country = "${jsonDecode['country']}";
-        profilepic = jsonDecode['image'].toString();
-        agegroup = jsonDecode['age_group'].toString();
-        flagicon = jsonDecode['flag_icon'].toString();
+            "${prodataa['name'][0].toUpperCase() + prodataa['name'].substring(1)}";
+        country = "${prodataa['country']}";
+        profilepic = prodataa['image'].toString();
+        agegroup = prodataa['age_group'].toString();
+        flagicon = prodataa['flag_icon'].toString();
       });
       print("flagicon" + flagicon);
       xpgainchart(userid.toString(), "");
       getbadges(userid.toString(), "");
       goalsummary(userid.toString());
+      var date = DateTime.now();
+      var month;
+      if (date.month == 1) {
+        month = "jan";
+      } else if (date.month == 2) {
+        month = "feb";
+      } else if (date.month == 3) {
+        month = "mar";
+      } else if (date.month == 4) {
+        month = "apr";
+      } else if (date.month == 5) {
+        month = "may";
+      } else if (date.month == 6) {
+        month = "jun";
+      } else if (date.month == 7) {
+        month = "jul";
+      } else if (date.month == 8) {
+        month = "aug";
+      } else if (date.month == 9) {
+        month = "sep";
+      } else if (date.month == 10) {
+        month = "oct";
+      } else if (date.month == 11) {
+        month = "nov";
+      } else if (date.month == 12) {
+        month = "dec";
+      }
+      log(date.month.toString());
+      leaderboardranking(userid.toString(), month.toString(), "");
     }
   }
 
   xpgainchart(String userid, String contactid) async {
-
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL + "xpgainchart"), body: {
       'user_id': userid.toString(),
@@ -128,7 +163,6 @@ class _YourPageState extends State<YourPage> {
     });
 
     if (response.statusCode == 200) {
-
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -141,7 +175,7 @@ class _YourPageState extends State<YourPage> {
           print("max" + jsonResponse['data']['max'].toString());
           print("totalquiz" + jsonResponse['data']['totalquiz'].toString());
 
-          onxpsuccess(xpdata,getXpGainChartResponseFromJson(data!));
+          onxpsuccess(xpdata, getXpGainChartResponseFromJson(data!));
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -153,14 +187,13 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-
       print(response.statusCode);
     }
   }
 
   onxpsuccess(xpdata, GetXpGainChartResponse? getXpGainChartR) {
     setState(() {
-      getXpGainChartResponse=getXpGainChartR;
+      getXpGainChartResponse = getXpGainChartR;
     });
     //  xplist=List.from(xpdata['data']['mnth']);
     print("mnth : " + xpdata['data']['mnth'].toString());
@@ -170,7 +203,6 @@ class _YourPageState extends State<YourPage> {
   }
 
   leaderboardranking(String userid, String month, String contactid) async {
-
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "leaderboardranking"),
         body: {
@@ -180,22 +212,17 @@ class _YourPageState extends State<YourPage> {
         });
 
     if (response.statusCode == 200) {
-
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
         setState(() {
-          leaderdata =
-              jsonResponse; //get all the data from json string superheros
+          leaderdata = jsonResponse[
+              'data']; //get all the data from json string superheros
           print(leaderdata.length);
           print(leaderdata.toString());
-          print("rank : " + jsonResponse['data']['rank'].toString());
 
-          onleadersuccess(leaderdata);
+          onleadersuccess(getLeaderboardRankFromJson(data));
         });
-
-        var venam = jsonDecode(data!)['data'];
-        print(venam);
       } else {
         snackBar = SnackBar(
           content: Text(jsonResponse['message']),
@@ -203,17 +230,32 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-
       print(response.statusCode);
     }
   }
 
-  onleadersuccess(leaderdata) {
-    print("rank : " + leaderdata['rank'].toString());
+  int index = 0;
+  onleadersuccess(GetLeaderboardRank? leaderboardRank) {
+    if (leaderboardRank != null) {
+      if (leaderboardRank.data != null) {
+        setState(() {
+          getleaderboardR = leaderboardRank;
+        });
+      }
+
+      for (int i = 0; i < getleaderboardR!.data!.rank!.length; i++) {
+        setState(() {
+          index = i;
+        });
+
+      }
+
+      log("rank : " + leaderdata['rank'].toString());
+      log("rank : " + leaderdata.toString());
+    }
   }
 
   getbadges(String userid, String contactid) async {
-
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL + "badges"), body: {
       'user_id': userid.toString(),
@@ -221,7 +263,6 @@ class _YourPageState extends State<YourPage> {
     });
 
     if (response.statusCode == 200) {
-
       datab = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -245,7 +286,6 @@ class _YourPageState extends State<YourPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-
       print(response.statusCode);
     }
   }
@@ -261,7 +301,6 @@ class _YourPageState extends State<YourPage> {
   }
 
   setgoals(String userid, String number, String type) async {
-
     http.Response response =
         await http.post(Uri.parse(StringConstants.BASE_URL + "goals"), body: {
       'user_id': userid.toString(),
@@ -270,7 +309,6 @@ class _YourPageState extends State<YourPage> {
     });
 
     if (response.statusCode == 200) {
-
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -300,7 +338,6 @@ class _YourPageState extends State<YourPage> {
 
       }
     } else {
-
       print(response.statusCode);
     }
   }
@@ -316,7 +353,6 @@ class _YourPageState extends State<YourPage> {
         body: {'user_id': userid.toString()});
 
     if (response.statusCode == 200) {
-
       data = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -369,17 +405,12 @@ class _YourPageState extends State<YourPage> {
   //   );
   // }
   var badgedetaildata;
-  getbadgedetails(String userid,String badgesId) async {
-
-    http.Response response =
-    await http.post(
-        Uri.parse(StringConstants.BASE_URL + "badges_details"),body: {
-      'user_id':userid.toString(),
-      'badges_id':badgesId.toString()
-    });
+  getbadgedetails(String userid, String badgesId) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "badges_details"),
+        body: {'user_id': userid.toString(), 'badges_id': badgesId.toString()});
 
     if (response.statusCode == 200) {
-
       datab = response.body;
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 200) {
@@ -396,45 +427,38 @@ class _YourPageState extends State<YourPage> {
 
         var venam = jsonDecode(data!)['data'];
         print(venam);
-      }else{
-        snackBar =
-            SnackBar(
-              content: Text(
-                  jsonResponse['message']),
-            );
-        ScaffoldMessenger
-            .of(context)
-            .showSnackBar(
-            snackBar);
+      } else {
+        snackBar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-    }else {
-
+    } else {
       print(response.statusCode);
     }
-
   }
-  onbadgedetails(badgedetaildata){
+
+  onbadgedetails(badgedetaildata) {
     //  xplist=List.from(xpdata['data']['mnth']);
-    if (badgedata != null) print("badgedata : " + badgedetaildata['data'].toString());
+    if (badgedata != null)
+      print("badgedata : " + badgedetaildata['data'].toString());
     print("badgedata : " + badgedetaildata['data']['image'].toString());
     print("badgedata : " + badgedetaildata['data']['title'].toString());
     print("badgedata : " + badgedetaildata['data']['description'].toString());
-    if(badgedetaildata!=null){
+    if (badgedetaildata != null) {
       AlertDialog alert = AlertDialog(
         insetPadding: EdgeInsets.all(4),
         titlePadding: EdgeInsets.all(4),
-        contentPadding:EdgeInsets.all(4),
-        shape: RoundedRectangleBorder(
-            borderRadius:
-            BorderRadius.circular(
-                20.0)),
+        contentPadding: EdgeInsets.all(4),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         content: Container(
           height: 180,
           width: 250,
           alignment: Alignment.center,
           child: Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(20,10,20,10),
+            margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
             height: 180,
             width: 250,
             child: Column(
@@ -443,18 +467,26 @@ class _YourPageState extends State<YourPage> {
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   height: 80,
                   width: 80,
-                  child:
-                  CircleAvatar(
+                  child: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage:
-                    NetworkImage(badgedetaildata['data']['image'].toString()),
+                    backgroundImage: NetworkImage(
+                        badgedetaildata['data']['image'].toString()),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
-                Text(badgedetaildata['data']['title'].toString() ,style: TextStyle(
-                    fontSize: 18, color: ColorConstants.txt,fontWeight: FontWeight.w600)),
-                Text(badgedetaildata['data']['message'].toString(), style: TextStyle(
-                  fontSize: 18, color: ColorConstants.txt,),textAlign: TextAlign.center,),
+                Text(badgedetaildata['data']['title'].toString(),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: ColorConstants.txt,
+                        fontWeight: FontWeight.w600)),
+                Text(
+                  badgedetaildata['data']['message'].toString(),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: ColorConstants.txt,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
@@ -462,18 +494,18 @@ class _YourPageState extends State<YourPage> {
       );
       showDialog(
           context: context,
-          builder: (BuildContext context){
+          builder: (BuildContext context) {
             Future.delayed(
               Duration(seconds: 3),
-                  () {
+              () {
                 Navigator.of(context).pop(true);
               },
             );
-            return  alert;
-          }
-      );
+            return alert;
+          });
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -520,22 +552,24 @@ class _YourPageState extends State<YourPage> {
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerLeft,
-
                   padding: EdgeInsets.all(5),
                   child: Center(
                     child: Card(
                       elevation: 3,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                      ),
+                          borderRadius: BorderRadius.circular(20)),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  HomePage()));
+                                  builder: (context) => HomePage()));
                         },
-                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        child: Image.asset(
+                          "assets/images/home_1.png",
+                          height: 40,
+                          width: 40,
+                        ),
                       ),
                     ),
                   ),
@@ -548,567 +582,657 @@ class _YourPageState extends State<YourPage> {
                     onTap: () {
                       _scaffoldKey.currentState!.openEndDrawer();
                     },
-                    child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
+                    child: Image.asset("assets/images/side_menu_2.png",
+                        height: 40, width: 40),
                   ),
                 ),
               ],
             ),
             Container(
               color: Colors.white70,
-              child:(prodata==null&&xpdata==null&&leaderdata==null&&goalsummarydata==null&&goaldata==null)?Container(height: MediaQuery.of(context).size.height,
-                child: Center(child: CircularProgressIndicator(color: ColorConstants.blue,)),): ListBody(
-                children: [
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
-                      child: const Text("YOUR PAGE",
-                          style: TextStyle(fontSize: 24, color: Colors.black))),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text(
-                        "You can find about your performance, your goals, and your achievements here.",
-                        style:
-                            TextStyle(fontSize: 15, color: ColorConstants.txt)),
-                  ),
-                  xpdata == null
-                      ? Container()
-                      : ListBody(
-                          children: [
-                            Card(
-                              child: Column(
+              child: (prodata == null &&
+                      xpdata == null &&
+                      goalsummarydata == null &&
+                      goaldata == null)
+                  ? Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: ColorConstants.blue,
+                      )),
+                    )
+                  : ListBody(
+                      children: [
+                        Container(
+                            alignment: Alignment.centerLeft,
+                            margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                            child: const Text("YOUR PAGE",
+                                style: TextStyle(
+                                    fontSize: 24, color: Colors.black))),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: const Text(
+                              "You can find about your performance, your goals, and your achievements here.",
+                              style: TextStyle(
+                                  fontSize: 15, color: ColorConstants.txt)),
+                        ),
+                        xpdata == null
+                            ? Container()
+                            : ListBody(
                                 children: [
-                                  Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 10),
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            alignment: Alignment.topRight,
-                                            child: GestureDetector(
-                                              onTap: (){
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>  PersonalInfoScreen()));
-                                              },
-                                              child: Container(
-                                                margin: const EdgeInsets.fromLTRB(
-                                                    0, 10, 10, 10),
-                                                height: 30,
-                                                width: 30,
-                                                alignment: Alignment.topRight,
-                                                padding: EdgeInsets.all(4),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    shape: BoxShape.circle),
-                                                child: Image.asset(
-                                                  "assets/images/editpen.png",
-                                                  height: 30,
-                                                  width: 30,
-                                                ),
-                                              ),
+                                  Card(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 10),
+                                            height: 200,
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
                                             ),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                              height: 100,
-                                              width: 100,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.all(4),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.red,
-                                                  shape: BoxShape.circle),
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 100,
-                                                child: CircleAvatar(
-                                                    backgroundColor: Colors.red,
-                                                    child: ClipOval(
-                                                        child: Image.network(
-                                                      profilepic,
-                                                      height: 100,
-                                                      width: 100,
-                                                      fit: BoxFit.cover,
-                                                    ))),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "${username}",
-                                      style: TextStyle(
-                                          color: ColorConstants.txt,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  username == null
-                                      ? Container()
-                                      : Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          alignment: Alignment.center,
-                                          height: 20,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "${agegroup}",
-                                                style: TextStyle(
-                                                    color: ColorConstants.txt,
-                                                    fontSize: 14),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              VerticalDivider(
-                                                  color: Colors.black),
-                                              // Text("|"),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                      height: 20,
-                                                      width: 20,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  alignment: Alignment.topRight,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PersonalInfoScreen()));
+                                                    },
+                                                    child: Container(
+                                                      margin: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 10, 10, 10),
+                                                      height: 30,
+                                                      width: 30,
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      padding:
+                                                          EdgeInsets.all(4),
                                                       decoration: BoxDecoration(
+                                                          color: Colors.white,
                                                           shape:
                                                               BoxShape.circle),
-                                                      child: CircleAvatar(
-                                                        radius: 20.0,
-                                                        backgroundImage:
-                                                            NetworkImage(
-                                                                "${flagicon}"),
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                      )),
-                                                  Text(
-                                                    "${country}",
-                                                    style: TextStyle(
-                                                        color:
-                                                            ColorConstants.txt,
-                                                        fontSize: 14),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                ],
-                              ),
-                            ),
-                            badgedata['data'] == null
-                                ? Container()
-                                : Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 10),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text("YOUR BADGES",
-                                                style: TextStyle(
-                                                    color: ColorConstants.txt,
-                                                    fontSize: 16)),
-                                          ),
-                                          GridView.builder(
-                                              physics: ClampingScrollPhysics(
-                                                  parent:
-                                                      BouncingScrollPhysics()),
-                                              itemCount:
-                                                  badgedata['data'].length,
-                                              shrinkWrap: true,
-                                              gridDelegate:
-                                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 3),
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return GestureDetector(
-                                                  onTap: (){
-                                                    getbadgedetails(userid.toString(),badgedata['data'][index]['id'].toString());
-                                                  },
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: Container(
-                                                           height: 50,
-                                                      width: MediaQuery.of(context).size.width,
-                                                      child: Image.network(
-                                                          "${badgedata['data'][index]['image'].toString()}", height: 50,width: 50,),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                          // Container(
-                                          //   child: Image.network("${badgedata['data']['image'].toString()}"),
-                                          // )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                            xpdata == null
-                                ? Container()
-                                : Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 10),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text("XP GAIN OVER TIME",
-                                                style: TextStyle(
-                                                    color: ColorConstants.txt,
-                                                    fontSize: 16)),
-                                          ),
-  //                                         Container(
-  //                                           child: Echarts( option: '''
-  //   {
-  //     xAxis: {
-  //       type: 'category',
-  //       data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-  //     },
-  //     yAxis: {
-  //       type: 'value'
-  //     },
-  //     series: [{
-  //       data: [${getXpGainChartResponse!.data!.mnth![0].xp},
-  //        ${getXpGainChartResponse!.data!.mnth![1].xp},
-  //         ${getXpGainChartResponse!.data!.mnth![2].xp},
-  //          ${getXpGainChartResponse!.data!.mnth![3].xp},
-  //           ${getXpGainChartResponse!.data!.mnth![4].xp},
-  //            ${getXpGainChartResponse!.data!.mnth![5].xp},
-  //             ${getXpGainChartResponse!.data!.mnth![6].xp},
-  //             ${getXpGainChartResponse!.data!.mnth![7].xp},
-  //             ${getXpGainChartResponse!.data!.mnth![8].xp},
-  //             ${getXpGainChartResponse!.data!.mnth![9].xp},
-  //             ${getXpGainChartResponse!.data!.mnth![10].xp},
-  //             ${getXpGainChartResponse!.data!.mnth![11].xp}
-  //             ],
-  //       type: 'line'
-  //     }]
-  //   }
-  // ''',
-  //                                           ),
-  //                                           width: 300,
-  //                                           height: 250,
-  //                                         )
-                                          // Container(
-                                          //     child: SfCartesianChart(
-                                          //
-                                          //         primaryXAxis: CategoryAxis(),
-                                          //         // Chart title
-                                          //         title: ChartTitle(text: 'Half yearly sales analysis'),
-                                          //         // Enable legend
-                                          //         legend: Legend(isVisible: true),
-                                          //         // Enable tooltip
-                                          //         tooltipBehavior: _tooltipBehavior,
-                                          //
-                                          //         series: <LineSeries<GetXpGainChartResponse, String>>[
-                                          //           LineSeries<GetXpGainChartResponse, String>(
-                                          //               dataSource:  <GetXpGainChartResponse>[
-                                          //                 //"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                                          //
-                                          //         xpdata("Jan",getXpGainChartResponse!.data!.mnth![1].xp),
-                                          //         xpdata("Feb",getXpGainChartResponse!.data!.mnth![2].xp),
-                                          //         xpdata("Mar", getXpGainChartResponse!.data!.mnth![3].xp),
-                                          //         xpdata("Apr",getXpGainChartResponse!.data!.mnth![4].xp),
-                                          //         xpdata("May",getXpGainChartResponse!.data!.mnth![5].xp),
-                                          //         xpdata("Jun",getXpGainChartResponse!.data!.mnth![6].xp),
-                                          //         xpdata("Jul",getXpGainChartResponse!.data!.mnth![7].xp),
-                                          //         xpdata("Aug",getXpGainChartResponse!.data!.mnth![8].xp),
-                                          //         xpdata("Sep",getXpGainChartResponse!.data!.mnth![9].xp),
-                                          //         xpdata("Oct",getXpGainChartResponse!.data!.mnth![10].xp),
-                                          //                 xpdata("Nov",getXpGainChartResponse!.data!.mnth![11].xp),
-                                          //                 xpdata("Dec",getXpGainChartResponse!.data!.mnth![0].xp)
-                                          //               ],
-                                          //               xValueMapper: (GetXpGainChartResponse xpl, _) => xpl.data!.mnth.toString(),
-                                          //               yValueMapper: (GetXpGainChartResponse xpl, _) => xpl.data!.max,
-                                          //               // Enable data label
-                                          //               dataLabelSettings: DataLabelSettings(isVisible: true)
-                                          //           )
-                                          //         ]
-                                          //     )
-                                          // )
-                                          // xplist==null?Container():  Container(
-                                          //     child: SfSparkLineChart(data:xplist,color: Colors.black,))
-                                          //
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                            leaderdata == null
-                                ? Container()
-                                : Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 10),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text("LEADERSHIP RANKING",
-                                                style: TextStyle(
-                                                    color: ColorConstants.txt,
-                                                    fontSize: 16)),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                            goalsummarydata == null
-                                ? Container()
-                                : Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 10),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text("YOUR GOALS",
-                                                style: TextStyle(
-                                                    color: ColorConstants.txt,
-                                                    fontSize: 16)),
-                                          ),
-                                          if((goalsummarydata['data']['play'] / (goalsummarydata['data']['total'])) >= 1 )
-                                            Container(
-                                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                                child: GFProgressBar(
-                                                  percentage:1.0,
-                                                  lineHeight: 20,
-                                                  alignment: MainAxisAlignment.spaceBetween,
-                                                  child: Text('${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}', textAlign: TextAlign.left,
-                                                    style: TextStyle(fontSize: 14, color: Colors.white),
-                                                  ),
-                                                  backgroundColor: Colors.black12,
-                                                  progressBarColor: ColorConstants.verdigris,
-                                                )
-                                            ),
-
-                                          if (((goalsummarydata['data']['play'] ) / (goalsummarydata['data']['total'])) < 1)
-                                            Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    10, 10, 10, 10),
-                                                child: GFProgressBar(
-                                                  percentage:  (goalsummarydata['data']['play']!/goalsummarydata['data']['total']!)*(0.3).toDouble(),
-                                                  lineHeight: 20,
-                                                  alignment: MainAxisAlignment
-                                                      .spaceBetween,
-                                                  child: Text(
-                                                    '${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}',
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.white),
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.black12,
-                                                  progressBarColor:
-                                                      ColorConstants.verdigris,
-                                                )),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                            Container(
-                                height: 40,
-                                alignment: Alignment.centerLeft,
-                                //color: Colors.white,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: Colors.black),
-                                ),
-                                margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    AlertDialog errorDialog = AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.0)), //this right here
-                                      title: Container(
-                                        height: 150,
-                                        width: 100,
-                                        padding: EdgeInsets.all(8),
-                                        alignment: Alignment.center,
-                                        child: ListView.builder(
-                                            physics: ClampingScrollPhysics(
-                                                parent:
-                                                    BouncingScrollPhysics()),
-                                            shrinkWrap: true,
-                                            itemCount: goallist.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Column(
-                                                children: [
-                                                  Container(
-                                                    //height: 50,
-                                                    padding: EdgeInsets.all(4),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          goalname =
-                                                              '${goallist[index]}';
-                                                          Navigator.pop(
-                                                              context);
-                                                        });
-                                                      },
-                                                      child: Text(
-                                                        '${goallist[index]}',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color:
-                                                                ColorConstants
-                                                                    .txt),
+                                                      child: Image.asset(
+                                                        "assets/images/editpen.png",
+                                                        height: 30,
+                                                        width: 30,
                                                       ),
                                                     ),
                                                   ),
-                                                  Divider(
-                                                    color: Colors.black12,
-                                                  )
-                                                ],
-                                              );
-                                            }),
-                                      ),
-                                    );
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            errorDialog);
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: goalname == null
-                                              ? Text(
-                                                  "Monthly, Weekly or Daily?",
+                                                ),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  child: Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    alignment: Alignment.center,
+                                                    padding: EdgeInsets.all(4),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: 100,
+                                                      child: CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          child: ClipOval(
+                                                              child:
+                                                                  Image.network(
+                                                            profilepic,
+                                                            height: 100,
+                                                            width: 100,
+                                                            fit: BoxFit.cover,
+                                                          ))),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+                                        username == null
+                                            ? Container()
+                                            : Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "${username}",
                                                   style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 14))
-                                              : Text("${goalname}",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14)),
-                                        ),
-                                        Image.asset(
-                                          "assets/images/dropdown.png",
-                                          height: 18,
-                                          width: 18,
-                                        )
+                                                      color: ColorConstants.txt,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                        agegroup == null &&
+                                                country == null &&
+                                                flagicon == null
+                                            ? Container()
+                                            : Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0, 10, 0, 10),
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                alignment: Alignment.center,
+                                                height: 20,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "${agegroup}",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 14),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    VerticalDivider(
+                                                        color: Colors.black),
+                                                    // Text("|"),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                            height: 20,
+                                                            width: 20,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle),
+                                                            child: CircleAvatar(
+                                                              radius: 20.0,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      "${flagicon}"),
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                            )),
+                                                        Text(
+                                                          "${country}",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  ColorConstants
+                                                                      .txt,
+                                                              fontSize: 14),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   ),
-                                )),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 60,
+                                  badgedata['data'] == null
+                                      ? Container()
+                                      : Card(
+                                          child: Container(
+                                            padding: EdgeInsets.all(5),
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 10),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text("YOUR BADGES",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 16)),
+                                                ),
+                                                GridView.builder(
+                                                    physics: ClampingScrollPhysics(
+                                                        parent:
+                                                            BouncingScrollPhysics()),
+                                                    itemCount: badgedata['data']
+                                                        .length,
+                                                    shrinkWrap: true,
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 3),
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          getbadgedetails(
+                                                              userid.toString(),
+                                                              badgedata['data'][
+                                                                          index]
+                                                                      ['id']
+                                                                  .toString());
+                                                        },
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.all(5),
+                                                          child: Container(
+                                                            height: 50,
+                                                            width:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            child:
+                                                                Image.network(
+                                                              "${badgedata['data'][index]['image'].toString()}",
+                                                              height: 50,
+                                                              width: 50,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                                // Container(
+                                                //   child: Image.network("${badgedata['data']['image'].toString()}"),
+                                                // )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  xpdata == null
+                                      ? Container()
+                                      : Card(
+                                          child: Container(
+                                            padding: EdgeInsets.all(5),
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 10),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      "XP GAIN OVER TIME",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 16)),
+                                                ),
+                                                Container(
+                                                  child: Echarts(
+                                                    option: '''
+                                                  {
+                                                    xAxis: {
+                                                      type: 'category',
+                                                      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                                    },
+                                                    yAxis: {
+                                                      type: 'value'
+                                                    },
+                                                    series: [{
+                                                      data: [${getXpGainChartResponse!.data!.mnth![0].xp},
+                                                       ${getXpGainChartResponse!.data!.mnth![1].xp},
+                                                        ${getXpGainChartResponse!.data!.mnth![2].xp},
+                                                         ${getXpGainChartResponse!.data!.mnth![3].xp},
+                                                          ${getXpGainChartResponse!.data!.mnth![4].xp},
+                                                           ${getXpGainChartResponse!.data!.mnth![5].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![6].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![7].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![8].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![9].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![10].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![11].xp}
+                                                            ],
+                                                      type: 'bar',
+                                                      color: '#F73F0C'
+                                                    }]
+                                                  }
+                                                ''',
+                                                  ),
+                                                  width: 300,
+                                                  height: 250,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  getleaderboardR == null
+                                      ? Container()
+                                      : Card(
+                                          child: Container(
+                                            padding: EdgeInsets.all(5),
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 10),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      "LEADERSHIP RANKING",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 16)),
+                                                ),
+                                                Container(
+                                                  child: Echarts(
+                                                    option: '''
+                                                      {
+                                                        xAxis: {
+                                                          type: 'category',
+                                                          data: ${index},
+                                                        },
+                                                        yAxis: {
+                                                          type: 'value'
+                                                        },
+                                                        series: [{
+                                                          data:${getleaderboardR!.data!.rank},
+                                                          type: 'line',
+                                                          color: '#F73F0C'
+                                                        }]
+                                                      }
+                                                    ''',
+                                                  ),
+                                                  width: 300,
+                                                  height: 250,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  goalsummarydata == null
+                                      ? Container()
+                                      : Card(
+                                          child: Container(
+                                            padding: EdgeInsets.all(5),
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 10),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text("YOUR GOALS",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 16)),
+                                                ),
+                                                if ((goalsummarydata['data']
+                                                            ['play'] /
+                                                        (goalsummarydata['data']
+                                                            ['total'])) >=
+                                                    1)
+                                                  Container(
+                                                      margin:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 10, 10, 10),
+                                                      child: GFProgressBar(
+                                                        percentage: 1.0,
+                                                        lineHeight: 20,
+                                                        alignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        child: Text(
+                                                          '${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.black12,
+                                                        progressBarColor:
+                                                            ColorConstants
+                                                                .verdigris,
+                                                      )),
+                                                if (((goalsummarydata['data']
+                                                            ['play']) /
+                                                        (goalsummarydata['data']
+                                                            ['total'])) <
+                                                    1)
+                                                  Container(
+                                                      margin:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 10, 10, 10),
+                                                      child: GFProgressBar(
+                                                        percentage: (goalsummarydata[
+                                                                        'data']
+                                                                    ['play']! /
+                                                                goalsummarydata[
+                                                                        'data'][
+                                                                    'total']!) *
+                                                            (0.3).toDouble(),
+                                                        lineHeight: 20,
+                                                        alignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        child: Text(
+                                                          '${goalsummarydata['data']['play']} out of ${goalsummarydata['data']['total']}',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.black12,
+                                                        progressBarColor:
+                                                            ColorConstants
+                                                                .verdigris,
+                                                      )),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  Container(
+                                      height: 40,
+                                      alignment: Alignment.centerLeft,
+                                      //color: Colors.white,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(color: Colors.black),
+                                      ),
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 20, 0, 20),
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          AlertDialog errorDialog = AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)), //this right here
+                                            title: Container(
+                                              height: 150,
+                                              width: 100,
+                                              padding: EdgeInsets.all(8),
+                                              alignment: Alignment.center,
+                                              child: ListView.builder(
+                                                  physics: ClampingScrollPhysics(
+                                                      parent:
+                                                          BouncingScrollPhysics()),
+                                                  shrinkWrap: true,
+                                                  itemCount: goallist.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return Column(
+                                                      children: [
+                                                        Container(
+                                                          //height: 50,
+                                                          padding:
+                                                              EdgeInsets.all(4),
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                goalname =
+                                                                    '${goallist[index]}';
+                                                                Navigator.pop(
+                                                                    context);
+                                                              });
+                                                            },
+                                                            child: Text(
+                                                              '${goallist[index]}',
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  color:
+                                                                      ColorConstants
+                                                                          .txt),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Divider(
+                                                          color: Colors.black12,
+                                                        )
+                                                      ],
+                                                    );
+                                                  }),
+                                            ),
+                                          );
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  errorDialog);
+                                        },
+                                        child: Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: goalname == null
+                                                    ? Text(
+                                                        "Monthly, Weekly or Daily?",
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 14))
+                                                    : Text("${goalname}",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 14)),
+                                              ),
+                                              Image.asset(
+                                                "assets/images/dropdown.png",
+                                                height: 18,
+                                                width: 18,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 60,
 
-                              //color: Colors.white,
-                              // decoration: BoxDecoration(
-                              //   color: Colors.white,
-                              //   border: Border.all(color: Colors.black),
-                              // ),
-                              margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                                    //color: Colors.white,
+                                    // decoration: BoxDecoration(
+                                    //   color: Colors.white,
+                                    //   border: Border.all(color: Colors.black),
+                                    // ),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 20, 0, 20),
 
-                              child: TextFormField(
-                                controller: numquizcontroller,
-                                obscureText: false,
-                                maxLength: 5,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 1.0),
+                                    child: TextFormField(
+                                      controller: numquizcontroller,
+                                      obscureText: false,
+                                      maxLength: 5,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.zero,
+                                            borderSide: BorderSide(
+                                                color: Colors.black,
+                                                width: 1.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.zero,
+                                            borderSide: BorderSide(
+                                                color: Colors.black,
+                                                width: 1.0),
+                                          ),
+                                          hintText: 'Number of Quizzes',
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey)),
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter
+                                            .singleLineFormatter
+                                      ],
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 1.0),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.white,
+                                          onPrimary: Colors.white,
+                                          elevation: 3,
+                                          alignment: Alignment.center,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0)),
+                                          fixedSize: const Size(160, 30),
+                                          //////// HERE
+                                        ),
+                                        onPressed: () {
+                                          if (numquizcontroller
+                                              .text.isNotEmpty) {
+                                            if (goalname != null) {
+                                              setgoals(
+                                                  userid.toString(),
+                                                  numquizcontroller.text
+                                                      .toString(),
+                                                  goalname);
+                                            } else {
+                                              snackBar = SnackBar(
+                                                content: Text(
+                                                    "please select goal period"),
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            }
+                                          } else {
+                                            snackBar = SnackBar(
+                                              content: Text(
+                                                  "please fill no. of quizzes"),
+                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+                                          }
+                                        },
+                                        child: const Text(
+                                          "SAVE CHANGES",
+                                          style: TextStyle(
+                                              color: ColorConstants.txt,
+                                              fontSize: 16),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
                                     ),
-                                    hintText: 'Number of Quizzes',
-                                    hintStyle: TextStyle(color: Colors.grey)),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter
-                                      .singleLineFormatter
+                                  ),
                                 ],
-                              ),
-                            ),
-                            Center(
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.white,
-                                    onPrimary: Colors.white,
-                                    elevation: 3,
-                                    alignment: Alignment.center,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                    fixedSize: const Size(160, 30),
-                                    //////// HERE
-                                  ),
-                                  onPressed: () {
-                                    if(numquizcontroller.text.isNotEmpty){
-                                      if(goalname!=null){
-                                        setgoals(userid.toString(), numquizcontroller.text.toString(), goalname);
-                                      }else{
-                                        snackBar = SnackBar(
-                                          content: Text("please select goal period"),
-                                        );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      }
-                                    }else{
-                                      snackBar = SnackBar(
-                                        content: Text("please fill no. of quizzes"),
-                                      );
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                    }
-
-                                  },
-                                  child: const Text(
-                                    "SAVE CHANGES",
-                                    style: TextStyle(
-                                        color: ColorConstants.txt,
-                                        fontSize: 16),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                ],
-              ),
+                              )
+                      ],
+                    ),
             ),
           ]),
         ),

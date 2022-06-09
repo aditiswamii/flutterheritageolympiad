@@ -50,7 +50,7 @@ class _AccountPageState extends State<MyAccountPage> {
   var flagicon;
   var prodata;
   var data;
-
+ var snackbar;
   User? userprofileresdata;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -77,39 +77,57 @@ class _AccountPageState extends State<MyAccountPage> {
         Uri.parse(StringConstants.BASE_URL + "user_profile"),body: {
           'user_id':userid.toString()
     });
-
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-     // Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
-      prodata = jsonDecode(
-          data!)['data'];
-      setState(() {
+      if (jsonResponse['status'] == 200) {
         prodata = jsonDecode(
-            data!)['data']; //get all the data from json string superheros
+            data!)['data'];
+        setState(() {
+          prodata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
 
-        onsuccess(prodata['user']);
-      });
-      print(prodata.length);
-      print(prodata.toString());
-      print("userdata"+prodata['user'].toString());
-      var venam = jsonDecode(data!)['data'];
-      print(venam);
-    } else {
+          onsuccess(prodata['user']);
+        });
+        print(prodata.length);
+        print(prodata.toString());
+        print("userdata" + prodata['user'].toString());
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+      }else{
+        snackbar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      }
+    }else {
      // Navigator.pop(context);
       print(response.statusCode);
     }
 
   }
-  onsuccess(jsonDecode){
-    if(jsonDecode!=null){
+  onsuccess(prodataa){
+    if(prodataa!=null){
+      // userprofileresdata=jsonDecode;
+      username="${prodataa['name'][0].toUpperCase() + prodataa['name'].substring(1)}";
+      country="${prodataa['country']}";
+      profilepic=prodataa['image'].toString();
+      agegroup=prodataa['age_group'].toString();
+      flagicon=prodataa['flag_icon'].toString();
       setState(() {
-       // userprofileresdata=jsonDecode;
-        username="${jsonDecode['name'][0].toUpperCase() + jsonDecode['name'].substring(1)}";
-        country="${jsonDecode['country']}";
-        profilepic=jsonDecode['image'].toString();
-        agegroup=jsonDecode['age_group'].toString();
-        flagicon=jsonDecode['flag_icon'].toString();
+        // userprofileresdata=jsonDecode;
+        username;
+        country;
+        profilepic;
+        agegroup;
+        flagicon;
       });
+      print(username +
+          country
+         + profilepic
+         + agegroup
+         + flagicon);
 print("flagicon"+flagicon);
     preference();
     }
@@ -178,496 +196,515 @@ print("flagicon"+flagicon);
         ),
         child:Container(
           margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            alignment: Alignment.centerLeft,
+          child: ListView(
+            children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          alignment: Alignment.centerLeft,
 
-                            padding: EdgeInsets.all(5),
-                            child: Center(
-                              child: Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage()));
-                                  },
-                                  child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
-                                ),
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                            child: Card(
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()));
+                                },
+                                child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
                               ),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            alignment: Alignment.centerRight,
-                            padding: EdgeInsets.only(right: 5.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                _scaffoldKey.currentState!.openEndDrawer();
-                              },
-                              child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
-                            ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(right: 5.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState!.openEndDrawer();
+                            },
+                            child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
                           ),
-                        ],
-                      ),
-                      Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
-                          child: const Text("YOUR ACCOUNT",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
-                         username==null?Container():
-              Container(alignment: Alignment.centerLeft,
-                  child: Text("${username}",style: TextStyle(
-                      color: ColorConstants.txt,
-                      fontSize: 16,fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,),
-                ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                        child: const Text("YOUR ACCOUNT",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
+                       username==null?Container( width: 200):
+            Container(
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.centerLeft,
+                child: Text("${username}",style: TextStyle(
+                    color: ColorConstants.txt,
+                    fontSize: 16,fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,),
+              ),
 
+              agegroup==null && country==null && flagicon==null ?
+              Container(  width: 10,):
               Container(
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  width: 200,
+                  alignment: Alignment.centerLeft,
                   height: 20,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
 
-                        Text("${agegroup}",style: TextStyle(
-                            color: ColorConstants.txt,
-                            fontSize: 14),
-                          textAlign: TextAlign.center,),
-                      VerticalDivider(color: Colors.black),
+                        Container(
+                          width: 80,
+                          child: Text("${agegroup}",style: TextStyle(
+                              color: ColorConstants.txt,
+                              fontSize: 14),
+                            textAlign: TextAlign.left,),
+                        ),
+                      Container(width: 10,alignment: Alignment.centerLeft,
+                          child: VerticalDivider(color: Colors.black)),
                       // Text("|"),
-                      Row(
-                        children: [
+                      Container(
+                        width: 90,
+                        child: Row(
+                          children: [
 
-                            Container(
-                                height: 20,width: 20,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle
+                              Container(
+                                  height: 20,width: 20,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle
+                                  ),
+                                  child:
+                                  CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundImage:
+                                    NetworkImage("${flagicon}"),
+                                    backgroundColor: Colors.transparent,
+                                  )
+                              ),
+
+                              Expanded(
+                                child: Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text("${country}",style: TextStyle(
+                                      color: ColorConstants.txt,
+                                      fontSize: 14),
+                                    textAlign: TextAlign.left,),
                                 ),
-                                child:
-                                CircleAvatar(
-                                  radius: 20.0,
-                                  backgroundImage:
-                                  NetworkImage("${flagicon}"),
-                                  backgroundColor: Colors.transparent,
-                                )
-                            ),
-
-                            Text("${country}",style: TextStyle(
-                                color: ColorConstants.txt,
-                                fontSize: 14),
-                              textAlign: TextAlign.center,),
-                        ],
+                              ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+              ),
 
-                ListBody(
-                  // scrollDirection: Axis.vertical,
-                  // shrinkWrap: true,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              ListBody(
+                // scrollDirection: Axis.vertical,
+                // shrinkWrap: true,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
 
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/your_page1.png",height: 30,width: 30,),
-                                title: GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>  YourPage()));
-                                    },
-
-                                    child: Text("YOUR PAGE",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
+                        child:
+                        Container(
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/notifications.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/your_page1.png",height: 30,width: 30,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const NotificationScreen()));
+                                            builder: (context) =>  YourPage()));
                                   },
 
-                                  child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("YOUR PAGE",style: TextStyle(color:ColorConstants.txt),)),
                             )
 
-                          ),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
 
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
                           ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/setting.png",height: 30,width: 30,),
-                                title:GestureDetector(
+                        ),
+                        child:
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: ListTile(
+                            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                            leading: Image.asset("assets/images/notifications.png",height: 30,width: 30,),
+                            title: GestureDetector(
+                                onTap: (){
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const NotificationScreen()));
+                                },
+
+                                child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.txt),)),
+                          )
+
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/setting.png",height: 30,width: 30,),
+                              title:GestureDetector(
+                                onTap: (){
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const ManageContactScreen()));
+                                },
+                                  child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
+                              title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const ManageContactScreen()));
+                                            builder: (context) => PersonalInfoScreen()));
                                   },
-                                    child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
-                                title: GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => PersonalInfoScreen()));
-                                    },
-                                    child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/change_password.png",height: 30,width: 30,),
-                                title:GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ChangepasswordScreen()));
-                                    },
-                                    child: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/privacy.png",height: 30,width: 30,),
-                                title:GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>  PrivacyPage()));
-                                    },
-                                    child: Text("PRIVACY",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
-                                title: GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => InviteContactScreen()));
-                                    },
-                                    child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
-                                title:GestureDetector(
-                                    onTap: (){
-                                      // Navigator.pushReplacement(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>  BarChartDemo()));
-                                       },
-                                    child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-                          ),
+                                  child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.txt),)),
+                            )
 
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
                           ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/help.png",height: 30,width: 30,),
-                                title: GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>  HelpPage()));
-                                    },
-                                    child: Text("HELP",style: TextStyle(color:ColorConstants.txt),)),
-                              )
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/change_password.png",height: 30,width: 30,),
+                              title:GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ChangepasswordScreen()));
+                                  },
+                                  child: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.txt),)),
+                            )
 
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/privacy.png",height: 30,width: 30,),
+                              title:GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>  PrivacyPage()));
+                                  },
+                                  child: Text("PRIVACY",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
+                              title: GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => InviteContactScreen()));
+                                  },
+                                  child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
+                              title:GestureDetector(
+                                  onTap: (){
+                                    // Navigator.pushReplacement(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>  BarChartDemo()));
+                                     },
+                                  child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+                        ),
+
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/help.png",height: 30,width: 30,),
+                              title: GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>  HelpPage()));
+                                  },
+                                  child: Text("HELP",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child:Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/about.png",height: 30,width: 30,),
+                              title: GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>  AboutUsPage()));
+                                  },
+                                  child: Text("ABOUT",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                      child: Card(
+                        elevation: 3,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          // if you need this
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                        child:
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ListTile(
+                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                              leading: Image.asset("assets/images/share1.png",height: 30,width: 30,),
+                              title: GestureDetector(
+                                  onTap: (){
+                                    Share.share('https://cultre.app/cul.tre/2', subject: 'share');
+                                    //Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
+                                  },
+                                  child: Text("SHARE",style: TextStyle(color:ColorConstants.txt),)),
+                            )
+
+                        ),
+                      ),
+                    ),
+
+                    Center(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            onPrimary: Colors.white,
+                            elevation: 3,
+                            alignment: Alignment.center,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            fixedSize: const Size(120, 30),
+                            //////// HERE
+                          ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
+                          },
+                          child: const Text(
+                            "GO BACK",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child:Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/about.png",height: 30,width: 30,),
-                                title: GestureDetector(
-                                    onTap: (){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>  AboutUsPage()));
-                                    },
-                                    child: Text("ABOUT",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                        child: Card(
-                          elevation: 3,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            // if you need this
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          child:
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListTile(
-                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                leading: Image.asset("assets/images/share1.png",height: 30,width: 30,),
-                                title: GestureDetector(
-                                    onTap: (){
-                                      Share.share('https://cultre.app/cul.tre/2', subject: 'share');
-                                      //Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
-                                    },
-                                    child: Text("SHARE",style: TextStyle(color:ColorConstants.txt),)),
-                              )
-
-                          ),
-                        ),
-                      ),
-
-                      Center(
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.red,
-                              onPrimary: Colors.white,
-                              elevation: 3,
-                              alignment: Alignment.center,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              fixedSize: const Size(120, 30),
-                              //////// HERE
-                            ),
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()));
-                            },
-                            child: const Text(
-                              "GO BACK",
-                              style: TextStyle(color: Colors.white, fontSize: 16),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]
-                ),
-              ],
-            ),
+                    ),
+                  ]
+              ),
+            ],
           ),
         ),
       ),

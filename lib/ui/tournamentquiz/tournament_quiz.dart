@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/gettournament/GetTournamentResponse.dart';
 import 'package:flutterheritageolympiad/ui/feed/filterpage/filterpage.dart';
@@ -29,6 +30,7 @@ import '../../../utils/StringConstants.dart';
 import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 
+import '../../modal/leaderboardrank/GetLeaderboardRank.dart';
 import 'leaguerank/leaguerank.dart';
 class TournamentPage extends StatefulWidget {
   var contents;
@@ -58,9 +60,9 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   var snackBar;
   var _expanded=false;
   GetTournamentResponse? gettourR;
-
+  GetLeaderboardRank? getleaderboardR;
   Duration myDuration = Duration(days: 1);
-
+  var leaderdata;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -117,11 +119,40 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
     }
   }
  onsuccess(GetTournamentResponse tournamentResponse){
+
     if(tournamentResponse.data!=null){
       setState(() {
         gettourR=tournamentResponse;
       });
-
+      var date = DateTime.now();
+      var month;
+      if (date.month == 1) {
+        month = "jan";
+      } else if (date.month == 2) {
+        month = "feb";
+      } else if (date.month == 3) {
+        month = "mar";
+      } else if (date.month == 4) {
+        month = "apr";
+      } else if (date.month == 5) {
+        month = "may";
+      } else if (date.month == 6) {
+        month = "jun";
+      } else if (date.month == 7) {
+        month = "jul";
+      } else if (date.month == 8) {
+        month = "aug";
+      } else if (date.month == 9) {
+        month = "sep";
+      } else if (date.month == 10) {
+        month = "oct";
+      } else if (date.month == 11) {
+        month = "nov";
+      } else if (date.month == 12) {
+        month = "dec";
+      }
+      log(date.month.toString());
+      leaderboardranking(userid.toString(), month.toString(), "");
     }
  }
   joinroom(String userid,int tournamentId, int sessionId ,int pos) async {
@@ -159,6 +190,59 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   setJoined(int pos) {
     getTour(userid.toString(),"");
    }
+  leaderboardranking(String userid, String month, String contactid) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "leaderboardranking"),
+        body: {
+          'user_id': userid.toString(),
+          'contact_id': contactid.toString(),
+          'month': month.toString()
+        });
+
+    if (response.statusCode == 200) {
+      data = response.body;
+      var jsonResponse = convert.jsonDecode(response.body);
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          leaderdata = jsonResponse[
+          'data']; //get all the data from json string superheros
+          print(leaderdata.length);
+          print(leaderdata.toString());
+
+          onleadersuccess(getLeaderboardRankFromJson(data));
+        });
+      } else {
+        snackBar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  int index = 0;
+  onleadersuccess(GetLeaderboardRank? leaderboardRank) {
+    if (leaderboardRank != null) {
+      if (leaderboardRank.data != null) {
+        setState(() {
+          getleaderboardR = leaderboardRank;
+        });
+      }
+
+      for (int i = 0; i < getleaderboardR!.data!.rank!.length; i++) {
+        setState(() {
+          index = i;
+        });
+
+      }
+
+      log("rank : " + leaderdata['rank'].toString());
+      log("rank : " + leaderdata.toString());
+    }
+  }
+
   // showLoaderDialog(BuildContext context) {
   //   AlertDialog alert = AlertDialog(
   //     content: new Row(
@@ -349,6 +433,30 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                 //       ],
                                 //     )
                                 // ),
+                              getleaderboardR == null
+                                  ? Container()
+                                  : Container(
+                                    child: Echarts(
+                                      option: '''
+                                                  {
+                                                    xAxis: {
+                                                      type: 'category',
+                                                      data: ${index},
+                                                    },
+                                                    yAxis: {
+                                                      type: 'value'
+                                                    },
+                                                    series: [{
+                                                      data:${getleaderboardR!.data!.rank},
+                                                      type: 'line',
+                                                      color: '#F73F0C'
+                                                    }]
+                                                  }
+                                                ''',
+                                    ),
+                                    width: 300,
+                                    height: 250,
+                                  ),
                               _expanded==false? Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 30,

@@ -5,6 +5,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/badgeresponse/GetBadgeResponse.dart';
 import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse.dart';
@@ -52,6 +53,7 @@ class _ContactPageState extends State<ContactPage> {
   var snackBar;
   List<num>? xplist;
   GetBadgeResponse? badgeResponse;
+  GetXpGainChartResponse? getXpGainChartResponse;
   final List<String> goallist = <String>['Monthly', 'Weekly','Daily']; //for goal list
   var goalname; // selected goal
   userdata() async {
@@ -178,7 +180,7 @@ ondeletesuccess(){
           print("max" + jsonResponse['data']['max'].toString());
           print("totalquiz" + jsonResponse['data']['totalquiz'].toString());
 
-          onxpsuccess(xpdata);
+          onxpsuccess(xpdata, getXpGainChartResponseFromJson(data!));
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -200,7 +202,10 @@ ondeletesuccess(){
     }
 
   }
-  onxpsuccess(xpdata){
+  onxpsuccess(xpdata,  GetXpGainChartResponse? getXpGainChartR){
+    setState(() {
+      getXpGainChartResponse = getXpGainChartR;
+    });
     //  xplist=List.from(xpdata['data']['mnth']);
     print("mnth : "+xpdata['data']['mnth'].toString());
     print("userdata"+ xpdata['data']['totalxp'].toString());
@@ -658,7 +663,9 @@ if(badgedetaildata!=null){
                               ),
                             ),
                           ),
-                          Card(
+                          xpdata == null
+                              ? Container()
+                              :   Card(
                             child: Container(
                               padding: EdgeInsets.all(5),
                               margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -670,9 +677,40 @@ if(badgedetaildata!=null){
                                         color: ColorConstants.txt,
                                         fontSize: 16)),
                                   ),
-                                  // xplist==null?Container():  Container(
-                                  //     child: SfSparkLineChart(data:xplist,color: Colors.black,))
-                                  //
+                                  Container(
+                                    child: Echarts(
+                                      option: '''
+                                                  {
+                                                    xAxis: {
+                                                      type: 'category',
+                                                      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                                    },
+                                                    yAxis: {
+                                                      type: 'value'
+                                                    },
+                                                    series: [{
+                                                      data: [${getXpGainChartResponse!.data!.mnth![0].xp},
+                                                       ${getXpGainChartResponse!.data!.mnth![1].xp},
+                                                        ${getXpGainChartResponse!.data!.mnth![2].xp},
+                                                         ${getXpGainChartResponse!.data!.mnth![3].xp},
+                                                          ${getXpGainChartResponse!.data!.mnth![4].xp},
+                                                           ${getXpGainChartResponse!.data!.mnth![5].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![6].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![7].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![8].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![9].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![10].xp},
+                                                            ${getXpGainChartResponse!.data!.mnth![11].xp}
+                                                            ],
+                                                      type: 'bar',
+                                                      color: '#FBB03B'
+                                                    }]
+                                                  }
+                                                ''',
+                                    ),
+                                    width: 300,
+                                    height: 250,
+                                  )
                                 ],
                               ),
                             ),
