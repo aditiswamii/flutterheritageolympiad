@@ -231,7 +231,7 @@ print("flagicon"+flagicon);
                       fontSize: 16,fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,),
                 ),
-                username==null?Container():
+
               Container(
                   height: 20,
                   child: Row(

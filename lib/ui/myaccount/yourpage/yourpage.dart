@@ -4,6 +4,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutterheritageolympiad/colors/colors.dart';
 import 'package:flutterheritageolympiad/modal/badgeresponse/GetBadgeResponse.dart';
 import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse.dart';
@@ -565,8 +566,8 @@ class _YourPageState extends State<YourPage> {
                   Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text(
-                        "You can find about your performanc, your goals, and your achievements here.",
+                    child: const Text(
+                        "You can find about your performance, your goals, and your achievements here.",
                         style:
                             TextStyle(fontSize: 15, color: ColorConstants.txt)),
                   ),
@@ -779,6 +780,38 @@ class _YourPageState extends State<YourPage> {
                                                     color: ColorConstants.txt,
                                                     fontSize: 16)),
                                           ),
+  //                                         Container(
+  //                                           child: Echarts( option: '''
+  //   {
+  //     xAxis: {
+  //       type: 'category',
+  //       data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  //     },
+  //     yAxis: {
+  //       type: 'value'
+  //     },
+  //     series: [{
+  //       data: [${getXpGainChartResponse!.data!.mnth![0].xp},
+  //        ${getXpGainChartResponse!.data!.mnth![1].xp},
+  //         ${getXpGainChartResponse!.data!.mnth![2].xp},
+  //          ${getXpGainChartResponse!.data!.mnth![3].xp},
+  //           ${getXpGainChartResponse!.data!.mnth![4].xp},
+  //            ${getXpGainChartResponse!.data!.mnth![5].xp},
+  //             ${getXpGainChartResponse!.data!.mnth![6].xp},
+  //             ${getXpGainChartResponse!.data!.mnth![7].xp},
+  //             ${getXpGainChartResponse!.data!.mnth![8].xp},
+  //             ${getXpGainChartResponse!.data!.mnth![9].xp},
+  //             ${getXpGainChartResponse!.data!.mnth![10].xp},
+  //             ${getXpGainChartResponse!.data!.mnth![11].xp}
+  //             ],
+  //       type: 'line'
+  //     }]
+  //   }
+  // ''',
+  //                                           ),
+  //                                           width: 300,
+  //                                           height: 250,
+  //                                         )
                                           // Container(
                                           //     child: SfCartesianChart(
                                           //

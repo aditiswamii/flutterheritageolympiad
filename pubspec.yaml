@@ -80,6 +80,9 @@ dependencies:
   cloud_firestore:
   firebase_messaging: ^11.2.6
   twitter_login: ^4.2.3
+  flutter_facebook_auth: ^3.5.0+1
+  flutter_login_facebook: ^1.0.0+1
+  flutter_echarts:
 dev_dependencies:
   flutter_test:
     sdk: flutter
