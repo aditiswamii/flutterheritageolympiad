@@ -13,12 +13,12 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/forgetpassword/forgetpassword.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/ui/forgetpassword/forgetpassword.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
-import 'package:flutterheritageolympiad/uinew/registerpage.dart';
-import 'package:flutterheritageolympiad/uinew/signuppage.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
+import 'package:CultreApp/uinew/registerpage.dart';
+import 'package:CultreApp/uinew/signuppage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
@@ -51,7 +51,8 @@ class _State extends State<LoginScreen> {
   String emailadd = '';
   GoogleSignInAccount? _currentUser;
   String _contactText = '';
-
+  Map _userObj = {};
+  bool _isLoggedIn = false;
   Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print(" --- background message received ---");
     print(message.notification!.title);
@@ -598,8 +599,8 @@ class _State extends State<LoginScreen> {
                               Image.asset("assets/images/google_512.png",height: 20,width: 20,),
                               Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text("Sign in with Google", style: TextStyle(
-                                    decoration: TextDecoration.underline,fontSize: 16,
-                                    color: ColorConstants.txt),textAlign: TextAlign.center,),
+                                  fontSize: 16,
+                                    color: Colors.black),textAlign: TextAlign.center,),
                               ),
                             ],
                           ),
@@ -622,8 +623,8 @@ class _State extends State<LoginScreen> {
                               Image.asset("assets/images/applelogo.png",height: 20,width: 20,),
                               Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text("Sign in with Apple", style: TextStyle(
-                                    decoration: TextDecoration.underline,fontSize: 16,
-                                    color: ColorConstants.txt),textAlign: TextAlign.center,),
+                                   fontSize: 16,
+                                    color: Colors.black),textAlign: TextAlign.center,),
                               ),
                             ],
                           ),
@@ -638,15 +639,15 @@ class _State extends State<LoginScreen> {
                       padding: EdgeInsets.all(4),
                       child: GestureDetector(
                         onTap: () {
-                          _updateLoginInfo();
+                          fbLogin();
                         },
                         child: Row(
                           children: [
                             Image.asset("assets/images/facebook_512.png",height: 20,width: 20,),
                             Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: Text("Sign in with Facebook", style: TextStyle(
-                                  decoration: TextDecoration.underline,fontSize: 16,
-                                  color: ColorConstants.txt),textAlign: TextAlign.center,),
+                                 fontSize: 16,
+                                  color: Colors.black),textAlign: TextAlign.center,),
                             ),
                           ],
                         ),
@@ -669,14 +670,50 @@ class _State extends State<LoginScreen> {
                             Image.asset("assets/images/twitter_icon.png",height: 20,width: 20,),
                             Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: Text("Sign in with twitter", style: TextStyle(
-                                  decoration: TextDecoration.underline,fontSize: 16,
-                                  color: ColorConstants.txt),textAlign: TextAlign.center,),
+                                fontSize: 16,
+                                  color: Colors.black),textAlign: TextAlign.center,),
                             ),
                           ],
                         ),
                       )),
                 ),
               ),
+    Container(
+    child: _isLoggedIn
+    ? Column(
+    children: [
+    Image.network(_userObj["picture"]["data"]["url"]),
+    Text(_userObj["name"]),
+    Text(_userObj["email"]),
+    TextButton(
+    onPressed: () {
+    FacebookAuth.instance.logOut().then((value) {
+    setState(() {
+    _isLoggedIn = false;
+    _userObj = {};
+    });
+    });
+    },
+    child: Text("Logout"))
+    ],
+    )
+        : Center(
+    child: ElevatedButton(
+    child: Text("Login with Facebook"),
+    onPressed: () async {
+    FacebookAuth.instance.login(
+    permissions: ["public_profile", "email"]).then((value) {
+    FacebookAuth.instance.getUserData().then((userData) {
+    setState(() {
+    _isLoggedIn = true;
+    _userObj = userData;
+    });
+    });
+    });
+    },
+    ),
+    ),
+    ),
 
             ],
           ),
@@ -758,13 +795,14 @@ class _State extends State<LoginScreen> {
   String? _email;
   String? _imageUrl;
 
-  Future<void> _updateLoginInfo() async {
+   _updateLoginInfo() async {
     final plugin = plugin1;
     final token = await plugin.accessToken;
     FacebookUserProfile? profile;
+    log("profile:${profile!.name!.toString()}");
     String? email;
     String? imageUrl;
-    log(profile!.name.toString());
+    log(profile.name.toString());
     if (token != null) {
       profile = await plugin.getUserProfile();
       if (token.permissions.contains(FacebookPermission.email.name)) {
@@ -789,16 +827,16 @@ class _State extends State<LoginScreen> {
   }
   Future<void> fbLogin()async{
      log("fblogin");
-    try{
 
 
-      final LoginResult result = await FacebookAuth.instance.login(); // by default we request the email and the public profile
 
+      final LoginResult result = await FacebookAuth.i.login(); // by default we request the email and the public profile
+      log("result: ${result.toString()}");
       if (result.status == LoginStatus.success) {
         // you are logged
 
         final AccessToken accessToken = result.accessToken!;
-
+        log("accessToken:"+accessToken.toString());
         final userData = await FacebookAuth.i.getUserData();
         log(userData['id'].toString());
         log("userData:"+userData.toString());
@@ -808,12 +846,7 @@ class _State extends State<LoginScreen> {
 
       }
 
-    }catch(e){
 
-      print(e);
-
-
-    }
   }
   Future<void> fbLogout()async{
     await FacebookAuth.instance.logOut();

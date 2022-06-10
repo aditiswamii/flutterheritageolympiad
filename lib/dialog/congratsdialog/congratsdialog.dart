@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:CultreApp/colors/colors.dart';
 
 
 class CongratsDialog extends StatefulWidget {

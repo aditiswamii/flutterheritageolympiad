@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutterheritageolympiad/modal/SignUpModal.dart';
+import 'package:CultreApp/modal/SignUpModal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreference {

@@ -6,13 +6,13 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/badgeresponse/GetBadgeResponse.dart';
-import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/badgeresponse/GetBadgeResponse.dart';
+import 'package:CultreApp/modal/xpgainchart/GetXPGainChartResponse.dart';
 
-import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -710,7 +710,60 @@ if(badgedetaildata!=null){
                                     ),
                                     width: 300,
                                     height: 250,
-                                  )
+                                  ),
+                                  Container(
+                                    alignment:
+                                    Alignment.center,
+                                    child: Text(
+                                        "2022",
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .txt,
+                                            fontSize: 16)),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        20, 10, 20, 10),
+                                    alignment:
+                                    Alignment.center,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(
+                                                xpdata['data']['totalxp'].toString(),
+                                                style: TextStyle(
+                                                    color: ColorConstants
+                                                        .txt,
+                                                    fontSize: 14)),
+                                            Text(
+                                                "Total XP",
+                                                style: TextStyle(
+                                                    color: ColorConstants
+                                                        .txt,
+                                                    fontSize: 14)),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                                xpdata['data']['totalquiz'].toString(),
+                                                style: TextStyle(
+                                                    color: ColorConstants
+                                                        .txt,
+                                                    fontSize: 14)),
+                                            Text(
+                                                "Quizzes Done",
+                                                style: TextStyle(
+                                                    color: ColorConstants
+                                                        .txt,
+                                                    fontSize: 14)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

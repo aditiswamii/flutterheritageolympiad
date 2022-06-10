@@ -2,25 +2,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:CultreApp/colors/colors.dart';
 
-import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
-import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
+import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
+import 'package:CultreApp/ui/quiz/let_quiz.dart';
+import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../uinew/loginpage.dart';
 import '../feed/feed.dart';
 import '../feed/savedpost/savedpost.dart';
+import '../myaccount/aboutuspage/aboutuspage.dart';
+import '../myaccount/helppage/helppage.dart';
 
-void main() {
 
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: MySideMenuDrawer(),
-  ));
-}
 class MySideMenuDrawer extends StatefulWidget{
 
   const MySideMenuDrawer({Key? key}) : super(key: key);
@@ -130,7 +125,12 @@ class _State extends State<MySideMenuDrawer> {
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                    title: const Text('About Us',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AboutUsPage(title: 'ABOUT US', url: 'https://www.cultre.in/our-team',)));
+
+                  // Navigator.pop(context);
 
                 },
               ),
@@ -138,7 +138,12 @@ class _State extends State<MySideMenuDrawer> {
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                 title: const Text('FAQ',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AboutUsPage(title: 'FAQ', url: 'https://cultre.app/faqs',)));
+
+                  // Navigator.pop(context);
 
                 },
               ),
@@ -146,7 +151,13 @@ class _State extends State<MySideMenuDrawer> {
                 visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                 title: const Text('HELP AND SUPPORT',style:TextStyle(fontSize: 18,color: ColorConstants.menu_text),textAlign: TextAlign.end,),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  HelpPage()));
+
+
+                  // Navigator.pop(context);
 
                 },
               ),

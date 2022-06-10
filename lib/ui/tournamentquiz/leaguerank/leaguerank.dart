@@ -10,20 +10,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/gettournament/GetTournamentResponse.dart';
-import 'package:flutterheritageolympiad/modal/xprewards/GetXPRewardsResponse.dart';
-import 'package:flutterheritageolympiad/ui/feed/filterpage/filterpage.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/gettournament/GetTournamentResponse.dart';
+import 'package:CultreApp/modal/xprewards/GetXPRewardsResponse.dart';
+import 'package:CultreApp/ui/feed/filterpage/filterpage.dart';
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/tournamentquiz/seeleague/seeleague.dart';
-import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/tournamentquiz/seeleague/seeleague.dart';
+import 'package:CultreApp/ui/tournamentquiz/tournament_quiz.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/StringConstants.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 class LeagueRank extends StatefulWidget {
 

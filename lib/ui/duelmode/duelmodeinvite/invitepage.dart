@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/dualdetailsresponse/GetDualDetailResponse.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodelink/duelmodelink.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/dualdetailsresponse/GetDualDetailResponse.dart';
+import 'package:CultreApp/ui/duelmode/duelmodelink/duelmodelink.dart';
+import 'package:CultreApp/ui/duelmode/duelmodemain/duelmode_main.dart';
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 
 import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';

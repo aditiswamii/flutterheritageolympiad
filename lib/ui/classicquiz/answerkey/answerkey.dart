@@ -4,17 +4,17 @@ import 'dart:math';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/dialog/raisedispute/Dialogdispute.dart';
+import 'package:CultreApp/dialog/raisedispute/Dialogdispute.dart';
 
 
-import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
+import 'package:CultreApp/ui/classicquiz/result/result.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:CultreApp/colors/colors.dart';
 
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 
 
 import 'package:shared_preferences/shared_preferences.dart';

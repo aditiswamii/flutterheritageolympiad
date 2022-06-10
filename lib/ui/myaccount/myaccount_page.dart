@@ -5,23 +5,23 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/userprofile/GetUserProfileResponse.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/aboutuspage/aboutuspage.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/changepassword/changepassword_screen.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/helppage/helppage.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontact.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/managecontacts/managecontacts.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/notification/notification_screen.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/payment/payment_screen.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/personalinfo/personalinfo.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/userprofile/GetUserProfileResponse.dart';
+import 'package:CultreApp/ui/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:CultreApp/ui/myaccount/aboutuspage/aboutuspage.dart';
+import 'package:CultreApp/ui/myaccount/changepassword/changepassword_screen.dart';
+import 'package:CultreApp/ui/myaccount/helppage/helppage.dart';
+import 'package:CultreApp/ui/myaccount/invitecontact/invitecontact.dart';
+import 'package:CultreApp/ui/myaccount/managecontacts/managecontacts.dart';
+import 'package:CultreApp/ui/myaccount/notification/notification_screen.dart';
+import 'package:CultreApp/ui/myaccount/payment/payment_screen.dart';
+import 'package:CultreApp/ui/myaccount/personalinfo/personalinfo.dart';
 
-import 'package:flutterheritageolympiad/ui/myaccount/privacy/privacy_page.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/yourpage/chart.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/yourpage/yourpage.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/myaccount/privacy/privacy_page.dart';
+import 'package:CultreApp/ui/myaccount/yourpage/chart.dart';
+import 'package:CultreApp/ui/myaccount/yourpage/yourpage.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -239,21 +239,22 @@ print("flagicon"+flagicon);
                     ),
                     Container(
                         alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
-                        child: const Text("YOUR ACCOUNT",style: TextStyle(fontSize: 24,color: ColorConstants.txt))),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: const Text("YOUR ACCOUNT",style: TextStyle(fontSize: 22,fontFamily: 'Nunito',fontStyle: FontStyle.normal,color: ColorConstants.txt))),
                        username==null?Container( width: 200):
             Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.centerLeft,
                 child: Text("${username}",style: TextStyle(
-                    color: ColorConstants.txt,
+                    color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
                     fontSize: 16,fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,),
               ),
 
               agegroup==null && country==null && flagicon==null ?
               Container(  width: 10,):
-              Container(
+              Container( margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 width: MediaQuery.of(context).size.width,
                 child: Container(
                   width: 200,
@@ -266,7 +267,7 @@ print("flagicon"+flagicon);
                         Container(
                           width: 80,
                           child: Text("${agegroup}",style: TextStyle(
-                              color: ColorConstants.txt,
+                              color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
                               fontSize: 14),
                             textAlign: TextAlign.left,),
                         ),
@@ -296,7 +297,7 @@ print("flagicon"+flagicon);
                                 child: Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: Text("${country}",style: TextStyle(
                                       color: ColorConstants.txt,
-                                      fontSize: 14),
+                                      fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                                     textAlign: TextAlign.left,),
                                 ),
                               ),
@@ -331,7 +332,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/your_page1.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/your_page1.png",height: 25,width: 25,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
@@ -340,7 +341,7 @@ print("flagicon"+flagicon);
                                             builder: (context) =>  YourPage()));
                                   },
 
-                                  child: Text("YOUR PAGE",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("YOUR PAGE",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -365,7 +366,7 @@ print("flagicon"+flagicon);
                           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: ListTile(
                             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                            leading: Image.asset("assets/images/notifications.png",height: 30,width: 30,),
+                            leading: Image.asset("assets/images/notifications.png",height: 25,width: 25,),
                             title: GestureDetector(
                                 onTap: (){
                                   Navigator.pushReplacement(
@@ -374,7 +375,7 @@ print("flagicon"+flagicon);
                                           builder: (context) => const NotificationScreen()));
                                 },
 
-                                child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.txt),)),
+                                child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                           )
 
                         ),
@@ -399,7 +400,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/setting.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/setting.png",height: 25,width: 25,),
                               title:GestureDetector(
                                 onTap: (){
                                   Navigator.pushReplacement(
@@ -407,7 +408,7 @@ print("flagicon"+flagicon);
                                       MaterialPageRoute(
                                           builder: (context) => const ManageContactScreen()));
                                 },
-                                  child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -431,7 +432,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/interval.png",height: 25,width: 25,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
@@ -439,7 +440,7 @@ print("flagicon"+flagicon);
                                         MaterialPageRoute(
                                             builder: (context) => PersonalInfoScreen()));
                                   },
-                                  child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -463,7 +464,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/change_password.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/change_password.png",height: 25,width: 25,),
                               title:GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
@@ -471,7 +472,7 @@ print("flagicon"+flagicon);
                                         MaterialPageRoute(
                                             builder: (context) => ChangepasswordScreen()));
                                   },
-                                  child: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -496,7 +497,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/privacy.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/privacy.png",height: 25,width: 25,),
                               title:GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
@@ -504,7 +505,7 @@ print("flagicon"+flagicon);
                                         MaterialPageRoute(
                                             builder: (context) =>  PrivacyPage()));
                                   },
-                                  child: Text("PRIVACY",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("PRIVACY",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -529,7 +530,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/interval.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/interval.png",height: 25,width: 25,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
@@ -537,7 +538,7 @@ print("flagicon"+flagicon);
                                         MaterialPageRoute(
                                             builder: (context) => InviteContactScreen()));
                                   },
-                                  child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -562,7 +563,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/payment_setting.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/payment_setting.png",height: 25,width: 25,),
                               title:GestureDetector(
                                   onTap: (){
                                     // Navigator.pushReplacement(
@@ -570,7 +571,7 @@ print("flagicon"+flagicon);
                                     //     MaterialPageRoute(
                                     //         builder: (context) =>  BarChartDemo()));
                                      },
-                                  child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
                         ),
 
@@ -595,7 +596,7 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/help.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/help.png",height: 25,width: 25,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
@@ -603,7 +604,7 @@ print("flagicon"+flagicon);
                                         MaterialPageRoute(
                                             builder: (context) =>  HelpPage()));
                                   },
-                                  child: Text("HELP",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("HELP",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -628,15 +629,15 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/about.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/about.png",height: 25,width: 25,),
                               title: GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>  AboutUsPage()));
+                                            builder: (context) =>  AboutUsPage(title: 'ABOUT US', url: 'https://www.cultre.in/our-team',)));
                                   },
-                                  child: Text("ABOUT",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("ABOUT",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -661,13 +662,13 @@ print("flagicon"+flagicon);
                             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ListTile(
                               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/share1.png",height: 30,width: 30,),
+                              leading: Image.asset("assets/images/share1.png",height: 25,width: 25,),
                               title: GestureDetector(
                                   onTap: (){
                                     Share.share('https://cultre.app/cul.tre/2', subject: 'share');
                                     //Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
                                   },
-                                  child: Text("SHARE",style: TextStyle(color:ColorConstants.txt),)),
+                                  child: Text("SHARE",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
                             )
 
                         ),
@@ -696,7 +697,7 @@ print("flagicon"+flagicon);
                           },
                           child: const Text(
                             "GO BACK",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: TextStyle(color: Colors.white, fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal,),
                             textAlign: TextAlign.center,
                           ),
                         ),

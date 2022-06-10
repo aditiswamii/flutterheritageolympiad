@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/utils/stringconstants.dart';
+import 'package:CultreApp/utils/stringconstants.dart';
 import 'package:http/http.dart';
 import 'dart:convert' as convert;
 import 'forget_viewmodal.dart';

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse.dart';
+import 'package:CultreApp/modal/xpgainchart/GetXPGainChartResponse.dart';
 class Mnth1 {
   Mnth1({
     int? xp,

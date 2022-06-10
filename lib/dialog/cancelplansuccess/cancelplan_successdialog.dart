@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/payment/payment_screen.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/ui/myaccount/payment/payment_screen.dart';
 
 void main() {
   runApp( MaterialApp(

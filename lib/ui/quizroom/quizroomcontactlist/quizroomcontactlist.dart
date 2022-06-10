@@ -6,13 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:CultreApp/colors/colors.dart';
 
-import 'package:flutterheritageolympiad/modal/getdueluserlist/GetDuelUserListResponse.dart';
+import 'package:CultreApp/modal/getdueluserlist/GetDuelUserListResponse.dart';
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
-import 'package:flutterheritageolympiad/utils/stringconstants.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
+import 'package:CultreApp/utils/stringconstants.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;

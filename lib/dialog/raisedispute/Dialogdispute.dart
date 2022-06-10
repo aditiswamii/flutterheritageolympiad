@@ -4,9 +4,9 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/payment/payment_screen.dart';
-import 'package:flutterheritageolympiad/utils/stringconstants.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/ui/myaccount/payment/payment_screen.dart';
+import 'package:CultreApp/utils/stringconstants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

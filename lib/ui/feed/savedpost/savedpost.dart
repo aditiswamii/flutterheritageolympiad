@@ -8,16 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/savedpost/GetSavePostResponse.dart';
-import 'package:flutterheritageolympiad/ui/feed/feed.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/savedpost/GetSavePostResponse.dart';
+import 'package:CultreApp/ui/feed/feed.dart';
 
 
 
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
-import 'package:flutterheritageolympiad/utils/apppreference.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
+import 'package:CultreApp/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
@@ -27,7 +27,7 @@ import '../../../utils/StringConstants.dart';
 
 import 'dart:convert' as convert;
 
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 class SavedPost extends StatefulWidget {
   SavedPost({Key? key}) : super(key: key);
 

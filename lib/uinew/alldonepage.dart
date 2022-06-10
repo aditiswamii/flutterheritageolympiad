@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/dialog/emailresend/emailresend_dialog.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/dialog/emailresend/emailresend_dialog.dart';
 
 
 
-import 'package:flutterheritageolympiad/uinew/registerpage.dart';
-import 'package:flutterheritageolympiad/uinew/signuppage.dart';
+import 'package:CultreApp/uinew/registerpage.dart';
+import 'package:CultreApp/uinew/signuppage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../modal/getemailverify/GetEmailVerifyResponse.dart';

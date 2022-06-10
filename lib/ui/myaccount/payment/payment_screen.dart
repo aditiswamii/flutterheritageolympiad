@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/dialog/cancelplan/cancelplan_dialog.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/dialog/cancelplan/cancelplan_dialog.dart';
+import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 

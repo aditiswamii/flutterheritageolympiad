@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:CultreApp/colors/colors.dart';
 
 
 class DialogDuelInviteSent extends StatefulWidget{

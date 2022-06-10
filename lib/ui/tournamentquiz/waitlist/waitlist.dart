@@ -9,14 +9,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/getduelresult/GetDuelResultResponse.dart';
-import 'package:flutterheritageolympiad/modal/tourroomlist/GetTourRoomlist.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/answerkey/answerkeyduel.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/getduelresult/GetDuelResultResponse.dart';
+import 'package:CultreApp/modal/tourroomlist/GetTourRoomlist.dart';
+import 'package:CultreApp/ui/duelmode/answerkey/answerkeyduel.dart';
 
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
+import 'package:CultreApp/ui/quiz/let_quiz.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/tournamentquiz/tournament_quiz.dart';
 
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:package_info_plus/package_info_plus.dart';

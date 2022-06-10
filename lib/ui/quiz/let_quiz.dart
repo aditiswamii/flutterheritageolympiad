@@ -7,18 +7,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/domainlist.dart';
+import 'package:CultreApp/ui/classicquiz/classicquiz_main.dart';
+import 'package:CultreApp/ui/classicquiz/domainlist.dart';
 
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodemain/duelmode_main.dart';
-import 'package:flutterheritageolympiad/ui/quizroom/quizroominvite/quizroominvitepage.dart';
-import 'package:flutterheritageolympiad/ui/quizroom/quizroommain/quizroom_main.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/dialog/duelinvitereceive/duelinvite_receivedialog.dart';
+import 'package:CultreApp/ui/duelmode/duelmodemain/duelmode_main.dart';
+import 'package:CultreApp/ui/quizroom/quizroominvite/quizroominvitepage.dart';
+import 'package:CultreApp/ui/quizroom/quizroommain/quizroom_main.dart';
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/tournamentquiz/tournament_quiz.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/tournamentquiz/tournament_quiz.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -423,7 +423,7 @@ var datalink;
     )),
 
 
-                userLeagueR!=null?  Container(
+                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   decoration: BoxDecoration(
                       color: Colors.white),
@@ -434,7 +434,7 @@ var datalink;
 
                     ),
                     child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child:userLeagueR!.data!.goalsummery==null?Container(child: Column(
+                      child:Container(child: Column(
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -443,7 +443,8 @@ var datalink;
                             ),
 
 
-                            Container(
+
+                            userLeagueR==null? Container(
                                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 child: GFProgressBar(
                                   percentage:0.0,
@@ -452,6 +453,42 @@ var datalink;
                                   backgroundColor: Colors.black12,
                                   progressBarColor: Colors.black12,
                                 )
+                            ):  userLeagueR!.data!.goalsummery==null? Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: GFProgressBar(
+                                  percentage:0.0,
+                                  lineHeight: 20,
+                                  alignment: MainAxisAlignment.spaceBetween,
+                                  backgroundColor: Colors.black12,
+                                  progressBarColor: Colors.black12,
+                                )
+                            ):((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1?
+                            Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: GFProgressBar(
+                                  percentage:
+                                  (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
+                                  lineHeight: 20,
+                                  alignment: MainAxisAlignment.spaceBetween,
+                                  child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 14, color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.black12,
+                                  progressBarColor: ColorConstants.verdigris,
+                                )
+                            ): Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: GFProgressBar(
+                                  percentage:1.0,
+                                  lineHeight: 20,
+                                  alignment: MainAxisAlignment.spaceBetween,
+                                  child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 14, color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.black12,
+                                  progressBarColor: ColorConstants.verdigris,
+                                )
+                            )
                             ),
 
 
@@ -460,54 +497,10 @@ var datalink;
                                 style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
                             ),
                           ]
-                      ),): Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Text("YOUR OVERALL PERFORMANCE",
-                                style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
-                            ),
-
-                            if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
-                              Container(
-                                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                  child: GFProgressBar(
-                                    percentage:
-                                    (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
-                                    lineHeight: 20,
-                                    alignment: MainAxisAlignment.spaceBetween,
-                                    child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                                      style: TextStyle(fontSize: 14, color: Colors.white),
-                                    ),
-                                    backgroundColor: Colors.black12,
-                                    progressBarColor: ColorConstants.verdigris,
-                                  )
-                              ),
-
-                            if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)>=1)
-                              Container(
-                                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                  child: GFProgressBar(
-                                    percentage:1.0,
-                                    lineHeight: 20,
-                                    alignment: MainAxisAlignment.spaceBetween,
-                                    child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                                      style: TextStyle(fontSize: 14, color: Colors.white),
-                                    ),
-                                    backgroundColor: Colors.black12,
-                                    progressBarColor: ColorConstants.verdigris,
-                                  )
-                              ),
-
-                            Container(
-                              child: Text("Quizzes Done",
-                                style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
-                            ),
-                          ]
-                      ),
+                      ),)
                     ),
                   ),
-                ):Container(),
+                ),
                 Container(
                   child: Center(
                     child: ElevatedButton(

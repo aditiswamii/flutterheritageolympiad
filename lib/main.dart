@@ -4,11 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/fcm/fcm.dart';
+import 'package:CultreApp/fcm/fcm.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
-import 'package:flutterheritageolympiad/uinew/loginpage.dart';
-import 'package:flutterheritageolympiad/widget/deeplink.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
+import 'package:CultreApp/uinew/loginpage.dart';
+import 'package:CultreApp/widget/deeplink.dart';
 import 'package:provider/provider.dart';
 
 

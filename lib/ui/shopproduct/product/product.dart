@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../colors/colors.dart';
 import '../../../utils/StringConstants.dart';
 import '../../rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import '../shopproducts_page.dart';
 
 class ProductList extends StatefulWidget{

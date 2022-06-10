@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/quizroom/waitroom/waitroom.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/ui/quizroom/waitroom/waitroom.dart';
 
 
 class DialogQuizroomInviteSent extends StatefulWidget{

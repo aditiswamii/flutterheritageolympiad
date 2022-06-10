@@ -11,14 +11,14 @@ import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/gettournament/GetTournamentResponse.dart';
-import 'package:flutterheritageolympiad/ui/feed/filterpage/filterpage.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/gettournament/GetTournamentResponse.dart';
+import 'package:CultreApp/ui/feed/filterpage/filterpage.dart';
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/tournamentquiz/filtertour/filtertour.dart';
-import 'package:flutterheritageolympiad/ui/tournamentquiz/waitlist/waitlist.dart';
-import 'package:flutterheritageolympiad/utils/countdowntimer.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/tournamentquiz/filtertour/filtertour.dart';
+import 'package:CultreApp/ui/tournamentquiz/waitlist/waitlist.dart';
+import 'package:CultreApp/utils/countdowntimer.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:intl/intl.dart';
 
@@ -27,7 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/StringConstants.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 
 import '../../modal/leaderboardrank/GetLeaderboardRank.dart';
@@ -381,82 +381,59 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                       child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: Column(
                             children: [
-                              // Container(
-                              //   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              //   child: Text("Your Activity Summary",
-                              //     style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
-                              // ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                height: 20,
 
-
-                                //  Container(
-                                //    width: MediaQuery.of(context).size.width,
-                                //     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                //     child: Row(
-                                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                //       children: [
-                                //         Container(
-                                //           width: 30,
-                                //           height: 20,
-                                //           decoration: BoxDecoration(
-                                //             color:Colors.red,
-                                //            borderRadius: BorderRadius.only(topLeft: Radius.elliptical(20, 20),
-                                //              bottomLeft:Radius.elliptical(20, 20),topRight:  Radius.elliptical(-20, -20),bottomRight:Radius.elliptical(-20, -20) )
-                                //           ),
-                                //
-                                //         ),
-                                //         Container( width: 30,   height: 20,
-                                //           decoration: BoxDecoration(
-                                //             color:Colors.deepOrange,
-                                //
-                                //           ),
-                                //
-                                //         ),
-                                //         Container( width: 30,   height: 20,
-                                //           decoration: BoxDecoration(
-                                //             color:Colors.orange,
-                                //           ),
-                                //
-                                //         ),
-                                //         Container( width: 30,   height: 20,
-                                //           decoration: BoxDecoration(
-                                //             color:Colors.green,
-                                //           ),
-                                //
-                                //         ),
-                                //         Container( width: 30,   height: 20,
-                                //           decoration: BoxDecoration(
-                                //             color:ColorConstants.verdigris,
-                                //               borderRadius: BorderRadius.only(topRight: Radius.elliptical(20, 20),bottomRight:Radius.elliptical(20, 20))
-                                //           ),
-                                //
-                                //         ),
-                                //       ],
-                                //     )
-                                // ),
-                              getleaderboardR == null
-                                  ? Container()
-                                  : Container(
-                                    child: Echarts(
-                                      option: '''
-                                                  {
-                                                    xAxis: {
-                                                      type: 'category',
-                                                      data: ${index},
-                                                    },
-                                                    yAxis: {
-                                                      type: 'value'
-                                                    },
-                                                    series: [{
-                                                      data:${getleaderboardR!.data!.rank},
-                                                      type: 'line',
-                                                      color: '#F73F0C'
-                                                    }]
-                                                  }
-                                                ''',
-                                    ),
-                                    width: 300,
-                                    height: 250,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.red,
+                                    // image: DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                    //     alignment:Alignment.centerLeft,fit: BoxFit.fitHeight,scale: 1 ),
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                  width: MediaQuery.of(context).size.width-30,
+                                  decoration: BoxDecoration(
+                                      color: ColorConstants.stage1color,
+                                      // image: DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                      //     alignment:Alignment.centerLeft,fit: BoxFit.fitHeight,scale: 1 ),
+                                      borderRadius: BorderRadius.circular(20)
                                   ),
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                    width: MediaQuery.of(context).size.width-30,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstants.stage2color,
+                                        // image: DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                        //     alignment:Alignment.centerLeft,fit: BoxFit.fitHeight,scale: 1 ),
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                      width: MediaQuery.of(context).size.width-30,
+                                      decoration: BoxDecoration(
+                                          color: ColorConstants.stage3color,
+                                          // image: DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                          //     alignment:Alignment.centerLeft,fit: BoxFit.fitHeight,scale: 1 ),
+                                          borderRadius: BorderRadius.circular(20)
+                                      ),
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                        width: MediaQuery.of(context).size.width-30,
+                                        decoration: BoxDecoration(
+                                            color: ColorConstants.stage5color,
+                                            // image: DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                            //     alignment:Alignment.centerLeft,fit: BoxFit.fitHeight,scale: 1 ),
+                                            borderRadius: BorderRadius.circular(20)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
                               _expanded==false? Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 30,
@@ -489,8 +466,30 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                     child: ListView(
                                       shrinkWrap: true,
                                       children: [
-                                        Container(
-                                          height: 100,
+
+                                        getleaderboardR == null
+                                            ? Container()
+                                            : Container(
+                                          child: Echarts(
+                                            option: '''
+                                                  {
+                                                    xAxis: {
+                                                      type: 'category',
+                                                     
+                                                    },
+                                                    yAxis: {
+                                                      type: 'value'
+                                                    },
+                                                    series: [{
+                                                      data:${getleaderboardR!.data!.rank},
+                                                      type: 'line',
+                                                      color: '#F73F0C'
+                                                    }]
+                                                  }
+                                                ''',
+                                          ),
+                                          width: 300,
+                                          height: 250,
                                         ),
                                         Center(
                                           child: ElevatedButton(

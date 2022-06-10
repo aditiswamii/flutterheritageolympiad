@@ -1,6 +1,6 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/ui/feed/feed.dart';
+import 'package:CultreApp/ui/feed/feed.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 

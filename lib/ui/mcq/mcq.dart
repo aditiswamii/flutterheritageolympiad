@@ -7,12 +7,12 @@ import 'dart:ui';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/question/GetQuestionResponse.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/result/result.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/question/GetQuestionResponse.dart';
+import 'package:CultreApp/ui/classicquiz/result/result.dart';
 
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/utils/stringconstants.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/utils/stringconstants.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';

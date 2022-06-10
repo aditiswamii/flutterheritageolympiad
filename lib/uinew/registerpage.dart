@@ -4,13 +4,13 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/getcitylist/GetCityResponse.dart';
-import 'package:flutterheritageolympiad/modal/getstate/GetStateResponse.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
-import 'package:flutterheritageolympiad/uinew/loginpage.dart';
-import 'package:flutterheritageolympiad/uinew/signuppage.dart';
-import 'package:flutterheritageolympiad/utils/apppreference.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/getcitylist/GetCityResponse.dart';
+import 'package:CultreApp/modal/getstate/GetStateResponse.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
+import 'package:CultreApp/uinew/loginpage.dart';
+import 'package:CultreApp/uinew/signuppage.dart';
+import 'package:CultreApp/utils/apppreference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../modal/getcountry/GetCountryList.dart';

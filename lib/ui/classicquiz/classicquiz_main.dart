@@ -5,15 +5,15 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/domainlist.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
+import 'package:CultreApp/ui/classicquiz/domainlist.dart';
+import 'package:CultreApp/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
+import 'package:CultreApp/colors/colors.dart';
 
-import 'package:flutterheritageolympiad/ui/duelmode/duelmodeinvite/invitepage.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/duelmode/duelmodeinvite/invitepage.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modal/Domains.dart';

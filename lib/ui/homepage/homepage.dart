@@ -8,20 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/dialog/contactinvitereceive/contactinvitereceive.dart';
-import 'package:flutterheritageolympiad/modal/getuserleagueresponse/GetUserLeagueResponse.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/dialog/contactinvitereceive/contactinvitereceive.dart';
+import 'package:CultreApp/modal/getuserleagueresponse/GetUserLeagueResponse.dart';
 
-import 'package:flutterheritageolympiad/ui/feed/feed.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homeview.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
-import 'package:flutterheritageolympiad/ui/myaccount/yourpage/yourpage.dart';
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
-import 'package:flutterheritageolympiad/ui/quizroom/waitroom/waitroom.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/shopproduct/shopproducts_page.dart';
-import 'package:flutterheritageolympiad/utils/SharedObjects.dart';
-import 'package:flutterheritageolympiad/utils/apppreference.dart';
+import 'package:CultreApp/ui/feed/feed.dart';
+import 'package:CultreApp/ui/homepage/homeview.dart';
+import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
+import 'package:CultreApp/ui/myaccount/yourpage/yourpage.dart';
+import 'package:CultreApp/ui/quiz/let_quiz.dart';
+import 'package:CultreApp/ui/quizroom/waitroom/waitroom.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
+import 'package:CultreApp/utils/SharedObjects.dart';
+import 'package:CultreApp/utils/apppreference.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
@@ -1123,7 +1123,7 @@ if(tournament!=null && tournament['tournament_id']>0){
 
 
 
-        userLeagueR!=null?  Container(
+       Container(
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
                 color: Colors.white),
@@ -1133,8 +1133,8 @@ if(tournament!=null && tournament['tournament_id']>0){
                 // if you need this
 
               ),
-          child: Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child:userLeagueR!.data!.goalsummery==null?Container(child: Column(
+          child:  Container( margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child:Container(child: Column(
                 children: [
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -1143,7 +1143,16 @@ if(tournament!=null && tournament['tournament_id']>0){
                   ),
 
 
-                    Container(
+                  userLeagueR==null? Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: GFProgressBar(
+                        percentage:0.0,
+                        lineHeight: 20,
+                        alignment: MainAxisAlignment.spaceBetween,
+                        backgroundColor: Colors.black12,
+                        progressBarColor: Colors.black12,
+                      )
+                  ):  userLeagueR!.data!.goalsummery==null? Container(
                         margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: GFProgressBar(
                           percentage:0.0,
@@ -1152,62 +1161,108 @@ if(tournament!=null && tournament['tournament_id']>0){
                           backgroundColor: Colors.black12,
                           progressBarColor: Colors.black12,
                         )
-                    ),
-
-
+                    ):((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1?
+                  Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: GFProgressBar(
+                        percentage:
+                        (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
+                        lineHeight: 20,
+                        alignment: MainAxisAlignment.spaceBetween,
+                        child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black12,
+                        progressBarColor: ColorConstants.verdigris,
+                      )
+                  ): Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: GFProgressBar(
+                        percentage:1.0,
+                        lineHeight: 20,
+                        alignment: MainAxisAlignment.spaceBetween,
+                        child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black12,
+                        progressBarColor: ColorConstants.verdigris,
+                      )
+                  )
+                  ),
                   Container(
                     child: Text("Quizzes Done",
                       style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
                   ),
+
+
+                  userLeagueR==null?Container():   Container(
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    height: 20,
+
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: ColorConstants.red,
+                         image: userLeagueR!.data!.user!.id==5?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                            alignment:Alignment(-.9,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                             alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                        borderRadius: BorderRadius.circular(20)
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                      width: MediaQuery.of(context).size.width-30,
+                      decoration: BoxDecoration(
+                          color: ColorConstants.stage1color,
+                              image:userLeagueR!.data!.user!.id==4?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                  alignment:Alignment(-.8,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                  alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                        width: MediaQuery.of(context).size.width-30,
+                        decoration: BoxDecoration(
+                            color: ColorConstants.stage2color,
+                            image:userLeagueR!.data!.user!.id==3?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                          alignment:Alignment(-.7,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                       alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                          width: MediaQuery.of(context).size.width-30,
+                          decoration: BoxDecoration(
+                              color: ColorConstants.stage3color,
+                              image:userLeagueR!.data!.user!.id==2?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                  alignment:Alignment(-.6,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                  alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                            width: MediaQuery.of(context).size.width-30,
+                            decoration: BoxDecoration(
+                                color: ColorConstants.stage5color,
+                                image:userLeagueR!.data!.user!.id==1?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                    alignment:Alignment.center,fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                    alignment:Alignment.center,fit: BoxFit.fitHeight,scale: 0, ),
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                    child: Text("Leagues",
+                      style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
+                  ),
                 ]
-            ),): Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Text("Your Activity Summary",
-                    style: TextStyle(color: ColorConstants.txt,fontSize: 12),textAlign: TextAlign.center,),
-                ),
+            ),)
 
-                if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)<1)
-                Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: GFProgressBar(
-                      percentage:
-                      (userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)*(0.3).toDouble(),
-                      lineHeight: 20,
-                      alignment: MainAxisAlignment.spaceBetween,
-                      child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 14, color: Colors.white),
-                      ),
-                      backgroundColor: Colors.black12,
-                      progressBarColor: ColorConstants.verdigris,
-                    )
-                ),
-
-                if((userLeagueR!.data!.goalsummery!.play!/userLeagueR!.data!.goalsummery!.total!)>=1)
-                Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: GFProgressBar(
-                      percentage:1.0,
-                      lineHeight: 20,
-                      alignment: MainAxisAlignment.spaceBetween,
-                      child: Text('${userLeagueR!.data!.goalsummery!.play!} out of ${userLeagueR!.data!.goalsummery!.total}', textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 14, color: Colors.white),
-                      ),
-                      backgroundColor: Colors.black12,
-                      progressBarColor: ColorConstants.verdigris,
-                    )
-                ),
-
-                Container(
-                  child: Text("Quizzes Done",
-                    style: TextStyle(color: Colors.grey,fontSize: 12),textAlign: TextAlign.center,),
-                ),
-        ]
-      ),
           ),
         ),
-      ):Container(),
+      ),
 
         Container(
           child: Center(

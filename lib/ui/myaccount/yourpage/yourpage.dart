@@ -6,15 +6,15 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/modal/badgeresponse/GetBadgeResponse.dart';
-import 'package:flutterheritageolympiad/modal/leaderboardrank/GetLeaderboardRank.dart';
-import 'package:flutterheritageolympiad/modal/leaguerank/GetLeagueRankResponse.dart';
-import 'package:flutterheritageolympiad/modal/xpgainchart/GetXPGainChartResponse.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/modal/badgeresponse/GetBadgeResponse.dart';
+import 'package:CultreApp/modal/leaderboardrank/GetLeaderboardRank.dart';
+import 'package:CultreApp/modal/leaguerank/GetLeagueRankResponse.dart';
+import 'package:CultreApp/modal/xpgainchart/GetXPGainChartResponse.dart';
 
-import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -192,14 +192,19 @@ class _YourPageState extends State<YourPage> {
   }
 
   onxpsuccess(xpdata, GetXpGainChartResponse? getXpGainChartR) {
-    setState(() {
-      getXpGainChartResponse = getXpGainChartR;
-    });
+
     //  xplist=List.from(xpdata['data']['mnth']);
     print("mnth : " + xpdata['data']['mnth'].toString());
     print("userdata" + xpdata['data']['totalxp'].toString());
     print("userdata" + xpdata['data']['max'].toString());
     print("userdata" + xpdata['data']['totalquiz'].toString());
+    if(getXpGainChartR!=null) {
+      if (getXpGainChartR.data != null) {
+        setState(() {
+          getXpGainChartResponse = getXpGainChartR;
+        });
+      }
+    }
   }
 
   leaderboardranking(String userid, String month, String contactid) async {
@@ -233,6 +238,7 @@ class _YourPageState extends State<YourPage> {
       print(response.statusCode);
     }
   }
+  var color_bar = [];
 
   int index = 0;
   onleadersuccess(GetLeaderboardRank? leaderboardRank) {
@@ -249,6 +255,9 @@ class _YourPageState extends State<YourPage> {
         });
 
       }
+
+
+
 
       log("rank : " + leaderdata['rank'].toString());
       log("rank : " + leaderdata.toString());
@@ -542,7 +551,19 @@ class _YourPageState extends State<YourPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
+        child: (prodata == null &&
+            xpdata == null &&
+            goalsummarydata == null &&
+            goaldata == null)
+            ? Container(
+          color: Colors.transparent,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+              child: CircularProgressIndicator(
+                color: Colors.blueAccent,
+              )),
+        )
+            : Container(
           color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(children: [
@@ -590,32 +611,21 @@ class _YourPageState extends State<YourPage> {
             ),
             Container(
               color: Colors.white70,
-              child: (prodata == null &&
-                      xpdata == null &&
-                      goalsummarydata == null &&
-                      goaldata == null)
-                  ? Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: Center(
-                          child: CircularProgressIndicator(
-                        color: ColorConstants.blue,
-                      )),
-                    )
-                  : ListBody(
+              child: ListBody(
                       children: [
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
                             child: const Text("YOUR PAGE",
                                 style: TextStyle(
-                                    fontSize: 24, color: Colors.black))),
+                                    fontSize: 24, color: Colors.black,fontFamily: 'Nunito',fontStyle: FontStyle.normal,))),
                         Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: const Text(
                               "You can find about your performance, your goals, and your achievements here.",
                               style: TextStyle(
-                                  fontSize: 15, color: ColorConstants.txt)),
+                                  fontSize: 15, color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                         ),
                         xpdata == null
                             ? Container()
@@ -713,7 +723,7 @@ class _YourPageState extends State<YourPage> {
                                                       color: ColorConstants.txt,
                                                       fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.w600),
+                                                          FontWeight.w600,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                                                   textAlign: TextAlign.center,
                                                 ),
                                               ),
@@ -738,7 +748,7 @@ class _YourPageState extends State<YourPage> {
                                                       style: TextStyle(
                                                           color: ColorConstants
                                                               .txt,
-                                                          fontSize: 14),
+                                                          fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                                                       textAlign:
                                                           TextAlign.center,
                                                     ),
@@ -769,7 +779,7 @@ class _YourPageState extends State<YourPage> {
                                                               color:
                                                                   ColorConstants
                                                                       .txt,
-                                                              fontSize: 14),
+                                                              fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                                                           textAlign:
                                                               TextAlign.center,
                                                         ),
@@ -781,7 +791,7 @@ class _YourPageState extends State<YourPage> {
                                       ],
                                     ),
                                   ),
-                                  badgedata['data'] == null
+                                  badgedata == null
                                       ? Container()
                                       : Card(
                                           child: Container(
@@ -797,7 +807,7 @@ class _YourPageState extends State<YourPage> {
                                                       style: TextStyle(
                                                           color: ColorConstants
                                                               .txt,
-                                                          fontSize: 16)),
+                                                          fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                                                 ),
                                                 GridView.builder(
                                                     physics: ClampingScrollPhysics(
@@ -848,7 +858,7 @@ class _YourPageState extends State<YourPage> {
                                             ),
                                           ),
                                         ),
-                                  xpdata == null
+                                  xpdata  == null
                                       ? Container()
                                       : Card(
                                           child: Container(
@@ -865,9 +875,9 @@ class _YourPageState extends State<YourPage> {
                                                       style: TextStyle(
                                                           color: ColorConstants
                                                               .txt,
-                                                          fontSize: 16)),
+                                                          fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                                                 ),
-                                                Container(
+                                                getXpGainChartResponse==null?Container(): Container(
                                                   child: Echarts(
                                                     option: '''
                                                   {
@@ -893,14 +903,77 @@ class _YourPageState extends State<YourPage> {
                                                             ${getXpGainChartResponse!.data!.mnth![11].xp}
                                                             ],
                                                       type: 'bar',
-                                                      color: '#F73F0C'
+                                                      color: '#F73F0C',
+                                                     
+                                                   
                                                     }]
                                                   }
                                                 ''',
+                                              //       extraScript: '''
+                                              //   chart.on('mouseover', { dataType: 'node' }, (params) => {
+                                              //   if(params.componentType === 'series') {
+                                              //     Messager.postMessage('anything');
+                                              //   }
+                                              //   });
+                                              // ''',
+
                                                   ),
                                                   width: 300,
                                                   height: 250,
-                                                )
+                                                ),
+                                                Container(
+                                                  alignment:
+                                                  Alignment.center,
+                                                  child: Text(
+                                                      "2022",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets.fromLTRB(
+                                                      20, 10, 20, 10),
+                                                  alignment:
+                                                  Alignment.center,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Column(
+                                                        children: [
+                                                          Text(
+                                                              xpdata['data']['totalxp'].toString(),
+                                                              style: TextStyle(
+                                                                  color: ColorConstants
+                                                                      .txt,
+                                                                  fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                                          Text(
+                                                              "Total XP",
+                                                              style: TextStyle(
+                                                                  color: ColorConstants
+                                                                      .txt,
+                                                                  fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                                        ],
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Text(
+                                                              xpdata['data']['totalquiz'].toString(),
+                                                              style: TextStyle(
+                                                                  color: ColorConstants
+                                                                      .txt,
+                                                                  fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                                          Text(
+                                                              "Quizzes Done",
+                                                              style: TextStyle(
+                                                                  color: ColorConstants
+                                                                      .txt,
+                                                                  fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -922,7 +995,7 @@ class _YourPageState extends State<YourPage> {
                                                       style: TextStyle(
                                                           color: ColorConstants
                                                               .txt,
-                                                          fontSize: 16)),
+                                                          fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                                                 ),
                                                 Container(
                                                   child: Echarts(
@@ -930,22 +1003,41 @@ class _YourPageState extends State<YourPage> {
                                                       {
                                                         xAxis: {
                                                           type: 'category',
-                                                          data: ${index},
+                                                        
+                                                    
                                                         },
                                                         yAxis: {
-                                                          type: 'value'
+                                                          type: 'value',
                                                         },
                                                         series: [{
                                                           data:${getleaderboardR!.data!.rank},
                                                           type: 'line',
-                                                          color: '#F73F0C'
-                                                        }]
+                                                          color: '#F73F0C',
+                                                           nodes: ${getleaderboardR!.data!.rank}
+                                                        
+                                                        }],
+                                                        title: {
+        text: 'Rank',
+        color: '#F73F0C',
+        bottom: 'bottom'
+    },
                                                       }
                                                     ''',
+
                                                   ),
                                                   width: 300,
                                                   height: 250,
-                                                )
+                                                ),
+                                                Container(
+                                                  alignment:
+                                                  Alignment.center,
+                                                  child: Text(
+                                                      "2022",
+                                                      style: TextStyle(
+                                                          color: ColorConstants
+                                                              .txt,
+                                                          fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -966,7 +1058,7 @@ class _YourPageState extends State<YourPage> {
                                                       style: TextStyle(
                                                           color: ColorConstants
                                                               .txt,
-                                                          fontSize: 16)),
+                                                          fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                                                 ),
                                                 if ((goalsummarydata['data']
                                                             ['play'] /
@@ -988,7 +1080,7 @@ class _YourPageState extends State<YourPage> {
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
-                                                              fontSize: 14,
+                                                              fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
                                                               color:
                                                                   Colors.white),
                                                         ),
@@ -1024,7 +1116,7 @@ class _YourPageState extends State<YourPage> {
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
-                                                              fontSize: 14,
+                                                              fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
                                                               color:
                                                                   Colors.white),
                                                         ),
@@ -1092,7 +1184,7 @@ class _YourPageState extends State<YourPage> {
                                                                   fontSize: 18,
                                                                   color:
                                                                       ColorConstants
-                                                                          .txt),
+                                                                          .txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                                                             ),
                                                           ),
                                                         ),
@@ -1126,7 +1218,7 @@ class _YourPageState extends State<YourPage> {
                                                     : Text("${goalname}",
                                                         style: TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 14)),
+                                                            fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                                               ),
                                               Image.asset(
                                                 "assets/images/dropdown.png",
@@ -1171,7 +1263,7 @@ class _YourPageState extends State<YourPage> {
                                           ),
                                           hintText: 'Number of Quizzes',
                                           hintStyle:
-                                              TextStyle(color: Colors.grey)),
+                                              TextStyle(color: Colors.grey,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter
                                             .singleLineFormatter
@@ -1223,7 +1315,7 @@ class _YourPageState extends State<YourPage> {
                                           "SAVE CHANGES",
                                           style: TextStyle(
                                               color: ColorConstants.txt,
-                                              fontSize: 16),
+                                              fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),

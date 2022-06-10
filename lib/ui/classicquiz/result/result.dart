@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutterheritageolympiad/colors/colors.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/answerkey/answerkey.dart';
-import 'package:flutterheritageolympiad/ui/classicquiz/classicquiz_main.dart';
+import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/ui/classicquiz/answerkey/answerkey.dart';
+import 'package:CultreApp/ui/classicquiz/classicquiz_main.dart';
 
-import 'package:flutterheritageolympiad/ui/myaccount/myaccount_page.dart';
-import 'package:flutterheritageolympiad/ui/quiz/let_quiz.dart';
-import 'package:flutterheritageolympiad/ui/rightdrawer/right_drawer.dart';
+import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
+import 'package:CultreApp/ui/quiz/let_quiz.dart';
+import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutterheritageolympiad/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/homepage/homepage.dart';
 
 class ResultPage extends StatefulWidget {
   var quizid;

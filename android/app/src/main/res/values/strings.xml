@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">CultreApp</string>
+<!--    <string name="facebook_app_id">356783999193701</string>-->
+<!--    <string name="fb_login_protocol_scheme">fb356783999193701</string>-->
+    <string name="tour_heading">Compete with other players! Your result will be ranked in your current league. Increase your rank to reach progress through next leagues</string>
+    <string name="rank_heading">Compete with other players! Your result will be ranked in your current league. Increase your rank to reach progress through next leagues</string>
+    <string name="two_more_invites">You can send them 2 more invites. If they reject thrice, you cannot send more invites for today!</string>
+    <string name="one_more_invites">You can send them 1 more invites. If they reject thrice, you cannot send more invites for today!</string>
+    <string name="cannot_send_more">You cannot send them more invites for today!</string>
+    <string name="notified">You will be notified when they have accepted your invite</string>
+
+    <string name="facebook_app_id">1401599550295984</string>
+    <string name="fb_login_protocol_scheme">fb1401599550295984</string>
+    <string name="facebook_client_token">8fa87670e561c6907a64756ac4457406</string>
+
+
+
+</resources>
