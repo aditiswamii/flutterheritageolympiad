@@ -18,7 +18,7 @@ import 'package:CultreApp/ui/myaccount/payment/payment_screen.dart';
 import 'package:CultreApp/ui/myaccount/personalinfo/personalinfo.dart';
 
 import 'package:CultreApp/ui/myaccount/privacy/privacy_page.dart';
-import 'package:CultreApp/ui/myaccount/yourpage/chart.dart';
+
 import 'package:CultreApp/ui/myaccount/yourpage/yourpage.dart';
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';

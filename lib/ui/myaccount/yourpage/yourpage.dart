@@ -24,7 +24,7 @@ import 'dart:convert' as convert;
 import '../../../modal/userprofile/GetUserProfileResponse.dart';
 import '../../../utils/StringConstants.dart';
 import '../personalinfo/personalinfo.dart';
-import 'chart.dart';
+
 
 class YourPage extends StatefulWidget {
   const YourPage({Key? key}) : super(key: key);

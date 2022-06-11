@@ -1,3 +1,5 @@
+import 'package:CultreApp/ui/feed/callmodules/callmodules.dart';
+import 'package:CultreApp/ui/feed/tagfeed/tagfeed.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:CultreApp/ui/feed/feed.dart';
@@ -12,8 +14,15 @@ class ImageviewFeed extends StatefulWidget{
   var contents;
   var themes;
   var seldomain;
+  int typef;
+  var tags;
+  var searchkey;
+  var module;
+  var feeddata;
+  var type;
   ImageviewFeed({Key? key,required this.gallery
-    ,required this.image,required this.index,required this.seldomain,required this.contents,required this.themes
+    ,required this.image,required this.index,required this.seldomain,
+    required this.contents,required this.themes,required this.typef,this.tags,this.searchkey,this.module,required this.feeddata,this.type
   }) : super(key: key);
 
   @override
@@ -37,8 +46,15 @@ class _State extends State<ImageviewFeed> {
     super.dispose();
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if(widget.typef==1)
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>FeedPage(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain,)));
+        builder: (BuildContext context) =>FeedPage(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain,feeddata: widget.feeddata)));
+    if(widget.typef==2)
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) =>TagFeed(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain, tags: widget.tags, seachkey: widget.searchkey, feeddata: widget.feeddata,)));
+    if(widget.typef==3)
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) =>CallModules(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain, module: widget.module, feeddata: widget.feeddata, type: widget.type,)));
 
     // Do some stuff.
     return true;
@@ -86,8 +102,15 @@ class _State extends State<ImageviewFeed> {
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: (){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) =>FeedPage(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain,)));
+                    if(widget.typef==1)
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) =>FeedPage(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain,feeddata: widget.feeddata)));
+                    if(widget.typef==2)
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) =>TagFeed(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain, tags: widget.tags, seachkey: widget.searchkey, feeddata: widget.feeddata,)));
+                    if(widget.typef==3)
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) =>CallModules(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain, module: widget.module, feeddata: widget.feeddata, type: widget.type,)));
 
 
 

@@ -1195,7 +1195,48 @@ if(tournament!=null && tournament['tournament_id']>0){
                   ),
 
 
-                  userLeagueR==null?Container():   Container(
+                  userLeagueR==null?Container(
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    height: 20,
+
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: ColorConstants.red,
+                       borderRadius: BorderRadius.circular(20)
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                      width: MediaQuery.of(context).size.width-30,
+                      decoration: BoxDecoration(
+                          color: ColorConstants.stage1color,
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                        width: MediaQuery.of(context).size.width-30,
+                        decoration: BoxDecoration(
+                            color: ColorConstants.stage2color,
+                             borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                          width: MediaQuery.of(context).size.width-30,
+                          decoration: BoxDecoration(
+                              color: ColorConstants.stage3color,
+                               borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                            width: MediaQuery.of(context).size.width-30,
+                            decoration: BoxDecoration(
+                                color: ColorConstants.stage5color,
+                                  borderRadius: BorderRadius.circular(20)
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ):   Container(
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     height: 20,
 
@@ -1244,7 +1285,7 @@ if(tournament!=null && tournament['tournament_id']>0){
                                 color: ColorConstants.stage5color,
                                 image:userLeagueR!.data!.user!.id==1?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
                                     alignment:Alignment.center,fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
-                                    alignment:Alignment.center,fit: BoxFit.fitHeight,scale: 0, ),
+                                    alignment:Alignment.center,fit: BoxFit.fitHeight,scale: -1, ),
                                 borderRadius: BorderRadius.circular(20)
                             ),
                           ),

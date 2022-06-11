@@ -93,23 +93,6 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
     // showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      //  domainname="";
-      //  domainnamelist.clear();
-      //  isChecked.every((element) => false);
-      // // Navigator.pop(context);
-      //  data = response.body; //store response as string
-      //  setState(() {
-      //    domains_length = jsonDecode(data!)['data'];
-      //    domains_rev = domains_length.reversed;
-      //    //get all the data from json string superheros
-      //    print(domains_length.length); // just printed length of data
-      //  });
-      //  var jsondata = getDomainsResponseFromJson(data!).data;
-      //  //var jsondataa=datadomainFromJson(data!).id.toString();
-      //  log(jsondata.toString());
-      //  var venam = jsonDecode(data!)['data'];
-      //  log(venam.toString());
-      //
       if (jsonResponse['status'] == 200) {
         seldomain=="";
         databean!.clear();
@@ -123,7 +106,7 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
           jsarray;
         });
         if (jsarray.isNotEmpty) {
-          var sobj = Domain(0, "Select All", false);
+          var sobj = Domain(0, "Select All", true);
 
           //clist!.add(sobj);
           setState(() {
@@ -131,7 +114,7 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
           });
           for (int i = 0; i < jsarray.length; i++) {
             var jobj = jsarray[i];
-            var sobj = Domain(jobj['id'], jobj['name'], false);
+            var sobj = Domain(jobj['id'], jobj['name'], true);
 
             // clist!.add(sobj);
             setState(() {
@@ -354,26 +337,36 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                               fontSize: 22,
                               color: Colors.black,
                               fontFamily: "Nunito"))),
-                  GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        themes="";
-                        tangible=1;
-                        intangible=0;
-                        natural=0;
-                      });
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            themes="";
+                            tangible=1;
+                            intangible=0;
+                            natural=0;
+                            contents="";
+                            single=0;
+                            collection=0;
+                            modules=0;
+                            singleb=false;
+                            collectionb=false;
+                            modulesb=false;
+                            cleanData();
+                            getDomains("1");
 
-                    },
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          });
+
+                        },
                         child: const Text("RESET ALL",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.black54,
                                 fontFamily: "Nunito",
-                                decoration: TextDecoration.underline))),
-                  ),
+                                decoration: TextDecoration.underline)),
+                      )),
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -557,13 +550,18 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                           "DOMAINS",
                           style: TextStyle(color: Colors.black, fontSize: 16),
                         ),
-                        Container(
-                          width: 20,
-                          height: 20,
-                          child: Image.asset(
-                            "assets/images/question.png",
-                            height: 20,
+                        GestureDetector(
+                          onTap: (){
+                            hintdialog(context, "Domains: Choose a domain.");
+                          },
+                          child: Container(
                             width: 20,
+                            height: 20,
+                            child: Image.asset(
+                              "assets/images/question.png",
+                              height: 20,
+                              width: 20,
+                            ),
                           ),
                         )
                       ],
@@ -574,12 +572,31 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                   Container(
                       color: Colors.white,
                       alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: const Text("Content Type",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontFamily: "Nunito"))),
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Content Type",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontFamily: "Nunito")),
+                          GestureDetector(
+                            onTap: (){
+                              hintdialog(context, "Content Type: Choose a content type.");
+                            },
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              child: Image.asset(
+                                "assets/images/question.png",
+                                height: 20,
+                                width: 20,
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
                   Container(
                     margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     // decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(5)),
@@ -594,195 +611,235 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                       ),
                       child: Column(
                         children: [
-                          Container(
-                            height: 35,
-                            child: ListTile(
-                              minLeadingWidth: 5,
-                              visualDensity:
-                              VisualDensity(vertical: -4, horizontal: -4),
-                              leading: Image.asset(
-                                  "assets/images/single_posts.png",
-                                  height: 20,
-                                  width: 20),
-                              title: Text(
-                                "Single Posts",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              trailing: Checkbox(
-                                onChanged: (checked) {
-                                  if (single == 1) {
-                                    single = 0;
-                                    singleb = false;
-                                    setState(() {
-                                      single = 0;
-                                      singleb = false;
-                                      if(contents.isNotEmpty){
-                                        contents=contents;
-                                      }else{
-                                        contents="";
-                                      }
-                                    });
-                                  } else {
-                                    single = 1;
-                                    singleb = true;
-                                    setState(() {
-                                      single = 1;
-                                      singleb = true;
-                                      if (contents.isNotEmpty) {
-                                        contents = contents + ",1";
-                                      } else {
-                                        contents = "1";
-
-                                      }
-
-                                    });
-                                  }
-                                  // setState(() {
-                                  //   if (contents.isNotEmpty) {
-                                  //     contents = contents + ",1";
-                                  //   } else {
-                                  //     contents = "1";
-                                  //   }
-                                  // });
-                                },
-                                value: singleb,
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            color: Colors.grey,
-                          ),
-                          Container(
-                            height: 35,
-                            child: ListTile(
-                              minLeadingWidth: 5,
-                              visualDensity:
-                              VisualDensity(vertical: -4, horizontal: -4),
-                              leading: Image.asset("assets/images/modules.png",
-                                  height: 20, width: 20),
-                              title: Text(
-                                "Modules",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              trailing: Checkbox(
-                                onChanged: (checked) {
-                                  if (modules == 1) {
-                                    modules = 0;
-
-                                    setState(() {
-                                      modules = 0;
-
-                                      // if(contents.isNotEmpty){
-                                      //   contents=contents;
-                                      // }else{
-                                      //   contents="";
-                                      // }
-                                    });
-                                  } else {
-                                    modules = 1;
-
-                                    setState(() {
-                                      modules = 1;
-                                      //
-                                      // if (contents.isNotEmpty) {
-                                      //   contents = contents + ",2";
-                                      // } else {
-                                      //   contents = "2";
-                                      // }
-
-                                    });
-
-                                  }
-                                  setState(() {
-                                    modulesb = checked!;
-                                  });
-                                  if(modulesb==true){
-                                    if(contents.isNotEmpty){
-                                      setState(() {
-                                        if(contents.contains("2")){
-                                          setState(() {
-                                            contents.replaceAll(RegExp(',2'), '');
-                                            contents.replaceAll(RegExp('2'), '');
-                                          });
-
-                                        }
-                                        contents=contents+",2";
-                                      });
-
-                                    }else{
-                                      setState(() {
-                                        contents="2";
-                                      });
-
-                                    }
+                          GestureDetector(
+                            onTap: () {
+                              if (single == 1) {
+                                single = 0;
+                                singleb = false;
+                                setState(() {
+                                  single = 0;
+                                  singleb = false;
+                                  if(contents.isNotEmpty){
+                                    contents=contents;
                                   }else{
-                                    // if(contents.contains(",2")){
-                                    //
-                                    //   setState(() {
-                                    //     contents='';
-                                    //   });
-                                    //
-                                    // }
-
+                                    contents="";
                                   }
-                                },
-                                value: modulesb,
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            color: Colors.grey,
-                          ),
-                          Container(
-                            height: 35,
-                            child: ListTile(
-                              minLeadingWidth: 5,
-                              visualDensity:
-                              VisualDensity(vertical: -4, horizontal: -4),
-                              leading: Image.asset(
-                                  "assets/images/collections.png",
-                                  height: 20,
-                                  width: 20),
-                              title: Text(
-                                "Collections",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              trailing: Checkbox(
-                                onChanged: (checked) {
-                                  if (collection == 1) {
-                                    collection = 0;
-                                    collectionb = false;
-                                    setState(() {
-                                      collection = 0;
-                                      collectionb = false;
-                                      if(contents.isNotEmpty){
-                                        contents=contents;
-                                      }else{
-                                        contents="";
-                                      }
-                                    });
+                                });
+                              } else {
+                                single = 1;
+                                singleb = true;
+                                setState(() {
+                                  single = 1;
+                                  singleb = true;
+                                  if (contents.isNotEmpty) {
+                                    contents = contents + ",1";
                                   } else {
-                                    collection = 1;
-                                    collectionb = true;
-                                    setState(() {
-                                      collection = 1;
-                                      collectionb = true;
-                                      if (contents.isNotEmpty) {
-                                        contents = contents + ",3";
-                                      } else {
-                                        contents = "3";
-                                      }
-                                    });
+                                    contents = "1";
 
                                   }
-                                },
-                                value: collectionb,
+
+                                });
+                              }
+                              // setState(() {
+                              //   if (contents.isNotEmpty) {
+                              //     contents = contents + ",1";
+                              //   } else {
+                              //     contents = "1";
+                              //   }
+                              // });
+
+                            },
+                            child: Container(
+                              height: 35,
+                              child:  ListTile(
+                                minLeadingWidth: 5,
+                                visualDensity:
+                                VisualDensity(vertical: -4, horizontal: -4),
+                                leading: Image.asset(
+                                    "assets/images/single_posts.png",
+                                    height: 20,
+                                    width: 20),
+                                title: Text(
+                                  "Single Posts",
+                                  style: TextStyle(fontSize: 18,color: Colors.black),
+                                ),
+                                trailing:
+                                singleb == true
+                                    ? Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box_with_tick.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                )
+                                    : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (modules == 1) {
+                                modules = 0;
+
+                                setState(() {
+                                  modulesb = false;
+                                  modules = 0;
+                                });
+                              } else {
+                                modules = 1;
+
+                                setState(() {
+                                  modules = 1;
+                                  modulesb = true;
+                                });
+                              }
+
+                              if (modulesb == true) {
+                                if (contents.isNotEmpty) {
+                                  setState(() {
+                                    if (contents.contains("2")) {
+                                      setState(() {
+                                        contents.replaceAll(RegExp(',2'), '');
+                                        contents.replaceAll(RegExp('2'), '');
+                                      });
+                                    }
+                                    contents = contents + ",2";
+                                  });
+                                } else {
+                                  setState(() {
+                                    contents = "2";
+                                  });
+                                }
+                              } else {
+                                // if(contents.contains(",2")){
+                                //
+                                //   setState(() {
+                                //     contents='';
+                                //   });
+                                //
+                                // }
+
+                              }
+
+                            },
+                            child: Container(
+                              height: 35,
+                              child:  ListTile(
+                                minLeadingWidth: 5,
+                                visualDensity:
+                                VisualDensity(vertical: -4, horizontal: -4),
+                                leading: Image.asset("assets/images/modules.png",
+                                    height: 20, width: 20),
+                                title: Text(
+                                  "Modules",
+                                  style: TextStyle(fontSize: 18,color: Colors.black),
+                                ),
+                                trailing:
+                                modulesb == true
+                                    ? Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box_with_tick.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                )
+                                    : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                           Divider(
                             color: Colors.grey,
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              if (collection == 1) {
+                                collection = 0;
+                                collectionb = false;
+                                setState(() {
+                                  collection = 0;
+                                  collectionb = false;
+                                  if(contents.isNotEmpty){
+                                    contents=contents;
+                                  }else{
+                                    contents="";
+                                  }
+                                });
+                              } else {
+                                collection = 1;
+                                collectionb = true;
+                                setState(() {
+                                  collection = 1;
+                                  collectionb = true;
+                                  if (contents.isNotEmpty) {
+                                    contents = contents + ",3";
+                                  } else {
+                                    contents = "3";
+                                  }
+                                });
+
+                              }
+                            },
+                            child: Container(
+                              height: 35,
+                              child: ListTile(
+                                minLeadingWidth: 5,
+                                visualDensity:
+                                VisualDensity(vertical: -4, horizontal: -4),
+                                leading: Image.asset(
+                                    "assets/images/collections.png",
+                                    height: 20,
+                                    width: 20),
+                                title: Text(
+                                  "Collections",
+                                  style: TextStyle(fontSize: 18,color: Colors.black),
+                                ),
+                                trailing:
+                                collectionb == true
+                                    ? Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box_with_tick.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                )
+                                    : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

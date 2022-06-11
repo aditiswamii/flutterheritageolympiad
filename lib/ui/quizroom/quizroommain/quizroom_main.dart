@@ -114,7 +114,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
           jsarray;
         });
         if (jsarray.isNotEmpty) {
-          var sobj = Domain(0, "Select All", false);
+          var sobj = Domain(0, "Select All", true);
 
           //clist!.add(sobj);
           setState(() {
@@ -122,7 +122,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
           });
           for (int i = 0; i < jsarray.length; i++) {
             var jobj = jsarray[i];
-            var sobj = Domain(jobj['id'], jobj['name'], false);
+            var sobj = Domain(jobj['id'], jobj['name'], true);
 
             // clist!.add(sobj);
             setState(() {

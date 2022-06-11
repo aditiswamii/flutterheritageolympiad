@@ -32,8 +32,12 @@ class _PhonebookPageState extends State<PhonebookPage> {
   var data;
   var snackBar;
   var checkdata;
-
+  var importdata;
   var contactlist;
+  List<String>? listv =[].cast<String>().toList(growable: true);
+  List<String>? friendList =[].cast<String>().toList(growable: true);
+  List<PhoneContact>? phcoList=[].cast<PhoneContact>().toList(growable: true);
+  List<String>? cultreList=[].cast<String>().toList(growable: true);
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -67,16 +71,52 @@ class _PhonebookPageState extends State<PhonebookPage> {
     // Do some stuff.
     return true;
   }
+  addfriend(String userid,String mobiles) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + "add_friend"),
+        body: {'user_id': userid.toString(),
+          'mobile':mobiles.toString()
+        });
+    // showLoaderDialog(context);
+    print("addfriendapi");
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+            jsonResponse['message'].toString(),textAlign: TextAlign.center,),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+        // onsuccess(null);
+        log(jsonResponse['message']);
+      }
+    } else {
+      // Navigator.pop(context);
+      print(response.statusCode);
+    }
+  }
   checkfriend(String userid) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "check_friend"),
         body: {'user_id': userid.toString()});
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("checkfriendapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
         checkdata = jsonResponse[
@@ -85,6 +125,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
         setState(() {
           checkdata = jsonResponse[
           'data'];
+          onchecksuccess(checkdata);
         });
         //get all the data from json string superheros
         print("length" + checkdata.length.toString());
@@ -101,38 +142,58 @@ class _PhonebookPageState extends State<PhonebookPage> {
         log(jsonResponse['message']);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
-  importcontact(String userid, List<String>? contacts) async {
+  onchecksuccess(checkdata){
+    if(data!=null) {
+      for (int i=0;i< data.length;i++){
+      setState(() {
+      listv!.add(data[i].toString());
+      friendphone(listv);
+      });
+    }
+  }
+  }
+  friendphone(List<String>? listv){
+    friendList!.clear();
+    friendList!.addAll(listv!);
+    setcontacts();
+  }
+  setcontacts(){
+    _fetchContacts();
+  }
+  importcontact(String userid, List<String> contacts) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "import_contact"),
         body: {
           'user_id': userid.toString(),
           'mobiles': contacts.toString()
         });
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("importcontactapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
-        checkdata = jsonResponse[
+        importdata = jsonResponse[
         'data'];
-        print("data" + checkdata.toString());
+        print("data" + importdata.toString());
         setState(() {
-          checkdata = jsonResponse[
+          importdata = jsonResponse[
           'data'];
         });
-
+        onimportsuccess(importdata);
         //get all the data from json string superheros
         print("length" + checkdata.length.toString());
 
 
-      } else {
+      }else if(jsonResponse['status'] == 201) {
+          onimportsuccess(listv);
+      }else {
         snackBar = SnackBar(
           content: Text(
             jsonResponse['message'].toString(),textAlign: TextAlign.center,),
@@ -143,8 +204,38 @@ class _PhonebookPageState extends State<PhonebookPage> {
         log(jsonResponse['message']);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
+    }
+  }
+  onimportsuccess(importdata){
+    if(data!=null) {
+      for (int i=0;i< data.length;i++){
+        setState(() {
+          listv!.add(data[i].toString());
+          cultreuser(listv);
+        });
+      }
+    }
+  }
+  cultreuser(List<String>? listv){
+    cultreList!.clear();
+    cultreList!.addAll(listv!);
+    for(int i =0;i< phcoList!.length;i++) {
+      for(int j =0;j< phcoList![i].phone!.length;j++){
+        var obj = PhoneContact();
+
+        if(phcoList![i].status==0){
+          obj.name = phcoList![i].name;
+          obj.id = phcoList![i].id;
+          obj.status = 2;
+         obj.phone = List as List<String>?;
+         log(phcoList![i].phone![j].toString());
+          // Log.e("phone",""+phcoList[i].phone!!.get(j)!!.toString())
+          obj.phone!.add(phcoList![i].phone![j].toString());
+          phcoList![i] = obj;
+        }
+      }
     }
   }
   Future _fetchContacts() async {
@@ -156,32 +247,26 @@ class _PhonebookPageState extends State<PhonebookPage> {
     }
 
     contactlist= List.from(_contacts!);
-
-   //  final results = contactlist!
-   //      .mapIndexed((e, i) => 'item: ${e[i]['phones']}, index: $i')
-   //      .toList();
-   //  print(results);
-   //  importcontact(userid.toString(), contactlist);
-
+   checkfriend(userid.toString());
   }
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -334,11 +419,9 @@ class _PhonebookPageState extends State<PhonebookPage> {
   }
 }
 
-// Container(
-//           child: ListView.builder(
-//               itemCount: _contacts!.length,
-//               itemBuilder: (context, i) => ListTile(
-//                 title: Text(_contacts![i].displayName),
-//               )
-//           ),
-//         )
+class PhoneContact {
+  String? id ;
+  String? name  ;
+  int status  = 0;
+  List<String>? phone;
+}
