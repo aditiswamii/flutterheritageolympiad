@@ -44,36 +44,6 @@ import '../rules/rulepage.dart';
 import '../tournamentquiz/tournament_quiz.dart';
 import '../tournamentquiz/waitlist/waitlist.dart';
 
-Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  log('Handling a background message ${message.messageId}');
-  log('Notification Message: ${message.data}');
-  NotificationService.showNotification(message.data['title'],message.data['body']);
-}
-Future<String?> initUniLinks() async {
-
-  try {
-    final initialLink = await getInitialLink();
-
-    return initialLink;
-  } on PlatformException {
-    return "";
-  }
-}
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  var link;
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  initUniLinks().then((value) => link);
-  runApp( MaterialApp(
-    theme: ThemeData(fontFamily: "Nunito"),
-    debugShowCheckedModeBanner: false,
-    home: HomePage(link:link),
-
-
-  ));
-}
 
 class HomePage extends StatefulWidget{
 var link;
@@ -109,10 +79,10 @@ GetUserLeagueResponse? userLeagueR;
   String? _token;
   String? get token => _token;
 
-  final FirebaseMessaging _fcm1 = FirebaseMessaging.instance;
+  // final FirebaseMessaging _fcm1 = FirebaseMessaging.instance;
 
  userdata() async {
-   messageHandler();
+  // messageHandler();
    final SharedPreferences prefs = await SharedPreferences.getInstance();
    setState(() {
      username = prefs.getString("username");
@@ -158,11 +128,11 @@ GetUserLeagueResponse? userLeagueR;
     userdata();
   }
   Future<Future> _refreshdata(BuildContext context) async {
-    NotificationService(_fcm1,context).initialize();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log("$message");
-      NotificationService.showNotification(message.data['title'],message.data['body']);
-    });
+    // NotificationService(_fcm1,context).initialize();
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   log("$message");
+    //   NotificationService.showNotification(message.data['title'],message.data['body']);
+    // });
     return myinvitation(userid.toString());
   }
   @override

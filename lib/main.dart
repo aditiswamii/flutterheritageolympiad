@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CultreApp/fcm/fcm.dart';
@@ -18,33 +21,50 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 import 'fcm/messagehandler.dart';
+import 'fcm/messagingservice.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+MessagingService _msgService = MessagingService();
+// Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   log('Handling a background message ${message.messageId}');
+//   log('Notification Message: ${message.data}');
+//   NotificationService.showNotification(message.data['title'],message.data['body']);
+// }
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  log('Handling a background message ${message.messageId}');
-  log('Notification Message: ${message.data}');
-  NotificationService.showNotification(message.data['title'],message.data['body']);
-}
-Future<String?> initUniLinks() async {
-
-  try {
-    final initialLink = await getInitialLink();
-
-    return initialLink;
-  } on PlatformException {
-    return "";
-  }
+  log(" --- background message received ---");
+  log(message.notification!.title.toString());
+  log(message.notification!.body.toString());
 }
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  var link;
+
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCA45SEP0RVCkh0m-ZAKE6CgUi49MfPfmw",
+            appId: "1:996536312413:android:10e948f7dea194aa6f63b4",
+            messagingSenderId: "996536312413-l4uljrnuhq8ci89rec4g4fn5iic9nm4a.apps.googleusercontent.com",
+            projectId: "cultre-mobile-app"));
+  }
+  FirebaseMessaging.instance.getToken().then((value) {
+    String? token = value;
+    log(token!);
+  });
+  _msgService.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  initUniLinks().then((value) => link);
+
+
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp( MaterialApp(
+    navigatorKey: navigatorKey,
     theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
-    home: MyApp(link:link),
+    home: MyApp(),
 
 
   ));
@@ -61,23 +81,23 @@ class MyApp extends StatefulWidget {
 class _State extends State<MyApp> {
   bool isLoggedIn = false;
  
-  // String? link = "";
+  String? link = "";
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
  // final PushNotificationService _notif = PushNotificationService(_fcm);
   var title ;
   @override
   void initState() {
 
-    NotificationService(_fcm,context).initialize();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log("$message");
-      NotificationService.showNotification(message.data['title'],message.data['body']);
-    });
+    // NotificationService(_fcm,context).initialize();
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   log("$message");
+    //   NotificationService.showNotification(message.data['title'],message.data['body']);
+    // });
    // link="";
-    widget.link="";
-    // initUniLinks().then((value) => setState(() {
-    //   link = value;
-    // }));
+    link="";
+    initUniLinks().then((value) => setState(() {
+      link = value;
+    }));
     super.initState();
    // testFunc();
     autoLogIn();
@@ -114,14 +134,14 @@ class _State extends State<MyApp> {
         isLoggedIn=true;
       });
     }
-    log(  widget.link == null ? "" : "mainlink: "+ widget.link!);
-    print( widget.link == null ? "" : "mainlink: "+ widget.link!);
+    log(  link == null ? "" : "mainlink: "+link!);
+    print(link == null ? "" : "mainlink: "+ link!);
     isLoggedIn==false ? Timer(
         const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LoginScreen()))):
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(link:  widget.link,)));
+        builder: (BuildContext context) => HomePage(link:  link,)));
   }
   @override
   void dispose() {
