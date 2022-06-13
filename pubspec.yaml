@@ -83,6 +83,8 @@ dependencies:
   flutter_facebook_auth: ^3.5.2
   flutter_login_facebook: ^1.0.0+1
   flutter_echarts:
+  device_info_plus:
+  rxdart:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -149,7 +149,7 @@ class _State extends State<DialogDuelInviteReceive> {
   }
   @override
   void dispose() {
-    Navigator.pop(context);
+    // Navigator.pop(context);
     super.dispose();
   }
   @override

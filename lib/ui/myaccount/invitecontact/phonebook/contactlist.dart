@@ -247,7 +247,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
     }
 
     contactlist= List.from(_contacts!);
-   checkfriend(userid.toString());
+   //checkfriend(userid.toString());
   }
   // showLoaderDialog(BuildContext context) {
   //   AlertDialog alert = AlertDialog(

@@ -450,7 +450,7 @@ class _State extends State<LoginScreen> {
         ),
         child: Container(
           margin: EdgeInsets.fromLTRB(20, 120, 20, 10),
-          child: Column(
+          child: ListView(
             children: [
               Container(
                   alignment: Alignment.centerLeft,

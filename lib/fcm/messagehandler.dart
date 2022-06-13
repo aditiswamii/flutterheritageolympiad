@@ -1,85 +1,149 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:CultreApp/main.dart';
+import 'package:CultreApp/ui/mcq/mcq.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PushNotificationService {
+class NotificationService {
   final FirebaseMessaging _fcm;
+  BuildContext context;
   String? _token;
   String? get token => _token;
-  PushNotificationService(this._fcm);
-  Future initialise() async {
-    String initMessage = "default";
+  NotificationService(this._fcm,this.context);
+  initialize(){
+    messageHandler();
+  }
+
+  Future<void> messageHandler() async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (Platform.isIOS) {
       // Request permission if on IOS
       _fcm.requestPermission();
     }
-      _token = await _fcm.getToken();
-
-      print("FCM: $_token");
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("fcmtoken", "$_token");
-
+    //on new token
     _fcm.onTokenRefresh.listen((token) {
         _token = token;
+        prefs.setString("fcmtoken", "$_token");
+        prefs.setBool("IsRegistered", false);
+        log("onnewtokenFCM: $_token");
       });
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
 
-      RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-      await _fcm.setForegroundNotificationPresentationOptions(
-        alert: true, // Required to display a heads up notification
-        badge: true,
-        sound: true,
-      );
-      //Set all values back to false to revert to the default functionality
-      //   _handleMessage(initialMessage!);
-    var notificationType = initialMessage!.data["type"];
-    if(notificationType=='tournament'){
+    FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
+      _handleMessage(remoteMessage);
+    });
 
-    }
-      FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'channel-02', // id
-        'Channel Names', // title
-        description:'This channel is used for important notifications.',// description
-        importance: Importance.max,
-      );
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        RemoteNotification? notification = message.notification;
-        AndroidNotification? android = message.notification?.android;
-
-        // If `onMessage` is triggered with a notification, construct our own
-        // local notification to show to users using the created channel.
-        if (notification != null && android != null) {
-          flutterLocalNotificationsPlugin.show(
-              notification.hashCode,
-              notification.title,
-              notification.body,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  channelDescription:  channel.description,
-                  icon: android.smallIcon,
-                  // other properties...
-                ),
-              ));
-        }
-      });
-    return initMessage;
   }
 
 void _handleMessage(RemoteMessage message) {
   var notificationType = message.data["type"];
+  log("notificationType: $notificationType");
   if(notificationType=='tournament'){
-
+    var title=message.data["title"];
+    var body=message.data['body'];
+    showNotification(title,body);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+  }else if(notificationType=='contact'){
+    var  title=message.data["title"];
+    var   body=message.data['body'];
+    showNotification(title,body);
+  }else if(notificationType=='dual'){
+    var  title=message.data["title"];
+    var  body=message.data['body'];
+    var  link=message.data['link'];
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp(link: link,)));
+    showNotification(title,body);
+  }else if(notificationType=='quizroom'){
+    var  title=message.data["title"];
+    var  body=message.data['body'];
+    var  link=message.data['link'];
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp(link: link,)));
+    showNotification(title,body);
+  }else if(notificationType=='product'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    showNotification(title,body);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+  }else if(notificationType=='experience'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    showNotification(title,body);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+  }else if(notificationType=='post'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    showNotification(title,body);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+  }else if(notificationType=='quizroomstart'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    String roomid=message.data['room_id'];
+    showNotification(title,body);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Mcq(quizid: roomid.toString(), type: "3", sessionid: 0, tourid: 0)));
+}else{
+    var title=message.data["title"];
+    var body=message.data['body'];
+    showNotification(title,body);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
   }
 }
+  static Future<void> showNotification(String title,String body) async {
+
+    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initiallizationSettingsIOS = IOSInitializationSettings();
+    var initialSetting = new InitializationSettings(android: android, iOS: initiallizationSettingsIOS);
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initialSetting);
+
+
+
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+        'channel-02',
+        'Channel Names',
+
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        icon: "logo_rs",
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound("notification")
+    );
+    const iOSDetails = IOSNotificationDetails();
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails, iOS: iOSDetails);
+
+    await flutterLocalNotificationsPlugin.show(0,title,body, platformChannelSpecifics);
+  }
+
 }

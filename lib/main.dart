@@ -19,21 +19,40 @@ import 'package:uni_links/uni_links.dart';
 
 import 'fcm/messagehandler.dart';
 
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  log('Handling a background message ${message.messageId}');
+  log('Notification Message: ${message.data}');
+  NotificationService.showNotification(message.data['title'],message.data['body']);
+}
+Future<String?> initUniLinks() async {
 
+  try {
+    final initialLink = await getInitialLink();
+
+    return initialLink;
+  } on PlatformException {
+    return "";
+  }
+}
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  var link;
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  initUniLinks().then((value) => link);
   runApp( MaterialApp(
     theme: ThemeData(fontFamily: "Nunito"),
     debugShowCheckedModeBanner: false,
-    home: MyApp(),
+    home: MyApp(link:link),
 
 
   ));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  var link;
+   MyApp({Key? key,this.link,}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -42,27 +61,32 @@ class MyApp extends StatefulWidget {
 class _State extends State<MyApp> {
   bool isLoggedIn = false;
  
-  String link = "";
+  // String? link = "";
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
  // final PushNotificationService _notif = PushNotificationService(_fcm);
-  String title = "Notif Title";
+  var title ;
   @override
   void initState() {
 
-   // _notif.initialise();
-    link="";
-    initUniLinks().then((value) => setState(() {
-      link = value!;
-    }));
+    NotificationService(_fcm,context).initialize();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log("$message");
+      NotificationService.showNotification(message.data['title'],message.data['body']);
+    });
+   // link="";
+    widget.link="";
+    // initUniLinks().then((value) => setState(() {
+    //   link = value;
+    // }));
     super.initState();
-    testFunc();
+   // testFunc();
     autoLogIn();
 
   }
-  testFunc() async {
-   // await Firebase.initializeApp();
-    title = await PushNotificationService(_fcm).initialise();
-  }
+  // testFunc() async {
+  //  // await Firebase.initializeApp();
+  //   title = await NotificationService(_fcm).onMessage();
+  // }
 
   Future<String?> initUniLinks() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -72,9 +96,9 @@ class _State extends State<MyApp> {
       // but keep in mind it could be `null`.
       return initialLink;
     } on PlatformException {
-      // Handle exception by warning the user their action did not succeed
-      // return?
+      return "" ;
     }
+
   }
   void autoLogIn() async {
 
@@ -90,14 +114,14 @@ class _State extends State<MyApp> {
         isLoggedIn=true;
       });
     }
-    log( link == null ? "" : "mainlink: "+link);
-    print(link == null ? "" : "mainlink: "+link);
+    log(  widget.link == null ? "" : "mainlink: "+ widget.link!);
+    print( widget.link == null ? "" : "mainlink: "+ widget.link!);
     isLoggedIn==false ? Timer(
         const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LoginScreen()))):
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(link: link,)));
+        builder: (BuildContext context) => HomePage(link:  widget.link,)));
   }
   @override
   void dispose() {

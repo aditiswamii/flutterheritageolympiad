@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -22,6 +24,7 @@ import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
 import 'package:CultreApp/utils/SharedObjects.dart';
 import 'package:CultreApp/utils/apppreference.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
@@ -30,6 +33,7 @@ import 'package:uni_links/uni_links.dart';
 import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import '../../dialog/quizroominvitereceive/quizroominvite_receivedialog.dart';
+import '../../fcm/messagehandler.dart';
 import '../../utils/StringConstants.dart';
 
 import '../classicquiz/result/result.dart';
@@ -40,6 +44,37 @@ import '../rules/rulepage.dart';
 import '../tournamentquiz/tournament_quiz.dart';
 import '../tournamentquiz/waitlist/waitlist.dart';
 
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  log('Handling a background message ${message.messageId}');
+  log('Notification Message: ${message.data}');
+  NotificationService.showNotification(message.data['title'],message.data['body']);
+}
+Future<String?> initUniLinks() async {
+
+  try {
+    final initialLink = await getInitialLink();
+
+    return initialLink;
+  } on PlatformException {
+    return "";
+  }
+}
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  var link;
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  initUniLinks().then((value) => link);
+  runApp( MaterialApp(
+    theme: ThemeData(fontFamily: "Nunito"),
+    debugShowCheckedModeBanner: false,
+    home: HomePage(link:link),
+
+
+  ));
+}
+
 class HomePage extends StatefulWidget{
 var link;
   HomePage({Key? key, this.link}) : super(key: key);
@@ -49,6 +84,8 @@ var link;
 }
 
 class _State extends State<HomePage> implements DialogDuelInviteView,DialogQuizRoomInviteView{
+
+  var  title ;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 var username;
 var email;
@@ -68,34 +105,21 @@ var myinvdata;
   var shortlink;
   var linkurl;
 GetUserLeagueResponse? userLeagueR;
+   FirebaseMessaging? _fcm;
+  String? _token;
+  String? get token => _token;
 
-
-// broadfun(){
-//   FBroadcast.instance().register(Key_Message, (value, callback) {
-//     var data = value;
-//   });     ///Register The Receiver
-//
-//   FBroadcast.instance().broadcast(
-//     "Key_Message",
-//     value: myController.text,
-//   ); ///Sending The Broadcast
-//
-//   //FBroadcast.instance().unregister(this); ///Close The Receiver ondispose
-//
-//   //FBroadcast.instance().stickyBroadcast(
-//   //   Key_Message,
-//   //   value: data,
-//   // );
-// }
-
+  final FirebaseMessaging _fcm1 = FirebaseMessaging.instance;
 
  userdata() async {
+   messageHandler();
    final SharedPreferences prefs = await SharedPreferences.getInstance();
    setState(() {
      username = prefs.getString("username");
      country =prefs.getString("country");
      userid= prefs.getString("userid");
    });
+
    free(userid.toString());
    getuserleague(userid.toString());
    linkurl=widget.link;
@@ -124,802 +148,21 @@ GetUserLeagueResponse? userLeagueR;
 
 
 }
-  free(String userid) async {
-
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "free"), body: {
-      'user_id': userid.toString(),
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-
-      if (jsonResponse['status'] == 200) {
-
-
-
-
-      } else {
-
-      }
-    } else {
-
-      print(response.statusCode);
-    }
-
-  }
-  // showLoaderDialog(BuildContext context) {
-  //   AlertDialog alert = AlertDialog(
-  //     content: new Row(
-  //       children: [
-  //         CircularProgressIndicator(),
-  //         Container(
-  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-  //       ],
-  //     ),
-  //   );
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
-  myinvitation(String userid) async {
-    // showLoaderDialog(context);
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "dashboard"), body: {
-      'user_id': userid.toString(),
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      // Navigator.pop(context);
-      if (jsonResponse['status'] == 200) {
-        data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          myinvdata = jsonResponse; //get all the data from json string superheros
-          print(myinvdata.length);
-          print(myinvdata.toString());
-        });
-        onsuccess(myinvdata);
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
-        //last_id
-
-      } else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-      // Navigator.pop(context);
-      print(response.statusCode);
-    }
-
-  }
-  onsuccess(myinvdata){
-  if(myinvdata!=null){
-    tournament=myinvdata['data']['tournament'];
-    dual=List.from(myinvdata['data']['dual']);
-    quizroom=List.from(myinvdata['data']['quizroom']);
-    contact=List.from(myinvdata['data']['contact']);
-    accept=List.from(myinvdata['data']['accept']);
-    quizroom_start=List.from(myinvdata['data']['accept']);
-setState(() {
-  tournament=myinvdata['data']['tournament'];
-  dual=List.from(myinvdata['data']['dual']);
-  quizroom=List.from(myinvdata['data']['quizroom']);
-  contact=List.from(myinvdata['data']['contact']);
-  accept=List.from(myinvdata['data']['accept']);
-  quizroom_start=List.from(myinvdata['data']['accept']);
-
-});
-if(tournament!=null && tournament['tournament_id']>0){
-  Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>  TourRoomWaitlist(sessionid: tournament['session_id'], tourid: tournament['tournament_id'], type: '4',)));
-}
- else  if(quizroom_start!=null && quizroom_start!.length>0){
-     Navigator.pushReplacement(
-         context,
-         MaterialPageRoute(
-             builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: accept![0]['id'], type: "3", tourid: 0, sessionid: 0 ,)));
-
-   }else if(accept!=null && accept!.length>0){
-     Navigator.pushReplacement(
-         context,
-         MaterialPageRoute(
-             builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: accept![0]['id'], type: "2", tourid: 0, sessionid: 0 ,)));
-
-   }else  if(dual!=null && dual!.length>0){
-     AlertDialog errorDialog = AlertDialog(
-         insetPadding: EdgeInsets.all(4),
-         titlePadding: EdgeInsets.all(4),
-         contentPadding:EdgeInsets.all(4),
-         shape: RoundedRectangleBorder(
-             borderRadius:
-             BorderRadius.circular(
-                 20.0)), //this right here
-         content: Container(
-             height:470,
-             width: 250,
-             alignment: Alignment.center,
-             child: DialogDuelInviteReceive(id: dual![0]['dual_id'], image: dual![0]['image'], diffi: dual![0]['difficulty'], index: 0,
-               domainsel:  dual![0]['domain'], link: dual![0]['link'], speed: dual![0]['quiz_speed'], name: dual![0]['name'],)));
-     showDialog(
-         context: context,
-         builder: (BuildContext context){
-           // Future.delayed(
-           //   Duration(seconds: 2),
-           //       () {
-           //     Navigator.of(context).pop(true);
-           //   },
-           // );
-           return  errorDialog;
-         }
-     );
-
-   }else if(quizroom!=null && quizroom!.length>0){
-      AlertDialog errorDialog = AlertDialog(
-          insetPadding: EdgeInsets.all(4),
-          titlePadding: EdgeInsets.all(4),
-          contentPadding:EdgeInsets.all(4),
-          shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(
-                  20.0)), //this right here
-          content: Container(
-              height:470,
-              width: 250,
-              alignment: Alignment.center,
-              child: DialogQuizRoomInviteReceive(id: quizroom![0]['quiz_room_id'], image: quizroom![0]['image'], diffi: quizroom![0]['difficulty'], index: 0,
-                domainsel:  quizroom![0]['domain'], link: quizroom![0]['link'], speed: quizroom![0]['quiz_speed'], name: quizroom![0]['name'],)));
-      showDialog(
-          context: context,
-          builder: (BuildContext context){
-            // Future.delayed(
-            //   Duration(seconds: 2),
-            //       () {
-            //     Navigator.of(context).pop(true);
-            //   },
-            // );
-            return  errorDialog;
-          }
-      );
-
-    }else if(contact!=null && contact!.length>0){
-      AlertDialog errorDialog = AlertDialog(
-        insetPadding: EdgeInsets.all(4),
-        titlePadding: EdgeInsets.all(4),
-        contentPadding: EdgeInsets.all(4),
-        shape: RoundedRectangleBorder(
-            borderRadius:
-            BorderRadius.circular(
-                20.0)),
-        //this right here
-        content: Container(
-            height:250,
-            // width: 250,
-            alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(0,10,0,10),
-            padding: EdgeInsets.all(10),
-            child:ListView(
-              children: [
-                Container(
-                    alignment: Alignment.center,
-                    margin:const EdgeInsets.only(bottom: 10),
-                    decoration: const BoxDecoration(
-                        color:Colors.white
-                    ),
-                    child: const Text('Contact Invitation Received From',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    margin:const EdgeInsets.only(bottom: 10),
-                    decoration:const  BoxDecoration(
-                        color:Colors.white
-                    ),
-                    child: Text(contact![0]['name'].toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
-                ),
-                Container(
-                  padding:const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  height: 100,
-                  width: 100,
-                  child: Center(
-                    child: SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:
-                        NetworkImage(contact![0]['image'].toString()),
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.red,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          rejectcontact(userid.toString(), contact![0]['link'].toString(), 0, 2);
-                        },
-                        child: const Text(
-                          "REJECT",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 14),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.verdigris,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          acceptcontact(userid.toString(), contact![0]['link'].toString(), 0, 1);
-                        },
-                        child: const Text(
-                          "ACCEPT",
-                          style: TextStyle(
-                              color: Colors.white, fontSize:14),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-        ),
-      );
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            // Future.delayed(
-            //   Duration(seconds: 2),
-            //       () {
-            //     Navigator.of(context).pop(true);
-            //   },
-            // );
-            return errorDialog;
-          }
-      );
-    }
-
-  }
-  }
-  var linkdata;
-  linkdetails(String userid,String link) async {
-   // showLoaderDialog(context);
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "link_details"), body: {
-      'user_id': userid.toString(),
-      'link':link.toString()
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-    //  Navigator.pop(context);
-      if (jsonResponse['status'] == 200) {
-        data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          linkdata = jsonResponse; //get all the data from json string superheros
-          print(linkdata.length);
-          print(linkdata.toString());
-        });
-        onlinkdetail(linkdata);
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
-        //last_id
-
-      } else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-      //Navigator.pop(context);
-      print(response.statusCode);
-    }
-
-  }
-
-  acceptcontact(String userid,String link,index,type) async {
-    //showLoaderDialog(context);
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "accept_link_invitation"), body: {
-      'user_id': userid.toString(),
-      'link':link.toString()
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-     // Navigator.pop(context);
-      if (jsonResponse['status'] == 200) {
-        setData(type,index);
-      } else  if (jsonResponse['status'] == 201) {
-        setData(type,index);
-      }
-      else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-     // Navigator.pop(context);
-      print(response.statusCode);
-    }
-
-  }
-  rejectcontact(String userid,String link,index,type) async {
-    //showLoaderDialog(context);
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "reject_link_invitation"), body: {
-      'user_id': userid.toString(),
-      'link':link.toString()
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-     // Navigator.pop(context);
-      if (jsonResponse['status'] == 200) {
-        setData(type,index);
-      }
-      else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-    //  Navigator.pop(context);
-      print(response.statusCode);
-    }
-
-  }
-  setData(int type,int index){
-    if(type==1){
-      snackBar = SnackBar(
-        content: Text(
-            "Contact added"),
-      );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
-
-    } else {
-      snackBar = SnackBar(
-        content: Text(
-            "Request rejected"),
-      );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
-    }
-    if(contact!=null && contact!.length>index+1){
-      AlertDialog errorDialog = AlertDialog(
-        insetPadding: EdgeInsets.all(4),
-        titlePadding: EdgeInsets.all(4),
-        contentPadding: EdgeInsets.all(4),
-        shape: RoundedRectangleBorder(
-            borderRadius:
-            BorderRadius.circular(
-                20.0)),
-        //this right here
-        content: Container(
-            height:250,
-            // width: 250,
-            alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(0,10,0,10),
-            padding: EdgeInsets.all(10),
-            child:ListView(
-              children: [
-                Container(
-                    alignment: Alignment.center,
-                    margin:const EdgeInsets.only(bottom: 10),
-                    decoration: const BoxDecoration(
-                        color:Colors.white
-                    ),
-                    child: const Text('Contact Invitation Received From',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    margin:const EdgeInsets.only(bottom: 10),
-                    decoration:const  BoxDecoration(
-                        color:Colors.white
-                    ),
-                    child: Text(contact![index+1]['name'].toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
-                ),
-                Container(
-                  padding:const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  height: 100,
-                  width: 100,
-                  child: Center(
-                    child: SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:
-                        NetworkImage(contact![index+1]['image'].toString()),
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.red,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                           rejectcontact(userid.toString(), contact![index+1]['link'].toString(), index+1, 2);
-                        },
-                        child: const Text(
-                          "REJECT",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 14),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.verdigris,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(100, 40),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          acceptcontact(userid.toString(), contact![index+1]['link'].toString(), index+1, 1);
-                        },
-                        child: const Text(
-                          "ACCEPT",
-                          style: TextStyle(
-                              color: Colors.white, fontSize:14),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-        ),
-      );
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            // Future.delayed(
-            //   Duration(seconds: 2),
-            //       () {
-            //     Navigator.of(context).pop(true);
-            //   },
-            // );
-            return errorDialog;
-          }
-      );
-    }
-
-  }
-  onlinkdetail(linkdata){
-
-    if(linkdata!=null) {
-      log(linkdata['data']['id'].toString());
-      log(linkdata['data']['name']);
-      log(linkdata['data']['image']);
-      log(linkdata['data']['link']);
-      log(linkdata['type'].toString());
-      AlertDialog errorDialog = AlertDialog(
-          insetPadding: EdgeInsets.all(4),
-          titlePadding: EdgeInsets.all(4),
-          contentPadding: EdgeInsets.all(4),
-          shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(
-                  20.0)),
-          //this right here
-          content: Container(
-                      height:250,
-                      // width: 250,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(0,10,0,10),
-                      padding: EdgeInsets.all(10),
-                      child:ListView(
-                        children: [
-                          Container(
-                              alignment: Alignment.center,
-                              margin:const EdgeInsets.only(bottom: 10),
-                              decoration: const BoxDecoration(
-                                  color:Colors.white
-                              ),
-                              child: const Text('Contact Invitation Received From',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
-                          ),
-                          Container(
-                              alignment: Alignment.center,
-                              margin:const EdgeInsets.only(bottom: 10),
-                              decoration:const  BoxDecoration(
-                                  color:Colors.white
-                              ),
-                              child: Text(linkdata['data']['name'].toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
-                          ),
-                          Container(
-                            padding:const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                              child: SizedBox(
-                                height: 100,
-                                width: 100,
-                                child: CircleAvatar(
-                                  radius: 30.0,
-                                  backgroundImage:
-                                  NetworkImage(linkdata['data']['image'].toString()),
-                                  backgroundColor: Colors.transparent,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: ColorConstants.red,
-                                    onPrimary: Colors.white,
-                                    elevation: 3,
-                                    alignment: Alignment.center,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0)),
-                                    fixedSize: const Size(100, 40),
-                                    //////// HERE
-                                  ),
-                                  onPressed: () {
-                                     rejectcontact(userid.toString(), linkdata['data']['link'].toString(), 0, 2);
-                                  },
-                                  child: const Text(
-                                    "REJECT",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: ColorConstants.verdigris,
-                                    onPrimary: Colors.white,
-                                    elevation: 3,
-                                    alignment: Alignment.center,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0)),
-                                    fixedSize: const Size(100, 40),
-                                    //////// HERE
-                                  ),
-                                  onPressed: () {
-                                    acceptcontact(userid.toString(), linkdata['data']['link'].toString(), 0, 1);
-                                  },
-                                  child: const Text(
-                                    "ACCEPT",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize:14),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                  ),
-                );
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            // Future.delayed(
-            //   Duration(seconds: 2),
-            //       () {
-            //     Navigator.of(context).pop(true);
-            //   },
-            // );
-            return errorDialog;
-          }
-      );
-    }else{
-      myinvitation(userid.toString());
-    }
-  }
-  var dualinkdata;
-  dualdetails(String userid,String link) async {
-    //showLoaderDialog(context);
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "dualdetails"), body: {
-      'user_id': userid.toString(),
-      'dual_link':link.toString()
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-     // Navigator.pop(context);
-      if (jsonResponse['status'] == 200) {
-        data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          dualinkdata = jsonResponse; //get all the data from json string superheros
-          print(dualinkdata.length);
-          print(dualinkdata.toString());
-        });
-        onduallinkdetail(dualinkdata);
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
-        //last_id
-
-      } else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-     // Navigator.pop(context);
-      print(response.statusCode);
-    }
-
-  }
-  onduallinkdetail(dualinkdata){
-    log(dualinkdata['data']['dual_id'].toString());
-    log(dualinkdata['data']['domain']);
-    log(dualinkdata['data']['quiz_speed']);
-    log(dualinkdata['data']['difficulty']);
-    log(dualinkdata['data']['link']);
-    log(dualinkdata['data']['created_date']);
-    // log(linkdata['type'].toString());
-
-  }
-  var quizroomdata;
-  quizroomdetail(String userid,String link) async {
-    //showLoaderDialog(context);
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "dualdetails"), body: {
-      'user_id': userid.toString(),
-      'link':link.toString()
-    });
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-     // Navigator.pop(context);
-      if (jsonResponse['status'] == 200) {
-        data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          quizroomdata = jsonResponse; //get all the data from json string superheros
-          print(quizroomdata.length);
-          print(quizroomdata.toString());
-        });
-        onquizroomlinkdetail(quizroomdata);
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
-        //last_id
-
-      } else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-   //   Navigator.pop(context);
-      print(response.statusCode);
-    }
-
-  }
-  onquizroomlinkdetail(quizroomdata){
-    log(quizroomdata['data']['dual_id'].toString());
-    log(quizroomdata['data']['domain']);
-    log(quizroomdata['data']['quiz_speed']);
-    log(quizroomdata['data']['difficulty']);
-    log(quizroomdata['data']['link']);
-    log(quizroomdata['data']['created_date']);
-    log(quizroomdata['type']);
-
-  }
-  getuserleague(String userid) async {
-    //showLoaderDialog(context);
-    http.Response response = await http.get(
-        Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
-    );
-
-
-    var jsonResponse = convert.jsonDecode(response.body);
-    if (response.statusCode == 200) {
-     // Navigator.pop(context);
-      data = response.body;
-
-      if (jsonResponse['status'] == 200) {
-        setState(() {
-          userleagdata = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(userleagdata.length);
-        });
-        getuserleagueresponse(getUserLeagueResponseFromJson(data!));
-        // var venam = userleagdata(data!)['data'];
-        // print(venam.toString());
-      } else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
-    } else {
-     // Navigator.pop(context);
-      // onsuccess(null);
-      print(response.statusCode);
-    }
-
-  }
-  getuserleagueresponse(GetUserLeagueResponse userLeagueResponse){
-   if(userLeagueResponse.data!=null){
-     setState(() {
-       userLeagueR=userLeagueResponse;
-     });
-   }
-
-  }
 
   @override
   void initState() {
+
    // log("link"+ link == null ? "" : link);
     super.initState();
+
     userdata();
   }
   Future<Future> _refreshdata(BuildContext context) async {
+    NotificationService(_fcm1,context).initialize();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log("$message");
+      NotificationService.showNotification(message.data['title'],message.data['body']);
+    });
     return myinvitation(userid.toString());
   }
   @override
@@ -1432,8 +675,919 @@ if(tournament!=null && tournament['tournament_id']>0){
 
     }
   }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        onResumed();
+        break;
+      case AppLifecycleState.inactive:
+        onPaused();
+        break;
+      case AppLifecycleState.paused:
+        onInactive();
+        break;
+      case AppLifecycleState.detached:
+        onDetached();
+        break;
+    }
+  }
+
+  Future<void> onResumed() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("fcmtoken") == null || prefs.getString("fcmtoken")!.isEmpty) {
+      generateDeviceToken();
+    } else {
+      if (!prefs.getBool("IsRegistered")!) {
+        sendDeviceIdApi(userid.toString(),_token.toString(),"0");
+      }
+    }
+  }
+  void onPaused() {
+    // TODO: implement onPaused
+  }
+  void onInactive() {
+    // TODO: implement onInactive
+  }
+  void onDetached() {
+    // TODO: implement onDetached
+  }
+
+  generateDeviceToken() async {
+   _token = await _fcm!.getToken();
+
+   _fcm!.onTokenRefresh.listen((token) {
+     _token = token;
+   });
+
+
+    if (token != null) {
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("fcmtoken", "$_token");
+    sendDeviceIdApi(userid.toString(),_token.toString(),"0");
+    log("MYFCMTOKEN : ${prefs.getString("fcmtoken")}");
+    }
+
+
+  }
+  sendDeviceIdApi(String userid,String token,String devicetype) async {
+
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "updatetoken"), body: {
+      'user_id': userid.toString(),
+      'device_type':"0",
+      'token':token.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+
+      if (jsonResponse['status'] == 200) {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool("IsRegistered", true);
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+
+      print(response.statusCode);
+    }
+
+  }
+  free(String userid) async {
+
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "free"), body: {
+      'user_id': userid.toString(),
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+
+      if (jsonResponse['status'] == 200) {
 
 
 
+
+      } else {
+
+      }
+    } else {
+
+      print(response.statusCode);
+    }
+
+  }
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: new Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
+  myinvitation(String userid) async {
+    // showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "dashboard"), body: {
+      'user_id': userid.toString(),
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          myinvdata = jsonResponse; //get all the data from json string superheros
+          print(myinvdata.length);
+          print(myinvdata.toString());
+        });
+        onsuccess(myinvdata);
+        // var venam = jsonDecode(data!)['data'];
+        // print(venam);
+        //last_id
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      // Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  onsuccess(myinvdata){
+    if(myinvdata!=null){
+      tournament=myinvdata['data']['tournament'];
+      dual=List.from(myinvdata['data']['dual']);
+      quizroom=List.from(myinvdata['data']['quizroom']);
+      contact=List.from(myinvdata['data']['contact']);
+      accept=List.from(myinvdata['data']['accept']);
+      quizroom_start=List.from(myinvdata['data']['accept']);
+      setState(() {
+        tournament=myinvdata['data']['tournament'];
+        dual=List.from(myinvdata['data']['dual']);
+        quizroom=List.from(myinvdata['data']['quizroom']);
+        contact=List.from(myinvdata['data']['contact']);
+        accept=List.from(myinvdata['data']['accept']);
+        quizroom_start=List.from(myinvdata['data']['accept']);
+
+      });
+      if(tournament!=null && tournament['tournament_id']>0){
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  TourRoomWaitlist(sessionid: tournament['session_id'], tourid: tournament['tournament_id'], type: '4',)));
+      }
+      else  if(quizroom_start!=null && quizroom_start!.length>0){
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: accept![0]['id'], type: "3", tourid: 0, sessionid: 0 ,)));
+
+      }else if(accept!=null && accept!.length>0){
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: accept![0]['id'], type: "2", tourid: 0, sessionid: 0 ,)));
+
+      }else  if(dual!=null && dual!.length>0){
+        AlertDialog errorDialog = AlertDialog(
+            insetPadding: EdgeInsets.all(4),
+            titlePadding: EdgeInsets.all(4),
+            contentPadding:EdgeInsets.all(4),
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(
+                    20.0)), //this right here
+            content: Container(
+                height:470,
+                width: 250,
+                alignment: Alignment.center,
+                child: DialogDuelInviteReceive(id: dual![0]['dual_id'], image: dual![0]['image'], diffi: dual![0]['difficulty'], index: 0,
+                  domainsel:  dual![0]['domain'], link: dual![0]['link'], speed: dual![0]['quiz_speed'], name: dual![0]['name'],)));
+        showDialog(
+            context: context,
+            builder: (BuildContext context){
+              // Future.delayed(
+              //   Duration(seconds: 2),
+              //       () {
+              //     Navigator.of(context).pop(true);
+              //   },
+              // );
+              return  errorDialog;
+            }
+        );
+
+      }else if(quizroom!=null && quizroom!.length>0){
+        AlertDialog errorDialog = AlertDialog(
+            insetPadding: EdgeInsets.all(4),
+            titlePadding: EdgeInsets.all(4),
+            contentPadding:EdgeInsets.all(4),
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(
+                    20.0)), //this right here
+            content: Container(
+                height:470,
+                width: 250,
+                alignment: Alignment.center,
+                child: DialogQuizRoomInviteReceive(id: quizroom![0]['quiz_room_id'], image: quizroom![0]['image'], diffi: quizroom![0]['difficulty'], index: 0,
+                  domainsel:  quizroom![0]['domain'], link: quizroom![0]['link'], speed: quizroom![0]['quiz_speed'], name: quizroom![0]['name'],)));
+        showDialog(
+            context: context,
+            builder: (BuildContext context){
+              // Future.delayed(
+              //   Duration(seconds: 2),
+              //       () {
+              //     Navigator.of(context).pop(true);
+              //   },
+              // );
+              return  errorDialog;
+            }
+        );
+
+      }else if(contact!=null && contact!.length>0){
+        AlertDialog errorDialog = AlertDialog(
+          insetPadding: EdgeInsets.all(4),
+          titlePadding: EdgeInsets.all(4),
+          contentPadding: EdgeInsets.all(4),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(
+                  20.0)),
+          //this right here
+          content: Container(
+              height:250,
+              // width: 250,
+              alignment: Alignment.center,
+              margin: EdgeInsets.fromLTRB(0,10,0,10),
+              padding: EdgeInsets.all(10),
+              child:ListView(
+                children: [
+                  Container(
+                      alignment: Alignment.center,
+                      margin:const EdgeInsets.only(bottom: 10),
+                      decoration: const BoxDecoration(
+                          color:Colors.white
+                      ),
+                      child: const Text('Contact Invitation Received From',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
+                  ),
+                  Container(
+                      alignment: Alignment.center,
+                      margin:const EdgeInsets.only(bottom: 10),
+                      decoration:const  BoxDecoration(
+                          color:Colors.white
+                      ),
+                      child: Text(contact![0]['name'].toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
+                  ),
+                  Container(
+                    padding:const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    height: 100,
+                    width: 100,
+                    child: Center(
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage:
+                          NetworkImage(contact![0]['image'].toString()),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: ColorConstants.red,
+                            onPrimary: Colors.white,
+                            elevation: 3,
+                            alignment: Alignment.center,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            fixedSize: const Size(100, 40),
+                            //////// HERE
+                          ),
+                          onPressed: () {
+                            rejectcontact(userid.toString(), contact![0]['link'].toString(), 0, 2);
+                          },
+                          child: const Text(
+                            "REJECT",
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 14),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: ColorConstants.verdigris,
+                            onPrimary: Colors.white,
+                            elevation: 3,
+                            alignment: Alignment.center,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            fixedSize: const Size(100, 40),
+                            //////// HERE
+                          ),
+                          onPressed: () {
+                            acceptcontact(userid.toString(), contact![0]['link'].toString(), 0, 1);
+                          },
+                          child: const Text(
+                            "ACCEPT",
+                            style: TextStyle(
+                                color: Colors.white, fontSize:14),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+          ),
+        );
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              // Future.delayed(
+              //   Duration(seconds: 2),
+              //       () {
+              //     Navigator.of(context).pop(true);
+              //   },
+              // );
+              return errorDialog;
+            }
+        );
+      }
+
+    }
+  }
+  var linkdata;
+  linkdetails(String userid,String link) async {
+    // showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "link_details"), body: {
+      'user_id': userid.toString(),
+      'link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      //  Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          linkdata = jsonResponse; //get all the data from json string superheros
+          print(linkdata.length);
+          print(linkdata.toString());
+        });
+        onlinkdetail(linkdata);
+        // var venam = jsonDecode(data!)['data'];
+        // print(venam);
+        //last_id
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      //Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+
+  acceptcontact(String userid,String link,index,type) async {
+    //showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "accept_link_invitation"), body: {
+      'user_id': userid.toString(),
+      'link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        setData(type,index);
+      } else  if (jsonResponse['status'] == 201) {
+        setData(type,index);
+      }
+      else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      // Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  rejectcontact(String userid,String link,index,type) async {
+    //showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "reject_link_invitation"), body: {
+      'user_id': userid.toString(),
+      'link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        setData(type,index);
+      }
+      else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      //  Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  setData(int type,int index){
+    if(type==1){
+      snackBar = SnackBar(
+        content: Text(
+            "Contact added"),
+      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackBar);
+
+    } else {
+      snackBar = SnackBar(
+        content: Text(
+            "Request rejected"),
+      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackBar);
+    }
+    if(contact!=null && contact!.length>index+1){
+      AlertDialog errorDialog = AlertDialog(
+        insetPadding: EdgeInsets.all(4),
+        titlePadding: EdgeInsets.all(4),
+        contentPadding: EdgeInsets.all(4),
+        shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(
+                20.0)),
+        //this right here
+        content: Container(
+            height:250,
+            // width: 250,
+            alignment: Alignment.center,
+            margin: EdgeInsets.fromLTRB(0,10,0,10),
+            padding: EdgeInsets.all(10),
+            child:ListView(
+              children: [
+                Container(
+                    alignment: Alignment.center,
+                    margin:const EdgeInsets.only(bottom: 10),
+                    decoration: const BoxDecoration(
+                        color:Colors.white
+                    ),
+                    child: const Text('Contact Invitation Received From',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    margin:const EdgeInsets.only(bottom: 10),
+                    decoration:const  BoxDecoration(
+                        color:Colors.white
+                    ),
+                    child: Text(contact![index+1]['name'].toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
+                ),
+                Container(
+                  padding:const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  height: 100,
+                  width: 100,
+                  child: Center(
+                    child: SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage:
+                        NetworkImage(contact![index+1]['image'].toString()),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.red,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          rejectcontact(userid.toString(), contact![index+1]['link'].toString(), index+1, 2);
+                        },
+                        child: const Text(
+                          "REJECT",
+                          style: TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.verdigris,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          acceptcontact(userid.toString(), contact![index+1]['link'].toString(), index+1, 1);
+                        },
+                        child: const Text(
+                          "ACCEPT",
+                          style: TextStyle(
+                              color: Colors.white, fontSize:14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+        ),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            // Future.delayed(
+            //   Duration(seconds: 2),
+            //       () {
+            //     Navigator.of(context).pop(true);
+            //   },
+            // );
+            return errorDialog;
+          }
+      );
+    }
+
+  }
+  onlinkdetail(linkdata){
+
+    if(linkdata!=null) {
+      log(linkdata['data']['id'].toString());
+      log(linkdata['data']['name']);
+      log(linkdata['data']['image']);
+      log(linkdata['data']['link']);
+      log(linkdata['type'].toString());
+      AlertDialog errorDialog = AlertDialog(
+        insetPadding: EdgeInsets.all(4),
+        titlePadding: EdgeInsets.all(4),
+        contentPadding: EdgeInsets.all(4),
+        shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(
+                20.0)),
+        //this right here
+        content: Container(
+            height:250,
+            // width: 250,
+            alignment: Alignment.center,
+            margin: EdgeInsets.fromLTRB(0,10,0,10),
+            padding: EdgeInsets.all(10),
+            child:ListView(
+              children: [
+                Container(
+                    alignment: Alignment.center,
+                    margin:const EdgeInsets.only(bottom: 10),
+                    decoration: const BoxDecoration(
+                        color:Colors.white
+                    ),
+                    child: const Text('Contact Invitation Received From',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ,fontWeight: FontWeight.w600),)
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    margin:const EdgeInsets.only(bottom: 10),
+                    decoration:const  BoxDecoration(
+                        color:Colors.white
+                    ),
+                    child: Text(linkdata['data']['name'].toString(),textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize: 18 ),)
+                ),
+                Container(
+                  padding:const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  height: 100,
+                  width: 100,
+                  child: Center(
+                    child: SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage:
+                        NetworkImage(linkdata['data']['image'].toString()),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.red,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          rejectcontact(userid.toString(), linkdata['data']['link'].toString(), 0, 2);
+                        },
+                        child: const Text(
+                          "REJECT",
+                          style: TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.verdigris,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          acceptcontact(userid.toString(), linkdata['data']['link'].toString(), 0, 1);
+                        },
+                        child: const Text(
+                          "ACCEPT",
+                          style: TextStyle(
+                              color: Colors.white, fontSize:14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+        ),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            // Future.delayed(
+            //   Duration(seconds: 2),
+            //       () {
+            //     Navigator.of(context).pop(true);
+            //   },
+            // );
+            return errorDialog;
+          }
+      );
+    }else{
+      myinvitation(userid.toString());
+    }
+  }
+  var dualinkdata;
+  dualdetails(String userid,String link) async {
+    //showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "dualdetails"), body: {
+      'user_id': userid.toString(),
+      'dual_link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          dualinkdata = jsonResponse; //get all the data from json string superheros
+          print(dualinkdata.length);
+          print(dualinkdata.toString());
+        });
+        onduallinkdetail(dualinkdata);
+        // var venam = jsonDecode(data!)['data'];
+        // print(venam);
+        //last_id
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      // Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  onduallinkdetail(dualinkdata){
+    log(dualinkdata['data']['dual_id'].toString());
+    log(dualinkdata['data']['domain']);
+    log(dualinkdata['data']['quiz_speed']);
+    log(dualinkdata['data']['difficulty']);
+    log(dualinkdata['data']['link']);
+    log(dualinkdata['data']['created_date']);
+    // log(linkdata['type'].toString());
+
+  }
+  var quizroomdata;
+  quizroomdetail(String userid,String link) async {
+    //showLoaderDialog(context);
+    http.Response response =
+    await http.post(Uri.parse(StringConstants.BASE_URL + "dualdetails"), body: {
+      'user_id': userid.toString(),
+      'link':link.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          quizroomdata = jsonResponse; //get all the data from json string superheros
+          print(quizroomdata.length);
+          print(quizroomdata.toString());
+        });
+        onquizroomlinkdetail(quizroomdata);
+        // var venam = jsonDecode(data!)['data'];
+        // print(venam);
+        //last_id
+
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      //   Navigator.pop(context);
+      print(response.statusCode);
+    }
+
+  }
+  onquizroomlinkdetail(quizroomdata){
+    log(quizroomdata['data']['dual_id'].toString());
+    log(quizroomdata['data']['domain']);
+    log(quizroomdata['data']['quiz_speed']);
+    log(quizroomdata['data']['difficulty']);
+    log(quizroomdata['data']['link']);
+    log(quizroomdata['data']['created_date']);
+    log(quizroomdata['type']);
+
+  }
+  getuserleague(String userid) async {
+
+    //showLoaderDialog(context);
+    http.Response response = await http.get(
+        Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
+    );
+
+
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      data = response.body;
+
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          userleagdata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(userleagdata.length);
+        });
+        getuserleagueresponse(getUserLeagueResponseFromJson(data!));
+        // var venam = userleagdata(data!)['data'];
+        // print(venam.toString());
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      // Navigator.pop(context);
+      // onsuccess(null);
+      print(response.statusCode);
+    }
+
+  }
+  getuserleagueresponse(GetUserLeagueResponse userLeagueResponse){
+    if(userLeagueResponse.data!=null){
+      setState(() {
+        userLeagueR=userLeagueResponse;
+      });
+    }
+
+  }
+
+  Future<void> messageHandler() async {
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      showNotification(event);
+    });
+
+  }
+
+  static Future<void> showNotification(RemoteMessage payload) async {
+
+    var android = AndroidInitializationSettings('logo_rs');
+    var initiallizationSettingsIOS = IOSInitializationSettings();
+    var initialSetting = new InitializationSettings(android: android, iOS: initiallizationSettingsIOS);
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initialSetting);
+
+
+
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+        'default_notification_channel_id',
+        'Notification',
+
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        icon: "logo_rs",
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound("notification")
+    );
+    const iOSDetails = IOSNotificationDetails();
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails, iOS: iOSDetails);
+
+    await flutterLocalNotificationsPlugin.show(0, payload.notification!.title, payload.notification!.body, platformChannelSpecifics);
+  }
 
 }
