@@ -485,7 +485,7 @@ if(badgedetaildata!=null){
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Text(
-                            "You can find about your performanc, your goals, and your achievements here.",
+                            "You can find about your performance, your goals, and your achievements here.",
                             style: TextStyle(fontSize: 15,
                                 color: ColorConstants.txt)
                         ),

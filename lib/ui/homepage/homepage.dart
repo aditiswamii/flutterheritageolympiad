@@ -228,7 +228,7 @@ GetUserLeagueResponse? userLeagueR;
                      Navigator.pushReplacement(
                          context,
                          MaterialPageRoute(
-                             builder: (context) => FeedPage()));
+                             builder: (context) => FeedPage(themes: '', seldomain: '',)));
                    },
                    child: Container(
                      height: 150,

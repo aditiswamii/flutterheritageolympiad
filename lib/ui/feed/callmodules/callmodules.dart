@@ -134,7 +134,7 @@ class _CallModulesState extends State<CallModules> with ChangeNotifier{
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => FeedPage(feeddata: widget.feeddata)));
+        MaterialPageRoute(builder: (BuildContext context) => FeedPage(feeddata: widget.feeddata, seldomain: '', themes: '',)));
     // Do some stuff.
     return true;
   }

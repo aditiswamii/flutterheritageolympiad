@@ -84,7 +84,7 @@ class _State extends State<MySideMenuDrawer> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => FeedPage()));
+                          builder: (context) => FeedPage(themes: '', seldomain: '',)));
                 },
               ),
               ListTile(

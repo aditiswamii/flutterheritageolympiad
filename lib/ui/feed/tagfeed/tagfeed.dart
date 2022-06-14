@@ -134,7 +134,7 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => FeedPage( feeddata: widget.feeddata)));
+        MaterialPageRoute(builder: (BuildContext context) => FeedPage( feeddata: widget.feeddata, themes: '', seldomain: '',)));
     // Do some stuff.
     return true;
   }

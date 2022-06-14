@@ -35,10 +35,10 @@ import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
 class FeedPage extends StatefulWidget {
   var contents;
-  var themes;
-  var seldomain;
+  String? themes;
+  String? seldomain;
   List<Feedresponse.Data>? feeddata;
-  FeedPage({Key? key, this.seldomain, this.contents, this.themes,this.feeddata}) : super(key: key);
+  FeedPage({Key? key,required this.seldomain,this.contents,required  this.themes,this.feeddata}) : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -84,23 +84,23 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
         databean=widget.feeddata;
       });
 
-    }else{
-      getFeed(userid.toString(), "0", "", widget.seldomain.toString(), widget.themes.toString());
+    }else {
+      getFeed(userid.toString(), "0", "",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty?widget.themes!:"");
     }
 
 
   }
 
-  getFeed(String userid, String feed_page_id, String feed_type_id,
-      String domain_id, String theme_id) async {
+  getFeed(String userid, String feedPageId, String feedTypeId,
+      String domainId, String themeId) async {
      // showLoaderDialog(context);
       http.Response response =
           await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
         'user_id': userid.toString(),
-        'feed_page_id': feed_page_id.toString(),
-        'feed_type_id': feed_type_id.toString(),
-        'domain_id': domain_id.toString(),
-        'theme_id': theme_id.toString()
+        'feed_page_id': feedPageId.toString(),
+        'feed_type_id': feedTypeId.toString(),
+        'domain_id': domainId.toString(),
+        'theme_id': themeId.toString()
       });
     var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
