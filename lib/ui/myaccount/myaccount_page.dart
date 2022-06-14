@@ -257,7 +257,7 @@ print("flagicon"+flagicon);
               Container( margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 width: MediaQuery.of(context).size.width,
                 child: Container(
-                  width: 200,
+                  width: 300,
                   alignment: Alignment.centerLeft,
                   height: 20,
                   child: Row(

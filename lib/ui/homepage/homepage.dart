@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,7 +23,7 @@ import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
 import 'package:CultreApp/utils/SharedObjects.dart';
 import 'package:CultreApp/utils/apppreference.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
@@ -75,11 +74,11 @@ var myinvdata;
   var shortlink;
   var linkurl;
 GetUserLeagueResponse? userLeagueR;
-   FirebaseMessaging? _fcm;
-  String? _token;
-  String? get token => _token;
+  //  FirebaseMessaging? _fcm;
+  // String? _token;
+  // String? get token => _token;
 
-  // final FirebaseMessaging _fcm1 = FirebaseMessaging.instance;
+
 
  userdata() async {
   // messageHandler();
@@ -664,14 +663,14 @@ GetUserLeagueResponse? userLeagueR;
   }
 
   Future<void> onResumed() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("fcmtoken") == null || prefs.getString("fcmtoken")!.isEmpty) {
-      generateDeviceToken();
-    } else {
-      if (!prefs.getBool("IsRegistered")!) {
-        sendDeviceIdApi(userid.toString(),_token.toString(),"0");
-      }
-    }
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // if (prefs.getString("fcmtoken") == null || prefs.getString("fcmtoken")!.isEmpty) {
+    //   generateDeviceToken();
+    // } else {
+    //   if (!prefs.getBool("IsRegistered")!) {
+    //     sendDeviceIdApi(userid.toString(),_token.toString(),"0");
+    //   }
+    // }
   }
   void onPaused() {
     // TODO: implement onPaused
@@ -683,24 +682,24 @@ GetUserLeagueResponse? userLeagueR;
     // TODO: implement onDetached
   }
 
-  generateDeviceToken() async {
-   _token = await _fcm!.getToken();
-
-   _fcm!.onTokenRefresh.listen((token) {
-     _token = token;
-   });
-
-
-    if (token != null) {
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("fcmtoken", "$_token");
-    sendDeviceIdApi(userid.toString(),_token.toString(),"0");
-    log("MYFCMTOKEN : ${prefs.getString("fcmtoken")}");
-    }
-
-
-  }
+  // generateDeviceToken() async {
+  //  _token = await _fcm!.getToken();
+  //
+  //  _fcm!.onTokenRefresh.listen((token) {
+  //    _token = token;
+  //  });
+  //
+  //
+  //   if (token != null) {
+  //
+  //     final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     prefs.setString("fcmtoken", "$_token");
+  //   sendDeviceIdApi(userid.toString(),_token.toString(),"0");
+  //   log("MYFCMTOKEN : ${prefs.getString("fcmtoken")}");
+  //   }
+  //
+  //
+  // }
   sendDeviceIdApi(String userid,String token,String devicetype) async {
 
     http.Response response =
@@ -1520,44 +1519,8 @@ GetUserLeagueResponse? userLeagueR;
 
   }
 
-  Future<void> messageHandler() async {
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      showNotification(event);
-    });
-
-  }
-
-  static Future<void> showNotification(RemoteMessage payload) async {
-
-    var android = AndroidInitializationSettings('logo_rs');
-    var initiallizationSettingsIOS = IOSInitializationSettings();
-    var initialSetting = new InitializationSettings(android: android, iOS: initiallizationSettingsIOS);
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initialSetting);
 
 
 
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-        'default_notification_channel_id',
-        'Notification',
-
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker',
-        icon: "logo_rs",
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound("notification")
-    );
-    const iOSDetails = IOSNotificationDetails();
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails, iOS: iOSDetails);
-
-    await flutterLocalNotificationsPlugin.show(0, payload.notification!.title, payload.notification!.body, platformChannelSpecifics);
-  }
 
 }

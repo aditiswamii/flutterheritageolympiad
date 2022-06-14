@@ -4,14 +4,16 @@ import 'dart:developer';
 import 'dart:io';
 
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+
+
+
 
 import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/ui/forgetpassword/forgetpassword.dart';
@@ -19,9 +21,11 @@ import 'package:CultreApp/ui/forgetpassword/forgetpassword.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:CultreApp/uinew/registerpage.dart';
 import 'package:CultreApp/uinew/signuppage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+//
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:twitter_login/twitter_login.dart';
+// import 'package:twitter_login/twitter_login.dart';
 
 
 import '../fcm/fcm.dart';
@@ -49,105 +53,105 @@ class _State extends State<LoginScreen> {
   var snackbar;
   //bool isLoggedIn = false;
   String emailadd = '';
-  GoogleSignInAccount? _currentUser;
-  String _contactText = '';
-  Map _userObj = {};
-  bool _isLoggedIn = false;
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    print(" --- background message received ---");
-    print(message.notification!.title);
-    print(message.notification!.body);
-  }
+  // GoogleSignInAccount? _currentUser;
+   String _contactText = '';
+  // Map _userObj = {};
+  // bool _isLoggedIn = false;
+  // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //   print(" --- background message received ---");
+  //   print(message.notification!.title);
+  //   print(message.notification!.body);
+  // }
 
   @override
   void initState() {
     super.initState();
     // firebasefun();
     //autoLogIn();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      setState(() {
-        _currentUser = account;
-      });
-      log("1");
-      log(_currentUser!.email);
-      if (_currentUser != null) {
-
-        _handleGetContact(_currentUser!);
-      }
-    });
-    _googleSignIn.signInSilently();
+    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+    //   setState(() {
+    //     _currentUser = account;
+    //   });
+    //   log("1");
+    //   log(_currentUser!.email);
+    //   if (_currentUser != null) {
+    //
+    //     _handleGetContact(_currentUser!);
+    //   }
+    // });
+    // _googleSignIn.signInSilently();
 
   }
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    // Optional clientId
-    // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
+  // GoogleSignIn _googleSignIn = GoogleSignIn(
+  //   // Optional clientId
+  //   // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+  //   scopes: <String>[
+  //     'email',
+  //     'https://www.googleapis.com/auth/contacts.readonly',
+  //   ],
+  //
+  // );
 
-  );
-
-  Future<void> _handleGetContact(GoogleSignInAccount user) async {
-    log(user.email);
-    socialloginapi(user.email, 1);
-    setState(() {
-      _contactText = 'Loading contact info...';
-    });
-    final http.Response response = await http.get(
-      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
-          '?requestMask.includeField=person.names'),
-      headers: await user.authHeaders,
-    );
-    if (response.statusCode != 200) {
-      setState(() {
-        _contactText = 'People API gave a ${response.statusCode} '
-            'response. Check logs for details.';
-      });
-      print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    }
-    final Map<String, dynamic> data =
-    json.decode(response.body) as Map<String, dynamic>;
-    final String? namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        _contactText = 'I see you know $namedContact!';
-      } else {
-        _contactText = 'No contacts to display.';
-      }
-    });
-  }
-
-  String? _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic>? connections = data['connections'] as List<dynamic>?;
-    final Map<String, dynamic>? contact = connections?.firstWhere(
-          (dynamic contact) => contact['names'] != null,
-      orElse: () => null,
-    ) as Map<String, dynamic>?;
-    if (contact != null) {
-      final Map<String, dynamic>? name = contact['names'].firstWhere(
-            (dynamic name) => name['displayName'] != null,
-        orElse: () => null,
-      ) as Map<String, dynamic>?;
-      if (name != null) {
-
-        return name['displayName'] as String?;
-      }
-    }
-    return null;
-  }
-
-  Future<void> _handleSignIn() async {
-    // print("Hello");
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> handleSignOut() => _googleSignIn.disconnect();
+  // Future<void> _handleGetContact(GoogleSignInAccount user) async {
+  //   log(user.email);
+  //   socialloginapi(user.email, 1);
+  //   setState(() {
+  //     _contactText = 'Loading contact info...';
+  //   });
+  //   final http.Response response = await http.get(
+  //     Uri.parse('https://people.googleapis.com/v1/people/me/connections'
+  //         '?requestMask.includeField=person.names'),
+  //     headers: await user.authHeaders,
+  //   );
+  //   if (response.statusCode != 200) {
+  //     setState(() {
+  //       _contactText = 'People API gave a ${response.statusCode} '
+  //           'response. Check logs for details.';
+  //     });
+  //     print('People API ${response.statusCode} response: ${response.body}');
+  //     return;
+  //   }
+  //   final Map<String, dynamic> data =
+  //   json.decode(response.body) as Map<String, dynamic>;
+  //   final String? namedContact = _pickFirstNamedContact(data);
+  //   setState(() {
+  //     if (namedContact != null) {
+  //       _contactText = 'I see you know $namedContact!';
+  //     } else {
+  //       _contactText = 'No contacts to display.';
+  //     }
+  //   });
+  // }
+  //
+  // String? _pickFirstNamedContact(Map<String, dynamic> data) {
+  //   final List<dynamic>? connections = data['connections'] as List<dynamic>?;
+  //   final Map<String, dynamic>? contact = connections?.firstWhere(
+  //         (dynamic contact) => contact['names'] != null,
+  //     orElse: () => null,
+  //   ) as Map<String, dynamic>?;
+  //   if (contact != null) {
+  //     final Map<String, dynamic>? name = contact['names'].firstWhere(
+  //           (dynamic name) => name['displayName'] != null,
+  //       orElse: () => null,
+  //     ) as Map<String, dynamic>?;
+  //     if (name != null) {
+  //
+  //       return name['displayName'] as String?;
+  //     }
+  //   }
+  //   return null;
+  // }
+  //
+  // Future<void> _handleSignIn() async {
+  //   // print("Hello");
+  //   try {
+  //     await _googleSignIn.signIn();
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
+  //
+  // Future<void> handleSignOut() => _googleSignIn.disconnect();
 
   void loginapi(String email, password) async {
     http.Response response = await http
@@ -245,6 +249,7 @@ class _State extends State<LoginScreen> {
       print(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
       if(jsonResponse['status']==200) {
+        prefs.setString("userid", jsonDecode(data!)['data']["user_id"].toString());
         if (prefs.getString("profileComplete") == "1") {
           prefs.setBool("loggedin", true);
           prefs.setString('issocial', '1');
@@ -592,7 +597,7 @@ class _State extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             //_handleSignIn();
-                            signupgoogle(context);
+                            // signupgoogle(context);
                           },
                           child: Row(
                             children: [
@@ -639,7 +644,8 @@ class _State extends State<LoginScreen> {
                       padding: EdgeInsets.all(4),
                       child: GestureDetector(
                         onTap: () {
-                          fbLogin();
+                          // fbLogin();
+                          // facebookSignin();
                         },
                         child: Row(
                           children: [
@@ -662,7 +668,7 @@ class _State extends State<LoginScreen> {
                       padding: EdgeInsets.all(4),
                       child: GestureDetector(
                         onTap: () {
-                          twitterlogin();
+                          // twitterlogin();
 
                         },
                         child: Row(
@@ -678,42 +684,6 @@ class _State extends State<LoginScreen> {
                       )),
                 ),
               ),
-    // Container(
-    // child: _isLoggedIn
-    // ? Column(
-    // children: [
-    // Image.network(_userObj["picture"]["data"]["url"]),
-    // Text(_userObj["name"]),
-    // Text(_userObj["email"]),
-    // TextButton(
-    // onPressed: () {
-    // FacebookAuth.instance.logOut().then((value) {
-    // setState(() {
-    // _isLoggedIn = false;
-    // _userObj = {};
-    // });
-    // });
-    // },
-    // child: Text("Logout"))
-    // ],
-    // )
-    //     : Center(
-    // child: ElevatedButton(
-    // child: Text("Login with Facebook"),
-    // onPressed: () async {
-    // FacebookAuth.instance.login(
-    // permissions: ["public_profile", "email"]).then((value) {
-    // FacebookAuth.instance.getUserData().then((userData) {
-    // setState(() {
-    // _isLoggedIn = true;
-    // _userObj = userData;
-    // });
-    // });
-    // });
-    // },
-    // ),
-    // ),
-    // ),
 
             ],
           ),
@@ -721,134 +691,104 @@ class _State extends State<LoginScreen> {
     );
   }
 
-  twitterlogin() async {
-    final twitterLogin = TwitterLogin(
+//   twitterlogin() async {
+//     final twitterLogin = TwitterLogin(
+//
+//       apiKey: 'LYAl31FIc1RVG8re8sBEzAX3Y',
+//
+//       apiSecretKey: 'LqBKt1XAk7SVQIY5UpSBjKdKHkohcuk8mvclkRTRIXRXaYgLRV',
+//
+//       redirectURI: 'https://cultre.app/twittercall',
+//     );
+//     final authResult = await twitterLogin.login();
+//     switch (authResult.status!) {
+//       case TwitterLoginStatus.loggedIn:
+//         print("succ");
+//         twitterloginapi(authResult.user!.id.toString(), authResult.user!.name.toString());
+//         //   FirebaseAuth.instance.signInWithCredential(
+//         //   TwitterAuthProvider.credential(
+//         //     accessToken: authResult.authToken!,
+//         //     secret: authResult.authTokenSecret!,
+//         //   ),
+//         // );
+//         break;
+//       case TwitterLoginStatus.cancelledByUser:
+//         print("cancel");
+//         // cancel
+//         break;
+//       case TwitterLoginStatus.error:
+//         print("error");
+//         // error
+//         break;
+//     }
+//   }
+// // function to implement the google signin
+//
+// // creating firebase instance
+//   final FirebaseAuth auth = FirebaseAuth.instance;
+//
+//   Future signupgoogle(BuildContext context) async {
+//     log("hi");
+//     final GoogleSignIn googleSignIn = GoogleSignIn();
+//     final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+//     log(googleSignIn.currentUser!.email);
+//     log(googleSignInAccount.toString());
+//     if (googleSignInAccount != null) {
+//       final GoogleSignInAuthentication googleSignInAuthentication =
+//       await googleSignInAccount.authentication;
+//       final AuthCredential authCredential = GoogleAuthProvider.credential(
+//           idToken: googleSignInAuthentication.idToken,
+//           accessToken: googleSignInAuthentication.accessToken);
+//       log(googleSignInAccount.email);
+//       // Getting users credential
+//       UserCredential result =  auth.signInWithCredential(authCredential) as UserCredential;
+//       User? user = result.user;
+//       if (user != null) {
+//         log("name : ${user.displayName!.toString()}");
+//         log("email : ${user.email!.toString()}");
+//         socialloginapi(user.email!, 1);
+//
+//
+//       }
+//
+//       // if result not null we simply call the MaterialpageRoute,
+//       // for go to the HomePage screen
+//     }
+//   }
+//
+//   Future<String?> facebookSignin() async {
+//     try {
+//       log('facebookSignin');
+//
+//       final instance = FacebookAuth.instance;
+//       final LoginResult result = await FacebookAuth.instance.login(permissions: ['email']);
+//
+//       if (result.status == LoginStatus.success) {
+//         log(result.toString());
+//         final AccessToken accessToken = result.accessToken!;
+//         if (accessToken != null) {
+//          log("loggedin");
+//         }
+//         final OAuthCredential credential =
+//         FacebookAuthProvider.credential(accessToken.token);
+//         final a = await auth.signInWithCredential(credential);
+//         log(a.toString());
+//         final userData = await FacebookAuth.instance.getUserData();
+//
+//           facebookloginapi(userData['id'].toString(), userData['name'].toString());
+//
+//         return 'login';
+//       } else if (result.status == LoginStatus.cancelled) {
+//         return 'Login cancelled';
+//       } else {
+//         log(result.status.toString());
+//         log(result.message.toString());
+//       }
+//     } catch (e) {
+//       return e.toString();
+//     }
+//   }
 
-      apiKey: 'LYAl31FIc1RVG8re8sBEzAX3Y',
-
-      apiSecretKey: 'LqBKt1XAk7SVQIY5UpSBjKdKHkohcuk8mvclkRTRIXRXaYgLRV',
-
-      redirectURI: 'https://cultre.app/twittercall',
-    );
-    final authResult = await twitterLogin.login();
-    switch (authResult.status!) {
-      case TwitterLoginStatus.loggedIn:
-        print("succ");
-        twitterloginapi(authResult.user!.id.toString(), authResult.user!.name.toString());
-          FirebaseAuth.instance.signInWithCredential(
-          TwitterAuthProvider.credential(
-            accessToken: authResult.authToken!,
-            secret: authResult.authTokenSecret!,
-          ),
-        );
-        break;
-      case TwitterLoginStatus.cancelledByUser:
-        print("cancel");
-        // cancel
-        break;
-      case TwitterLoginStatus.error:
-        print("error");
-        // error
-        break;
-    }
-  }
-// function to implement the google signin
-
-// creating firebase instance
-  final FirebaseAuth auth = FirebaseAuth.instance;
-
-   signupgoogle(BuildContext context) async {
-    log("hi");
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-    log(googleSignIn.currentUser!.email);
-    log(googleSignInAccount.toString());
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
-      final AuthCredential authCredential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken);
-      log(googleSignInAccount.email);
-      // Getting users credential
-      UserCredential result =  auth.signInWithCredential(authCredential) as UserCredential;
-      User? user = result.user;
-      if (user != null) {
-        log("name : ${user.displayName!.toString()}");
-        log("email : ${user.email!.toString()}");
-        socialloginapi(user.email!, 1);
-
-
-      }
-
-      // if result not null we simply call the MaterialpageRoute,
-      // for go to the HomePage screen
-    }
-  }
-  final plugin1 = FacebookLogin(debug: true);
-  String? _sdkVersion;
-  FacebookAccessToken? _token;
-  FacebookUserProfile? _profile;
-  String? _email;
-  String? _imageUrl;
-
-   _updateLoginInfo() async {
-    final plugin = plugin1;
-    final token = await plugin.accessToken;
-    FacebookUserProfile? profile;
-    log("profile:${profile!.name!.toString()}");
-    String? email;
-    String? imageUrl;
-    log(profile.name.toString());
-    if (token != null) {
-      profile = await plugin.getUserProfile();
-      if (token.permissions.contains(FacebookPermission.email.name)) {
-        email = await plugin.getUserEmail();
-        log(email.toString());
-      }
-      imageUrl = await plugin.getProfileImageUrl(width: 100);
-    }
-
-    setState(() {
-      _token = token;
-      _profile = profile;
-      _email = email;
-      _imageUrl = imageUrl;
-    });
-  }
-  Future<void> _getSdkVersion() async {
-    final sdkVesion = await plugin1.sdkVersion;
-    setState(() {
-      _sdkVersion = sdkVesion;
-    });
-  }
-  Future<void> fbLogin()async{
-     log("fblogin");
-
-
-
-      final LoginResult result = await FacebookAuth.i.login(); // by default we request the email and the public profile
-      log("result: ${result.toString()}");
-      if (result.status == LoginStatus.success) {
-        // you are logged
-
-        final AccessToken accessToken = result.accessToken!;
-        log("accessToken:"+accessToken.toString());
-        final userData = await FacebookAuth.i.getUserData();
-        log(userData['id'].toString());
-        log("userData:"+userData.toString());
-        facebookloginapi(userData['id'].toString(), userData['name'].toString());
-        print(userData['name']);
-      }else{
-
-      }
-
-
-  }
-  Future<void> fbLogout()async{
-    await FacebookAuth.instance.logOut();
-    setState(() {});
-  }
 
 }
 

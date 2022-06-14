@@ -52,7 +52,6 @@ dependencies:
   file_picker:
   flutter_contacts: ^1.1.2
   contacts_service:
-  permission_handler:
   flutter_downloader:
   json_object_mapper:
   expansion_tile_card:
@@ -63,22 +62,21 @@ dependencies:
   intl: ^0.17.0-nullsafety.2
   webview_flutter:
   charts_flutter:
-  google_sign_in: ^5.0.1
+#  google_sign_in: ^5.0.1
   change_app_package_name: ^1.0.0
   uni_links:
   pull_to_refresh:
-  flutter_local_notifications:
+#  flutter_local_notifications:
   fbroadcast_nullsafety: ^2.0.2
   provider:
   lottie:
   readmore:
   photo_view:
-  firebase_messaging: ^11.2.6
-  firebase_core:
-  firebase_auth:
-  twitter_login: ^4.2.3
-  flutter_facebook_auth: ^4.3.4+2
-  flutter_login_facebook: ^1.0.0+1
+#  firebase_messaging: ^11.2.6
+#  firebase_core:
+#  firebase_auth:
+#  twitter_login: ^4.2.3
+#  flutter_facebook_auth: ^4.3.4+2
   flutter_echarts:
   device_info_plus:
   rxdart:
