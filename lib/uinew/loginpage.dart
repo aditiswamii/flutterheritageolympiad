@@ -304,8 +304,8 @@ class _State extends State<LoginScreen> {
     if (response.statusCode == 200) {
       // Navigator.pop(context);
       data = response.body;
-      print(jsonDecode(data!)['data'].toString());
-      print(jsonDecode(data!)['data']["id"].toString());
+      log(jsonDecode(data!)['data'].toString());
+      log(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
       if(jsonResponse['status']==200) {
         if (prefs.getString("profileComplete") == "1") {
@@ -678,42 +678,42 @@ class _State extends State<LoginScreen> {
                       )),
                 ),
               ),
-    Container(
-    child: _isLoggedIn
-    ? Column(
-    children: [
-    Image.network(_userObj["picture"]["data"]["url"]),
-    Text(_userObj["name"]),
-    Text(_userObj["email"]),
-    TextButton(
-    onPressed: () {
-    FacebookAuth.instance.logOut().then((value) {
-    setState(() {
-    _isLoggedIn = false;
-    _userObj = {};
-    });
-    });
-    },
-    child: Text("Logout"))
-    ],
-    )
-        : Center(
-    child: ElevatedButton(
-    child: Text("Login with Facebook"),
-    onPressed: () async {
-    FacebookAuth.instance.login(
-    permissions: ["public_profile", "email"]).then((value) {
-    FacebookAuth.instance.getUserData().then((userData) {
-    setState(() {
-    _isLoggedIn = true;
-    _userObj = userData;
-    });
-    });
-    });
-    },
-    ),
-    ),
-    ),
+    // Container(
+    // child: _isLoggedIn
+    // ? Column(
+    // children: [
+    // Image.network(_userObj["picture"]["data"]["url"]),
+    // Text(_userObj["name"]),
+    // Text(_userObj["email"]),
+    // TextButton(
+    // onPressed: () {
+    // FacebookAuth.instance.logOut().then((value) {
+    // setState(() {
+    // _isLoggedIn = false;
+    // _userObj = {};
+    // });
+    // });
+    // },
+    // child: Text("Logout"))
+    // ],
+    // )
+    //     : Center(
+    // child: ElevatedButton(
+    // child: Text("Login with Facebook"),
+    // onPressed: () async {
+    // FacebookAuth.instance.login(
+    // permissions: ["public_profile", "email"]).then((value) {
+    // FacebookAuth.instance.getUserData().then((userData) {
+    // setState(() {
+    // _isLoggedIn = true;
+    // _userObj = userData;
+    // });
+    // });
+    // });
+    // },
+    // ),
+    // ),
+    // ),
 
             ],
           ),
@@ -723,27 +723,24 @@ class _State extends State<LoginScreen> {
 
   twitterlogin() async {
     final twitterLogin = TwitterLogin(
-      // Consumer API keys
+
       apiKey: 'LYAl31FIc1RVG8re8sBEzAX3Y',
-      // Consumer API Secret keys
+
       apiSecretKey: 'LqBKt1XAk7SVQIY5UpSBjKdKHkohcuk8mvclkRTRIXRXaYgLRV',
-      // Registered Callback URLs in TwitterApp
-      // Android is a deeplink
-      // iOS is a URLScheme
+
       redirectURI: 'https://cultre.app/twittercall',
     );
     final authResult = await twitterLogin.login();
     switch (authResult.status!) {
       case TwitterLoginStatus.loggedIn:
         print("succ");
-       twitterloginapi(authResult.user!.id.toString(), authResult.user!.name.toString());
-        return await FirebaseAuth.instance.signInWithCredential(
+        twitterloginapi(authResult.user!.id.toString(), authResult.user!.name.toString());
+          FirebaseAuth.instance.signInWithCredential(
           TwitterAuthProvider.credential(
             accessToken: authResult.authToken!,
             secret: authResult.authTokenSecret!,
           ),
         );
-        // success
         break;
       case TwitterLoginStatus.cancelledByUser:
         print("cancel");

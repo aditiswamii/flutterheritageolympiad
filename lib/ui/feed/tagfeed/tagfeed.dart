@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:CultreApp/ui/feed/feed.dart';
-import 'package:add_2_calendar/add_2_calendar.dart';
+
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:flutter/cupertino.dart';

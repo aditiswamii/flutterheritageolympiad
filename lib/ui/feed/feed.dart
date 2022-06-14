@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:CultreApp/ui/feed/callmodules/callmodules.dart';
 import 'package:CultreApp/ui/feed/tagfeed/tagfeed.dart';
-import 'package:add_2_calendar/add_2_calendar.dart';
+
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -431,20 +431,20 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
     }
 
   }
-  Event buildEvent(String? title,String? description) {
-    return Event(
-      title: title!,
-      description: description!,
-      location: 'Cultre App',
-      startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(minutes: 30)),
-      allDay: false,
-      iosParams: IOSParams(
-        reminder: Duration(minutes: 40),
-      ),
-
-    );
-  }
+  // Event buildEvent(String? title,String? description) {
+  //   return Event(
+  //     title: title!,
+  //     description: description!,
+  //     location: 'Cultre App',
+  //     startDate: DateTime.now(),
+  //     endDate: DateTime.now().add(Duration(minutes: 30)),
+  //     allDay: false,
+  //     iosParams: IOSParams(
+  //       reminder: Duration(minutes: 40),
+  //     ),
+  //
+  //   );
+  // }
   @override
   void initState() {
     super.initState();
@@ -923,7 +923,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                       GestureDetector(
                                                           onTap: () {
                                                             log("cal click");
-                                                            buildEvent( databean![index].title!, databean![index].description!);
+                                                            // buildEvent( databean![index].title!, databean![index].description!);
                                                           },
                                                           child: Image.asset(
                                                             "assets/images/calendary.png",

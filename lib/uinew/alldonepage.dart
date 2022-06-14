@@ -36,8 +36,9 @@ var userid;
   var snackbar;
   void email() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(otpController.text.toString()==prefs.getString('verifycode'))
-    emailverifyapi(widget.email, prefs.getString('verifycode')!, prefs.getString('issocial').toString());
+    if(otpController.text.toString()==prefs.getString('verifycode')) {
+      emailverifyapi(widget.email, prefs.getString('verifycode')!, prefs.getString('issocial').toString());
+    }
   }
   void emailverifyapi( String email, String otp, String is_social) async {
     http.Response response = await http
@@ -116,7 +117,7 @@ var userid;
         ),
         child: Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
-          child: Column(
+          child: ListView(
             children: [
               Container(
                   alignment: Alignment.centerLeft,
@@ -131,7 +132,6 @@ var userid;
                       "To start using the app,please verify your email address",
                       style: TextStyle(
                           fontSize: 18, color: ColorConstants.txt))),
-              Flexible(child:
               Container(
                 height: 60,
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -149,7 +149,7 @@ var userid;
                     FilteringTextInputFormatter.singleLineFormatter
                   ],
                 ) ,
-              ),),
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 alignment: Alignment.centerLeft,

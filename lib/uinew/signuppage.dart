@@ -102,7 +102,7 @@ class _State extends State<Stepone> {
         ),
         child: Container(color: Colors.white.withAlpha(100),
           margin: EdgeInsets.fromLTRB(20, 100, 20, 10),
-          child: Column(children: [
+          child: ListView(children: [
             Container(
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -176,83 +176,110 @@ class _State extends State<Stepone> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+              color: Colors.white,
+              margin:EdgeInsets.fromLTRB(0, 20, 10, 10),
+              alignment: Alignment.centerLeft,
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "I agree to the terms and conditions*",
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: ColorConstants.txt),
-                    ),
-                    Checkbox(
-                      value: value,
-                      onChanged: (newvalue) {
-                        setState(() {
-                          value = newvalue!;
-                        });
-                      },
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "I agree to the terms and conditions*",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: ColorConstants.txt),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                     setState(() {
+                       value=!value;
+                       print(value);
+                     });
+                    },
+                    child: value == true
+                        ? Container(
+                      width: 20,
+                      height: 20,
+                      child: Image.asset(
+                        "assets/images/check_box_with_tick.png",
+                        height: 20,
+                        width: 20,
+                      ),
                     )
-                  ]),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.white,
-                elevation: 3,
-                alignment: Alignment.center,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                fixedSize: const Size(150, 50),
-                //////// HERE
+                        : Container(
+                      width: 20,
+                      height: 20,
+                      child: Image.asset(
+                        "assets/images/check_box.png",
+                        height: 20,
+                        width: 20,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              onPressed: () {
-                if (emailController.text.isNotEmpty) {
-                  if (usernameController.text.isNotEmpty) {
-                    if(passwordController.text.isNotEmpty ){
-                    if (passwordController.text.toString() == repeatpasswordController.text.toString()) {
-                      if(value==true){
-                        steponeapi(emailController.text.toString(),
-                            usernameController.text.toString(),
-                            repeatpasswordController.text.toString());
-                      }else{
+            ),
+
+            Container(
+              child: Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.white,
+                    elevation: 3,
+                    alignment: Alignment.center,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    fixedSize: const Size(150, 50),
+                    //////// HERE
+                  ),
+                  onPressed: () {
+                    if (emailController.text.isNotEmpty) {
+                      if (usernameController.text.isNotEmpty) {
+                        if(passwordController.text.isNotEmpty ){
+                        if (passwordController.text.toString() == repeatpasswordController.text.toString()) {
+                          if(value==true){
+                            steponeapi(emailController.text.toString(),
+                                usernameController.text.toString(),
+                                repeatpasswordController.text.toString());
+                          }else{
+                            const snackBar = SnackBar(
+                              content: Text('Please agree to term and conditions'),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+                        } else {
+                          const snackBar = SnackBar(
+                            content: Text('Please check password'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      }
+                        else {
+                          const snackBar = SnackBar(
+                            content: Text('Please fill password'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      }else {
                         const snackBar = SnackBar(
-                          content: Text('Please agree to term and conditions'),
+                          content: Text('Please fill username'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     } else {
                       const snackBar = SnackBar(
-                        content: Text('Please check password'),
+                        content: Text('Please fill email address'),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                  }
-                    else {
-                      const snackBar = SnackBar(
-                        content: Text('Please fill password'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  }else {
-                    const snackBar = SnackBar(
-                      content: Text('Please fill username'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                } else {
-                  const snackBar = SnackBar(
-                    content: Text('Please fill email address'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              child: const Text(
-                "NEXT",
-                style:
-                TextStyle(color: ColorConstants.txt, fontSize: 16),
-                textAlign: TextAlign.center,
+                  },
+                  child: const Text(
+                    "NEXT",
+                    style:
+                    TextStyle(color: ColorConstants.txt, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
           ]),

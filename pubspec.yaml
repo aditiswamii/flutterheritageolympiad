@@ -38,7 +38,7 @@ dependencies:
   staggered_grid_view_flutter:
   items_list_view:
   reorderable_griditem_view:
-  getwidget: ^2.0.4
+  getwidget: ^3.0.1
   expandable_group: ^0.0.5
   clipboard:
   flutter_share: ^2.0.0
@@ -46,7 +46,7 @@ dependencies:
   shared_preferences_android:
   share_plus: ^4.0.5
   mvp:
-  image_picker: ^0.7.2+1
+  image_picker: ^0.8.5+3
   http:
   aws_s3_upload:
   file_picker:
@@ -65,7 +65,6 @@ dependencies:
   charts_flutter:
   google_sign_in: ^5.0.1
   change_app_package_name: ^1.0.0
-
   uni_links:
   pull_to_refresh:
   flutter_local_notifications:
@@ -74,13 +73,11 @@ dependencies:
   lottie:
   readmore:
   photo_view:
-  add_2_calendar:
   firebase_messaging: ^11.2.6
-  firebase_core: ^1.12.0
-  cloud_functions: ^3.2.6
+  firebase_core:
   firebase_auth:
   twitter_login: ^4.2.3
-  flutter_facebook_auth: ^3.5.2
+  flutter_facebook_auth: ^4.3.4+2
   flutter_login_facebook: ^1.0.0+1
   flutter_echarts:
   device_info_plus:
@@ -94,7 +91,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
