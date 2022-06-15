@@ -321,7 +321,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     }
   }
   onupdate(){
-
+   successdialog(context, "You have successfully updated your profile");
   }
   validateName(String value) {
     if (value.length > 3)
@@ -339,7 +339,32 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       return false;
     }
   }
+  successdialog(BuildContext context, String text) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: ColorConstants.verdigris,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      content: Container(
+          child: Text(
+            "${text}",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+            textAlign: TextAlign.center,
+          )),
 
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(
+          Duration(seconds: 2),
+              () {
+            Navigator.of(context).pop(true);
+          },
+        );
+        return alert;
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();

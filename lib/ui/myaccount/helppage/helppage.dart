@@ -81,12 +81,8 @@ class _AccountPageState extends State<HelpPage> {
 
 
         });
-        snackBar = SnackBar(
-          content: Text(jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        var venam = jsonDecode(data!)['data'];
-        print(venam);
+
+        successdialog(context, "Thanks for your feedback");
       } else {
         snackBar = SnackBar(
           content: Text(jsonResponse['message']),
@@ -98,7 +94,32 @@ class _AccountPageState extends State<HelpPage> {
       print(response.statusCode);
     }
   }
+  successdialog(BuildContext context, String text) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: ColorConstants.verdigris,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      content: Container(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 18),
+            textAlign: TextAlign.center,
+          )),
 
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(
+          Duration(seconds: 2),
+              () {
+            Navigator.of(context).pop(true);
+          },
+        );
+        return alert;
+      },
+    );
+  }
 
 
   showLoaderDialog(BuildContext context) {

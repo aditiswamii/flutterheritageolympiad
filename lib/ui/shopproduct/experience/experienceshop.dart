@@ -141,8 +141,8 @@ class _ExperiencePageState extends State<ExperiencePage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => ShopPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => ShopPage()));
     // Do some stuff.
     return true;
   }

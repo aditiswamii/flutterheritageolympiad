@@ -47,8 +47,9 @@ class _PhonebookPageState extends State<PhonebookPage> {
     });
     print("userdata");
     //calTheme();
-    _fetchContacts();
-
+    //_fetchContacts();
+    phcoList!.clear();
+    checkfriend(userid.toString());
 
   }
   @override
@@ -109,7 +110,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
   }
   checkfriend(String userid) async {
     http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "check_friend"),
+        Uri.parse("${StringConstants.BASE_URL}check_friend"),
         body: {'user_id': userid.toString()});
     // showLoaderDialog(context);
 
@@ -147,10 +148,10 @@ class _PhonebookPageState extends State<PhonebookPage> {
     }
   }
   onchecksuccess(checkdata){
-    if(data!=null) {
-      for (int i=0;i< data.length;i++){
+    if(checkdata!=null) {
+      for (int i=0;i< checkdata.length;i++){
       setState(() {
-      listv!.add(data[i].toString());
+      listv!.add(checkdata[i].toString());
       friendphone(listv);
       });
     }
@@ -424,4 +425,5 @@ class PhoneContact {
   String? name  ;
   int status  = 0;
   List<String>? phone;
+
 }

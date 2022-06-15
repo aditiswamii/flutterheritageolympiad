@@ -98,8 +98,8 @@ class _State extends State<ProductList>{
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => ShopPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => ShopPage()));
     // Do some stuff.
     return true;
   }
