@@ -208,7 +208,8 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                   child: TextButton(
                     onPressed: (){
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) =>FeedPage(contents: widget.contents, themes: widget.themes, seldomain: widget.seldomain, feeddata: widget.feeddata,)));
+                          builder: (BuildContext context) =>FeedPage(contents: widget.contents, themes: widget.themes,
+                            seldomain: widget.seldomain, feeddata:widget.feeddata,)));
 
 
 

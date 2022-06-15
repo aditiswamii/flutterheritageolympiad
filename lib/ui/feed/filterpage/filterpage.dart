@@ -26,6 +26,7 @@ import '../../../modal/domains/GetDomainsResponse.dart';
 import 'dart:convert' as convert;
 
 class FilterPage extends StatefulWidget {
+
   FilterPage({Key? key}) : super(key: key);
 
   @override

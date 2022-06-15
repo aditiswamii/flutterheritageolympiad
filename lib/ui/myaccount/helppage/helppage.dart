@@ -258,6 +258,7 @@ class _AccountPageState extends State<HelpPage> {
                     margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
 
                     child: TextFormField(
+
                       controller: descpcontroller,
                       obscureText: false,
                       maxLength: 500,

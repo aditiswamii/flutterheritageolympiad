@@ -59,7 +59,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
   var username;
   var email;
   var country;
-  var profilepic;
+  String? profilepic;
   var userid;
   var snackBar;
   var prodata;
@@ -497,10 +497,14 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 100.0,
-                      child:CircleAvatar(
+                      child:profilepic!.isEmpty?CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage:AssetImage("assets/images/placeholder.png"),
+                        backgroundColor: Colors.transparent,
+                      ): CircleAvatar(
                         backgroundColor: Colors.white,
                         child: ClipOval(
-                          child: _image ==null ?  Image.network(profilepic,height: 100,width: 100,fit: BoxFit.cover,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.cover,),
+                          child: _image ==null ?  Image.network(profilepic!,height: 100,width: 100,fit: BoxFit.cover,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.cover,),
                         ),
                       ),
                     ),

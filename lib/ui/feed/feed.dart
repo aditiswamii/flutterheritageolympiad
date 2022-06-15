@@ -306,7 +306,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
          tagfilterd = list;
        });
        Navigator.of(context).pushReplacement(
-           MaterialPageRoute(builder: (BuildContext context) => TagFeed(tags: tagfilterd,seachkey:searchkey, feeddata: feeddata,)));
+           MaterialPageRoute(builder: (BuildContext context) => TagFeed(tags: tagfilterd,seachkey:searchkey, feeddata: databean,)));
      }else{
        rlshow=false;
        snackBar = const SnackBar(
@@ -632,11 +632,13 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                 ),
               ),
 
-                databean==null? Center(
-                  child: Container(
+                 databean!.isEmpty ? Container(
+                   height: 300,
+                   child: const Center(
+                    child: CircularProgressIndicator(),
+                ),
+                 )
 
-                  ),
-                )
                     :  Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: ListView.builder(

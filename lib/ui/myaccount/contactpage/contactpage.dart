@@ -38,7 +38,7 @@ class _ContactPageState extends State<ContactPage> {
   var username;
   var email;
   var country;
-  var profilepic;
+  String? profilepic;
   var userid;
   var agegroup;
   var flagicon;
@@ -532,9 +532,13 @@ if(badgedetaildata!=null){
                                             ),
                                             child: Container(  width: MediaQuery.of(context).size.width,
                                               height: 100,
-                                              child: CircleAvatar(
+                                              child:profilepic!.isEmpty?CircleAvatar(
+                                                radius: 30.0,
+                                                backgroundImage:AssetImage("assets/images/placeholder.png"),
+                                                backgroundColor: Colors.transparent,
+                                              ): CircleAvatar(
                                                   backgroundColor: Colors.red,
-                                                  child:ClipOval(child: Image.network(profilepic,height: 100,width: 100,fit: BoxFit.cover,))
+                                                  child:ClipOval(child: Image.network(profilepic!,height: 100,width: 100,fit: BoxFit.cover,))
                                               ),
                                             ),
                                           ),
@@ -619,7 +623,23 @@ if(badgedetaildata!=null){
                             ),
                           ),
 
-                          Card(
+                          badgedata==null?Card(
+                          child: Container(
+                          padding: EdgeInsets.all(5),
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Column(
+                          children: [
+                          Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text("YOUR BADGES",style: TextStyle(
+                          color: ColorConstants.txt,
+                          fontSize: 16)),
+                          ),
+
+    ],
+    ),
+    ),
+    ):  Card(
                             child: Container(
                               padding: EdgeInsets.all(5),
                               margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),

@@ -39,7 +39,7 @@ class _YourPageState extends State<YourPage> {
   var username;
   var email;
   var country;
-  var profilepic;
+  String? profilepic;
   var userid;
   var agegroup;
   var flagicon;
@@ -694,13 +694,17 @@ class _YourPageState extends State<YourPage> {
                                                               .size
                                                               .width,
                                                       height: 100,
-                                                      child: CircleAvatar(
+                                                      child:profilepic!.isEmpty?CircleAvatar(
+                                                        radius: 30.0,
+                                                        backgroundImage:AssetImage("assets/images/placeholder.png"),
+                                                        backgroundColor: Colors.transparent,
+                                                      ):  CircleAvatar(
                                                           backgroundColor:
                                                               Colors.red,
                                                           child: ClipOval(
                                                               child:
                                                                   Image.network(
-                                                            profilepic,
+                                                            profilepic!,
                                                             height: 100,
                                                             width: 100,
                                                             fit: BoxFit.cover,
@@ -1232,12 +1236,6 @@ class _YourPageState extends State<YourPage> {
                                   Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 60,
-
-                                    //color: Colors.white,
-                                    // decoration: BoxDecoration(
-                                    //   color: Colors.white,
-                                    //   border: Border.all(color: Colors.black),
-                                    // ),
                                     margin:
                                         const EdgeInsets.fromLTRB(0, 20, 0, 20),
 
@@ -1246,7 +1244,7 @@ class _YourPageState extends State<YourPage> {
                                       obscureText: false,
                                       maxLength: 5,
                                       keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                           filled: true,
                                           fillColor: Colors.white,
                                           border: OutlineInputBorder(
@@ -1263,7 +1261,7 @@ class _YourPageState extends State<YourPage> {
                                           ),
                                           hintText: 'Number of Quizzes',
                                           hintStyle:
-                                              TextStyle(color: Colors.grey,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
+                                              TextStyle(color: Colors.grey,fontFamily: 'Nunito',fontStyle: FontStyle.normal,)),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter
                                             .singleLineFormatter
