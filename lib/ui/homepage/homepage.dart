@@ -689,7 +689,7 @@ String link="";
   }
 
  void onResumed()  {
-    print(link == null ? "" : "mainlink: "+ link);
+    print(link == null ? "" : "mainlink: $link");
     link="";
     initUniLinks().then((value) => setState(() {
       link = value!;

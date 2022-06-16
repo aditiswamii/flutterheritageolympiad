@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:CultreApp/main.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class _State extends State<DialogDispute> {
                             content: Text(
                              "Please submit your dispute",
                               textAlign: TextAlign.center,));
-                        ScaffoldMessenger.of(context)
+                        ScaffoldMessenger.of(navigatorKey.currentState!.context)
                             .showSnackBar(snackbar);
                       }
                         },

@@ -54,6 +54,9 @@ class _State extends State<AnswerkeyPage> {
   var useropt;
   var ques;
   var snackBar;
+  TextEditingController descripcontroller= TextEditingController();
+  var data1;
+  var raisedata;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -144,29 +147,33 @@ class _State extends State<AnswerkeyPage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    if(widget.type=="1")
+    if(widget.type=="1") {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>ResultPage(quizid: widget.quizid, savedata: widget.saveddata, type: widget.type,)));
+    }
 
-   if(widget.type=="2")
-          Navigator.pushReplacement(
+   if(widget.type=="2") {
+     Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  DuelModeResult(quizid: widget.quizid, type: widget.type,)));
+   }
 
-       if(widget.type=="3")
-      Navigator.pushReplacement(
+       if(widget.type=="3") {
+         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>  QuizroomResult(quizid: widget.quizid, type: widget.type,)));
+       }
 
-     if(widget.type=="4")
-      Navigator.pushReplacement(
+     if(widget.type=="4") {
+       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>  TournamentResult( type: widget.type, sessionid: widget.sessionid, tourid: widget.tourid,)));
+     }
 
       return true;
 
@@ -274,7 +281,78 @@ class _State extends State<AnswerkeyPage> {
                                 width: 250,
 
                                 alignment: Alignment.center,
-                                child: DialogDispute(quizid: widget.quizid, type: widget.type,)),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+
+                                    ),
+                                    // height:250,
+                                    // width: 250,
+                                    alignment: Alignment.center,
+                                    //margin: EdgeInsets.fromLTRB(0,10,0,10),
+
+                                    child:Column(
+                                      children: [
+                                        Text('Raise a dispute',textAlign: TextAlign.center,style: TextStyle(color: ColorConstants.txt,fontSize:18 ),),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Container(
+                                            height: 150,
+                                            width: MediaQuery.of(context).size.width,
+                                            child: TextFormField(
+                                                textInputAction: TextInputAction.done,
+                                                decoration: InputDecoration(
+                                                  enabledBorder: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(5.0)),
+                                                      borderSide: BorderSide(color: Colors.black54)),
+                                                  focusedBorder: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(5.0)),
+                                                      borderSide: BorderSide(color: Colors.black54)),
+                                                  border: InputBorder.none,
+                                                ),
+                                                controller: descripcontroller //this is your text
+                                            ),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: ColorConstants.verdigris,
+                                            onPrimary: Colors.white,
+                                            elevation: 3,
+                                            alignment: Alignment.center,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0)),
+                                            fixedSize: const Size(100, 40),
+                                            //////// HERE
+                                          ),
+                                          onPressed: () {
+                                            if(descripcontroller.text.isNotEmpty){
+                                              raisedispute(userid.toString(), widget.type!, descripcontroller.text.toString(), widget.tourid, widget.sessionid,
+                                                  widget.quizid);
+
+                                            }else{
+                                              var snackbar = SnackBar(
+                                                  content: Text(
+                                                    "Please submit your dispute",
+                                                    textAlign: TextAlign.center,));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackbar);
+                                            }
+                                          },
+                                          child: const Text(
+                                            "SUBMIT",
+                                            style: TextStyle(
+                                                color: ColorConstants.lightgrey200, fontSize: 14),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ),
+                                // child: DialogDispute(quizid: widget.quizid, type: widget.type,)
+                            ),
                           );
                           showDialog(
                               context: context,
@@ -303,4 +381,59 @@ class _State extends State<AnswerkeyPage> {
       ),
     );
   }
+
+  void raisedispute(String user_id,String type,String dispute,int tourid,int seesionid,String quizid) async {
+    descripcontroller.text="";
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL+"raise_dispute"), body: {
+      'user_id': user_id.toString(),
+      'type': type.toString(),
+      if(widget.type=="4")
+        "tournament_id" : tourid.toString(),
+      "session_id": seesionid.toString(),
+      if(widget.type == "1")
+        "quiz_id": quizid.toString(),
+      'dispute':dispute.toString()
+    });
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);//store response as string
+
+      data1 = response.body;
+      if (jsonResponse['status'] == 200) {
+      setState(() {
+        raisedata = jsonDecode(
+            data1!)['data']; //get all the data from json string superheros
+        print(raisedata.length); // just printed length of data
+      });
+      snackBar = SnackBar(
+          content: Text(
+            "thanks for feedback",
+            textAlign: TextAlign.center,
+          ));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      var venam = jsonDecode(data1!)['data'];
+      print(venam);
+    }else{
+        snackBar = SnackBar(
+            content: Text(
+              "please submit again",
+              textAlign: TextAlign.center,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
+      else {
+      Navigator.pop(context);//store response as string
+
+      snackBar = SnackBar(
+          content: Text(
+            "please submit again",
+            textAlign: TextAlign.center,
+          ));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print(response.statusCode);
+    }
+  }
+
 }

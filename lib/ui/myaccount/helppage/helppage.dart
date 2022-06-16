@@ -246,7 +246,8 @@ class _AccountPageState extends State<HelpPage> {
                       controller: titlecontroller,
                       obscureText: false,
                       maxLength: 100,
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -283,7 +284,8 @@ class _AccountPageState extends State<HelpPage> {
                       controller: descpcontroller,
                       obscureText: false,
                       maxLength: 500,
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,

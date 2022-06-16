@@ -294,7 +294,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
                                        Container(
                                          height: 300,
                                          color: ColorConstants.lightgrey200,
-                                         child: Image.network(experdata![index].images![0].toString(),fit: BoxFit.contain,),
+                                         child: Image.network(experdata![index].images![0].toString(),fit: BoxFit.cover,),
                                        ),
                                         Container(
                                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
