@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 
+import 'package:CultreApp/ui/rules/rulepage.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
@@ -69,6 +70,8 @@ class _State extends State<TourRoomWaitlist> {
 
     //getTourRoom(widget.tourid, widget.sessionid);
     getTourRoom(widget.tourid!, widget.sessionid!);
+    log(widget.tourid.toString());
+    log(widget.sessionid.toString());
     // getFeed(userid.toString(), "0", "", "", "");
   }
 
@@ -263,10 +266,10 @@ class _State extends State<TourRoomWaitlist> {
                                       end: Duration.zero),
                                   onEnd: () {
                                     log("sessid:",error: {widget.sessionid.toString()});
-                                    Navigator.pushReplacement(
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>  Mcq(quizid:"", type: widget.type, tourid: widget.tourid, sessionid: widget.sessionid,)));
+                                            builder: (context) =>  RulesPage(quizspeedid: "", sessionid: widget.sessionid, quizid: "", tourid: widget.tourid, quiztypeid: "", type: "4",)));
 
                                   },
                                   builder: (BuildContext context, Duration value, Widget? child) {

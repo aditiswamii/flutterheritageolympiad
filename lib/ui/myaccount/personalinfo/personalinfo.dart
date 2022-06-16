@@ -481,39 +481,67 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                   child: GestureDetector(
                     onTap: (){
                       AlertDialog errorDialog = AlertDialog(
+                        insetPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                        titlePadding:EdgeInsets.fromLTRB(10, 20, 10, 10),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   20.0)), //this right here
                           title: Container(
-                              height: 100,
-                              width: 100,
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      FloatingActionButton(
-                                        onPressed: getImagefromcamera,
-                                        tooltip: "Pick Image form gallery",
-                                        child: Icon(Icons.add_a_photo),
+                            height: 100,
+                            width: 100,
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: ColorConstants.red,
+                                        onPrimary: Colors.white,
+                                        elevation: 3,
+                                        shape: CircleBorder(
+                                        ),
+                                        //alignment: Alignment.center,
+                                        // shape: RoundedRectangleBorder(
+                                        //     borderRadius: BorderRadius.circular(20.0)),
+                                        fixedSize: const Size(50, 50),
+                                        //////// HERE
                                       ),
-                                      FloatingActionButton(
-                                        onPressed: getImagefromGallery,
-                                        tooltip: "Pick Image from camera",
-                                        child: Icon(Icons.broken_image_outlined),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
+                                      onPressed: getImagefromcamera,
+
+                                      child: Icon(Icons.add_a_photo,size: 22,color: Colors.white,),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: ColorConstants.red,
+                                        onPrimary: Colors.white,
+                                        elevation: 3,
+                                        //alignment: Alignment.center,
+                                        shape: CircleBorder(
+                                        ),
+                                        fixedSize: const Size(50, 50),
+                                        //////// HERE
+                                      ),
+                                      onPressed:
+                                      getImagefromGallery,
+                                      child: Icon(Icons.broken_image_outlined,size: 22,color:Colors.white,),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Text("Pick Image\nfrom camera",style: TextStyle(fontSize: 12)),
                                       Text("Pick Image\nform gallery",style: TextStyle(fontSize: 12),),
                                     ],
                                   ),
-                                ],
-                              ),)
+                                ),
+                              ],
+                            ),)
                       );
                       showDialog(
                           context: context,

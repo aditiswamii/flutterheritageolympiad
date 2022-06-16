@@ -200,9 +200,8 @@ class _State extends State<Mcq> {
       });
       print("current ques: " + "${currentques!.question}");
     } else {
-      showMessageDialog(context);
-      // print("index"+answer[5]);
-      //PassValue();
+      countdownTimer!.cancel();
+      PassValue();
 
     }
     if(currentques!.quesType==2){
@@ -227,6 +226,7 @@ class _State extends State<Mcq> {
   }
 
   PassValue() {
+    countdownTimer!.cancel();
     answerstring = "";
     for (int i = 0; i < answer.length; i++) {
       if (answerstring.isEmpty) {
@@ -1113,8 +1113,11 @@ class _State extends State<Mcq> {
                               child: TextButton(
                                 onPressed: () {
                                   print("ans:$selectans");
-
-                                  reloadques();
+                                  if (_questionindex < questions!.length) {
+                                    reloadques();
+                                  }else{
+                                    showMessageDialog(context);
+                                  }
                                 },
                                 child: Image.asset(
                                     "assets/images/rightarrow2.png",

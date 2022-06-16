@@ -326,7 +326,7 @@ class _SavedPostState extends State<SavedPost> {
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: NetworkImage(savefdata![index].media![pagePosition]),
-                                                    fit: BoxFit.contain)),
+                                                    fit: BoxFit.cover)),
                                             child: Container(
                                               margin: EdgeInsets.all(10),
                                               alignment:
@@ -382,7 +382,7 @@ class _SavedPostState extends State<SavedPost> {
 
                                         ),
                                         Container(
-                                          height: 32,
+                                          height: 42,
 
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
@@ -414,7 +414,7 @@ class _SavedPostState extends State<SavedPost> {
                                                       ),
                                                     ),
                                                     child: Container(
-                                                      padding: EdgeInsets.all(4),
+                                                      padding: EdgeInsets.all(8),
                                                       child: Center(
                                                         child: Text(savefdata![index].tags![index1],
                                                           style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),

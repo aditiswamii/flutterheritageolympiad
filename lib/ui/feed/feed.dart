@@ -689,7 +689,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                             databean![index].media!
 
                                                                 [pagePosition]),
-                                                        fit: BoxFit.contain)),
+                                                        fit: BoxFit.cover)),
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
@@ -808,7 +808,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                             ),
                                           ),
                                           Container(
-                                            height: 32,
+                                            height: 42,
 
                                             child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
@@ -846,7 +846,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                         ),
                                                       ),
                                                       child: Container(
-                                                        padding: const EdgeInsets.all(4),
+                                                        padding: const EdgeInsets.all(8),
                                                         child: Center(
                                                           child: Text(databean![index].tags!
                                                               [index1],style: const TextStyle(color: Colors.white),textAlign: TextAlign.center,),
@@ -984,6 +984,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
             loadmoreapi(userid.toString(), feed_page_id.toString(), "", "", "");
           },
           child: Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
             child: const Center(child: Text("Show More",
               style: TextStyle(color: Colors.black,fontSize: 18),textAlign: TextAlign.center,)),
           ),

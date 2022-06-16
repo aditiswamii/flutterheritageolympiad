@@ -159,9 +159,9 @@ class _State extends State<QuizroomLink> {
                         //////// HERE
                       ),
                       onPressed: () {
-                        Clipboard.setData(ClipboardData(text: "$link"));
+                        Clipboard.setData(ClipboardData(text: "http://cultre.app/$link"));
                         Clipboard.kTextPlain;
-                        Clipboard.getData("$link");
+                        Clipboard.getData("http://cultre.app/$link");
                       },
                       child: const Text(
                         "COPY LINK",
@@ -185,7 +185,7 @@ class _State extends State<QuizroomLink> {
                         ),
                         onPressed: () {
                           //share;
-                          Share.share('${widget.link}', subject: 'Share link');
+                          Share.share('http://cultre.app/${widget.link}', subject: 'Share link');
                           // Navigator.pushReplacement(
                           //     context,
                           //     MaterialPageRoute(

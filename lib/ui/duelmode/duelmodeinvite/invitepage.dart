@@ -293,54 +293,53 @@ var dualdata;
                       "Invite someone else to Duel with",
                       style: TextStyle(
                           fontSize: 15, color: ColorConstants.txt))),
-              Container(
-                width: 350,
-                alignment: Alignment.center,
-                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                      height: 150,
-                      width: 150,
-                      decoration:  BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: select==1?ColorConstants.yellow200:ColorConstants.lightgrey200
-                      ),
-                      child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              select=1;
-                            });
-                            //ColorConstants.myfeed;
-                             },
-                          child: Text("INVITE",style: TextStyle(color: select==1?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                      height: 150,
-                      width: 150,
-                      decoration:  BoxDecoration(
-                        shape: BoxShape.rectangle,
-                          color: select==2?ColorConstants.yellow200:ColorConstants.lightgrey200
-                      ),
-                      child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              select=2;
-                            });
+    Container(
+        margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+    child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
+    shrinkWrap: true,
+    physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
 
-                          },
-                          child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
-                    ),
-                  ],
-                ),
-              ),
+    children: [
+    Container(
+    alignment: Alignment.center,
+    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+    height: 150,
+    width: 150,
+    decoration:  BoxDecoration(
+    shape: BoxShape.rectangle,
+    color: select==1?ColorConstants.yellow200:ColorConstants.lightgrey200
+    ),
+    child: GestureDetector(
+    onTap: () {
+    setState(() {
+    select=1;
+    });
+    //ColorConstants.myfeed;
+    },
+    child: Text("INVITE",style: TextStyle(color: select==1?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+    ),
+    Container(
+    alignment: Alignment.center,
+    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+    height: 150,
+    width: 150,
+    decoration:  BoxDecoration(
+    shape: BoxShape.rectangle,
+    color: select==2?ColorConstants.yellow200:ColorConstants.lightgrey200
+    ),
+    child: GestureDetector(
+    onTap: () {
+    setState(() {
+    select=2;
+    });
+
+    },
+    child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+    ),
+    ])),
+
               Container(
                 child: Text(
                   "QUIZ SUMMARY",

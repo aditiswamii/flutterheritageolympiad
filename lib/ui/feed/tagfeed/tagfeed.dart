@@ -367,7 +367,7 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
 
                                         ),
                                         Container(
-                                          height: 32,
+                                          height: 42,
 
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
@@ -399,7 +399,7 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                                                       ),
                                                     ),
                                                     child: Container(
-                                                      padding: const EdgeInsets.all(4),
+                                                      padding: const EdgeInsets.all(8),
                                                       child: Center(
                                                         child: Text(databean![index].tags![index1],
                                                           style: const TextStyle(color: Colors.white),textAlign: TextAlign.center,),

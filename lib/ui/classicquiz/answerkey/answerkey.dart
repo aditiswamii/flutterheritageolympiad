@@ -227,8 +227,7 @@ class _State extends State<AnswerkeyPage> {
                                             EdgeInsets.fromLTRB(0, 10, 0, 10),
                                         child: ListBody(
                                           children: [
-                                            Text("${index + 1})"
-                                                "${jsonDecode(data!)['data'][index]['question']}"),
+                                            Text("${index + 1}) ${jsonDecode(data!)['data'][index]['question']}"),
                                             Text(
                                                 "Your Answer : ${jsonDecode(data!)['data'][index]['your_option']}"),
                                             Text(

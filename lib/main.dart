@@ -59,7 +59,7 @@ void main() async{
   // });
   // _msgService.init();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+  // initUniLinks().then((value) => link;
   runApp( MaterialApp(
     navigatorKey: navigatorKey,
     theme: ThemeData(fontFamily: "Nunito"),
@@ -69,7 +69,17 @@ void main() async{
 
   ));
 }
+Future<String?> initUniLinks() async {
 
+  try {
+    final initialLink = await getInitialLink();
+
+    return initialLink;
+  } on PlatformException {
+    return "" ;
+  }
+
+}
 class MyApp extends StatefulWidget {
   var link;
    MyApp({Key? key,this.link,}) : super(key: key);

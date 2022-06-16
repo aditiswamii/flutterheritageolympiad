@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:CultreApp/colors/colors.dart';
-import 'package:CultreApp/modal/gettournament/GetTournamentResponse.dart';
+import 'package:CultreApp/modal/gettournament/GetTournamentResponse.dart' as TournamentResponse;
 import 'package:CultreApp/ui/feed/filterpage/filterpage.dart';
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
@@ -59,7 +61,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   var data;
   var snackBar;
   var _expanded=false;
-  GetTournamentResponse? gettourR;
+  TournamentResponse.GetTournamentResponse? gettourR;
   GetLeaderboardRank? getleaderboardR;
   Duration myDuration = Duration(days: 1);
   var leaderdata;
@@ -87,7 +89,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
           tourdata = jsonDecode(
               data!)['data']; //get all the data from json string superheros
           print(tourdata.length);
-          onsuccess(getTournamentResponseFromJson(data!));
+          onsuccess(TournamentResponse.getTournamentResponseFromJson(data!));
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -108,7 +110,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
           tourdata = jsonDecode(
               data!)['data']; //get all the data from json string superheros
           print(tourdata.length);
-          onsuccess(getTournamentResponseFromJson(data!));
+          onsuccess(TournamentResponse.getTournamentResponseFromJson(data!));
         });
 
         var venam = jsonDecode(data!)['data'];
@@ -118,7 +120,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
       }
     }
   }
- onsuccess(GetTournamentResponse tournamentResponse){
+ onsuccess(TournamentResponse.GetTournamentResponse tournamentResponse){
 
     if(tournamentResponse.data!=null){
       setState(() {
@@ -393,7 +395,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                     borderRadius: BorderRadius.circular(20)
                                 ),
                                 child: Container(
-                                  margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                  margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
                                   width: MediaQuery.of(context).size.width-30,
                                   decoration: BoxDecoration(
                                       color: ColorConstants.stage1color,
@@ -402,7 +404,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                       borderRadius: BorderRadius.circular(20)
                                   ),
                                   child: Container(
-                                    margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                    margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
                                     width: MediaQuery.of(context).size.width-30,
                                     decoration: BoxDecoration(
                                         color: ColorConstants.stage2color,
@@ -411,7 +413,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                         borderRadius: BorderRadius.circular(20)
                                     ),
                                     child: Container(
-                                      margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                      margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
                                       width: MediaQuery.of(context).size.width-30,
                                       decoration: BoxDecoration(
                                           color: ColorConstants.stage3color,
@@ -420,7 +422,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                           borderRadius: BorderRadius.circular(20)
                                       ),
                                       child: Container(
-                                        margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                        margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
                                         width: MediaQuery.of(context).size.width-30,
                                         decoration: BoxDecoration(
                                             color: ColorConstants.stage5color,
@@ -694,7 +696,8 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        starttimer(gettourR!.data![index].startTime!,gettourR!.data![index].id!,gettourR!.data![index].sessions![index].id!),
+                                        starttimer(gettourR!.time!,gettourR!.data![index].id!,
+                                            gettourR!.data![index].sessions![index].id!,gettourR!.data![index],gettourR!.date!),
 
                                         // Text(
                                         //     gettourR!.data![index].startTime!,
@@ -911,48 +914,303 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
       ),
     );
   }
+  int expiryTime=0;
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
+  DateTime? convertStringToDate( String? dateStr,String? format )  {
+    final DateFormat formatter = DateFormat(format);
+    DateTime? date;
+    date = formatter.parse(dateStr!);
+    log(date.toString());
+  return date;
+}
 
-  Widget starttimer(String time,int tourid,int sessionid){
-    DateTime dateTime;
-    dateTime = DateTime.parse(time).toLocal();
+
+
+
+  Widget starttimer(String time,int tourid,int sessionid, TournamentResponse.Data? data,String date){
+    log(time);
+    log(date);
+    log("${data!.startTime}");
     final DateFormat formatter = DateFormat('hh:mm:ss');
-    final String formatted = formatter.format(dateTime);
-    final int sec = dateTime.millisecond;
+
+      if (data.frequency == "Daily") {
+        String ttime = data.startTime!.substring(11);
+        if (data.startTime!.compareTo(
+            "$date $time") > 0) {
+          int currentTime = convertStringToDate(
+              "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+          var newatime= (DateTime.parse(
+              "$date $time").hour * 3600) +(DateTime.parse(
+              "$date $time").minute * 60 )+(DateTime.parse(
+              "$date $time").second * 1);
+            // expiryTime =
+            //     convertStringToDate(data.startTime, "yyyy-mm-dd hh:mm:ss")!
+            //         .millisecond - currentTime;
+          var exatime= (DateTime.parse(
+              data.startTime!).hour * 3600) +(DateTime.parse(
+              data.startTime!).minute * 60 )+(DateTime.parse(
+              data.startTime!).second * 1);
+          expiryTime =  exatime-newatime;
+          log("currentTime1:$currentTime");
+   log("expiryTime1:$expiryTime");
+        } else {if (data.isPlayed == 0) {
+            if (data.sessions != null && data.sessions!.isNotEmpty) {
+              int selindex = -1;
+              TournamentResponse.Sessions? sess;
+              for (sess in data.sessions!) {
+                selindex++;
+                String sval = "";
+                if (sess.startTime!.length == 4) {
+                  sval = "0${sess.startTime!}:00";
+                } else {
+                  sval = "${sess.startTime!}:00";
+                }
+
+                if (time.compareTo(sval) > 0) {
+                  break;
+                }
+              }
+              if (selindex == -1 || selindex == data.sessions!.length - 1) {
+                int currentTime =  DateTime.parse(
+                    "$date $time").millisecond;
+                var newatime= (DateTime.parse(
+                    "$date $time").hour * 3600) +(DateTime.parse(
+                    "$date $time").minute * 60 )+(DateTime.parse(
+                    "$date $time").second * 1);
+                  // expiryTime =
+                  //     DateTime.parse("$date $ttime")
+                  //         .millisecond + 86400000 - currentTime;
+                var exatime= (DateTime.parse(
+                    "$date $ttime").hour * 3600) +(DateTime.parse(
+                    "$date $ttime").minute * 60 )+(DateTime.parse(
+                    "$date $ttime").second * 1);
+                expiryTime =exatime + 86400000-newatime;
+                log("expiryTime2:$expiryTime");
+              } else {
+                String sstime = "${data.sessions![selindex].startTime}:00";
+                if (sstime.length == 7)
+                  sstime = "0$sstime";
+
+
+                log("start: $sstime");
+                log("datetime3:$date $time");
+                int currentTime = DateTime.parse(
+                    "$date $time").second;
+                var newatime= (DateTime.parse(
+                    "$date $time").hour * 3600) +(DateTime.parse(
+                    "$date $time").minute * 60 )+(DateTime.parse(
+                    "$date $time").second * 1);
+
+                log("currentTime3:$currentTime");
+
+                var exatime= (DateTime.parse(
+                    "$date $sstime").hour * 3600) +(DateTime.parse(
+                    "$date $sstime").minute * 60 )+(DateTime.parse(
+                    "$date $sstime").second * 1);
+                expiryTime =
+                    exatime-newatime;
+                log("value${exatime-newatime}");
+                log("expiryTime3:$expiryTime");
+              }
+            }
+          } else {
+            int currentTime = convertStringToDate(
+                "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+
+            var newatime= (DateTime.parse(
+                "$date $time").hour * 3600) +(DateTime.parse(
+                "$date $time").minute * 60 )+(DateTime.parse(
+                "$date $time").second * 1);
+              // expiryTime =
+              //     convertStringToDate("$date $ttime", "yyyy-mm-dd hh:mm:ss")!
+              //         .millisecond + 864 - currentTime;
+            var exatime= (DateTime.parse(
+                "$date $ttime").hour * 3600) +(DateTime.parse(
+                "$date $ttime").minute * 60 )+(DateTime.parse(
+                "$date $ttime").second * 1);
+            expiryTime =exatime + 86400000-newatime;
+            log("expiryTime4:$expiryTime");
+          }
+        }
+      } else if (data.frequency == "Weekly") {
+        String ttime = data.startTime!.substring(data.startTime!.length - 8);
+        if (data.startTime!.compareTo("$date $time") > 0) {
+          int currentTime = convertStringToDate(
+              "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+          var newatime= (DateTime.parse(
+              "$date $time").hour * 3600) +(DateTime.parse(
+              "$date $time").minute * 60 )+(DateTime.parse(
+              "$date $time").second * 1);
+            // expiryTime =
+            //     convertStringToDate(data.startTime, "yyyy-mm-dd hh:mm:ss")!
+            //         .millisecond - currentTime;
+          var exatime= (DateTime.parse(
+              data.startTime!).hour * 3600) +(DateTime.parse(
+              data.startTime!).minute * 60 )+(DateTime.parse(
+              data.startTime!).second * 1);
+          expiryTime =exatime -newatime;
+          log("expiryTime5:$expiryTime");
+        } else {
+          if ("$date $time".compareTo("$date $ttime") > 0) {
+            int currentTime = convertStringToDate(
+                "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+            var newatime= (DateTime.parse(
+                "$date $time").hour * 3600) +(DateTime.parse(
+                "$date $time").minute * 60 )+(DateTime.parse(
+                "$date $time").second * 1);
+              // expiryTime =
+              //     convertStringToDate("$date $ttime", "yyyy-mm-dd hh:mm:ss")!
+              //         .millisecond + 864 - currentTime;
+            var exatime= (DateTime.parse(
+                "$date $ttime").hour * 3600) +(DateTime.parse(
+                "$date $ttime").minute * 60 )+(DateTime.parse(
+                "$date $ttime").second * 1);
+            expiryTime =exatime + 86400000-newatime;
+            log("expiryTime6:$expiryTime");
+          } else {
+            int currentTime = convertStringToDate(
+                "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+            var newatime= (DateTime.parse(
+                "$date $time").hour * 3600) +(DateTime.parse(
+                "$date $time").minute * 60 )+(DateTime.parse(
+                "$date $time").second * 1);
+              // expiryTime =
+              //     convertStringToDate("$date $ttime", "yyyy-mm-dd hh:mm:ss")!
+              //         .millisecond - currentTime;
+            var exatime= (DateTime.parse(
+                "$date $ttime").hour * 3600) +(DateTime.parse(
+                "$date $ttime").minute * 60 )+(DateTime.parse(
+                "$date $ttime").second * 1);
+            expiryTime =exatime -newatime;
+            log("expiryTime7:$expiryTime");
+          }
+        }
+      } else if (data.frequency == "Monthly") {
+        String ttime = data.startTime!.substring(data.startTime!.length - 8);
+        if (data.startTime!.compareTo("$date $time") > 0) {
+          int currentTime = convertStringToDate(
+              "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+          var newatime= (DateTime.parse(
+              "$date $time").hour * 3600) +(DateTime.parse(
+              "$date $time").minute * 60 )+(DateTime.parse(
+              "$date $time").second * 1);
+            // expiryTime =
+            //     convertStringToDate(data.startTime, "yyyy-mm-dd hh:mm:ss")!
+            //         .millisecond - currentTime;
+          var exatime= (DateTime.parse(
+              data.startTime!).hour * 3600) +(DateTime.parse(
+              data.startTime!).minute * 60 )+(DateTime.parse(
+              data.startTime!).second * 1);
+          expiryTime =exatime -newatime;
+          log("expiryTime8:$expiryTime");
+        } else {
+          if ("$date $time".compareTo("$date $ttime") > 0) {
+            int currentTime = convertStringToDate(
+                "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+            var newatime= (DateTime.parse(
+                "$date $time").hour * 3600) +(DateTime.parse(
+                "$date $time").minute * 60 )+(DateTime.parse(
+                "$date $time").second * 1);
+
+              // expiryTime =
+              //     convertStringToDate("$date $ttime", "yyyy-mm-dd hh:mm:ss")!
+              //         .millisecond + 864 - currentTime;
+            var exatime= (DateTime.parse(
+                "$date $ttime").hour * 3600) +(DateTime.parse(
+                "$date $ttime").minute * 60 )+(DateTime.parse(
+                "$date $ttime").second * 1);
+            expiryTime =exatime + 86400000-newatime;
+            log("expiryTime9:$expiryTime");
+          } else {
+            int currentTime = convertStringToDate(
+                "$date $time", "yyyy-mm-dd hh:mm:ss")!.millisecond;
+            var newatime= (DateTime.parse(
+                "$date $time").hour * 3600) +(DateTime.parse(
+                "$date $time").minute * 60 )+(DateTime.parse(
+                "$date $time").second * 1);
+              expiryTime =
+                  convertStringToDate("$date $ttime", "yyyy-mm-dd hh:mm:ss")!
+                      .millisecond - currentTime;
+            var exatime= (DateTime.parse(
+                "$date $ttime").hour * 3600) +(DateTime.parse(
+                "$date $ttime").minute * 60 )+(DateTime.parse(
+                "$date $ttime").second * 1);
+            expiryTime =exatime -newatime;
+            log("expiryTime10:$expiryTime");
+          }
+        }
+      }
+
+
+    log("ex"+expiryTime.toString());
+    // DateTime dateTime;
+    // dateTime = DateTime.parse(time);
+    // final DateFormat formatter = DateFormat('HH:mm:ss');
+    // final String formatted = formatter.format(dateTime);
+    // final int sec = dateTime.millisecond;
     //Duration clockTimer = Duration(hours: dateTime.hour);
      String starttime="";
+    log(starttime.toString());
+
     return Container(
       child:
       Column(
          children: [
-           Container(
-             child: TweenAnimationBuilder<Duration>(
-                 duration:  Duration(hours: dateTime.hour ),
-                 tween: Tween(begin: Duration(hours: dateTime.hour),
-                     end: Duration.zero),
-                 onEnd: () {
-                   starttime="JOIN NOW";
-                 },
-                 builder: (BuildContext context, Duration value, Widget? child) {
-                   String strDigits(int n) => n.toString().padLeft(2, '0');
-                   final hours = strDigits(value.inHours.remainder(12));
-                   final minutes =  strDigits(value.inMinutes.remainder(60)) ;
-                   final seconds = strDigits(value.inSeconds.remainder(60));
-                   starttime='$hours:$minutes:$seconds';
-                   return Center(
-                     child: Container(
-                         height: 40,width: 100,
-                         padding:  const EdgeInsets.all(5),
-                         alignment: Alignment.center,
-                         child: Text(starttime,
-                             textAlign: TextAlign.center,
-                   style: TextStyle(
-                   fontSize: 22,
-                   color: Colors.black,fontWeight: FontWeight.w600,
-                   fontFamily: "Nunito")),
-                     )
-                   );
-                 }),
+            CountdownTimer(
+             endTime: expiryTime,
+             widgetBuilder: (context, t) {
+               if (expiryTime > 30000) {
+
+                         String strDigits(int n) => n.toString().padLeft(2, '0');
+                         final hours = strDigits(t!.hours!.remainder(12));
+                         final minutes =  strDigits(t.min!.remainder(60)) ;
+                         final seconds = strDigits(t.sec!.remainder(60));
+                         final days = t.days!;
+                         log('${strDigits(days)} days $hours:$minutes:$seconds');
+                         if(days>0){
+                           starttime='${strDigits(days)} days $hours:$minutes:$seconds';
+                         }else{
+                           starttime='$hours:$minutes:$seconds';
+                         }
+
+               }else {
+                 starttime="JOIN NOW";
+               }
+               return Text("$starttime");
+               },
+              onEnd: (){
+                starttime= "JOIN NOW";
+              },
            ),
+           // Container(
+           //   child: TweenAnimationBuilder<Duration>(
+           //       duration:  Duration(hours: dateTime.hour ),
+           //       tween: Tween(begin: Duration(hours: dateTime.hour),
+           //           end: Duration.zero),
+           //       onEnd: () {
+           //         starttime="JOIN NOW";
+           //       },
+           //       builder: (BuildContext context, Duration value, Widget? child) {
+           //         String strDigits(int n) => n.toString().padLeft(2, '0');
+           //         final hours = strDigits(value.inHours.remainder(12));
+           //         final minutes =  strDigits(value.inMinutes.remainder(60)) ;
+           //         final seconds = strDigits(value.inSeconds.remainder(60));
+           //         starttime='$hours:$minutes:$seconds';
+           //         return Center(
+           //           child: Container(
+           //               height: 40,width: 100,
+           //               padding:  const EdgeInsets.all(5),
+           //               alignment: Alignment.center,
+           //               child: Text(starttime,
+           //                   textAlign: TextAlign.center,
+           //         style: TextStyle(
+           //         fontSize: 22,
+           //         color: Colors.black,fontWeight: FontWeight.w600,
+           //         fontFamily: "Nunito")),
+           //           )
+           //         );
+           //       }),
+           // ),
 
          ]
       ),

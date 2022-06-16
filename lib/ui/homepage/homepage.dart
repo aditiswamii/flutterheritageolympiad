@@ -5,6 +5,7 @@ import 'dart:developer';
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -52,7 +53,7 @@ var link;
   _State createState() => _State();
 }
 
-class _State extends State<HomePage> implements DialogDuelInviteView,DialogQuizRoomInviteView{
+class _State extends State<HomePage> with WidgetsBindingObserver implements DialogDuelInviteView,DialogQuizRoomInviteView{
 
   var  title ;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -115,16 +116,23 @@ GetUserLeagueResponse? userLeagueR;
    //
    // }
 
-
 }
+String link="";
+  late final AsyncCallback resumeCallBack;
+  late final AsyncCallback suspendingCallBack;
 
   @override
   void initState() {
 
    // log("link"+ link == null ? "" : link);
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     userdata();
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
   Future<Future> _refreshdata(BuildContext context) async {
     // NotificationService(_fcm1,context).initialize();
@@ -134,6 +142,18 @@ GetUserLeagueResponse? userLeagueR;
     // });
     return myinvitation(userid.toString());
   }
+  Future<String?> initUniLinks() async {
+
+    try {
+      final initialLink = await getInitialLink();
+
+      return initialLink;
+    } on PlatformException {
+      return "" ;
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -417,29 +437,29 @@ GetUserLeagueResponse? userLeagueR;
                        borderRadius: BorderRadius.circular(20)
                     ),
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                      width: MediaQuery.of(context).size.width-30,
+                      margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                      width: MediaQuery.of(context).size.width/5,
                       decoration: BoxDecoration(
                           color: ColorConstants.stage1color,
                           borderRadius: BorderRadius.circular(20)
                       ),
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                        width: MediaQuery.of(context).size.width-30,
+                        margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                        width: MediaQuery.of(context).size.width/5,
                         decoration: BoxDecoration(
                             color: ColorConstants.stage2color,
                              borderRadius: BorderRadius.circular(20)
                         ),
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                          width: MediaQuery.of(context).size.width-30,
+                          margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                          width: MediaQuery.of(context).size.width/5,
                           decoration: BoxDecoration(
                               color: ColorConstants.stage3color,
                                borderRadius: BorderRadius.circular(20)
                           ),
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                            width: MediaQuery.of(context).size.width-30,
+                            margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                            width: MediaQuery.of(context).size.width/5,
                             decoration: BoxDecoration(
                                 color: ColorConstants.stage5color,
                                   borderRadius: BorderRadius.circular(20)
@@ -456,13 +476,13 @@ GetUserLeagueResponse? userLeagueR;
                     decoration: BoxDecoration(
                         color: ColorConstants.red,
                          image: userLeagueR!.data!.user!.id==5?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
-                            alignment:Alignment(-.9,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                            alignment:Alignment(-.85,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
                              alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
                         borderRadius: BorderRadius.circular(20)
                     ),
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                      width: MediaQuery.of(context).size.width-30,
+                      margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                      width: MediaQuery.of(context).size.width/5,
                       decoration: BoxDecoration(
                           color: ColorConstants.stage1color,
                               image:userLeagueR!.data!.user!.id==4?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
@@ -471,18 +491,18 @@ GetUserLeagueResponse? userLeagueR;
                           borderRadius: BorderRadius.circular(20)
                       ),
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                        width: MediaQuery.of(context).size.width-30,
+                        margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                        width: MediaQuery.of(context).size.width/5,
                         decoration: BoxDecoration(
                             color: ColorConstants.stage2color,
                             image:userLeagueR!.data!.user!.id==3?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
-                          alignment:Alignment(-.7,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                          alignment:Alignment(-.75,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
                        alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
                             borderRadius: BorderRadius.circular(20)
                         ),
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                          width: MediaQuery.of(context).size.width-30,
+                          margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                          width: MediaQuery.of(context).size.width/5,
                           decoration: BoxDecoration(
                               color: ColorConstants.stage3color,
                               image:userLeagueR!.data!.user!.id==2?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
@@ -491,8 +511,8 @@ GetUserLeagueResponse? userLeagueR;
                               borderRadius: BorderRadius.circular(20)
                           ),
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                            width: MediaQuery.of(context).size.width-30,
+                            margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                            width: MediaQuery.of(context).size.width/5,
                             decoration: BoxDecoration(
                                 color: ColorConstants.stage5color,
                                 image:userLeagueR!.data!.user!.id==1?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
@@ -646,8 +666,13 @@ GetUserLeagueResponse? userLeagueR;
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+
     switch (state) {
       case AppLifecycleState.resumed:
+        print("resume");
+        initUniLinks().then((value) => setState(() {
+          link = value!;
+        }));
         onResumed();
         break;
       case AppLifecycleState.inactive:
@@ -660,9 +685,18 @@ GetUserLeagueResponse? userLeagueR;
         onDetached();
         break;
     }
+    super.didChangeAppLifecycleState(state);
   }
 
-  Future<void> onResumed() async {
+ void onResumed()  {
+    print(link == null ? "" : "mainlink: "+ link);
+    link="";
+    initUniLinks().then((value) => setState(() {
+      link = value!;
+    }));
+    log(  link == null ? "" : "mainlink: "+link);
+    print(link == null ? "" : "mainlink: "+ link);
+
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // if (prefs.getString("fcmtoken") == null || prefs.getString("fcmtoken")!.isEmpty) {
     //   generateDeviceToken();
@@ -1423,7 +1457,32 @@ GetUserLeagueResponse? userLeagueR;
     log(dualinkdata['data']['link']);
     log(dualinkdata['data']['created_date']);
     // log(linkdata['type'].toString());
-
+    AlertDialog errorDialog = AlertDialog(
+        insetPadding: EdgeInsets.all(4),
+        titlePadding: EdgeInsets.all(4),
+        contentPadding:EdgeInsets.all(4),
+        shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(
+                20.0)), //this right here
+        content: Container(
+            height:470,
+            width: 250,
+            alignment: Alignment.center,
+            child: DialogDuelInviteReceive(id: dualinkdata['data']['dual_id'], image:dualinkdata['data']['image'], diffi: dualinkdata['data']['difficulty'], index: 0,
+              domainsel: dualinkdata['data']['domain'], link: dualinkdata['data']['link'], speed: dualinkdata['data']['quiz_speed'], name: dualinkdata['data']['name'],)));
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          // Future.delayed(
+          //   Duration(seconds: 2),
+          //       () {
+          //     Navigator.of(context).pop(true);
+          //   },
+          // );
+          return  errorDialog;
+        }
+    );
   }
   var quizroomdata;
   quizroomdetail(String userid,String link) async {
@@ -1471,7 +1530,32 @@ GetUserLeagueResponse? userLeagueR;
     log(quizroomdata['data']['link']);
     log(quizroomdata['data']['created_date']);
     log(quizroomdata['type']);
-
+    AlertDialog errorDialog = AlertDialog(
+        insetPadding: EdgeInsets.all(4),
+        titlePadding: EdgeInsets.all(4),
+        contentPadding:EdgeInsets.all(4),
+        shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(
+                20.0)), //this right here
+        content: Container(
+            height:470,
+            width: 250,
+            alignment: Alignment.center,
+            child: DialogQuizRoomInviteReceive(id: quizroomdata['data']['dual_id'], image: quizroomdata['data']['image'], diffi:quizroomdata['data']['difficulty'], index: 0,
+              domainsel:  quizroomdata['data']['domain'], link:quizroomdata['data']['link'], speed: quizroomdata['data']['quiz_speed'], name: quizroomdata['data']['name'],)));
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          // Future.delayed(
+          //   Duration(seconds: 2),
+          //       () {
+          //     Navigator.of(context).pop(true);
+          //   },
+          // );
+          return  errorDialog;
+        }
+    );
   }
   getuserleague(String userid) async {
 

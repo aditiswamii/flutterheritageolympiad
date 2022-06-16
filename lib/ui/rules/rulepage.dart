@@ -26,8 +26,8 @@ class RulesPage extends StatefulWidget {
   var quizspeedid;
   var quizid;
   var type;
-  var tourid;
-  var sessionid;
+  int? tourid;
+  int? sessionid;
    RulesPage({Key? key,required this.quizspeedid,required this.quiztypeid,required this.quizid,
      required this.type,required this.sessionid,required this.tourid}) : super(key: key);
 
@@ -68,8 +68,9 @@ class _State extends State<RulesPage> {
               getQuizroomRule(widget.quizid.toString());
 
     }else if(widget.type=="4"){
-
-          getTourRule(widget.tourid, widget.sessionid);
+         log(widget.tourid.toString());
+         log(widget.sessionid.toString());
+          getTourRule(widget.tourid!, widget.sessionid!);
 
     }
 
@@ -151,13 +152,13 @@ class _State extends State<RulesPage> {
       print(response.statusCode);
     }
   }
-  void getTourRule(int tournament_id,int session_id) async {
+  void getTourRule(int tournamentId,int sessionId) async {
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL+"tournament_rule"),
         body: {
           'user_id': userid.toString(),
-          'tournament_id': tournament_id.toString(),
-          'session_id': session_id.toString(),
+          'tournament_id': tournamentId.toString(),
+          'session_id': sessionId.toString(),
         });
     if (response.statusCode == 200) {
       data = response.body; //store response as string
