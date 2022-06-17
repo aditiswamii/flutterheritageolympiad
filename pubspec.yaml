@@ -58,29 +58,31 @@ dependencies:
   back_button_interceptor: ^6.0.0
   flip_card:
   package_info_plus:
-  device_calendar:
   intl: ^0.17.0-nullsafety.2
   webview_flutter:
   charts_flutter:
-#  google_sign_in: ^5.0.1
   change_app_package_name: ^1.0.0
   uni_links:
   pull_to_refresh:
-#  flutter_local_notifications:
   fbroadcast_nullsafety: ^2.0.2
   provider:
   lottie:
   readmore:
   photo_view:
+  flutter_echarts:
+  device_info_plus:
+  rxdart:
+  flutter_countdown_timer: ^4.1.0
+  video_player:
+  audioplayers:
+  add_2_calendar:
 #  firebase_messaging: ^11.2.6
 #  firebase_core:
 #  firebase_auth:
 #  twitter_login: ^4.2.3
 #  flutter_facebook_auth: ^4.3.4+2
-  flutter_echarts:
-  device_info_plus:
-  rxdart:
-  flutter_countdown_timer: ^4.1.0
+#  flutter_local_notifications:
+#  google_sign_in: ^5.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

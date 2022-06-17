@@ -180,55 +180,66 @@ class _ExperiencePageState extends State<ExperiencePage> {
             fit: BoxFit.cover,
           ),
         ),
-        child:Container( color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
-          child: ListView(
+        child:Container(
+          color: Colors.white.withAlpha(100),
+          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+          child: Stack(
               children: [
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      alignment: Alignment.centerLeft,
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                    height: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                          alignment: Alignment.centerLeft,
 
-                      padding: EdgeInsets.all(5),
-                      child: Center(
-                        child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>  HomePage()));
-                            },
-                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                            child: Card(
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>  HomePage()));
+                                },
+                                child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(right: 5.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState!.openEndDrawer();
+                            },
+                            child: Image.asset(
+                                "assets/images/side_menu_2.png", height: 40,
+                                width: 40),
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          _scaffoldKey.currentState!.openEndDrawer();
-                        },
-                        child: Image.asset(
-                            "assets/images/side_menu_2.png", height: 40,
-                            width: 40),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 Container(
-                  color: Colors.white,
-                  child: ListBody(
+                  alignment: Alignment(0,100),
+                  // height: MediaQuery.of(context).size.height-120,
+                  margin: const EdgeInsets.fromLTRB(20, 90, 20, 10),
+                  child: ListView(
                       children: [
                         Container(
                             alignment: Alignment.centerLeft,

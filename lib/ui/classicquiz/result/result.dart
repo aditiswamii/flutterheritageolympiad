@@ -23,7 +23,7 @@ import 'package:CultreApp/ui/homepage/homepage.dart';
 class ResultPage extends StatefulWidget {
   var quizid;
   var savedata;
-  String? type;
+  var type;
  ResultPage({Key? key,required this.quizid,required this.savedata,required this.type}) : super(key: key);
 
   @override
@@ -42,15 +42,14 @@ var percentage;
 String packagename="";
   PackageInfo? packageInfo;
   userdata() async {
-    // PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString("username");
       country = prefs.getString("country");
       userid = prefs.getString("userid");
-      // packagename=packageInfo.packageName.toString();
+
     });
+    getPackage();
   }
   void getPackage() async {
     packageInfo = await PackageInfo.fromPlatform();
@@ -66,16 +65,8 @@ String packagename="";
   @override
   void initState() {
     super.initState();
-    getPackage();
-    // setState(() {
-    //   xp=widget.savedata["xp"];
-    //   percentage=widget.savedata["17"];
-    //
-    // });
-    // print(xp);
-    // print(percentage);
-    userdata();
     BackButtonInterceptor.add(myInterceptor);
+    userdata();
   }
 
   @override
@@ -87,7 +78,7 @@ String packagename="";
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) => HomePage()));
-    // Do some stuff.
+    print("classicresult${BackButtonInterceptor.describe()}");
     return true;
   }
 

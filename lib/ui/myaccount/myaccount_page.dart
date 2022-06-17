@@ -195,60 +195,76 @@ print("flagicon"+flagicon);
           ),
         ),
         child:Container(
-          margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-          child: ListView(
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+          child: Stack(
             children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          alignment: Alignment.centerLeft,
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              alignment: Alignment.centerLeft,
 
-                          padding: EdgeInsets.all(5),
-                          child: Center(
-                            child: Card(
-                              elevation: 3,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage()));
-                                },
-                                child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                              padding: EdgeInsets.all(5),
+                              child: Center(
+                                child: Card(
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => HomePage()));
+                                    },
+                                    child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 5.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _scaffoldKey.currentState!.openEndDrawer();
+                                },
+                                child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(right: 5.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              _scaffoldKey.currentState!.openEndDrawer();
-                            },
-                            child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: const Text("YOUR ACCOUNT",style: TextStyle(fontSize: 22,fontFamily: 'Nunito',fontStyle: FontStyle.normal,color: ColorConstants.txt))),
-                       username==null?Container( width: 200):
+              Container(
+                alignment: Alignment(0,100),
+                // height: MediaQuery.of(context).size.height-120,
+                margin: const EdgeInsets.fromLTRB(0, 90, 0, 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                      children: [
+                            Container(
+                                alignment: Alignment.centerLeft,
+                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: const Text("Your Account",style: TextStyle(fontSize: 22,fontFamily: 'Nunito',fontStyle: FontStyle.normal,color: ColorConstants.txt))),
+
+                           username==null?Container( width: 200):
             Container(
               margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.centerLeft,
                 child: Text("${username}",style: TextStyle(
-                    color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
-                    fontSize: 16,fontWeight: FontWeight.w600),
+                        color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
+                        fontSize: 16,fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,),
               ),
 
@@ -261,50 +277,48 @@ print("flagicon"+flagicon);
                   alignment: Alignment.centerLeft,
                   height: 20,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                            Container(
+                              child: Text("${agegroup}",style: TextStyle(
+                                  color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
+                                  fontSize: 14),
+                                textAlign: TextAlign.left,),
+                            ),
+                          Container(width: 10,alignment: Alignment.centerLeft,
+                              child: VerticalDivider(color: Colors.black)),
+                          // Text("|"),
+                          Container(
+                            width: 150,
+                            child: Row(
+                              children: [
 
-                        Container(
-                          width: 80,
-                          child: Text("${agegroup}",style: TextStyle(
-                              color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal,
-                              fontSize: 14),
-                            textAlign: TextAlign.left,),
-                        ),
-                      Container(width: 10,alignment: Alignment.centerLeft,
-                          child: VerticalDivider(color: Colors.black)),
-                      // Text("|"),
-                      Container(
-                        width: 90,
-                        child: Row(
-                          children: [
-
-                              Container(
-                                  height: 20,width: 20,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle
+                                  Container(
+                                      height: 20,width: 20,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle
+                                      ),
+                                      child:
+                                      CircleAvatar(
+                                        radius: 20.0,
+                                        backgroundImage:
+                                        NetworkImage("${flagicon}"),
+                                        backgroundColor: Colors.transparent,
+                                      )
                                   ),
-                                  child:
-                                  CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                    NetworkImage("${flagicon}"),
-                                    backgroundColor: Colors.transparent,
-                                  )
-                              ),
 
-                              Expanded(
-                                child: Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text("${country}",style: TextStyle(
-                                      color: ColorConstants.txt,
-                                      fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
-                                    textAlign: TextAlign.left,),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
+                                  Expanded(
+                                    child: Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                      child: Text("${country}",style: TextStyle(
+                                          color: ColorConstants.txt,
+                                          fontSize: 14,fontFamily: 'Nunito',fontStyle: FontStyle.normal),
+                                        textAlign: TextAlign.left,),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
                   ),
                 ),
               ),
@@ -313,398 +327,402 @@ print("flagicon"+flagicon);
                 // scrollDirection: Axis.vertical,
                 // shrinkWrap: true,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
                         Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/your_page1.png",height: 25,width: 25,),
-                              title: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>  YourPage()));
-                                  },
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
 
-                                  child: Text("YOUR PAGE",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: ListTile(
-                            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                            leading: Image.asset("assets/images/notifications.png",height: 25,width: 25,),
-                            title: GestureDetector(
-                                onTap: (){
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const NotificationScreen()));
-                                },
-
-                                child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                          )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/setting.png",height: 25,width: 25,),
-                              title:GestureDetector(
-                                onTap: (){
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const ManageContactScreen()));
-                                },
-                                  child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/interval.png",height: 25,width: 25,),
-                              title: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => PersonalInfoScreen()));
-                                  },
-                                  child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/change_password.png",height: 25,width: 25,),
-                              title:GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ChangepasswordScreen()));
-                                  },
-                                  child: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/privacy.png",height: 25,width: 25,),
-                              title:GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>  PrivacyPage()));
-                                  },
-                                  child: Text("PRIVACY",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/interval.png",height: 25,width: 25,),
-                              title: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => InviteContactScreen()));
-                                  },
-                                  child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/payment_setting.png",height: 25,width: 25,),
-                              title:GestureDetector(
-                                  onTap: (){
-                                    // Navigator.pushReplacement(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) =>  BarChartDemo()));
-                                     },
-                                  child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-                        ),
-
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/help.png",height: 25,width: 25,),
-                              title: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>  HelpPage()));
-                                  },
-                                  child: Text("HELP",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child:Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/about.png",height: 25,width: 25,),
-                              title: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>  AboutUsPage(title: 'ABOUT US', url: 'https://www.cultre.in/our-team',)));
-                                  },
-                                  child: Text("ABOUT",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-                      child: Card(
-                        elevation: 3,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          // if you need this
-                          side: BorderSide(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              leading: Image.asset("assets/images/share1.png",height: 25,width: 25,),
-                              title: GestureDetector(
-                                  onTap: (){
-                                    Share.share('https://cultre.app/cul.tre/2', subject: 'share');
-                                    //Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
-                                  },
-                                  child: Text("SHARE",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
-                            )
-
-                        ),
-                      ),
-                    ),
-
-                    Center(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
-                            onPrimary: Colors.white,
+                          child: Card(
                             elevation: 3,
-                            alignment: Alignment.center,
+                            color: Colors.white,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            fixedSize: const Size(120, 30),
-                            //////// HERE
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()));
-                          },
-                          child: const Text(
-                            "GO BACK",
-                            style: TextStyle(color: Colors.white, fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal,),
-                            textAlign: TextAlign.center,
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/your_page1.png",height: 25,width: 25,),
+                                  title: GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  YourPage()));
+                                      },
+
+                                      child: Text("YOUR PAGE",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: ListTile(
+                                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                leading: Image.asset("assets/images/notifications.png",height: 25,width: 25,),
+                                title: GestureDetector(
+                                    onTap: (){
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => const NotificationScreen()));
+                                    },
+
+                                    child: Text("NOTIFICATIONS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                              )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/setting.png",height: 25,width: 25,),
+                                  title:GestureDetector(
+                                    onTap: (){
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => const ManageContactScreen()));
+                                    },
+                                      child: Text("MANAGE CONTACTS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/interval.png",height: 25,width: 25,),
+                                  title: GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => PersonalInfoScreen()));
+                                      },
+                                      child: Text("PERSONAL INFORMATION",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/change_password.png",height: 25,width: 25,),
+                                  title:GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ChangepasswordScreen()));
+                                      },
+                                      child: Text("CHANGE PASSWORD",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/privacy.png",height: 25,width: 25,),
+                                  title:GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  PrivacyPage()));
+                                      },
+                                      child: Text("PRIVACY",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/interval.png",height: 25,width: 25,),
+                                  title: GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => InviteContactScreen()));
+                                      },
+                                      child: Text("INVITE FRIENDS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/payment_setting.png",height: 25,width: 25,),
+                                  title:GestureDetector(
+                                      onTap: (){
+                                        // Navigator.pushReplacement(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>  BarChartDemo()));
+                                         },
+                                      child: Text("PAYMENTS",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+                            ),
+
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/help.png",height: 25,width: 25,),
+                                  title: GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  HelpPage()));
+                                      },
+                                      child: Text("HELP",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child:Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/about.png",height: 25,width: 25,),
+                                  title: GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  AboutUsPage(title: 'ABOUT US', url: 'https://www.cultre.in/our-team',)));
+                                      },
+                                      child: Text("ABOUT",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+                          child: Card(
+                            elevation: 3,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // if you need this
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child:
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: ListTile(
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                  leading: Image.asset("assets/images/share1.png",height: 25,width: 25,),
+                                  title: GestureDetector(
+                                      onTap: (){
+                                        Share.share('https://cultre.app/cul.tre/2', subject: 'share');
+                                        //Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
+                                      },
+                                      child: Text("SHARE",style: TextStyle(color:ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal),)),
+                                )
+
+                            ),
+                          ),
+                        ),
+
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                                onPrimary: Colors.white,
+                                elevation: 3,
+                                alignment: Alignment.center,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                fixedSize: const Size(120, 30),
+                                //////// HERE
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()));
+                              },
+                              child: const Text(
+                                "GO BACK",
+                                style: TextStyle(color: Colors.white, fontSize: 16,fontFamily: 'Nunito',fontStyle: FontStyle.normal,),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                  ],
+              ),
                   ]
               ),
+                      ),
+                    ),
             ],
           ),
         ),

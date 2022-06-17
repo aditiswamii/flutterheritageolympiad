@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:CultreApp/ui/feed/feed.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
@@ -243,90 +244,93 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                                   if( databean![index].media!=null)
                                     Container(
                                       height: 200,
-                                      child: PageView.builder(
-                                          itemCount:  databean![index].media!.length,
-                                          pageSnapping: true,
-                                          controller: _pageController,
-                                          onPageChanged: (page) {
-                                            setState(() {
-                                              activePage = page;
-                                            });
-                                          },
-                                          itemBuilder: (context, pagePosition) {
-                                            return  GestureDetector(
-                                              onTap:(){
-                                                Navigator.of(context).pushReplacement(
-                                                    MaterialPageRoute(builder: (BuildContext context) =>
-                                                        ImageviewFeed(gallery: databean![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
-                                                          seldomain: widget.seldomain, image:  databean![index].media![pagePosition], typef: 2,tags:databean,searchkey: widget.seachkey, feeddata: widget.feeddata,)));
+                                      child: Stack(
+                                        children: [
+                                          PageView.builder(
+                                              itemCount:  databean![index].media!.length,
+                                              pageSnapping: true,
+                                              controller: _pageController,
+                                              onPageChanged: (page) {
+                                                setState(() {
+                                                  activePage = page;
+                                                });
                                               },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(databean![index].media![pagePosition]),
-                                                        fit: BoxFit.cover)),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      height: 50,
-                                                      padding:EdgeInsets.all(8),
-                                                      alignment: Alignment.topLeft,
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap:(){
+                                              itemBuilder: (context, pagePosition) {
+                                                return  GestureDetector(
+                                                  onTap:(){
+                                                    Navigator.of(context).pushReplacement(
+                                                        MaterialPageRoute(builder: (BuildContext context) =>
+                                                            ImageviewFeed(gallery: databean![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
+                                                              seldomain: widget.seldomain, image:  databean![index].media![pagePosition], typef: 2,tags:databean,searchkey: widget.seachkey, feeddata: widget.feeddata,)));
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: NetworkImage(databean![index].media![pagePosition]),
+                                                            fit: BoxFit.cover)),
 
-                                                            },
-                                                            child: Container(
-                                                              margin: EdgeInsets.only(left: 5,right: 5),
-                                                              decoration: BoxDecoration(
-                                                                  color: Colors.white,
-                                                                  borderRadius: BorderRadius.circular(20)
-                                                              ),
-                                                              padding:  EdgeInsets.all(4),height: 35, width: 35,
-                                                              child: Center(
-                                                                child: Card(
-                                                                  elevation: 3,
-                                                                  child: databean![index].type=="Modules"?Image.asset("assets/images/modules.png",fit: BoxFit.cover,
-                                                                  ):databean![index].type=="Single Posts"?Image.asset("assets/images/single_posts.png",fit: BoxFit.cover,
-                                                                  ):Image.asset("assets/images/collections.png",fit: BoxFit.cover,
-                                                                  ),
-                                                                ),
-                                                              ),),
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: (){
-                                                              Share.share("${databean![index].title! +"\n"+
-                                                                  databean![index].description! +"\n"+ databean![index].media!.toString()}", subject: 'share');
+                                                  ),
+                                                );
+                                              }),
+                                          Container(
+                                            height: 50,
+                                            padding:EdgeInsets.all(8),
+                                            alignment: Alignment.topLeft,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap:(){
 
-                                                            },
-                                                            child: Container(height: 35, width: 35,
-                                                              child: Image.asset("assets/images/share_feed.png",fit: BoxFit.cover,
-                                                              ),),
-                                                          ),
-                                                        ],
+                                                  },
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.circular(20)
+                                                    ),
+                                                    padding:  EdgeInsets.all(3),height: 30, width: 30,
+                                                    child: Center(
+                                                      child: Card(
+                                                        elevation: 3,
+                                                        child: databean![index].type=="Modules"?Image.asset("assets/images/modules.png",fit: BoxFit.cover,
+                                                        ):databean![index].type=="Single Posts"?Image.asset("assets/images/single_posts.png",fit: BoxFit.cover,
+                                                        ):Image.asset("assets/images/collections.png",fit: BoxFit.cover,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      margin: const EdgeInsets.all(10),
-                                                      alignment:
-                                                      Alignment.bottomCenter,
-                                                      height: 40,
-                                                      child: Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                          children: indicators(
-                                                              databean![index].media!.length,
-                                                              activePage)),
-                                                    ),
-                                                  ],
+                                                    ),),
                                                 ),
-                                              ),
-                                            );
-                                          }),
+                                                GestureDetector(
+                                                  onTap: (){
+                                                    Share.share("${databean![index].title! +"\n"+
+                                                        databean![index].description! +"\n"+ databean![index].media!.toString()}", subject: 'share');
+
+                                                  },
+                                                  child: Container(height: 30, width: 30,
+                                                    child: Image.asset("assets/images/share_feed.png",fit: BoxFit.cover,
+                                                    ),),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Container(
+                                              margin: const EdgeInsets.all(10),
+                                              alignment:
+                                              Alignment.bottomCenter,
+                                              height: 40,
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .center,
+                                                  children: indicators(
+                                                      databean![index].media!.length,
+                                                      activePage)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   Container(
                                     margin: const EdgeInsets.fromLTRB(
@@ -341,7 +345,7 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                                               style: const TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.black,
-                                                  fontFamily: "Nunito")),
+                                                  fontFamily: "Nunito",fontStyle: FontStyle.normal)),
                                         ),
                                         Container(
                                           margin: const EdgeInsets.fromLTRB(
@@ -350,7 +354,7 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                                             databean![index].description!,
                                             trimLines: 5,
                                             textAlign: TextAlign.justify,
-                                            style: const TextStyle(fontSize: 14,color:Colors.black,),
+                                            style: const TextStyle(fontSize: 14,color:Colors.black,fontStyle: FontStyle.normal),
                                             colorClickableText: Colors.black,
                                             trimMode: TrimMode.Line,
                                             trimCollapsedText: 'Read more',
@@ -358,11 +362,11 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                                             lessStyle: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.blue,
-                                                fontFamily: "Nunito"),
+                                                fontFamily: "Nunito",fontStyle: FontStyle.normal),
                                             moreStyle:const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.blue,
-                                                fontFamily: "Nunito"),
+                                                fontFamily: "Nunito",fontStyle: FontStyle.normal),
                                           ),
 
                                         ),
@@ -466,6 +470,10 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
                                                   children: [
                                                     GestureDetector(
                                                         onTap: () {
+                                                          log("cal click");
+                                                          Add2Calendar.addEvent2Cal(
+                                                            buildEvent(title:databean![index].title!,desc:  databean![index].description! ),
+                                                          );
                                                           // Share.share(jsonDecode(data!)['data'][index]['external_link'], subject: 'Share link');
                                                         },
                                                         child: Image.asset(
@@ -520,7 +528,23 @@ class _TagFeedState extends State<TagFeed> with ChangeNotifier{
 
     );
   }
-
+  Event buildEvent({Recurrence? recurrence,String? title, String? desc}) {
+    return Event(
+      title: title!,
+      description: desc!,
+      location: 'Cultre App',
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(Duration(minutes: 30)),
+      allDay: false,
+      iosParams: IOSParams(
+        reminder: Duration(minutes: 40),
+      ),
+      // androidParams: AndroidParams(
+      //   // emailInvites: ["test@example.com"],
+      // ),
+      recurrence: recurrence,
+    );
+  }
   List<Widget> indicators(imagesLength, currentIndex) {
     return List<Widget>.generate(imagesLength, (index) {
       return Container(

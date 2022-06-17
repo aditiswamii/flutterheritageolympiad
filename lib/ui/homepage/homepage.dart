@@ -197,12 +197,13 @@ String link="";
         ),
         Container(
             alignment: Alignment.centerLeft,
-            margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-            child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: const Text("WELCOME BACK,",style: TextStyle(fontSize: 22,color: ColorConstants.txt,fontFamily: "Nunito"))),
         Container(
             alignment: Alignment.centerLeft,
-            margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-            child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",
+                style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
 
          Container(
            child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
@@ -220,23 +221,29 @@ String link="";
                    child: Container(
                      height: 150,
                      width: 150,
-                     color: ColorConstants.red200,
+                     color: ColorConstants.red,
 
-                     child: Column(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     child: Stack(
+                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
-                         Container(
-                           padding: EdgeInsets.all(10),
-                           alignment: Alignment.topRight,
-                           child: Image.asset("assets/images/mcq_pattern2.png",
-                               height: 20,width: 20,alignment: Alignment.topRight),
-                         ),
-                         Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
-                         Container(
-                           padding: EdgeInsets.all(10),
+                         Align(
                            alignment: Alignment.topLeft,
-                           child: Image.asset("assets/images/mcq_pattern2.png",
-                               height: 20,width: 20,alignment: Alignment.topLeft),
+                           child: Container(
+                             padding: EdgeInsets.all(10),
+
+                             child: Image.asset("assets/images/mcq_pattern2.png",
+                                 height: 20,width: 20,alignment: Alignment.topRight),
+                           ),
+                         ),
+                         Center(child: Container(child: Text("MY\nACCOUNT",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,))),
+                         Align(
+                           alignment: Alignment.bottomRight,
+                           child: Container(
+                             padding: EdgeInsets.all(10),
+
+                             child: Image.asset("assets/images/mcq_pattern2.png",
+                                 height: 20,width: 20,alignment: Alignment.topLeft),
+                           ),
                          ),
                        ],
                      ),
@@ -288,19 +295,19 @@ String link="";
                      width: 150,
                      color: ColorConstants.blue200,
 
-                     child: Column(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     child: Stack(
+                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
                          Container(
                            padding: EdgeInsets.all(10),
-                           alignment: Alignment.topRight,
+                           alignment: Alignment.topLeft,
                            child: Image.asset("assets/images/mcq_pattern2.png",
                                height: 20,width: 20,alignment: Alignment.topRight),
                          ),
-                         Container(child: Text("TO THE\nQUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                         Center(child: Container(child: Text("TO THE\nQUIZZES",style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,))),
                          Container(
                            padding: EdgeInsets.all(10),
-                           alignment: Alignment.topLeft,
+                           alignment: Alignment.bottomCenter,
                            child: Image.asset("assets/images/mcq_pattern2.png",
                                height: 20,width: 20,alignment: Alignment.topLeft),
                          ),
@@ -325,19 +332,19 @@ String link="";
                      width: 150,
                      color: Colors.black26,
 
-                     child:  Column(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     child:  Stack(
+                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
                          Container(
                            padding: EdgeInsets.all(10),
-                           alignment: Alignment.topLeft,
+                           alignment: Alignment.topCenter,
                            child: Image.asset("assets/images/mcq_pattern2.png",
                                height: 20,width: 20,alignment: Alignment.topLeft),
                          ),
-                         Container(child: Text("TO THE\nSHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,)),
+                         Center(child: Container(child: Text("TO THE\nSHOP",style: TextStyle(color: Colors.black54,fontSize: 20,fontFamily: "Nunito"),textAlign: TextAlign.center,))),
                          Container(
                            padding: EdgeInsets.all(10),
-                           alignment: Alignment.topCenter,
+                           alignment: Alignment.bottomLeft,
                            child: Image.asset("assets/images/mcq_pattern2.png",
                                height: 20,width: 20,alignment: Alignment.topCenter),
                          ),

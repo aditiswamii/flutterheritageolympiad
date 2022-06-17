@@ -856,6 +856,13 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
                                               seldomain);
                                         }
                                       }
+                                    }else{
+                                      snackbar = SnackBar(
+                                        content: Text(
+                                            "Please select domain"),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackbar);
                                     }
                                   },
                                   child: const Text(

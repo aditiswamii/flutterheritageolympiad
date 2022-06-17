@@ -13,7 +13,6 @@ import 'package:CultreApp/ui/classicquiz/result/result.dart';
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/utils/stringconstants.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -46,6 +45,11 @@ class Mcq extends StatefulWidget {
 }
 
 class _State extends State<Mcq> {
+  var username;
+  var email;
+  var country;
+  var profilepic;
+  var userid;
   bool _hasBeenPressed1 = false;
   bool _hasBeenPressed2 = false;
   bool _hasBeenPressed3 = false;
@@ -97,6 +101,18 @@ class _State extends State<Mcq> {
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
+   userdata();
+  }
+  userdata() async {
+    // PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("username");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
+      // packagename=packageInfo.packageName.toString();
+    });
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         visibilityanimation = true;
@@ -110,10 +126,9 @@ class _State extends State<Mcq> {
     }
 
     myDuration = Duration(seconds: 0);
-   // ramdomcolor = (color..shuffle()).first;
+    // ramdomcolor = (color..shuffle()).first;
     ramdomcolor = ColorConstants.red_ques;
   }
-
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
@@ -769,12 +784,13 @@ class _State extends State<Mcq> {
                       if (currentques!.questionMedia!.isNotEmpty)
                         Container(
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Image.network(
+                            child:Image.network(
                               currentques!.questionMedia!,
                               height: 250,
                               width: 250,
                               alignment: Alignment.center,
-                            )),
+                            )
+                        ),
 
 
                         Visibility(

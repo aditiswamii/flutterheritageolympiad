@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:CultreApp/ui/feed/callmodules/callmodules.dart';
 import 'package:CultreApp/ui/feed/tagfeed/tagfeed.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
@@ -90,7 +91,15 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
 
 
   }
+  Future<Future> _refreshdata(BuildContext context) async {
+    // NotificationService(_fcm1,context).initialize();
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   log("$message");
+    //   NotificationService.showNotification(message.data['title'],message.data['body']);
+    // });
+    return  getFeed(userid.toString(), "0", "",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty?widget.themes!:"");
 
+  }
   getFeed(String userid, String feedPageId, String feedTypeId,
       String domainId, String themeId) async {
      // showLoaderDialog(context);
@@ -431,20 +440,23 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
     }
 
   }
-  // Event buildEvent(String? title,String? description) {
-  //   return Event(
-  //     title: title!,
-  //     description: description!,
-  //     location: 'Cultre App',
-  //     startDate: DateTime.now(),
-  //     endDate: DateTime.now().add(Duration(minutes: 30)),
-  //     allDay: false,
-  //     iosParams: IOSParams(
-  //       reminder: Duration(minutes: 40),
-  //     ),
-  //
-  //   );
-  // }
+  Event buildEvent({Recurrence? recurrence,String? title, String? desc}) {
+    return Event(
+      title: title!,
+      description: desc!,
+      location: 'Cultre App',
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(Duration(minutes: 30)),
+      allDay: false,
+      iosParams: IOSParams(
+        reminder: Duration(minutes: 40),
+      ),
+      // androidParams: AndroidParams(
+      //   // emailInvites: ["test@example.com"],
+      // ),
+      recurrence: recurrence,
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -456,6 +468,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+    controller.clear();
     super.dispose();
   }
 
@@ -483,492 +496,524 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          color: Colors.white.withAlpha(100),
-          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerLeft,
+        child: RefreshIndicator(
+          color: Colors.transparent,
+          onRefresh: () => _refreshdata(context),
+          child: Container(
+            color: Colors.white.withAlpha(100),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Stack(children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  height: 80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20, 10, 0, 10),
+                        alignment: Alignment.centerLeft,
 
-                  padding: const EdgeInsets.all(5),
-                  child: Center(
-                    child: Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
+                        padding: const EdgeInsets.all(5),
+                        child: Center(
+                          child: Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>  HomePage()));
+
+                              },
+                              child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                            ),
+                          ),
+                        ),
                       ),
-                      child: GestureDetector(
-                        onTap: () {
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 20, 10),
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            _scaffoldKey.currentState!.openEndDrawer();
+                          },
+                          child: Image.asset("assets/images/side_menu_2.png",
+                              height: 40, width: 40),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment(0,100),
+                // height: MediaQuery.of(context).size.height-120,
+                margin: const EdgeInsets.fromLTRB(20, 80, 20, 10),
+                child: ListView(
+                    children: [
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: const Text("WHAT'S NEW",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontFamily: "Nunito"))),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                      child: Text(username==null?"":username,
+                          style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontFamily: "Nunito"))),
+                  Container(
+                    height: 50,
+                    child: Card(
+                      child: ListTile(
+                       tileColor: ColorConstants.bggrey,
+                        title: TextFormField(
+                          controller: controller,
+                          textInputAction: TextInputAction.search,
+                          onFieldSubmitted: onSearchTextChanged,
+                          decoration: const InputDecoration(
+                              hintText: 'Enter one or more keywords', border: InputBorder.none),
+                        ),
+                        trailing: GestureDetector(
+                          onTap:(){
+                            onSearchTextChanged(controller.text);
+                          },
+                            child: Icon(Icons.search)),
+                        // trailing: controller.text.isNotEmpty
+                        //     ? IconButton(
+                        //         icon: const Icon(Icons.cancel),
+                        //         onPressed: () {
+                        //           controller.clear();
+                        //           onSearchTextChanged('');
+                        //         },
+                        //       )
+                        //     : IconButton(
+                        //   icon: const Icon(Icons.cancel,color: Colors.white,),
+                        //   onPressed: () {
+                        //     controller.clear();
+                        //     onSearchTextChanged('');
+                        //   },
+                        // ),
+                      ),
+                    ),
+                  ),
+                Container(
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: (){
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  HomePage()));
-
+                                  builder: (context) => FilterPage()));
                         },
-                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 5.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _scaffoldKey.currentState!.openEndDrawer();
-                    },
-                    child: Image.asset("assets/images/side_menu_2.png",
-                        height: 40, width: 40),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              color: Colors.white,
-              child: ListBody(children: [
-                Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: const Text("WHAT'S NEW",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontFamily: "Nunito"))),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: Text(username==null?"":username,
-                        style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontFamily: "Nunito"))),
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.search),
-                    title: TextFormField(
-                      controller: controller,
-                      textInputAction: TextInputAction.search,
-                      onFieldSubmitted: onSearchTextChanged,
-                      decoration: const InputDecoration(
-                          hintText: 'Search', border: InputBorder.none),
-                    ),
-                    trailing: controller.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.cancel),
-                            onPressed: () {
-                              controller.clear();
-                              onSearchTextChanged('');
-                            },
-                          )
-                        : IconButton(
-                      icon: const Icon(Icons.cancel,color: Colors.white,),
-                      onPressed: () {
-                        controller.clear();
-                        onSearchTextChanged('');
-                      },
-                    ),
-                  ),
-                ),
-              Container(
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FilterPage()));
-                      },
-                      child: Card(
-                        child: Container(
-                          width: 150,
-                          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("SET FILTER",
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                  fontFamily: "Nunito")),
-                              Image.asset("assets/images/right_arrow.png",
-                                  height: 20, width: 20),
-                            ],
+                        child: Card(
+                          child: Container(
+                            color: ColorConstants.bggrey,
+                            padding: EdgeInsets.all(4),
+                            width: 150,
+                            child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("SET FILTER",
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontFamily: "Nunito")),
+                                Image.asset("assets/images/right_arrow.png",
+                                    height: 20, width: 20),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                   GestureDetector(
-                     onTap: (){
-                       Navigator.pushReplacement(
-                           context,
-                           MaterialPageRoute(
-                               builder: (context) => SavedPost()));
-                     },
-                      child: Card(
-                        child: Container(
-                          width: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("SAVED POST",
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontFamily: "Nunito")),
-                              Image.asset("assets/images/right_arrow.png",
-                                  height: 20, width: 20),
-                            ],
+                     GestureDetector(
+                       onTap: (){
+                         Navigator.pushReplacement(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) => SavedPost()));
+                       },
+                        child: Card(
+                          child: Container(
+                            color: ColorConstants.bggrey,
+                            padding: EdgeInsets.all(4),
+                            width: 150,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("SAVED POST",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontFamily: "Nunito")),
+                                Image.asset("assets/images/right_arrow.png",
+                                    height: 20, width: 20),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
 
-                 databean!.isEmpty ? Container(
-                   height: 300,
-                   child: const Center(
-                    child: CircularProgressIndicator(),
-                ),
-                 )
+                   databean!.isEmpty ? Container(
+                     height: 300,
+                     child: const Center(
+                      child: CircularProgressIndicator(),
+                  ),
+                   )
 
-                    :  Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: ListView.builder(
-                            physics: const ClampingScrollPhysics(
-                                parent: const BouncingScrollPhysics()),
-                            shrinkWrap: true,
-                            itemCount: databean!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              var ischecked=databean![index].isSaved;
-                              var check= ischecked==1?true:false;
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  // if you need this
-                                  side: BorderSide(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: ListBody(
-                                  children: [
-                                    if(databean![index].mediaType
-                                    .toString().isNotEmpty)
-                                    Container(
-                                      height: 300,
-                                      child: PageView.builder(
-                                          itemCount: databean![index].media!
-                                              .length,
-                                          pageSnapping: true,
-                                          controller: _pageController,
-                                          onPageChanged: (page) {
-                                            setState(() {
-                                              activePage = page;
-                                            });
-                                          },
-                                          itemBuilder: (context, pagePosition) {
-                                            return GestureDetector(
-                                              onTap:(){
-                                                Navigator.of(context).pushReplacement(
-                                                    MaterialPageRoute(builder: (BuildContext context) =>
-                                                        ImageviewFeed(gallery: databean![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
-                                                          seldomain: widget.seldomain, image:databean![index].media![pagePosition], typef: 1, feeddata: databean,)));
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(
-                                                            databean![index].media!
-
-                                                                [pagePosition]),
-                                                        fit: BoxFit.cover)),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      height: 50,
-                                                      padding:EdgeInsets.all(8),
-                                                      alignment: Alignment.topLeft,
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap:(){
-                                                              if(databean![index].type=="Modules") {
-                                                                getmodule(userid
-                                                                    .toString(),
-                                                                    databean![index]
-                                                                        .id
-                                                                        .toString(),
-                                                                    "2");
-                                                              }else if(databean![index].type=="Collections"){
-                                                                getmodule(userid
-                                                                    .toString(),
-                                                                    databean![index]
-                                                                        .id
-                                                                        .toString(),
-                                                                    "3");
-                                                              }
-                                                             },
-                                                            child: Container(
-                                                              margin: EdgeInsets.only(left: 5,right: 5),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius: BorderRadius.circular(20)
-                                                              ),
-                                                              padding:  EdgeInsets.all(4),height: 35, width: 35,
-                                                              child: Center(
-                                                                child: Card(
-                                                                        elevation: 3,
-                                                                  child: databean![index].type=="Modules"?Image.asset("assets/images/modules.png",fit: BoxFit.cover,
-                                                                  ):databean![index].type=="Single Posts"?Image.asset("assets/images/single_posts.png",fit: BoxFit.cover,
-                                                                  ):Image.asset("assets/images/collections.png",fit: BoxFit.cover,
-                                                                  ),
-                                                                ),
-                                                              ),),
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: (){
-                                                              Share.share("${databean![index].title! +"\n"+
-                                                                  databean![index].description! +"\n"+ databean![index].media!.toString()}", subject: 'share');
-
-                                                            },
-                                                            child: Container(height: 35, width: 35,
-                                                              child: Image.asset("assets/images/share_feed.png",fit: BoxFit.cover,
-                                                              ),),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin: const EdgeInsets.all(10),
-                                                      alignment:
-                                                          Alignment.bottomCenter,
-                                                      height: 40,
-                                                      child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: indicators(
-                                                              databean![index].media!
-
-                                                                  .length,
-                                                              activePage)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }),
+                      :  Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: ListView.builder(
+                              physics: const ClampingScrollPhysics(
+                                  parent: const BouncingScrollPhysics()),
+                              shrinkWrap: true,
+                              itemCount: databean!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                var ischecked=databean![index].isSaved;
+                                var check= ischecked==1?true:false;
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    // if you need this
+                                    side: BorderSide(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      width: 1,
                                     ),
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          10, 10, 10, 10),
-                                      child: ListBody(
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 10, 0, 10),
-                                            child: Text(
-                                                databean![index].title!,
-                                                style: const TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontFamily: "Nunito")),
-                                          ),
-                                          Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 10, 0, 10),
-                                            child: ReadMoreText(
-                                              databean![index].description!
-                                              ,
-                                              trimLines: 5,
-                                              textAlign: TextAlign.justify,
-                                              style: const TextStyle(fontSize: 14,color:Colors.black,),
-                                              colorClickableText: Colors.black,
-                                              trimMode: TrimMode.Line,
-                                              trimCollapsedText: 'Read more',
-                                              trimExpandedText: 'Read less',
-                                              lessStyle: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.blue,
-                                                  fontFamily: "Nunito"),
-                                              moreStyle:const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.blue,
-                                                  fontFamily: "Nunito"),
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 42,
-
-                                            child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                                physics: const ClampingScrollPhysics(
-                                                    parent:
-                                                        BouncingScrollPhysics()),
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                databean![index].tags!
-
-                                                        .length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index1) {
-
+                                  ),
+                                  child: ListBody(
+                                    children: [
+                                      if(databean![index].mediaType
+                                      .toString().isNotEmpty)
+                                      Container(
+                                        height: 300,
+                                        child: Stack(
+                                          children: [
+                                            PageView.builder(
+                                                itemCount: databean![index].media!
+                                                    .length,
+                                                pageSnapping: true,
+                                                controller: _pageController,
+                                                onPageChanged: (page) {
+                                                  setState(() {
+                                                    activePage = page;
+                                                  });
+                                                },
+                                                itemBuilder: (context, pagePosition) {
                                                   return GestureDetector(
-                                                    onTap: (){
+                                                    onTap:(){
+                                                      Navigator.of(context).pushReplacement(
+                                                          MaterialPageRoute(builder: (BuildContext context) =>
+                                                              ImageviewFeed(gallery: databean![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
+                                                                seldomain: widget.seldomain, image:databean![index].media![pagePosition], typef: 1, feeddata: databean,)));
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(
+                                                                  databean![index].media!
 
+                                                                      [pagePosition]),
+                                                              fit: BoxFit.cover)),
 
-                                                      gettagfilter(userid.toString(),databean![index].tags!
-                                                      [index1].toString(), "0");
-                                                              },
-                                                    child: Card(
-                                                      elevation: 2,
-                                                      color: Colors.deepOrange,
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                20),
-                                                        // if you need this
-                                                        side: BorderSide(
-                                                          color: Colors.grey
-                                                              .withOpacity(0.2),
-                                                          width: 1,
-                                                        ),
-                                                      ),
-                                                      child: Container(
-                                                        padding: const EdgeInsets.all(8),
-                                                        child: Center(
-                                                          child: Text(databean![index].tags!
-                                                              [index1],style: const TextStyle(color: Colors.white),textAlign: TextAlign.center,),
-                                                        ),
-                                                      ),
                                                     ),
                                                   );
                                                 }),
-                                          ),
-                                          Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 10, 0, 10),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
+                                            Container(
+                                              height: 50,
+                                              padding:EdgeInsets.all(8),
+                                              alignment: Alignment.topLeft,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap:(){
+                                                      if(databean![index].type=="Modules") {
+                                                        getmodule(userid
+                                                            .toString(),
+                                                            databean![index]
+                                                                .id
+                                                                .toString(),
+                                                            "2");
+                                                      }else if(databean![index].type=="Collections"){
+                                                        getmodule(userid
+                                                            .toString(),
+                                                            databean![index]
+                                                                .id
+                                                                .toString(),
+                                                            "3");
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      margin: EdgeInsets.only(left: 5,right: 5),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(20)
+                                                      ),
+                                                      padding:  EdgeInsets.all(3),height: 30, width: 30,
+                                                      child: Center(
+                                                        child: Card(
+                                                          elevation: 3,
+                                                          child: databean![index].type=="Modules"?Image.asset("assets/images/modules.png",fit: BoxFit.cover,
+                                                          ):databean![index].type=="Single Posts"?Image.asset("assets/images/single_posts.png",fit: BoxFit.cover,
+                                                          ):Image.asset("assets/images/collections.png",fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: (){
+                                                      Share.share("${databean![index].title! +"\n"+
+                                                          databean![index].description! +"\n"+ databean![index].media!.toString()}", subject: 'share');
 
-                                                Container(
-                                                  child: Row(
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
+                                                    },
+                                                    child: Container(height: 30, width: 30,
+                                                      child: Image.asset("assets/images/share_feed.png",fit: BoxFit.cover,
+                                                      ),),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Container(
+                                                margin: const EdgeInsets.all(10),
+                                                alignment:
+                                                Alignment.bottomCenter,
+                                                height: 40,
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .center,
+                                                    children: indicators(
+                                                        databean![index].media!
+
+                                                            .length,
+                                                        activePage)),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            10, 10, 10, 10),
+                                        child: ListBody(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.fromLTRB(
+                                                  0, 10, 0, 10),
+                                              child: Text(
+                                                  databean![index].title!,
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black,
+                                                      fontFamily: "Nunito",fontStyle: FontStyle.normal)),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.fromLTRB(
+                                                  0, 10, 0, 10),
+                                              child: ReadMoreText(
+                                                databean![index].description!
+                                                ,
+                                                trimLines: 5,
+                                                textAlign: TextAlign.justify,
+                                                style: const TextStyle(fontSize: 14,color:Colors.black,fontStyle: FontStyle.normal,),
+                                                colorClickableText: Colors.black,
+                                                trimMode: TrimMode.Line,
+                                                trimCollapsedText: 'Read more',
+                                                trimExpandedText: 'Read less',
+                                                lessStyle: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.blue,
+                                                    fontFamily: "Nunito",fontStyle: FontStyle.normal),
+                                                moreStyle:const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.blue,
+                                                    fontFamily: "Nunito",fontStyle: FontStyle.normal),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 42,
+
+                                              child: ListView.builder(
+                                                scrollDirection: Axis.horizontal,
+                                                  physics: const ClampingScrollPhysics(
+                                                      parent:
+                                                          BouncingScrollPhysics()),
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                  databean![index].tags!
+
+                                                          .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index1) {
+
+                                                    return GestureDetector(
+                                                      onTap: (){
+
+
+                                                        gettagfilter(userid.toString(),databean![index].tags!
+                                                        [index1].toString(), "0");
+                                                                },
+                                                      child: Card(
+                                                        elevation: 2,
+                                                        color: Colors.deepOrange,
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  20),
+                                                          // if you need this
+                                                          side: BorderSide(
+                                                            color: Colors.grey
+                                                                .withOpacity(0.2),
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Container(
+                                                          padding: const EdgeInsets.all(8),
+                                                          child: Center(
+                                                            child: Text(databean![index].tags!
+                                                                [index1],style: const TextStyle(color: Colors.white,fontStyle: FontStyle.normal),textAlign: TextAlign.center,),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.fromLTRB(
+                                                  0, 10, 0, 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+
+                                                  Container(
+                                                    child: Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              check=!check;
+                                                              check==true?ischecked=1:ischecked=0;
+                                                            });
                                                             check=!check;
                                                             check==true?ischecked=1:ischecked=0;
-                                                          });
-                                                          check=!check;
-                                                          check==true?ischecked=1:ischecked=0;
-                                                          savepost(userid.toString(), databean![index].id.toString(),
-                                                              ischecked==1?0:1,index );
-                                                        },
-                                                        child: Container(
-                                                            child: ischecked != 1
-                                                                ? Image.asset(
-                                                                    "assets/images/folder_2.png",
-                                                                    height: 30,
-                                                                    width: 30,
-                                                                    color: ColorConstants
-                                                                        .lightgrey200,
-                                                                  )
-                                                                : Image.asset(
-                                                                    "assets/images/folder.png",
-                                                                    height: 30,
-                                                                    width: 30,
-                                                                    color: Colors
-                                                                        .deepOrange,
-                                                                  )),
-                                                      ),
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                                .fromLTRB(
-                                                            5, 0, 0, 0),
-                                                        child: Text(
-                                                            databean![index].savepost
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: databean![index].isSaved!=
-                                                                        1
-                                                                    ? Colors
-                                                                        .black54
-                                                                    : Colors
-                                                                        .deepOrange,
-                                                                fontFamily:
-                                                                    "Nunito")),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: 60,
-                                                  child: Row(
-                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      GestureDetector(
-                                                          onTap: () {
-                                                            log("cal click");
-                                                            // buildEvent( databean![index].title!, databean![index].description!);
+                                                            savepost(userid.toString(), databean![index].id.toString(),
+                                                                ischecked==1?0:1,index );
                                                           },
-                                                          child: Image.asset(
-                                                            "assets/images/calendary.png",
-                                                            height: 25,
-                                                            width: 25,
-                                                          )),
-                                                      GestureDetector(
-                                                          onTap: () {
-                                                            Share.share(
-                                                                databean![index].externalLink!,
-                                                                subject:
-                                                                    'Share link');
-                                                          },
-                                                          child: Image.asset(
-                                                            "assets/images/exporty.png",
-                                                            height: 25,
-                                                            width: 25,
-                                                          )),
-                                                    ],
+                                                          child: Container(
+                                                              child: ischecked != 1
+                                                                  ? Image.asset(
+                                                                      "assets/images/folder_2.png",
+                                                                      height: 25,
+                                                                      width: 25,
+                                                                      color: Colors.grey,
+                                                                    )
+                                                                  : Image.asset(
+                                                                      "assets/images/folder.png",
+                                                                      height: 25,
+                                                                      width: 25,
+                                                                      color: Colors
+                                                                          .deepOrange,
+                                                                    )),
+                                                        ),
+                                                        Container(
+                                                          margin: const EdgeInsets
+                                                                  .fromLTRB(
+                                                              5, 0, 0, 0),
+                                                          child: Text(
+                                                              databean![index].savepost
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: databean![index].isSaved!=
+                                                                          1
+                                                                      ? Colors
+                                                                          .black54
+                                                                      : Colors
+                                                                          .deepOrange,
+                                                                  fontFamily:
+                                                                      "Nunito")),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Container(
+                                                    width: 60,
+                                                    child: Row(
+                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        GestureDetector(
+                                                            onTap: () {
+                                                              log("cal click");
+                                                              Add2Calendar.addEvent2Cal(
+                                                                buildEvent(title:databean![index].title!,desc:  databean![index].description! ),
+                                                              );
+                                                              // buildEvent( databean![index].title!, databean![index].description!);
+                                                            },
+                                                            child: Image.asset(
+                                                              "assets/images/calendary.png",
+                                                              height: 25,
+                                                              width: 25,
+                                                            )),
+                                                        GestureDetector(
+                                                            onTap: () {
+                                                              Share.share(
+                                                                  databean![index].externalLink!,
+                                                                  subject:
+                                                                      'Share link');
+                                                            },
+                                                            child: Image.asset(
+                                                              "assets/images/exporty.png",
+                                                              height: 25,
+                                                              width: 25,
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          // Container(
-                                          //  child:Event(
-                                          //
-                                          //  ),
-                                          //)
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
-                      ),
-                if(feeddata!=null)
-                  Visibility(child:showmore(context),visible: rlshow,replacement: const SizedBox.shrink(),)
+                                            // Container(
+                                            //  child:Event(
+                                            //
+                                            //  ),
+                                            //)
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
+                  if(feeddata!=null)
+                    Visibility(child:showmore(context),visible: rlshow,replacement: const SizedBox.shrink(),)
 
-              ]),
-            ),
-          ]),
+                ]),
+              ),
+            ]),
+          ),
         ),
       ),
     );
@@ -984,6 +1029,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
             loadmoreapi(userid.toString(), feed_page_id.toString(), "", "", "");
           },
           child: Container(
+
             margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
             child: const Center(child: Text("Show More",
               style: TextStyle(color: Colors.black,fontSize: 18),textAlign: TextAlign.center,)),

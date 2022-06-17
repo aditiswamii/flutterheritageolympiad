@@ -1,6 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
 
+
+import 'package:CultreApp/ui/homepage/homepage.dart';
+import 'package:CultreApp/ui/quiz/let_quiz.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +32,7 @@ import '../../tournamentquiz/result/tourresult.dart';
 class AnswerkeyPage extends StatefulWidget {
   var quizid;
   var saveddata;
-  String? type;
+  var type;
   var tourid;
   var sessionid;
   AnswerkeyPage({Key? key, required this.quizid,required this.saveddata,
@@ -40,7 +43,7 @@ class AnswerkeyPage extends StatefulWidget {
 }
 
 class _State extends State<AnswerkeyPage> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
   String? data;
   var answerdata;
@@ -64,25 +67,25 @@ class _State extends State<AnswerkeyPage> {
       country = prefs.getString("country");
       userid = prefs.getString("userid");
     });
+    if(widget.type=="1"|| widget.type=="2"|| widget.type=="3"){
+      getAnswer(widget.quizid);
+    }else if(widget.type=="4"){
+      getTourAnswer(widget.tourid, widget.sessionid);
+    }
+
   }
 
   @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
-    if(widget.type=="1"|| widget.type=="2"|| widget.type=="3"){
-      getAnswer(widget.quizid);
-    }else if(widget.type=="4"){
-    getTourAnswer(widget.tourid, widget.sessionid);
-    }
-
     userdata();
   }
 
-  void getAnswer(String quiz_id) async {
+  void getAnswer(String quizId) async {
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL+"get_answerkey"), body: {
-      'quiz_id': quiz_id.toString(),
+      'quiz_id': quizId.toString(),
     });
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -101,8 +104,7 @@ class _State extends State<AnswerkeyPage> {
           content: Text(
               jsonResponse['message']),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       print(response.statusCode);
@@ -147,36 +149,21 @@ class _State extends State<AnswerkeyPage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    if(widget.type=="1") {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>ResultPage(quizid: widget.quizid, savedata: widget.saveddata, type: widget.type,)));
-    }
-
-   if(widget.type=="2") {
-     Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  DuelModeResult(quizid: widget.quizid, type: widget.type,)));
-   }
-
-       if(widget.type=="3") {
-         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  QuizroomResult(quizid: widget.quizid, type: widget.type,)));
-       }
-
-     if(widget.type=="4") {
-       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  TournamentResult( type: widget.type, sessionid: widget.sessionid, tourid: widget.tourid,)));
-     }
-
+      widget.type=='1'? Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) =>
+              ResultPage(quizid: widget.quizid, savedata: widget.saveddata, type: widget.type,)))
+          :widget.type=='2'? Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) =>
+              DuelModeResult(quizid: widget.quizid, type: widget.type,)))
+          :widget.type=='3'?Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) =>
+              QuizroomResult(quizid: widget.quizid, type: widget.type,))):
+          Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) =>
+              TournamentResult( type: widget.type, sessionid: widget.sessionid, tourid: widget.tourid,)));
+    log(info.currentRoute(context).toString());
+    log("answerkey${BackButtonInterceptor.describe()}");
       return true;
-
   }
 
   @override

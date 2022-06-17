@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
-import 'package:device_calendar/device_calendar.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -157,49 +157,64 @@ class _LeagueRankState extends State<LeagueRank> with TickerProviderStateMixin{
         ),
         child: Container(
           color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 5.0),
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage()));
-                    },
-                    child: Image.asset("assets/images/home_1.png",
-                        height: 40, width: 40),
-                  ),
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                color: Colors.white,
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                height: 80,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                      alignment: Alignment.centerLeft,
+
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>  HomePage()));
+                              },
+                              child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 5.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          _scaffoldKey.currentState!.openEndDrawer();
+                        },
+                        child: Image.asset("assets/images/side_menu_2.png",
+                            height: 40, width: 40),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 5.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _scaffoldKey.currentState!.openEndDrawer();
-                    },
-                    child: Image.asset("assets/images/side_menu_2.png",
-                        height: 40, width: 40),
-                  ),
-                ),
-              ],
+              ),
             ),
             Container(
-              color: Colors.white,
-              child: ListBody(children: [
+              alignment: Alignment(0,100),
+              // height: MediaQuery.of(context).size.height-120,
+              margin: const EdgeInsets.fromLTRB(20, 90, 20, 10),
+              child: ListView(
+                  children: [
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -409,8 +424,41 @@ class _LeagueRankState extends State<LeagueRank> with TickerProviderStateMixin{
                       ),
                     ],
                   ),
-               )
+               ),
+                Container(
+                  alignment: FractionalOffset.bottomCenter,
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.red,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          fixedSize: const Size(100, 40),
+                          //////// HERE
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TournamentPage()));
+                        },
+                        child: const Text(
+                          "GO BACK",
+                          style: TextStyle(
+                              color: ColorConstants.lightgrey200, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
 
+                    ],
+                  ),
+                ),
               ]),
             ),
           ]),

@@ -422,698 +422,714 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         ),
         child: Container(
           color: Colors.white.withAlpha(200),
-          margin: EdgeInsets.fromLTRB(20, 40, 20, 0),
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      alignment: Alignment.centerLeft,
+          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  height: 80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        alignment: Alignment.centerLeft,
 
-                      padding: EdgeInsets.all(5),
-                      child: Center(
-                        child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>  HomePage()));
-                            },
-                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        padding: EdgeInsets.all(5),
+                        child: Center(
+                          child: Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>  HomePage()));
+                              },
+                              child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          _scaffoldKey.currentState!.openEndDrawer();
-                        },
-                        child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 5.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            _scaffoldKey.currentState!.openEndDrawer();
+                          },
+                          child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
-                      child: const Text("PERSONAL INFORMATION",
-                          style: TextStyle(
-                              fontSize: 24, color: ColorConstants.txt))),
-
-              prodata==null?Container():  ListBody(
+              ),
+              Container(
+                alignment: Alignment(0,100),
+                // height: MediaQuery.of(context).size.height-120,
+                margin: const EdgeInsets.fromLTRB(0, 90, 0, 10),
+                child: ListView(
                   children: [
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                        child: const Text("PERSONAL INFORMATION",
+                            style: TextStyle(
+                                fontSize: 24, color: ColorConstants.txt))),
 
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GestureDetector(
-                    onTap: (){
-                      AlertDialog errorDialog = AlertDialog(
-                        insetPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                        titlePadding:EdgeInsets.fromLTRB(10, 20, 10, 10),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  20.0)), //this right here
-                          title: Container(
-                            height: 100,
-                            width: 100,
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
 
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: ColorConstants.red,
-                                        onPrimary: Colors.white,
-                                        elevation: 3,
-                                        shape: CircleBorder(
-                                        ),
-                                        //alignment: Alignment.center,
-                                        // shape: RoundedRectangleBorder(
-                                        //     borderRadius: BorderRadius.circular(20.0)),
-                                        fixedSize: const Size(50, 50),
-                                        //////// HERE
-                                      ),
-                                      onPressed: getImagefromcamera,
+            prodata==null?Container():  ListBody(
+                children: [
 
-                                      child: Icon(Icons.add_a_photo,size: 22,color: Colors.white,),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: ColorConstants.red,
-                                        onPrimary: Colors.white,
-                                        elevation: 3,
-                                        //alignment: Alignment.center,
-                                        shape: CircleBorder(
-                                        ),
-                                        fixedSize: const Size(50, 50),
-                                        //////// HERE
-                                      ),
-                                      onPressed:
-                                      getImagefromGallery,
-                                      child: Icon(Icons.broken_image_outlined,size: 22,color:Colors.white,),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Text("Pick Image\nfrom camera",style: TextStyle(fontSize: 12)),
-                                      Text("Pick Image\nform gallery",style: TextStyle(fontSize: 12),),
-                                    ],
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GestureDetector(
+                  onTap: (){
+                AlertDialog errorDialog = AlertDialog(
+                  insetPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                  titlePadding:EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            20.0)), //this right here
+                    title: Container(
+                      height: 100,
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: ColorConstants.red,
+                                  onPrimary: Colors.white,
+                                  elevation: 3,
+                                  shape: CircleBorder(
                                   ),
+                                  //alignment: Alignment.center,
+                                  // shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.circular(20.0)),
+                                  fixedSize: const Size(50, 50),
+                                  //////// HERE
                                 ),
+                                onPressed: getImagefromcamera,
+
+                                child: Icon(Icons.add_a_photo,size: 22,color: Colors.white,),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: ColorConstants.red,
+                                  onPrimary: Colors.white,
+                                  elevation: 3,
+                                  //alignment: Alignment.center,
+                                  shape: CircleBorder(
+                                  ),
+                                  fixedSize: const Size(50, 50),
+                                  //////// HERE
+                                ),
+                                onPressed:
+                                getImagefromGallery,
+                                child: Icon(Icons.broken_image_outlined,size: 22,color:Colors.white,),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text("Pick Image\nfrom camera",style: TextStyle(fontSize: 12)),
+                                Text("Pick Image\nform gallery",style: TextStyle(fontSize: 12),),
                               ],
-                            ),)
+                            ),
+                          ),
+                        ],
+                      ),)
+                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => errorDialog);
+                  },
+                  child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 100.0,
+                child:profilepic!.isEmpty?CircleAvatar(
+                  radius: 30.0,
+                  backgroundImage:AssetImage("assets/images/placeholder.png"),
+                  backgroundColor: Colors.transparent,
+                ): CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: ClipOval(
+                    child: _image ==null ?  Image.network(profilepic!,height: 100,width: 100,fit: BoxFit.cover,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.cover,),
+                  ),
+                ),
+                  ),
+                ),
+              ),
+                Container(
+                  height: 60,
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: TextFormField(
+                initialValue: firstname,
+                onChanged: (value){
+                  setState(() {
+                    firstname=value;
+
+                  });
+                  print(firstname);
+                },
+                obscureText: false,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor:  Colors.black12,
+                  border: InputBorder.none,
+                  // labelText: 'Username or Email ID',
+                  hintText: 'firstname',
+                ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
+                  ),
+                ),
+                Container(
+                  height: 60,
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: TextFormField(
+                initialValue: lastname,
+                onChanged: (value){
+                  setState(() {
+                    lastname=value;
+
+                  });
+                  print(lastname);
+                },
+                obscureText: false,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor:  Colors.black12,
+                  border: InputBorder.none,
+                  // labelText: 'Username or Email ID',
+                  hintText: 'lastname',
+                ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
+                  ),
+                ),
+                Container(
+                  height: 60,
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: TextFormField(
+                initialValue: mobileno,
+                onChanged: (value){
+                  setState(() {
+                    mobileno=value;
+
+                  });
+                  print(mobileno);
+                },
+                obscureText: false,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor:  Colors.black12,
+                  border: InputBorder.none,
+                  // labelText: 'Username or Email ID',
+                  hintText: 'mobile no',
+                ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
+                  ),
+                ),
+                  Container(  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  //color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(5)),
+                  // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+
+                  child: GestureDetector(
+                    onTap: () {
+                      AlertDialog errorDialog = AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        contentPadding: EdgeInsets.all(5), //this right here
+                        title: SingleChildScrollView(
+                          // height: 300,
+                          // width: 100,
+                          // alignment: Alignment.center,
+                          child: Container(
+                            height: 500,
+                            child: ListView.builder(
+                                physics: ClampingScrollPhysics(
+                                    parent: BouncingScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount:
+                                jsonDecode(datacoun!)[
+                                'countries'].length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        //height: 50,
+                                        padding: EdgeInsets.all(8),
+                                        margin: EdgeInsets.all(4),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              countryname = jsonDecode(datacoun!)[
+                                              'countries'][index]['name']
+                                                  .toString();
+                                              countryid = jsonDecode(datacoun!)[
+                                              'countries'][index]['id']
+                                                  .toString();
+                                              getState(
+                                                  GetStateResponse, countryid);
+                                              print(countryid);
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                          child: Text(
+                                            jsonDecode(datacoun!)['countries']
+                                            [index]['name'],
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: ColorConstants.txt),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
+                        ),
                       );
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => errorDialog);
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 100.0,
-                      child:profilepic!.isEmpty?CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:AssetImage("assets/images/placeholder.png"),
-                        backgroundColor: Colors.transparent,
-                      ): CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: ClipOval(
-                          child: _image ==null ?  Image.network(profilepic!,height: 100,width: 100,fit: BoxFit.cover,):Image.file(_image!,height: 100,width: 100,fit: BoxFit.cover,),
-                        ),
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: countryname == null
+                                ? Text("Select Country",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14))
+                                : Text(countryname.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14)),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_outlined,
+                            size: 22,
+                          )
+                        ],
                       ),
                     ),
+                  )),
+                  Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  //color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(5)),
+                  // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+
+                  child: GestureDetector(
+                    onTap: () {
+                      AlertDialog errorDialog = AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        contentPadding: EdgeInsets.all(5), //this right here
+                        title: SingleChildScrollView(
+                          child: Container(
+                            height: 300,
+                            child: ListView.builder(
+                                physics: ClampingScrollPhysics(
+                                    parent: BouncingScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount:
+                                jsonDecode(datastate!)['states'].length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        //height: 50,
+                                        padding: EdgeInsets.all(8),
+                                        margin: EdgeInsets.all(4),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              statename =
+                                                  jsonDecode(datastate!)['states']
+                                                  [index]['name']
+                                                      .toString();
+                                              stateid =
+                                                  jsonDecode(datastate!)['states']
+                                                  [index]['id']
+                                                      .toString();
+                                              getCity(GetCityResponse, stateid);
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                          child: Text(
+                                            jsonDecode(datastate!)['states']
+                                            [index]['name'],
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: ColorConstants.txt),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
+                        ),
+                      );
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => errorDialog);
+                    },
+                    child: Container( margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: statename == null
+                                ? Text("Select State",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14))
+                                : Text(statename.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14)),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_outlined,
+                            size: 22,
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+                  Container(margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  //color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(5)),
+                  // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+
+                  child: GestureDetector(
+                    onTap: () {
+                      AlertDialog errorDialog = AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        contentPadding: EdgeInsets.all(5), //this right here
+                        title: SingleChildScrollView(
+                          child: Container(
+                            height: 300,
+                            child: ListView.builder(
+                                physics: ClampingScrollPhysics(
+                                    parent: BouncingScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount: jsonDecode(citydata!)['cities'].length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        //height: 50,
+                                        padding: EdgeInsets.all(8),
+                                        margin: EdgeInsets.all(4),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              cityname =
+                                                  jsonDecode(citydata!)['cities']
+                                                  [index]['name']
+                                                      .toString();
+                                              cityid =
+                                                  jsonDecode(citydata!)['cities']
+                                                  [index]['id']
+                                                      .toString();
+
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                          child: Text(
+                                            jsonDecode(citydata!)['cities'][index]
+                                            ['name'],
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: ColorConstants.txt),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
+                        ),
+                      );
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => errorDialog);
+                    },
+                    child: Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: cityname == null
+                                ? Text("Select City",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14))
+                                : Text(cityname.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14)),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_outlined,
+                            size: 22,
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+                  Container(margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                height: 50,
+                alignment: Alignment.centerLeft,
+                //color: Colors.white,
+                decoration: BoxDecoration(
+                    color: Colors.black12, borderRadius: BorderRadius.circular(5)),
+                child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        dobdate ="${selectedDate.day}-${selectedDate.month}-${selectedDate.year}";
+                        dob="${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+                        //"${selectedDate.year}/${selectedDate.month}/${selectedDate.day}";
+
+                      });
+                      _selectDate(context);
+                    },
+                    child: dobdate == null
+                        ? Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Text("Select DOB",
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 14)),
+                        )
+                        : Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Text("${dobdate}",
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 14)),
+                        )),
+                // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  ),
+                  Container(
+                  height: 60,
+                  alignment: Alignment.centerLeft,
+                  //color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(5)),
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      AlertDialog errorDialog = AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(20.0)), //this right here
+                        title: Container(
+                          height: 100,
+                          width: 100,
+                          padding: EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          child: ListView.builder(
+                              physics: ClampingScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
+                              shrinkWrap: true,
+                              itemCount: genderlist.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      //height: 50,
+                                      padding: EdgeInsets.all(4),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            gendername = '${genderlist[index]}';
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: Text(
+                                          '${genderlist[index]}',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: ColorConstants.txt),
+                                        ),
+                                      ),
+                                    ),
+                                    Divider(
+                                      color: Colors.black12,
+                                    )
+                                  ],
+                                );
+                              }),
+                        ),
+                      );
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => errorDialog);
+                    },
+                    child: Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: gendername == null
+                                ? Text("Select Gender",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14))
+                                : Text("${gendername}",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14)),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_outlined,
+                            size: 22,
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+
+                Center(
+                  child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: ColorConstants.verdigris,
+                    onPrimary: Colors.white,
+                    elevation: 3,
+                    alignment: Alignment.center,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    fixedSize: const Size(120, 30),
+                    //////// HERE
+                  ),
+                  onPressed: () {
+                    log(dob.toString());
+                    log(dobdate.toString());
+                    String strDigits(int n) => n.toString().padLeft(2, '0');
+                    log("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}");
+                    // if(dob==null)
+                    //   {
+                    //     var newdate= DateTime.parse(dobdate);
+                    //     final DateFormat formatter = DateFormat('dd-mm-yyyy');
+                    //     final String formatted = formatter.format(newdate);
+                    //
+                    //    setState(() {
+                    //      dob="$formatted";
+                    //    });
+                    //   }
+                    // log(dob.toString());
+                    // Navigator.of(context).pop();
+                    if (validateMobile(mobileno.toString())) {
+                      if (validateName(firstname)) {
+                        if (_image != null) {
+                         // showLoaderDialog(context);
+                          uploadFile(
+                              userid.toString(),
+                              mobileno.toString(),
+                              firstname.toString(),
+                              dobdate.toString(),
+                              stateid.toString(),
+                              cityid.toString(),
+                              gendername.toString(),
+                              lastname.toString(),
+                              _image!);
+                        } else {
+                         // showLoaderDialog(context);
+                          profileupdateapi(
+                              userid.toString(),
+                              mobileno.toString(),
+                              firstname.toString(),
+                              dobdate.toString(),
+                              stateid.toString(),
+                              cityid.toString(),
+                              gendername.toString(),
+                              lastname.toString());
+                        }
+                      }else{
+                        const snackBar =
+                        SnackBar(
+                          content: Text(
+                              'Name Must be more than 2 character'),
+                        );
+                        ScaffoldMessenger
+                            .of(context)
+                            .showSnackBar(
+                            snackBar);
+                      }
+                    }else{
+                      const snackBar =
+                      SnackBar(
+                        content: Text(
+                            'Mobile number must be of 10 digits'),
+                      );
+                      ScaffoldMessenger
+                          .of(context)
+                          .showSnackBar(
+                          snackBar);
+                    }
+                  },
+                  child: const Text(
+                    "UPDATE",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                  Container(
-                    height: 60,
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: TextFormField(
-                      initialValue: firstname,
-                      onChanged: (value){
-                        setState(() {
-                          firstname=value;
 
-                        });
-                        print(firstname);
-                      },
-                      obscureText: false,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor:  Colors.black12,
-                        border: InputBorder.none,
-                        // labelText: 'Username or Email ID',
-                        hintText: 'firstname',
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.singleLineFormatter
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 60,
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: TextFormField(
-                      initialValue: lastname,
-                      onChanged: (value){
-                        setState(() {
-                          lastname=value;
+    ),
 
-                        });
-                        print(lastname);
-                      },
-                      obscureText: false,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor:  Colors.black12,
-                        border: InputBorder.none,
-                        // labelText: 'Username or Email ID',
-                        hintText: 'lastname',
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.singleLineFormatter
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 60,
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: TextFormField(
-                      initialValue: mobileno,
-                      onChanged: (value){
-                        setState(() {
-                          mobileno=value;
+                ),
 
-                        });
-                        print(mobileno);
-                      },
-                      obscureText: false,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor:  Colors.black12,
-                        border: InputBorder.none,
-                        // labelText: 'Username or Email ID',
-                        hintText: 'mobile no',
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.singleLineFormatter
-                      ],
-                    ),
-                  ),
-                    Container(  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        height: 50,
-                        alignment: Alignment.centerLeft,
-                        //color: Colors.white,
-                        decoration: BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.circular(5)),
-                        // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-
-                        child: GestureDetector(
-                          onTap: () {
-                            AlertDialog errorDialog = AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              contentPadding: EdgeInsets.all(5), //this right here
-                              title: SingleChildScrollView(
-                                // height: 300,
-                                // width: 100,
-                                // alignment: Alignment.center,
-                                child: Container(
-                                  height: 500,
-                                  child: ListView.builder(
-                                      physics: ClampingScrollPhysics(
-                                          parent: BouncingScrollPhysics()),
-                                      shrinkWrap: true,
-                                      itemCount:
-                                      jsonDecode(datacoun!)[
-                                      'countries'].length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              //height: 50,
-                                              padding: EdgeInsets.all(8),
-                                              margin: EdgeInsets.all(4),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    countryname = jsonDecode(datacoun!)[
-                                                    'countries'][index]['name']
-                                                        .toString();
-                                                    countryid = jsonDecode(datacoun!)[
-                                                    'countries'][index]['id']
-                                                        .toString();
-                                                    getState(
-                                                        GetStateResponse, countryid);
-                                                    print(countryid);
-                                                    Navigator.pop(context);
-                                                  });
-                                                },
-                                                child: Text(
-                                                  jsonDecode(datacoun!)['countries']
-                                                  [index]['name'],
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: ColorConstants.txt),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }),
-                                ),
-                              ),
-                            );
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => errorDialog);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: countryname == null
-                                      ? Text("Select Country",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14))
-                                      : Text(countryname.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14)),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  size: 22,
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        height: 50,
-                        alignment: Alignment.centerLeft,
-                        //color: Colors.white,
-                        decoration: BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.circular(5)),
-                        // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-
-                        child: GestureDetector(
-                          onTap: () {
-                            AlertDialog errorDialog = AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              contentPadding: EdgeInsets.all(5), //this right here
-                              title: SingleChildScrollView(
-                                child: Container(
-                                  height: 300,
-                                  child: ListView.builder(
-                                      physics: ClampingScrollPhysics(
-                                          parent: BouncingScrollPhysics()),
-                                      shrinkWrap: true,
-                                      itemCount:
-                                      jsonDecode(datastate!)['states'].length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              //height: 50,
-                                              padding: EdgeInsets.all(8),
-                                              margin: EdgeInsets.all(4),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    statename =
-                                                        jsonDecode(datastate!)['states']
-                                                        [index]['name']
-                                                            .toString();
-                                                    stateid =
-                                                        jsonDecode(datastate!)['states']
-                                                        [index]['id']
-                                                            .toString();
-                                                    getCity(GetCityResponse, stateid);
-                                                    Navigator.pop(context);
-                                                  });
-                                                },
-                                                child: Text(
-                                                  jsonDecode(datastate!)['states']
-                                                  [index]['name'],
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: ColorConstants.txt),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }),
-                                ),
-                              ),
-                            );
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => errorDialog);
-                          },
-                          child: Container( margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: statename == null
-                                      ? Text("Select State",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14))
-                                      : Text(statename.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14)),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  size: 22,
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-                    Container(margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        height: 50,
-                        alignment: Alignment.centerLeft,
-                        //color: Colors.white,
-                        decoration: BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.circular(5)),
-                        // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-
-                        child: GestureDetector(
-                          onTap: () {
-                            AlertDialog errorDialog = AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              contentPadding: EdgeInsets.all(5), //this right here
-                              title: SingleChildScrollView(
-                                child: Container(
-                                  height: 300,
-                                  child: ListView.builder(
-                                      physics: ClampingScrollPhysics(
-                                          parent: BouncingScrollPhysics()),
-                                      shrinkWrap: true,
-                                      itemCount: jsonDecode(citydata!)['cities'].length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              //height: 50,
-                                              padding: EdgeInsets.all(8),
-                                              margin: EdgeInsets.all(4),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    cityname =
-                                                        jsonDecode(citydata!)['cities']
-                                                        [index]['name']
-                                                            .toString();
-                                                    cityid =
-                                                        jsonDecode(citydata!)['cities']
-                                                        [index]['id']
-                                                            .toString();
-
-                                                    Navigator.pop(context);
-                                                  });
-                                                },
-                                                child: Text(
-                                                  jsonDecode(citydata!)['cities'][index]
-                                                  ['name'],
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: ColorConstants.txt),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }),
-                                ),
-                              ),
-                            );
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => errorDialog);
-                          },
-                          child: Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: cityname == null
-                                      ? Text("Select City",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14))
-                                      : Text(cityname.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14)),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  size: 22,
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-                    Container(margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                      height: 50,
-                      alignment: Alignment.centerLeft,
-                      //color: Colors.white,
-                      decoration: BoxDecoration(
-                          color: Colors.black12, borderRadius: BorderRadius.circular(5)),
-                      child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              dobdate ="${selectedDate.day}-${selectedDate.month}-${selectedDate.year}";
-                              dob="${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-                              //"${selectedDate.year}/${selectedDate.month}/${selectedDate.day}";
-
-                            });
-                            _selectDate(context);
-                          },
-                          child: dobdate == null
-                              ? Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: Text("Select DOB",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 14)),
-                              )
-                              : Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: Text("${dobdate}",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 14)),
-                              )),
-                      // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    ),
-                    Container(
-                        height: 60,
-                        alignment: Alignment.centerLeft,
-                        //color: Colors.white,
-                        decoration: BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.circular(5)),
-                        margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: GestureDetector(
-                          onTap: () {
-                            AlertDialog errorDialog = AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(20.0)), //this right here
-                              title: Container(
-                                height: 100,
-                                width: 100,
-                                padding: EdgeInsets.all(8),
-                                alignment: Alignment.center,
-                                child: ListView.builder(
-                                    physics: ClampingScrollPhysics(
-                                        parent: BouncingScrollPhysics()),
-                                    shrinkWrap: true,
-                                    itemCount: genderlist.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Container(
-                                            //height: 50,
-                                            padding: EdgeInsets.all(4),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  gendername = '${genderlist[index]}';
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                              child: Text(
-                                                '${genderlist[index]}',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: ColorConstants.txt),
-                                              ),
-                                            ),
-                                          ),
-                                          Divider(
-                                            color: Colors.black12,
-                                          )
-                                        ],
-                                      );
-                                    }),
-                              ),
-                            );
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => errorDialog);
-                          },
-                          child: Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: gendername == null
-                                      ? Text("Select Gender",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14))
-                                      : Text("${gendername}",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14)),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  size: 22,
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: ColorConstants.verdigris,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          fixedSize: const Size(120, 30),
-                          //////// HERE
-                        ),
-                        onPressed: () {
-                          log(dob.toString());
-                          log(dobdate.toString());
-                          String strDigits(int n) => n.toString().padLeft(2, '0');
-                          log("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}");
-                          // if(dob==null)
-                          //   {
-                          //     var newdate= DateTime.parse(dobdate);
-                          //     final DateFormat formatter = DateFormat('dd-mm-yyyy');
-                          //     final String formatted = formatter.format(newdate);
-                          //
-                          //    setState(() {
-                          //      dob="$formatted";
-                          //    });
-                          //   }
-                          // log(dob.toString());
-                          // Navigator.of(context).pop();
-                          if (validateMobile(mobileno.toString())) {
-                            if (validateName(firstname)) {
-                              if (_image != null) {
-                               // showLoaderDialog(context);
-                                uploadFile(
-                                    userid.toString(),
-                                    mobileno.toString(),
-                                    firstname.toString(),
-                                    dobdate.toString(),
-                                    stateid.toString(),
-                                    cityid.toString(),
-                                    gendername.toString(),
-                                    lastname.toString(),
-                                    _image!);
-                              } else {
-                               // showLoaderDialog(context);
-                                profileupdateapi(
-                                    userid.toString(),
-                                    mobileno.toString(),
-                                    firstname.toString(),
-                                    dobdate.toString(),
-                                    stateid.toString(),
-                                    cityid.toString(),
-                                    gendername.toString(),
-                                    lastname.toString());
-                              }
-                            }else{
-                              const snackBar =
-                              SnackBar(
-                                content: Text(
-                                    'Name Must be more than 2 character'),
-                              );
-                              ScaffoldMessenger
-                                  .of(context)
-                                  .showSnackBar(
-                                  snackBar);
-                            }
-                          }else{
-                            const snackBar =
-                            SnackBar(
-                              content: Text(
-                                  'Mobile number must be of 10 digits'),
-                            );
-                            ScaffoldMessenger
-                                .of(context)
-                                .showSnackBar(
-                                snackBar);
-                          }
-                        },
-                        child: const Text(
-                          "UPDATE",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-
-              ],
-            )
-
+              ]),
+                  ],
+                ),
+                ),
+            ],
           ),
         ),
       ),

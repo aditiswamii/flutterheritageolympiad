@@ -30,4 +30,5 @@ static const gradient_progress=[Color(0xFFFCA95C),Color(0xFF47B8AC)];
   static const stage3color = Color(0xFFCDD93B);
   static const stage4color = Color(0xFF5CD696);
   static const stage5color = Color(0xFF65C9C0);
+  static const bggrey = Color(0xFFf9f9f9);
 }

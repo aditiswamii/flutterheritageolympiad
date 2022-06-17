@@ -180,7 +180,7 @@ class _State extends State<RulesPage> {
   }
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>const QuizPage()));
+        builder: (BuildContext context) =>QuizPage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
   }
@@ -332,7 +332,7 @@ class _State extends State<RulesPage> {
                               : ruledata.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container( margin:  const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                child: Text("${index+1})""${jsonDecode(data!)['data'][index]}"));
+                                child: Text("${index+1}) " "${jsonDecode(data!)['data'][index]}"));
                           },
                         ),
                       ),
@@ -359,7 +359,7 @@ class _State extends State<RulesPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ClassicQuizMain()));
+                                  builder: (context) => const QuizPage()));
                         },
                         child: const Text(
                           "GO BACK",

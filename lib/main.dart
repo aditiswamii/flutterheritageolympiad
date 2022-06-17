@@ -3,6 +3,7 @@ import 'dart:developer';
 
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:CultreApp/colors/colors.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 
@@ -35,7 +36,12 @@ import 'fcm/messagingservice.dart';
 // }
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.white, // navigation bar color
+    statusBarColor:  ColorConstants.verdigris,  // status bar color
+    statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+    statusBarBrightness: Brightness.light,
+  ));
   // if (Firebase.apps.isEmpty) {
   //   await Firebase.initializeApp(
   //       options: const FirebaseOptions(
@@ -141,7 +147,7 @@ class _State extends State<MyApp> {
         const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LoginScreen()))):
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(maintainState: true,
         builder: (BuildContext context) => HomePage(link:  link,)));
   }
   @override

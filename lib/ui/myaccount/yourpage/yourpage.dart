@@ -21,6 +21,7 @@ import 'package:http/http.dart' as http;
 
 import 'dart:convert' as convert;
 
+import '../../../modal/getuserleagueresponse/GetUserLeagueResponse.dart' as GetUserLeagueResponse;
 import '../../../modal/userprofile/GetUserProfileResponse.dart';
 import '../../../utils/StringConstants.dart';
 import '../personalinfo/personalinfo.dart';
@@ -53,11 +54,12 @@ class _YourPageState extends State<YourPage> {
   var badgedata;
   User? userprofileresdata;
   var snackBar;
+  var userleagdata;
   List<num>? xplist;
   GetBadgeResponse? badgeResponse;
   GetXpGainChartResponse? getXpGainChartResponse;
   GetLeaderboardRank? getleaderboardR;
-
+  GetUserLeagueResponse.GetUserLeagueResponse? userLeagueR;
   final List<String> goallist = <String>[
     'Monthly',
     'Weekly',
@@ -75,6 +77,51 @@ class _YourPageState extends State<YourPage> {
     });
 
     getUserProfile(userid.toString());
+  }
+  getuserleague(String userid) async {
+
+    //showLoaderDialog(context);
+    http.Response response = await http.get(
+        Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
+    );
+
+
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      data = response.body;
+
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          userleagdata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(userleagdata.length);
+        });
+        getuserleagueresponse(GetUserLeagueResponse.getUserLeagueResponseFromJson(data!));
+        // var venam = userleagdata(data!)['data'];
+        // print(venam.toString());
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+              jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    } else {
+      // Navigator.pop(context);
+      // onsuccess(null);
+      print(response.statusCode);
+    }
+
+  }
+  getuserleagueresponse(GetUserLeagueResponse.GetUserLeagueResponse userLeagueResponse){
+    if(userLeagueResponse.data!=null){
+      setState(() {
+        userLeagueR=userLeagueResponse;
+      });
+    }
+
   }
 
   getUserProfile(String userid) async {
@@ -123,6 +170,7 @@ class _YourPageState extends State<YourPage> {
       xpgainchart(userid.toString(), "");
       getbadges(userid.toString(), "");
       goalsummary(userid.toString());
+      getuserleague(userid.toString());
       var date = DateTime.now();
       var month;
       if (date.month == 1) {
@@ -551,71 +599,69 @@ class _YourPageState extends State<YourPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: (prodata == null &&
-            xpdata == null &&
-            goalsummarydata == null &&
-            goaldata == null)
-            ? Container(
-          color: Colors.transparent,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-              child: CircularProgressIndicator(
-                color: Colors.blueAccent,
-              )),
-        )
-            : Container(
-          color: Colors.white.withAlpha(100),
+        child:  Container(
+
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(5),
-                  child: Center(
-                    child: Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
-                        },
-                        child: Image.asset(
-                          "assets/images/home_1.png",
-                          height: 40,
-                          width: 40,
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                color: Colors.white,
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                height: 80,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()));
+                            },
+                            child: Image.asset(
+                              "assets/images/home_1.png",
+                              height: 40,
+                              width: 40,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 5.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          _scaffoldKey.currentState!.openEndDrawer();
+                        },
+                        child: Image.asset("assets/images/side_menu_2.png",
+                            height: 40, width: 40),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 5.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _scaffoldKey.currentState!.openEndDrawer();
-                    },
-                    child: Image.asset("assets/images/side_menu_2.png",
-                        height: 40, width: 40),
-                  ),
-                ),
-              ],
+              ),
             ),
             Container(
-              color: Colors.white70,
-              child: ListBody(
+              alignment: Alignment(0,100),
+              // height: MediaQuery.of(context).size.height-120,
+              margin: const EdgeInsets.fromLTRB(0, 90, 0, 10),
+              child: ListView(
                       children: [
                         Container(
                             alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                            margin: const EdgeInsets.fromLTRB(0, 30, 0, 10),
                             child: const Text("YOUR PAGE",
                                 style: TextStyle(
                                     fontSize: 24, color: Colors.black,fontFamily: 'Nunito',fontStyle: FontStyle.normal,))),
@@ -627,9 +673,18 @@ class _YourPageState extends State<YourPage> {
                               style: TextStyle(
                                   fontSize: 15, color: ColorConstants.txt,fontFamily: 'Nunito',fontStyle: FontStyle.normal)),
                         ),
-                        xpdata == null
-                            ? Container()
-                            : ListBody(
+                (prodata == null &&
+                    xpdata == null &&
+                    goalsummarydata == null &&
+                    goaldata == null)
+                    ? Container(
+                  color: Colors.transparent,
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blueAccent,
+                      )),
+                ) : ListBody(
                                 children: [
                                   Card(
                                     child: Column(
@@ -792,6 +847,104 @@ class _YourPageState extends State<YourPage> {
                                                   ],
                                                 ),
                                               ),
+                                        userLeagueR==null?Container(
+                                          margin: EdgeInsets.fromLTRB(0, 10, 10, 20),
+                                          height: 20,
+
+                                          width: MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                              color: ColorConstants.red,
+                                              borderRadius: BorderRadius.circular(20)
+                                          ),
+                                          child: Container(
+                                            margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                            width: MediaQuery.of(context).size.width/5,
+                                            decoration: BoxDecoration(
+                                                color: ColorConstants.stage1color,
+                                                borderRadius: BorderRadius.circular(20)
+                                            ),
+                                            child: Container(
+                                              margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                              width: MediaQuery.of(context).size.width/5,
+                                              decoration: BoxDecoration(
+                                                  color: ColorConstants.stage2color,
+                                                  borderRadius: BorderRadius.circular(20)
+                                              ),
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                                width: MediaQuery.of(context).size.width/5,
+                                                decoration: BoxDecoration(
+                                                    color: ColorConstants.stage3color,
+                                                    borderRadius: BorderRadius.circular(20)
+                                                ),
+                                                child: Container(
+                                                  margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                                  width: MediaQuery.of(context).size.width/5,
+                                                  decoration: BoxDecoration(
+                                                      color: ColorConstants.stage5color,
+                                                      borderRadius: BorderRadius.circular(20)
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ):   Container(
+                                          margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                          height: 20,
+
+                                          width: MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                              color: ColorConstants.red,
+                                              image: userLeagueR!.data!.user!.id==5?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                  alignment:Alignment(-.85,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                  alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                                              borderRadius: BorderRadius.circular(20)
+                                          ),
+                                          child: Container(
+                                            margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                            width: MediaQuery.of(context).size.width/5,
+                                            decoration: BoxDecoration(
+                                                color: ColorConstants.stage1color,
+                                                image:userLeagueR!.data!.user!.id==4?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                    alignment:Alignment(-.8,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                    alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                                                borderRadius: BorderRadius.circular(20)
+                                            ),
+                                            child: Container(
+                                              margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                              width: MediaQuery.of(context).size.width/5,
+                                              decoration: BoxDecoration(
+                                                  color: ColorConstants.stage2color,
+                                                  image:userLeagueR!.data!.user!.id==3?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                      alignment:Alignment(-.75,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                      alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                                                  borderRadius: BorderRadius.circular(20)
+                                              ),
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                                width: MediaQuery.of(context).size.width/5,
+                                                decoration: BoxDecoration(
+                                                    color: ColorConstants.stage3color,
+                                                    image:userLeagueR!.data!.user!.id==2?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                        alignment:Alignment(-.6,0),fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                        alignment:Alignment.centerRight,fit: BoxFit.fitHeight,scale: 1 ),
+                                                    borderRadius: BorderRadius.circular(20)
+                                                ),
+                                                child: Container(
+                                                  margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/7, 0, 0, 0),
+                                                  width: MediaQuery.of(context).size.width/5,
+                                                  decoration: BoxDecoration(
+                                                      color: ColorConstants.stage5color,
+                                                      image:userLeagueR!.data!.user!.id==1?DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                          alignment:Alignment.center,fit: BoxFit.fitHeight,scale: 1 ):DecorationImage(image: AssetImage("assets/images/trianglewhite.png"),
+                                                        alignment:Alignment.center,fit: BoxFit.fitHeight,scale: -1, ),
+                                                      borderRadius: BorderRadius.circular(20)
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -1020,11 +1173,7 @@ class _YourPageState extends State<YourPage> {
                                                            nodes: ${getleaderboardR!.data!.rank}
                                                         
                                                         }],
-                                                        title: {
-        text: 'Rank',
-        color: '#F73F0C',
-        bottom: 'bottom'
-    },
+                                                   
                                                       }
                                                     ''',
 

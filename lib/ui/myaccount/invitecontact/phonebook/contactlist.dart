@@ -7,6 +7,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../colors/colors.dart';
+import '../../../../modal/PhoneContact.dart';
 import '../../../../utils/StringConstants.dart';
 import '../../../rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
@@ -38,6 +39,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
   List<String>? friendList =[].cast<String>().toList(growable: true);
   List<PhoneContact>? phcoList=[].cast<PhoneContact>().toList(growable: true);
   List<String>? cultreList=[].cast<String>().toList(growable: true);
+  List<String>? totphcoList  = [].cast<String>().toList(growable: true);
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -47,9 +49,9 @@ class _PhonebookPageState extends State<PhonebookPage> {
     });
     print("userdata");
     //calTheme();
-    //_fetchContacts();
+    _fetchContacts();
     phcoList!.clear();
-    checkfriend(userid.toString());
+   // checkfriend(userid.toString());
 
   }
   @override
@@ -149,17 +151,25 @@ class _PhonebookPageState extends State<PhonebookPage> {
   }
   onchecksuccess(checkdata){
     if(checkdata!=null) {
-      for (int i=0;i< checkdata.length;i++){
       setState(() {
-      listv!.add(checkdata[i].toString());
-      friendphone(listv);
+        listv=List.from(checkdata);
       });
-    }
+    friendphone(listv);
+    //   for (int i=0;i< checkdata.length;i++){
+    //   setState(() {
+    //   listv!.add(checkdata[i].toString());
+    //   friendphone(listv);
+    //   });
+    // }
   }
   }
-  friendphone(List<String>? listv){
+  friendphone(List<String>? listvv){
     friendList!.clear();
-    friendList!.addAll(listv!);
+    setState(() {
+      friendList=List.from(listvv!);
+    });
+
+    // friendList!.addAll(listv!);
     setcontacts();
   }
   setcontacts(){
@@ -193,6 +203,7 @@ class _PhonebookPageState extends State<PhonebookPage> {
 
 
       }else if(jsonResponse['status'] == 201) {
+        log(jsonResponse['message']);
           onimportsuccess(listv);
       }else {
         snackBar = SnackBar(
@@ -246,8 +257,19 @@ class _PhonebookPageState extends State<PhonebookPage> {
       final contacts = await FlutterContacts.getContacts();
       setState(() => _contacts = contacts);
     }
+    for(int i =0;i<_contacts!.length;i++) {
+      for (int j = 0; j < _contacts![i].phones.length; j++) {
+        setState(() {
+          totphcoList!.add(_contacts![i].phones[j].number);
+          log(totphcoList.toString());
+        });
 
-    contactlist= List.from(_contacts!);
+      }
+    }
+
+    // totphcoList=List.from(_contacts!);
+    // contactlist= List.from(_contacts!);
+   importcontact(userid.toString(), totphcoList!);
    //checkfriend(userid.toString());
   }
   // showLoaderDialog(BuildContext context) {
@@ -420,10 +442,10 @@ class _PhonebookPageState extends State<PhonebookPage> {
   }
 }
 
-class PhoneContact {
-  String? id ;
-  String? name  ;
-  int status  = 0;
-  List<String>? phone;
-
-}
+// class PhoneContact {
+//   String? id ;
+//   String? name  ;
+//   int status  = 0;
+//   List<String>? phone;
+//
+// }

@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:device_calendar/device_calendar.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -205,52 +206,63 @@ class _SavedPostState extends State<SavedPost> {
           ),
         ),
         child: Container(
-          color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: ListView(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerLeft,
+          // color: Colors.white.withAlpha(100),
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                color: Colors.white,
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                height: 80,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                      alignment: Alignment.centerLeft,
 
-                  padding: EdgeInsets.all(5),
-                  child: Center(
-                    child: Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  HomePage()));
-                        },
-                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>  HomePage()));
+                            },
+                            child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 5.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          _scaffoldKey.currentState!.openEndDrawer();
+                        },
+                        child: Image.asset("assets/images/side_menu_2.png",
+                            height: 40, width: 40),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 5.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _scaffoldKey.currentState!.openEndDrawer();
-                    },
-                    child: Image.asset("assets/images/side_menu_2.png",
-                        height: 40, width: 40),
-                  ),
-                ),
-              ],
+              ),
             ),
             Container(
-              color: Colors.white,
-              child: ListBody(children: [
+              alignment: Alignment(0,100),
+              // height: MediaQuery.of(context).size.height-120,
+              margin: const EdgeInsets.fromLTRB(20, 90, 20, 10),
+              child: ListView(
+                  children: [
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -475,16 +487,22 @@ class _SavedPostState extends State<SavedPost> {
                                                 ),
                                               ),
                                               Container(
+                                                width: 60,
                                                 child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     GestureDetector(
                                                         onTap: () {
+                                                          log("cal click");
+                                                          Add2Calendar.addEvent2Cal(
+                                                            buildEvent(title:savefdata![index].title!,desc:  savefdata![index].description! ),
+                                                          );
                                                           // Share.share(jsonDecode(data!)['data'][index]['external_link'], subject: 'Share link');
                                                         },
                                                         child: Image.asset(
                                                           "assets/images/calendary.png",
-                                                          height: 30,
-                                                          width: 30,
+                                                          height: 25,
+                                                          width: 25,
                                                         )),
                                                     GestureDetector(
                                                         onTap: () {
@@ -495,8 +513,8 @@ class _SavedPostState extends State<SavedPost> {
                                                         },
                                                         child: Image.asset(
                                                           "assets/images/exporty.png",
-                                                          height: 30,
-                                                          width: 30,
+                                                          height: 25,
+                                                          width: 25,
                                                         )),
                                                   ],
                                                 ),
@@ -727,10 +745,18 @@ class _SavedPostState extends State<SavedPost> {
                                             ),
                                           ),
                                           Container(
+                                            width: 60,
                                             child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 GestureDetector(
                                                     onTap: () {
+                                                      log("cal click");
+                                                      Add2Calendar.addEvent2Cal(
+                                                        buildEvent(title:  jsonDecode(data!)['data'][index]
+                                                        ['title'],desc:  jsonDecode(data!)['data'][index]
+                                                        ['description'] ),
+                                                      );
                                                       // Share.share(jsonDecode(data!)['data'][index]['external_link'], subject: 'Share link');
                                                     },
                                                     child: Image.asset(
@@ -759,6 +785,7 @@ class _SavedPostState extends State<SavedPost> {
                                         ],
                                       ),
                                     ),
+
                                     // Container(
                                     //  child:Event(
                                     //
@@ -771,7 +798,18 @@ class _SavedPostState extends State<SavedPost> {
                           ),
                         );
                       }),
+
                 ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (BuildContext context) => FeedPage(seldomain: "", themes: "", contents: "",)));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                        child: Center(child: Text('BACK TO FEED',style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.w600),)),
+                      ),
+                    )
               ]),
             ),
           ]),
@@ -779,7 +817,23 @@ class _SavedPostState extends State<SavedPost> {
       ),
     );
   }
-
+  Event buildEvent({Recurrence? recurrence,String? title, String? desc}) {
+    return Event(
+      title: title!,
+      description: desc!,
+      location: 'Cultre App',
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(Duration(minutes: 30)),
+      allDay: false,
+      iosParams: IOSParams(
+        reminder: Duration(minutes: 40),
+      ),
+      // androidParams: AndroidParams(
+      //   // emailInvites: ["test@example.com"],
+      // ),
+      recurrence: recurrence,
+    );
+  }
   List<Widget> indicators(imagesLength, currentIndex) {
     return List<Widget>.generate(imagesLength, (index) {
       return Container(

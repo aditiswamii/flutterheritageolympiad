@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:CultreApp/ui/quiz/let_quiz.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-
-import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -280,7 +279,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+        MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
     // Do some stuff.
     return true;
   }
@@ -299,7 +298,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
+            image: AssetImage("assets/images/debackground.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -307,56 +306,71 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
           color: Colors.transparent,
           onRefresh: () => _refreshdata(context),
           child: Container(
-            color: Colors.white.withAlpha(100),
-            margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: ListView(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 5.0),
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                      },
-                      child: Image.asset("assets/images/home_1.png",
-                          height: 40, width: 40),
-                    ),
+
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Stack(children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  height: 80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                        alignment: Alignment.centerLeft,
+
+                        padding: EdgeInsets.all(5),
+                        child: Center(
+                          child: Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>  HomePage()));
+                                },
+                                child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 5.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            _scaffoldKey.currentState!.openEndDrawer();
+                          },
+                          child: Image.asset("assets/images/side_menu_2.png",
+                              height: 40, width: 40),
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _scaffoldKey.currentState!.openEndDrawer();
-                      },
-                      child: Image.asset("assets/images/side_menu_2.png",
-                          height: 40, width: 40),
-                    ),
-                  ),
-                ],
+                ),
               ),
               Container(
-                color: Colors.white,
-                child: ListBody(children: [
+                alignment: Alignment(0,100),
+                // height: MediaQuery.of(context).size.height-120,
+                margin: const EdgeInsets.fromLTRB(20, 90, 20, 10),
+                child: ListView(
+                    children: [
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: const Text("TOURNAMENT",
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 22,
                               color: Colors.black,
                               fontFamily: "Nunito"))),
                   Container(
@@ -436,29 +450,25 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                                 ),
                               ),
 
-                              _expanded==false? Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 30,
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      setState(() {
-                                        _expanded=true;
+                              _expanded==false? GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    _expanded=true;
 
-                                      });
+                                  });
 
-                                    },
-                                    child: Container(
-
-                                      margin: EdgeInsets.all(4),
-                                      child: Center(
-                                          child:Image.asset(
-                                            'assets/images/down_arrow.png',
-                                            height: 10,width: 10,
-                                            color: ColorConstants.txt,
-                                          )
-                                      ),
-                                    ),
-                                  )
+                                },
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 30,
+                                    child: Center(
+                                        child:Image.asset(
+                                          'assets/images/down_arrow.png',
+                                          height: 10,width: 10,
+                                          color: ColorConstants.txt,
+                                        )
+                                    )
+                                ),
                               ):Container(
                                   width: MediaQuery.of(context).size.width,
                                 //  height: 40,
@@ -529,6 +539,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
                                           },
                                           child: Container(
+                                            width: MediaQuery.of(context).size.width,
                                             margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                             child: Center(
                                                 child:Image.asset(
@@ -618,7 +629,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
                   gettourR==null? Center(
                     child: Container(
-
+                        child: Center(child: CircularProgressIndicator()),
                     ),
                   )
                       :  Container(
