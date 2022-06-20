@@ -184,7 +184,7 @@ class _State extends State<Mcq> {
       setState(() {
         prevarrow == false;
       });
-
+      setState(() => myDuration = Duration(seconds: questime));
     }
     print("prevarrow: "+prevarrow.toString());
     secrem = questime;
@@ -200,7 +200,7 @@ class _State extends State<Mcq> {
     if (!(countdownTimer == null)) {
       setState(() => countdownTimer!.cancel());
     }
-    setState(() => myDuration = Duration(seconds: questime));
+
     countdownTimer =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
     print(_questionindex);
