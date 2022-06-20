@@ -91,7 +91,7 @@ class _State extends State<Mcq> {
   int _questionindex = 0;
   var _totalScore = 0;
   Timer? countdownTimer;
-  late Duration myDuration;
+  Duration? myDuration;
   bool visibilityanimation = false;
   bool prevarrow = false;
   GetQuestionResponse? questionR;
@@ -151,7 +151,7 @@ class _State extends State<Mcq> {
   void setCountDown() {
     final reduceSecondsBy = 1;
     setState(() {
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
+      final seconds = myDuration!.inSeconds - reduceSecondsBy;
       if (seconds < 0) {
         countdownTimer!.cancel();
         reloadques();
@@ -581,8 +581,8 @@ class _State extends State<Mcq> {
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
-    final minutes = strDigits(myDuration.inMinutes.remainder(60));
-    final seconds = strDigits(myDuration.inSeconds.remainder(60));
+    final minutes = strDigits(myDuration!.inMinutes.remainder(60));
+    final seconds = strDigits(myDuration!.inSeconds.remainder(60));
     return Visibility(
       visible: visibilityanimation,
       replacement: Scaffold(

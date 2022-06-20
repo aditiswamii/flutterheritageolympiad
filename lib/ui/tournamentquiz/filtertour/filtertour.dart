@@ -61,12 +61,17 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
   var tangible = 1;
   var intangible = 0;
   var natural = 0;
-  var single = 0;
-  var modules = 0;
-  var collection = 0;
-  var singleb = false;
-  var modulesb = false;
-  var collectionb = false;
+  // var single = 0;
+  // var modules = 0;
+  // var collection = 0;
+  // var singleb = false;
+  // var modulesb = false;
+  // var collectionb = false;
+ int qsellall = 0;
+ int weekly = 0;
+ int monthly = 0;
+ int special = 0;
+ int hourly = 0;
   String themes = "";
   String contents = "";
   var click = false;
@@ -348,12 +353,17 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                             intangible=0;
                             natural=0;
                             contents="";
-                            single=0;
-                            collection=0;
-                            modules=0;
-                            singleb=false;
-                            collectionb=false;
-                            modulesb=false;
+                           qsellall = 0;
+                        weekly = 0;
+                          monthly = 0;
+                             special = 0;
+                            hourly = 0;
+                            // single=0;
+                            // collection=0;
+                            // modules=0;
+                            // singleb=false;
+                            // collectionb=false;
+                            // modulesb=false;
                             cleanData();
                             getDomains("1");
 
@@ -576,14 +586,14 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Content Type",
+                          const Text("Quiz Type",
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
                                   fontFamily: "Nunito")),
                           GestureDetector(
                             onTap: (){
-                              hintdialog(context, "Content Type: Choose a content type.");
+                              hintdialog(context, "Quiz Type: Choose a quiz type.");
                             },
                             child: Container(
                               width: 20,
@@ -613,40 +623,83 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (single == 1) {
-                                single = 0;
-                                singleb = false;
+                              if(qsellall == 0){
                                 setState(() {
-                                  single = 0;
-                                  singleb = false;
-                                  if(contents.isNotEmpty){
-                                    contents=contents;
-                                  }else{
-                                    contents="";
-                                  }
+                                  qsellall = 1;
+                                  weekly = 1;
+                                  monthly = 1;
+                                  special = 1;
+                                  hourly = 1;
                                 });
+
+
                               } else {
-                                single = 1;
-                                singleb = true;
                                 setState(() {
-                                  single = 1;
-                                  singleb = true;
-                                  if (contents.isNotEmpty) {
-                                    contents = contents + ",1";
-                                  } else {
-                                    contents = "1";
+                                  qsellall = 0;
+                                  weekly = 0;
+                                  monthly = 0;
+                                  special = 0;
+                                  hourly = 0;
+                                });
 
-                                  }
 
+                              }
+
+
+
+                            },
+                            child: Container(
+                              height: 35,
+                              child:  ListTile(
+
+                                visualDensity:
+                                VisualDensity(vertical: -4, horizontal: -4),
+
+                                title: Text(
+                                  "Select All",
+                                  style: TextStyle(fontSize: 14,color: Colors.black),
+                                ),
+                                trailing:
+                                qsellall == 1
+                                    ? Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box_with_tick.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                )
+                                    : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if(hourly == 0){
+                                setState(() {
+                                  hourly = 1;
+                                });
+
+                              } else {
+                                setState(() {
+                                  qsellall = 0;
+
+                                  hourly = 0;
                                 });
                               }
-                              // setState(() {
-                              //   if (contents.isNotEmpty) {
-                              //     contents = contents + ",1";
-                              //   } else {
-                              //     contents = "1";
-                              //   }
-                              // });
 
                             },
                             child: Container(
@@ -656,15 +709,15 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                                 visualDensity:
                                 VisualDensity(vertical: -4, horizontal: -4),
                                 leading: Image.asset(
-                                    "assets/images/single_posts.png",
+                                    "assets/images/hours24.png",
                                     height: 20,
                                     width: 20),
                                 title: Text(
-                                  "Single Posts",
-                                  style: TextStyle(fontSize: 18,color: Colors.black),
+                                  "Daily",
+                                  style: TextStyle(fontSize: 14,color: Colors.black),
                                 ),
                                 trailing:
-                                singleb == true
+                                hourly == 1
                                     ? Container(
                                   width: 20,
                                   height: 20,
@@ -692,64 +745,35 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (modules == 1) {
-                                modules = 0;
-
+                              if(weekly == 0){
                                 setState(() {
-                                  modulesb = false;
-                                  modules = 0;
+                                  weekly = 1;
                                 });
-                              } else {
-                                modules = 1;
 
+
+                              } else {
                                 setState(() {
-                                  modules = 1;
-                                  modulesb = true;
+                                  qsellall = 0;
+                                  weekly = 0;
                                 });
-                              }
 
-                              if (modulesb == true) {
-                                if (contents.isNotEmpty) {
-                                  setState(() {
-                                    if (contents.contains("2")) {
-                                      setState(() {
-                                        contents.replaceAll(RegExp(',2'), '');
-                                        contents.replaceAll(RegExp('2'), '');
-                                      });
-                                    }
-                                    contents = contents + ",2";
-                                  });
-                                } else {
-                                  setState(() {
-                                    contents = "2";
-                                  });
-                                }
-                              } else {
-                                // if(contents.contains(",2")){
-                                //
-                                //   setState(() {
-                                //     contents='';
-                                //   });
-                                //
-                                // }
 
                               }
-
                             },
                             child: Container(
-                              height: 35,
+                              height: 30,
                               child:  ListTile(
                                 minLeadingWidth: 5,
                                 visualDensity:
                                 VisualDensity(vertical: -4, horizontal: -4),
-                                leading: Image.asset("assets/images/modules.png",
+                                leading: Image.asset("assets/images/week7.png",
                                     height: 20, width: 20),
                                 title: Text(
-                                  "Modules",
-                                  style: TextStyle(fontSize: 18,color: Colors.black),
+                                  "Weekly",
+                                  style: TextStyle(fontSize: 14,color: Colors.black),
                                 ),
                                 trailing:
-                                modulesb == true
+                                weekly == 1
                                     ? Container(
                                   width: 20,
                                   height: 20,
@@ -776,49 +800,91 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (collection == 1) {
-                                collection = 0;
-                                collectionb = false;
-                                setState(() {
-                                  collection = 0;
-                                  collectionb = false;
-                                  if(contents.isNotEmpty){
-                                    contents=contents;
-                                  }else{
-                                    contents="";
-                                  }
-                                });
-                              } else {
-                                collection = 1;
-                                collectionb = true;
-                                setState(() {
-                                  collection = 1;
-                                  collectionb = true;
-                                  if (contents.isNotEmpty) {
-                                    contents = contents + ",3";
-                                  } else {
-                                    contents = "3";
-                                  }
-                                });
+                              if(monthly == 0){
+setState(() {
+  monthly = 1;
+});
 
+
+
+
+                              } else {
+                                setState(() {
+                                  qsellall = 0;
+
+                                  monthly = 0;
+                                });
                               }
                             },
                             child: Container(
-                              height: 35,
+                              height: 30,
                               child: ListTile(
                                 minLeadingWidth: 5,
                                 visualDensity:
                                 VisualDensity(vertical: -4, horizontal: -4),
                                 leading: Image.asset(
-                                    "assets/images/collections.png",
+                                    "assets/images/month30.png",
                                     height: 20,
                                     width: 20),
                                 title: Text(
-                                  "Collections",
-                                  style: TextStyle(fontSize: 18,color: Colors.black),
+                                  "Monthly",
+                                  style: TextStyle(fontSize: 14,color: Colors.black),
                                 ),
                                 trailing:
-                                collectionb == true
+                                monthly == 1
+                                    ? Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box_with_tick.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                )
+                                    : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    "assets/images/check_box.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if(special == 0){
+                                setState(() {
+                                  special = 1;
+                                });
+                              } else {
+                                setState(() {
+                                  qsellall = 0;
+                                  special = 0;
+                                });
+                              }
+                            },
+                            child: Container(
+                              height: 30,
+                              child: ListTile(
+                                minLeadingWidth: 5,
+                                visualDensity:
+                                VisualDensity(vertical: -4, horizontal: -4),
+                                leading: Image.asset(
+                                    "assets/images/specials_calendar_1.png",
+                                    height: 20,
+                                    width: 20),
+                                title: Text(
+                                  "Specials",
+                                  style: TextStyle(fontSize: 14,color: Colors.black),
+                                ),
+                                trailing:
+                                special == 1
                                     ? Container(
                                   width: 20,
                                   height: 20,
@@ -844,6 +910,7 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                       ),
                     ),
                   ),
+
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
@@ -917,6 +984,33 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
                                 }
                               }
                             }
+                            if (hourly == 1) {
+                              contents += "1";
+                            }
+                            if (weekly == 1) {
+                              if (contents.isNotEmpty) {
+                                contents += ",2";
+                              } else {
+                                contents += "2";
+                              }
+                            }
+                            if (monthly == 1) {
+                              if (contents.isNotEmpty) {
+                                contents += ",3";
+                              } else {
+                                contents += "3";
+                              }
+                            }
+                            if (special == 1) {
+                              if (contents.isNotEmpty) {
+                                contents += ",4";
+                              } else {
+                                contents += "4";
+                              }
+                            }
+                            setState(() {
+                              contents;
+                            });
                             print(seldomain);
                             log("tang " + tangible.toString());
                             log("intang " + intangible.toString());

@@ -155,7 +155,7 @@ class _State extends State<TourRoomWaitlist> {
 
   onexittour() {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => TournamentPage()));
+        MaterialPageRoute(builder: (BuildContext context) => TournamentPage(seldomain: "", themes: "", contents: "",)));
   }
 
 
@@ -195,7 +195,7 @@ class _State extends State<TourRoomWaitlist> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => TournamentPage()));
+        MaterialPageRoute(builder: (BuildContext context) => TournamentPage(seldomain: "", themes: "", contents: "",)));
     // Do some stuff.
     return true;
   }
@@ -447,7 +447,7 @@ class _State extends State<TourRoomWaitlist> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TournamentPage()));
+                                builder: (context) => TournamentPage(seldomain: "", themes: "", contents: "",)));
                       },
                       child: const Text(
                         "GO BACK",

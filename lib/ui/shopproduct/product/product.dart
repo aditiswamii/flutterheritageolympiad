@@ -224,7 +224,7 @@ class _State extends State<ProductList>{
                                         Container(
                                           height: 300,
                                           color: ColorConstants.lightgrey200,
-                                          child: Image.network(jsonDecode(data!)['data'][index]['images'][0],fit: BoxFit.cover,),
+                                          child: Image.network(jsonDecode(data!)['data'][index]['images'][0],fit: BoxFit.fill,),
                                         ),
                                         Container(
                                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),

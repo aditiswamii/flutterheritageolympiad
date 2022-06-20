@@ -247,6 +247,7 @@ class _AccountPageState extends State<HelpPage> {
                       obscureText: false,
                       maxLength: 100,
                       keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.done,
                       maxLines: null,
                       decoration: InputDecoration(
                           filled: true,
@@ -286,6 +287,7 @@ class _AccountPageState extends State<HelpPage> {
                       maxLength: 500,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,

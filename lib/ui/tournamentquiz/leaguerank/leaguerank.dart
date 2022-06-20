@@ -133,7 +133,7 @@ class _LeagueRankState extends State<LeagueRank> with TickerProviderStateMixin{
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => TournamentPage()));
+        MaterialPageRoute(builder: (BuildContext context) => TournamentPage(contents: "", themes: "", seldomain: "",)));
     // Do some stuff.
     return true;
   }
@@ -446,7 +446,7 @@ class _LeagueRankState extends State<LeagueRank> with TickerProviderStateMixin{
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TournamentPage()));
+                                  builder: (context) => TournamentPage(seldomain: "", themes: "", contents: "",)));
                         },
                         child: const Text(
                           "GO BACK",

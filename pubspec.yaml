@@ -76,6 +76,9 @@ dependencies:
   video_player:
   audioplayers:
   add_2_calendar:
+  firebase_core: ^1.13.1
+  firebase_messaging: ^11.2.11
+  overlay_support: ^1.2.1
 #  firebase_messaging: ^11.2.6
 #  firebase_core:
 #  firebase_auth:

@@ -59,21 +59,35 @@ class _NotificationScreenState extends State<NotificationScreen> {
       'user_id': userid.toString(),
       'notifications_id': notifications_id.toString()
     });
-
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
-      data = response.body;
-      //final responseJson = json.decode(response.body);//store response as string
-      setState(() {
-        updata = jsonDecode(
-            data!)['data']; //get all the data from json string superheros
-        print(updata.length);
-      });
-      getnotification(userid.toString());
-      var venam = jsonDecode(data!)['data'];
-      print(venam);
-      //last_id
-
+      if (jsonResponse['status'] == 200) {
+        data = response.body;
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          updata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(updata.length);
+        });
+        snackBar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+        getnotification(userid.toString());
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+        //last_id
+      }else{
+        snackBar = SnackBar(
+            content: Text(
+              jsonResponse['message'].toString(),
+              textAlign: TextAlign.center,));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
     } else {
       Navigator.pop(context);
       print(response.statusCode);

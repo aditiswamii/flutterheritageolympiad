@@ -585,7 +585,7 @@ class _State extends State<TournamentResult> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TournamentPage()));
+                                  builder: (context) => TournamentPage(seldomain: "", themes: "", contents: "",)));
                         },
                         child: const Text(
                           "BACK TO TOUR",

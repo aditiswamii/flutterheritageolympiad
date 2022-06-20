@@ -300,43 +300,45 @@ var dualdata;
     physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
 
     children: [
-    Container(
-    alignment: Alignment.center,
-    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-    height: 150,
-    width: 150,
-    decoration:  BoxDecoration(
-    shape: BoxShape.rectangle,
-    color: select==1?ColorConstants.yellow200:ColorConstants.lightgrey200
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            select=1;
+          });
+          //ColorConstants.myfeed;
+        },
+      child: Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+      height: 150,
+      width: 150,
+      decoration:  BoxDecoration(
+      shape: BoxShape.rectangle,
+      color: select==1?ColorConstants.yellow200:ColorConstants.lightgrey200
+      ),
+      child: Text("INVITE",style: TextStyle(color: select==1?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,),
+      ),
     ),
-    child: GestureDetector(
-    onTap: () {
-    setState(() {
-    select=1;
-    });
-    //ColorConstants.myfeed;
-    },
-    child: Text("INVITE",style: TextStyle(color: select==1?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
-    ),
-    Container(
-    alignment: Alignment.center,
-    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-    height: 150,
-    width: 150,
-    decoration:  BoxDecoration(
-    shape: BoxShape.rectangle,
-    color: select==2?ColorConstants.yellow200:ColorConstants.lightgrey200
-    ),
-    child: GestureDetector(
-    onTap: () {
-    setState(() {
-    select=2;
-    });
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            select=2;
+          });
 
-    },
-    child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
+        },
+      child: Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+      height: 150,
+      width: 150,
+      decoration:  BoxDecoration(
+      shape: BoxShape.rectangle,
+      color: select==2?ColorConstants.yellow200:ColorConstants.lightgrey200
+      ),
+      child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,),
+      ),
     ),
     ])),
 

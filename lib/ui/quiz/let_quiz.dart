@@ -401,7 +401,7 @@ var datalink;
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  TournamentPage()));
+                  builder: (context) =>  TournamentPage(themes: "", seldomain: "", contents: "",)));
         },
         child: Container( padding: EdgeInsets.all(4),
           height: 150,

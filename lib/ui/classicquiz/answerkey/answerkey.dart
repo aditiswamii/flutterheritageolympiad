@@ -287,6 +287,9 @@ class _State extends State<AnswerkeyPage> {
                                             height: 150,
                                             width: MediaQuery.of(context).size.width,
                                             child: TextFormField(
+                                                keyboardType: TextInputType.multiline,
+                                                maxLines: null,
+                                                maxLength: 500,
                                                 textInputAction: TextInputAction.done,
                                                 decoration: InputDecoration(
                                                   enabledBorder: OutlineInputBorder(

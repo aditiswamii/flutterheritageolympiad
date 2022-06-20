@@ -37,7 +37,7 @@ class TournamentPage extends StatefulWidget {
   var contents;
   var themes;
   var seldomain;
-  TournamentPage({Key? key, this.seldomain, this.contents, this.themes}) : super(key: key);
+  TournamentPage({Key? key,required this.seldomain,required this.contents,required this.themes}) : super(key: key);
 
   @override
   _TournamentPageState createState() => _TournamentPageState();
@@ -50,7 +50,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
   // TextEditingController controller = TextEditingController();
   // List<Data> _searchResult = [];
   // List<Data> _userDetails = [];
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   var username;
   var email;
   var country;
@@ -71,15 +71,17 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
       country = prefs.getString("country");
       userid = prefs.getString("userid");
     });
-   // showLoaderDialog(context);
-    getTour(userid.toString(),"");
+   // log(widget.contents!);
+   //  log(widget.seldomain!);
+   //  log(widget.themes!);
+    getTour(userid.toString(),"",widget.contents!.isNotEmpty ?widget.contents!:"",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty ?widget.themes!:"",);
   }
-  getTour(String userid,String search) async {
+  getTour(String userid,String search,String tournamentType,String domainid,String themeid) async {
 
     if (search != "") {
       http.Response response =
       await http.get(
-          Uri.parse(StringConstants.BASE_URL + "tournament?user_id=$userid"));
+          Uri.parse("${StringConstants.BASE_URL}tournament?user_id=$userid&tournament_type=$tournamentType&domain_id=$domainid&theme_id=$themeid"));
 
       if (response.statusCode == 200) {
         data = response.body;
@@ -100,7 +102,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
       http.Response response =
       await http.get(
-          Uri.parse(StringConstants.BASE_URL + "tournament?user_id=$userid&search=$search"));
+          Uri.parse("${StringConstants.BASE_URL}tournament?user_id=$userid&search=$search"));
 
       if (response.statusCode == 200) {
         data = response.body;
@@ -189,7 +191,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 }
 
   setJoined(int pos) {
-    getTour(userid.toString(),"");
+    getTour(userid.toString(),"",widget.contents!.isNotEmpty ?widget.contents!:"",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty ?widget.themes!:"",);
    }
   leaderboardranking(String userid, String month, String contactid) async {
     http.Response response = await http.post(
@@ -284,7 +286,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
     return true;
   }
   Future<Future> _refreshdata(BuildContext context) async {
-    return getTour(userid.toString(),"");
+    return getTour(userid.toString(),"",widget.contents!.isNotEmpty ?widget.contents!:"",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty ?widget.themes!:"",);
   }
   @override
   Widget build(BuildContext context) {
@@ -972,9 +974,15 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
    //              selindex++;
    //              String sval = "";
    //              if (sess.startTime!.length == 4) {
-   //                sval = "0${sess.startTime!}:00";
+   //
+   //                  sval = "0${sess.startTime!}:00";
+   //
+   //
    //              } else {
-   //                sval = "${sess.startTime!}:00";
+   //
+   //                  sval = "${sess.startTime!}:00";
+   //
+   //
    //              }
    //
    //              if (time.compareTo(sval) > 0) {
@@ -1006,22 +1014,26 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
    //              log("start: $sstime");
    //              log("datetime3:$date $time");
    //              int currentTime = DateTime.parse(
-   //                  "$date $time").second;
+   //                  "$date $time").toLocal().millisecondsSinceEpoch;
    //              var newatime= (DateTime.parse(
-   //                  "$date $time").hour * 3600) +(DateTime.parse(
-   //                  "$date $time").minute * 60 )+(DateTime.parse(
-   //                  "$date $time").second * 1);
+   //                  "$date $time").toLocal().hour * 3600) +(DateTime.parse(
+   //                  "$date $time").toLocal().minute * 60 )+(DateTime.parse(
+   //                  "$date $time").toLocal().second * 1);
    //
    //              log("currentTime3:$currentTime");
-   //              log("newatime3:$newatime");
+   //           //   log("newatime3:$newatime");
+   //             var expiryTimee =
+   //                  DateTime.parse("$date $sstime")
+   //                      .millisecondsSinceEpoch + 86400000 - currentTime;
    //              var exatime= (DateTime.parse(
-   //                  "$date $sstime").hour * 3600) +(DateTime.parse(
-   //                  "$date $sstime").minute * 60 )+(DateTime.parse(
-   //                  "$date $sstime").second * 1);
-   //              log("exatime3:$exatime");
+   //                  "$date $sstime").toLocal().hour * 3600) +(DateTime.parse(
+   //                  "$date $sstime").toLocal().minute * 60 )+(DateTime.parse(
+   //                  "$date $sstime").toLocal().second * 1);
+   //           //   log("exatime3:$exatime");
+   //              log("exatimee3:$expiryTimee");
    //              expiryTime =
-   //                  exatime- newatime ;
-   //              log("value${exatime-newatime}");
+   //                  exatime  -newatime ;
+   //             // log("value${exatime-newatime}");
    //              log("expiryTime3:$expiryTime");
    //            }
    //          }
@@ -1158,8 +1170,8 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
    //  log("ex"+expiryTime.toString());
     DateTime dateTime;
     dateTime = DateTime.parse(stime);
-    final DateFormat formatter = DateFormat('HH:mm:ss');
-    final String formatted = formatter.format(dateTime);
+    final DateFormat formatterr = DateFormat('HH:mm:ss');
+    final String formatted = formatterr.format(dateTime);
     final int sec = dateTime.millisecond;
     Duration clockTimer = Duration(hours: dateTime.hour);
      String starttime="";
@@ -1192,7 +1204,7 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
                          child: Text(starttime,
                              textAlign: TextAlign.center,
                              style: TextStyle(
-                                 fontSize: 22,
+                                 fontSize: 18,
                                  color: Colors.black,fontWeight: FontWeight.w600,
                                  fontFamily: "Nunito")),
                        )
@@ -1209,25 +1221,26 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
            //       },
            //       builder: (BuildContext context, Duration value, Widget? child) {
            //         String strDigits(int n) => n.toString().padLeft(2, '0');
-           //         final hours = strDigits(value.inHours.remainder(24));
+           //         final hours = strDigits(value.inHours.remainder(12));
            //         final minutes =  strDigits(value.inMinutes.remainder(60)) ;
            //         final seconds = strDigits(value.inSeconds.remainder(60));
            //         starttime='$hours:$minutes:$seconds';
            //         return Center(
            //           child: Container(
-           //               height: 40,width: 100,
+           //               height: 40,width: 120,
            //               padding:  const EdgeInsets.all(5),
            //               alignment: Alignment.center,
            //               child: Text(starttime,
            //                   textAlign: TextAlign.center,
            //         style: TextStyle(
-           //         fontSize: 22,
+           //         fontSize: 18,
            //         color: Colors.black,fontWeight: FontWeight.w600,
            //         fontFamily: "Nunito")),
            //           )
            //         );
            //       }),
            // ),
+
 
          ]
       ),
@@ -1254,10 +1267,11 @@ class _TournamentPageState extends State<TournamentPage> with TickerProviderStat
 
 
       // showLoaderDialog(context);
-     getTour(userid.toString(), text);
+     getTour(userid.toString(), text,widget.contents!.isNotEmpty ?widget.contents!:"",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty ?widget.themes!:"",);
     } else {
 
-      getTour(userid.toString(), "");
+      getTour(userid.toString(),"",widget.contents!.isNotEmpty ?widget.contents!:"",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty ?widget.themes!:"",);
+      ;
     }
     print(text);
     log(text);
