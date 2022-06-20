@@ -131,7 +131,10 @@ class _State extends State<MyApp> {
     await Firebase.initializeApp();
     RemoteMessage? initialMessage =
     await FirebaseMessaging.instance.getInitialMessage();
-
+    FirebaseMessaging.instance.getToken().then((token){
+      log(token!);
+      print(token);
+    });
     if (initialMessage != null) {
       PushNotification notification = PushNotification(
         title: initialMessage.notification?.title,
