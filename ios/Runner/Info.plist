@@ -22,6 +22,24 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Music!</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Access most functions for calendar viewing and editing.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Access contacts for event attendee editing.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>motion</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>photos</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>reminders</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>speech</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,32 +59,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSAppleMusicUsageDescription</key>
-    <string>Music!</string>
-    <key>kTCCServiceMediaLibrary</key>
-    <string>media</string>
-    <key>NSCalendarsUsageDescription</key>
-    <string>Calendars</string>
-    <key>NSCameraUsageDescription</key>
-    <string>camera</string>
-    <key>NSContactsUsageDescription</key>
-    <string>contacts</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>microphone</string>
-    <key>NSSpeechRecognitionUsageDescription</key>
-    <string>speech</string>
-    <key>NSMotionUsageDescription</key>
-    <string>motion</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>photos</string>
-    <key>NSRemindersUsageDescription</key>
-    <string>reminders</string>
-    <key>NSContactsUsageDescription</key>
-    <string>Reason we need access to the contact list</string>
-    <key>NSCalendarsUsageDescription</key>
-    <string>Access most functions for calendar viewing and editing.</string>
-    <key>NSContactsUsageDescription</key>
-    <string>Access contacts for event attendee editing.</string>
-
+	<key>kTCCServiceMediaLibrary</key>
+	<string>media</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>

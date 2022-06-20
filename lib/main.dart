@@ -147,7 +147,7 @@ class _State extends State<MyApp> {
         const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LoginScreen()))):
-    Navigator.of(context).pushReplacement(MaterialPageRoute(maintainState: true,
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (BuildContext context) => HomePage(link:  link,)));
   }
   @override
