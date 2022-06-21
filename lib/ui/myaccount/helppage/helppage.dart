@@ -166,7 +166,7 @@ class _AccountPageState extends State<HelpPage> {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: false,
       endDrawer: MySideMenuDrawer(),
       body: Container(

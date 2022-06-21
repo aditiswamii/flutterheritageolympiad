@@ -14,13 +14,29 @@
       },
       "oauth_client": [
         {
+          "client_id": "996536312413-5hbvkbuvl6jiuqhnkddec9e715b7933m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heritageolympiad.quiz",
+            "certificate_hash": "9101e297dbc05f0df718b239a260814bf8b84df3"
+          }
+        },
+        {
+          "client_id": "996536312413-67c6me1rndth20bv15s31v5hf5lnpfva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heritageolympiad.quiz",
+            "certificate_hash": "5ddf4ce7aa990ca4ccc91c8bf2481efae22e4138"
+          }
+        },
+        {
           "client_id": "996536312413-l4uljrnuhq8ci89rec4g4fn5iic9nm4a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCA45SEP0RVCkh0m-ZAKE6CgUi49MfPfmw"
+          "current_key": "AIzaSyBLcJBHQshmvrr5ibzvTbzCCK0paz_axKI"
         }
       ],
       "services": {
@@ -29,6 +45,13 @@
             {
               "client_id": "996536312413-l4uljrnuhq8ci89rec4g4fn5iic9nm4a.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "996536312413-lcg762r6f3dmevke2nc11fse45m3eore.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.heritageolympiad.quiz"
+              }
             }
           ]
         }

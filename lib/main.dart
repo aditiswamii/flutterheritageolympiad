@@ -4,6 +4,7 @@ import 'dart:developer';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:CultreApp/colors/colors.dart';
+import 'package:CultreApp/ui/mcq/mcq.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -16,6 +17,7 @@ import 'package:CultreApp/fcm/fcm.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:CultreApp/uinew/loginpage.dart';
 import 'package:CultreApp/widget/deeplink.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:overlay_support/overlay_support.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
@@ -31,29 +33,26 @@ import 'fcm/messagingservice.dart';
 import 'modal/pushnotification/pushnotifiaction.dart';
 //
  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-// MessagingService _msgService = MessagingService();
-//
-// Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   log(" --- background message received ---");
-//   log(message.notification!.title.toString());
-//   log(message.notification!.body.toString());
-// }
+
+
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  log(" --- background message received ---");
+  log(message.notification!.title.toString());
+  log(message.notification!.body.toString());
+}
+MessagingService _msgService = MessagingService();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.white, // navigation bar color
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+   // systemNavigationBarColor: Colors.white, // navigation bar color
     statusBarColor:  ColorConstants.verdigris,  // status bar color
     statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
     statusBarBrightness: Brightness.light,
   ));
-  // if (Firebase.apps.isEmpty) {
-  //   await Firebase.initializeApp(
-  //       options: const FirebaseOptions(
-  //           apiKey: "AIzaSyCA45SEP0RVCkh0m-ZAKE6CgUi49MfPfmw",
-  //           appId: "1:996536312413:android:10e948f7dea194aa6f63b4",
-  //           messagingSenderId: "996536312413-l4uljrnuhq8ci89rec4g4fn5iic9nm4a.apps.googleusercontent.com",
-  //           projectId: "cultre-mobile-app"));
-  // }
+  await Firebase.initializeApp();
+  _msgService.init();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   // if (kIsWeb) {
   //   // initialiaze the facebook javascript SDK
   //   await FacebookAuth.i.webInitialize(
@@ -63,13 +62,7 @@ void main() async{
   //     version: "v13.0",
   //   );
   // }
-  // FirebaseMessaging.instance.getToken().then((value) {
-  //   String? token = value;
-  //   log(token!);
-  // });
-  // _msgService.init();
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // initUniLinks().then((value) => link;
+
   runApp( OverlaySupport(
     child: MaterialApp(
       navigatorKey: navigatorKey,
@@ -81,17 +74,7 @@ void main() async{
     ),
   ));
 }
-Future<String?> initUniLinks() async {
 
-  try {
-    final initialLink = await getInitialLink();
-
-    return initialLink;
-  } on PlatformException {
-    return "" ;
-  }
-
-}
 class MyApp extends StatefulWidget {
 
   var link;
@@ -101,7 +84,7 @@ class MyApp extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<MyApp> {
+class _State extends State<MyApp> with WidgetsBindingObserver{
   late int _totalNotifications;
   late final FirebaseMessaging _messaging;
   PushNotification? _notificationInfo;
@@ -118,78 +101,12 @@ class _State extends State<MyApp> {
     initUniLinks().then((value) => setState(() {
       link = value;
     }));
-    checkForInitialMessage();
+
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
 
     autoLogIn();
 
-  }
-  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    print("Handling a background message: ${message.messageId}");
-  }
-  checkForInitialMessage() async {
-    await Firebase.initializeApp();
-    RemoteMessage? initialMessage =
-    await FirebaseMessaging.instance.getInitialMessage();
-    FirebaseMessaging.instance.getToken().then((token){
-      log(token!);
-      print(token);
-    });
-    if (initialMessage != null) {
-      PushNotification notification = PushNotification(
-        title: initialMessage.notification?.title,
-        body: initialMessage.notification?.body,
-        dataTitle: initialMessage.data['title'],
-        dataBody: initialMessage.data['body'],
-      );
-      setState(() {
-        _notificationInfo = notification;
-        _totalNotifications++;
-      });
-      log('TITLE: ${_notificationInfo!.dataTitle ?? _notificationInfo!.title}');
-      log('BODY: ${_notificationInfo!.dataBody ?? _notificationInfo!.body}');
-    }
-  }
-  void registerNotification() async {
-    // 1. Initialize the Firebase app
-    await Firebase.initializeApp();
-
-    // 2. Instantiate Firebase Messaging
-    _messaging = FirebaseMessaging.instance;
-
-    // 3. On iOS, this helps to take the user permissions
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-      // For handling the received notifications
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        // Parse the message received
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotifications++;
-        });
-      });
-      if(_notificationInfo != null){
-        log("title:"+_notificationInfo!.title.toString());
-        log("body"+_notificationInfo!.body.toString());
-      }
-
-    } else {
-      print('User declined or has not accepted permission');
-    }
   }
 
   Future<String?> initUniLinks() async {
@@ -219,6 +136,7 @@ class _State extends State<MyApp> {
     }
     log(  link == null ? "" : "mainlink: "+link!);
     print(link == null ? "" : "mainlink: "+ link!);
+
     isLoggedIn==false ? Timer(
         const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -228,8 +146,49 @@ class _State extends State<MyApp> {
   }
   @override
   void dispose() {
-
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("resume");
+        _msgService.init();
+        onResumed();
+        break;
+      case AppLifecycleState.inactive:
+        onPaused();
+        break;
+      case AppLifecycleState.paused:
+        onInactive();
+        break;
+      case AppLifecycleState.detached:
+        onDetached();
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  Future<void> onResumed()  async {
+    print(link == null ? "" : "mainlink 1: $link");
+    // link="";
+    initUniLinks().then((value) => setState(() {
+      link = value!;
+    }));
+    log(  link == null ? "" : "mainlink 2: "+link!);
+    print(link == null ? "" : "mainlink 3 : "+ link!);
+
+  }
+  void onPaused() {
+    // TODO: implement onPaused
+  }
+  void onInactive() {
+    // TODO: implement onInactive
+  }
+  void onDetached() {
+    // TODO: implement onDetached
   }
 
   @override

@@ -204,6 +204,7 @@ class _State extends State<Mcq> {
     countdownTimer =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
     print(_questionindex);
+    print(questions!.length);
     if (_questionindex < questions!.length) {
       //   randomItem = (questions..shuffle()).first;
       randomItem = questions![_questionindex];
@@ -215,7 +216,9 @@ class _State extends State<Mcq> {
       });
       print("current ques: " + "${currentques!.question}");
     } else {
-      countdownTimer!.cancel();
+      if(countdownTimer!.isActive) {
+        countdownTimer!.cancel();
+      }
       PassValue();
 
     }
@@ -239,9 +242,17 @@ class _State extends State<Mcq> {
 
     }
   }
-
+  NextQue(){
+    if (_questionindex < questions!.length) {
+      reloadques();
+    }else{
+      showMessageDialog(context);
+    }
+  }
   PassValue() {
-    countdownTimer!.cancel();
+    if(countdownTimer!.isActive) {
+      countdownTimer!.cancel();
+    }
     answerstring = "";
     for (int i = 0; i < answer.length; i++) {
       if (answerstring.isEmpty) {
@@ -306,7 +317,7 @@ class _State extends State<Mcq> {
 
   void getTourQuestions(int tournamentId, int sessionId) async {
     http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "tournament_questions"),
+        Uri.parse("${StringConstants.BASE_URL}tournament_questions"),
         body: {
           'tournament_id': tournamentId.toString(),
           'session_id': sessionId.toString(),
@@ -345,7 +356,7 @@ class _State extends State<Mcq> {
           totalques = questionR!.data!.totalQuestion;
           totalquesinquiz = questionR!.data!.totalQuestionInQuiz;
           questime = questionR!.data!.time!;
-          quiztype = questionR!.data!.quizType!.toString();
+         // quiztype = questionR!.data!.quizType!.toString();
           questionlistlen = questions!.length;
           wholequiztime = int.parse(questionR!.data!.wholeQuizTime!);
 
@@ -432,12 +443,16 @@ class _State extends State<Mcq> {
   void submittourquiz(
       int tournamentId, int sessionId, String quizAnswer) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
+print("hi");
+    print(tournamentId.toString());
+    print(sessionId.toString());
+    print(quizAnswer.toString());
+    print(prefs.getString("userid").toString());
     http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL + "save_room_result"), body: {
+        .post(Uri.parse(StringConstants.BASE_URL + "tournament_result"), body: {
       'tournament_id': tournamentId.toString(),
       'session_id': sessionId.toString(),
-      'quiz_answer': quizAnswer.toString(),
+      'answer': quizAnswer.toString(),
       'user_id': prefs.getString("userid").toString()
     });
     showLoaderDialog(context);
@@ -445,6 +460,7 @@ class _State extends State<Mcq> {
     if (response.statusCode == 200) {
       Navigator.pop(context);
       resultdata = response.body;
+      print(response.body);
       if (jsonResponse['status'] == 200) {
         resultres = jsonDecode(response.body);
         savedata = jsonDecode(resultdata!)['data'];
@@ -458,6 +474,8 @@ class _State extends State<Mcq> {
         print(jsonDecode(resultdata!)['data']['quiz_id']);
         print(jsonDecode(resultdata!)['data']['xp']);
         print(jsonDecode(resultdata!)['data']['per']);
+      } else {
+
       }
     } else {
       Navigator.pop(context);
@@ -533,8 +551,11 @@ class _State extends State<Mcq> {
                           fontWeight: FontWeight.w700))),
               TextButton(
                   onPressed: () {
-                    countdownTimer!.cancel();
+
                     PassValue();
+                    if(countdownTimer!.isActive) {
+                      countdownTimer!.cancel();
+                    }
                   },
                   child: Text("Yes",
                       style: TextStyle(
@@ -781,7 +802,7 @@ class _State extends State<Mcq> {
                             ),
                           ),
 
-                      if (currentques!.questionMedia!.isNotEmpty)
+                      if (currentques!.questionMedia!=null && currentques!.questionMedia!.isNotEmpty)
                         Container(
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child:Image.network(
@@ -1129,11 +1150,12 @@ class _State extends State<Mcq> {
                               child: TextButton(
                                 onPressed: () {
                                   print("ans:$selectans");
-                                  if (_questionindex < questions!.length) {
-                                    reloadques();
-                                  }else{
-                                    showMessageDialog(context);
-                                  }
+                                  NextQue();
+                                  // if (_questionindex < questions!.length) {
+                                  //   reloadques();
+                                  // }else{
+                                  //   showMessageDialog(context);
+                                  // }
                                 },
                                 child: Image.asset(
                                     "assets/images/rightarrow2.png",

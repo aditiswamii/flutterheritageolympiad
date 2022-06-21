@@ -67,9 +67,10 @@ class _State extends State<TournamentResult> {
     });
     print("userdata");
     //calTheme();
-
+  log(widget.tourid);
+  log(widget.sessionid);
     getTourResult(userid.toString(), widget.tourid,widget.sessionid);
-
+   // getTourResult(userid.toString(), 124,widget.sessionid);
   }
   void getPackage() async {
     packageInfo = await PackageInfo.fromPlatform();
@@ -103,10 +104,10 @@ class _State extends State<TournamentResult> {
         //final responseJson = json.decode(response.body);//store response as string
         resultdata = jsonResponse[
         'data']; //get all the data from json string superheros
-        print("length" + resultdata.length.toString());
-        print("resdata" + jsonResponse['data'].toString());
-        print("resdata" + jsonResponse['data'][0].toString());
-        // print("getduelresult"+getDuelResultResponseFromJson(data!).result.toString());
+        // print("length" + resultdata.length.toString());
+        // print("resdata" + jsonResponse['data'].toString());
+        // print("resdata" + jsonResponse['data'][0].toString());
+
         onsuccess(resultdata);
 
         // print("getduelresult"+getDuelResultResponseFromJson(data!).result.toString());
@@ -126,13 +127,23 @@ class _State extends State<TournamentResult> {
 
   onsuccess(resultdata) {
     log("log" + resultdata.toString());
-    if (resultdata != null) {
+    if (resultdata != null && resultdata.toString().isNotEmpty) {
       setState(() {
         tourresultr = resultdata;
       });
       print("gettourjsonsuccess" + tourresultr.toString());
       print("gettourjsonsuccessuser" + tourresultr[0]['percentage'].toString());
+    }else{
+      print("gettourjsonsuccess not calculated yet" );
+      Future.delayed(
+        const Duration(seconds: 30),
+            () {
+          getTourResult(userid.toString(), widget.tourid,widget.sessionid);
+        },
+      );
+
     }
+
   }
 
 
@@ -178,6 +189,8 @@ class _State extends State<TournamentResult> {
 
   @override
   Widget build(BuildContext context) {
+    log(widget.tourid.toString());
+    log(widget.sessionid.toString());
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(

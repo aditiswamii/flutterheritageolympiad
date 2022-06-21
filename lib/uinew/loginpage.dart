@@ -164,8 +164,8 @@ class _State extends State<LoginScreen> {
     if (response.statusCode == 200) {
       Navigator.pop(context);
       data = response.body;
-      print(jsonDecode(data!)['data'].toString());
-      print(jsonDecode(data!)['data']["id"].toString());
+      // print(jsonDecode(data!)['data'].toString());
+      // print(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
       if(jsonResponse['status']==200) {
 
@@ -196,8 +196,7 @@ class _State extends State<LoginScreen> {
             "agegroup", jsonDecode(data!)["age_group"].toString());
         Loginuser(jsonDecode(data!)['data']);
         print(jsonDecode(data!)['data'].toString());
-      }else{
-        if(jsonDecode(data!)['data'].toString().isNotEmpty){
+      }else if(jsonDecode(data!)['data'].toString().isNotEmpty){
           prefs.setString("userid", jsonDecode(data!)['data']["id"].toString());
           prefs.setString(
               "name", jsonDecode(data!)['data']["username"].toString());
@@ -206,8 +205,8 @@ class _State extends State<LoginScreen> {
           prefs.setString(
               "gender", jsonDecode(data!)['data']["gender"].toString());
           OpenProfile(jsonDecode(data!)['data']);
-        }
-        Navigator.pop(context);
+        }else{
+
         const snackBar = SnackBar(
           content: Text(
             'Invalid Login Credentials',textAlign: TextAlign.center,),

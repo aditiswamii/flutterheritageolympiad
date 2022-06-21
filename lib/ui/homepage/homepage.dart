@@ -1,9 +1,12 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 
 
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +37,7 @@ import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import '../../dialog/duelinvitereceive/duelinvite_receivedialog.dart';
 import '../../dialog/quizroominvitereceive/quizroominvite_receivedialog.dart';
 import '../../fcm/messagehandler.dart';
+import '../../fcm/messagingservice.dart';
 import '../../utils/StringConstants.dart';
 
 import '../classicquiz/result/result.dart';
@@ -75,9 +79,9 @@ var myinvdata;
   var shortlink;
   var linkurl;
 GetUserLeagueResponse? userLeagueR;
-  //  FirebaseMessaging? _fcm;
-  // String? _token;
-  // String? get token => _token;
+   FirebaseMessaging? _fcm;
+  String? _token;
+  String? get token => _token;
 
 
 
@@ -671,15 +675,14 @@ String link="";
 
     }
   }
+  MessagingService _msgService = MessagingService();
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
 
     switch (state) {
       case AppLifecycleState.resumed:
         print("resume");
-        initUniLinks().then((value) => setState(() {
-          link = value!;
-        }));
+        _msgService.init();
         onResumed();
         break;
       case AppLifecycleState.inactive:
@@ -695,23 +698,40 @@ String link="";
     super.didChangeAppLifecycleState(state);
   }
 
- void onResumed()  {
-    print(link == null ? "" : "mainlink: $link");
-    link="";
+ Future<void> onResumed()  async {
+    print(link == null ? "" : "mainlink 1: $link");
+    // link="";
     initUniLinks().then((value) => setState(() {
       link = value!;
     }));
-    log(  link == null ? "" : "mainlink: "+link);
-    print(link == null ? "" : "mainlink: "+ link);
+    log(  link == null ? "" : "mainlink 2: "+link);
+    print(link == null ? "" : "mainlink 3 : "+ link);
+    linkurl=link;
+    if(link.isNotEmpty) {
+      setState(() {
+        shortlink = linkurl.toString().substring(18);
+      });
+      shortlink = linkurl.toString().substring(18);
+      //            linkshort = linkurl.substring(22)!!
+      log("shortlink: "+ shortlink);
+      if(shortlink.toString().contains("invite")) {
+        linkdetails(userid.toString(),shortlink.toString());
+      } else if(shortlink.toString().contains("quizroom")){
+        log("shortlink: "+shortlink);
+        quizroomdetail(userid.toString(), shortlink.toString());
+      } else {
+        dualdetails(userid.toString(), shortlink.toString());
+      }
 
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // if (prefs.getString("fcmtoken") == null || prefs.getString("fcmtoken")!.isEmpty) {
-    //   generateDeviceToken();
-    // } else {
-    //   if (!prefs.getBool("IsRegistered")!) {
-    //     sendDeviceIdApi(userid.toString(),_token.toString(),"0");
-    //   }
-    // }
+    } else {
+      myinvitation(userid.toString());
+    }
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      if (prefs.getBool("IsRegistered")==false && prefs.getString("fcmtoken") != null &&  prefs.getString("fcmtoken")!.isNotEmpty) {
+        sendDeviceIdApi(userid.toString(),_token.toString(),"0");
+
+    }
   }
   void onPaused() {
     // TODO: implement onPaused
@@ -723,30 +743,31 @@ String link="";
     // TODO: implement onDetached
   }
 
-  // generateDeviceToken() async {
-  //  _token = await _fcm!.getToken();
-  //
-  //  _fcm!.onTokenRefresh.listen((token) {
-  //    _token = token;
-  //  });
-  //
-  //
-  //   if (token != null) {
-  //
-  //     final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     prefs.setString("fcmtoken", "$_token");
-  //   sendDeviceIdApi(userid.toString(),_token.toString(),"0");
-  //   log("MYFCMTOKEN : ${prefs.getString("fcmtoken")}");
-  //   }
-  //
-  //
-  // }
+  generateDeviceToken() async {
+   _token = await _fcm!.getToken();
+
+   _fcm!.onTokenRefresh.listen((token) {
+     _token = token;
+   });
+
+
+    if (token != null) {
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("fcmtoken", "$_token");
+    sendDeviceIdApi(userid.toString(),_token.toString(),"0");
+    log("MYFCMTOKEN : ${prefs.getString("fcmtoken")}");
+    }
+
+
+  }
   sendDeviceIdApi(String userid,String token,String devicetype) async {
 
     http.Response response =
     await http.post(Uri.parse(StringConstants.BASE_URL + "updatetoken"), body: {
       'user_id': userid.toString(),
       'device_type':"0",
+      'isios':  Platform.isIOS?"1":"0",
       'token':token.toString()
     });
     var jsonResponse = convert.jsonDecode(response.body);
@@ -755,14 +776,14 @@ String link="";
       if (jsonResponse['status'] == 200) {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool("IsRegistered", true);
-
+       log("sendDeviceIdApi success");
       } else {
-        snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        // snackBar = SnackBar(
+        //   content: Text(
+        //       jsonResponse['message']),
+        // );
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(snackBar);
       }
     } else {
 
@@ -1083,6 +1104,10 @@ String link="";
         //last_id
 
       } else {
+        setState(() {
+          link="";
+        });
+
         snackBar = SnackBar(
           content: Text(
               jsonResponse['message']),
@@ -1443,6 +1468,9 @@ String link="";
         //last_id
 
       } else {
+        setState(() {
+          link="";
+        });
         snackBar = SnackBar(
           content: Text(
               jsonResponse['message']),
@@ -1516,6 +1544,9 @@ String link="";
         //last_id
 
       } else {
+        setState(() {
+          link="";
+        });
         snackBar = SnackBar(
           content: Text(
               jsonResponse['message']),
