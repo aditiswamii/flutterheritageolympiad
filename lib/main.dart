@@ -5,7 +5,9 @@ import 'dart:developer';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/ui/mcq/mcq.dart';
+import 'package:CultreApp/ui/shopactivity/shopactivity.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -27,22 +29,279 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
+// import 'package:workmanager/workmanager.dart';
 
 import 'fcm/messagehandler.dart';
 import 'fcm/messagingservice.dart';
 import 'modal/pushnotification/pushnotifiaction.dart';
 //
  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+MessagingService _msgService = MessagingService();
 
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  log(" --- background message received ---");
-  log(message.notification!.title.toString());
-  log(message.notification!.body.toString());
+  await Firebase.initializeApp();
+
+  log(" --- background message received in main---");
+  _firebaseMessaging.getInitialMessage();
+  showNotification(0,message.data['title'],message.data['body']);
+  // _msgService.init();
+  //_handleMessage(message);
+
 }
-MessagingService _msgService = MessagingService();
+
+Future _registerForegroundMessageHandler(RemoteMessage message)  async{
+
+  log(" --- Foreground message received in main1---");
+  showNotification(0,message.notification!.title.toString(), message.notification!.body.toString());
+  _handleMessage(message);
+  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+}
+Future<void> _handleMessage(RemoteMessage message) async{
+  log(message.toString());
+  var notificationType = message.data["type"];
+  log("notificationType: $notificationType");
+  if(notificationType=='tournament'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => MyApp()));
+    });
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(1,title,body);
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+  }else if(notificationType=='contact'){
+    var  title=message.data["title"];
+    var   body=message.data['body'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(1,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => MyApp()));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+
+  }else if(notificationType=='dual'){
+    var  title=message.data["title"];
+    var  body=message.data['body'];
+    var  link=message.data['link'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => MyApp()));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => MyApp(link: link,)));
+
+  }else if(notificationType=='quizroom'){
+    var  title=message.data["title"];
+    var  body=message.data['body'];
+    var  link=message.data['link'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => MyApp()));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => MyApp(link: link,)));
+
+  }else if(notificationType=='product'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => Shopactivity(type: 1,)));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => Shopactivity(type: 1,)));
+  }else if(notificationType=='experience'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => Shopactivity(type: 2,)));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => Shopactivity(type: 2,)));
+  }else if(notificationType=='post'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => Shopactivity(type: 3,)));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => Shopactivity(type: 3,)));
+  }else if(notificationType=='quizroomstart'){
+    var title=message.data["title"];
+    var body=message.data['body'];
+    String roomid=message.data['room_id'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => Mcq(quizid: roomid.toString(), type: "3", sessionid: 0, tourid: 0)));
+
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => Mcq(quizid: roomid.toString(), type: "3", sessionid: 0, tourid: 0)));
+  }else{
+    var title=message.data["title"];
+    var body=message.data['body'];
+    // if( body!=null) {
+    //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
+    //       background: ColorConstants.verdigris);
+    // }
+    showNotification(2,title,body);
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => MyApp()));
+    });
+    Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(
+            builder: (context) => MyApp()));
+  }
+}
+
+Future showNotification(int notifyid,String? title,String? body) async {
+
+  //  var android = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  //  var initiallizationSettingsIOS = const IOSInitializationSettings();
+  //  var initialSetting = InitializationSettings(android: android, iOS: initiallizationSettingsIOS);
+  //  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  // await flutterLocalNotificationsPlugin.initialize(initialSetting);
+
+  FlutterLocalNotificationsPlugin flip = FlutterLocalNotificationsPlugin();
+
+  // app_icon needs to be a added as a drawable
+  // resource to the Android head project.
+  var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+  var IOS = IOSInitializationSettings();
+
+  // initialise settings for both Android and iOS device.
+  var settings = InitializationSettings(android: android, iOS: IOS);
+  flip.initialize(settings);
+
+  _showNotificationWithDefaultSound(flip,notifyid,title,body);
+
+
+  // const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+  //     'channel-02',
+  //     'Channel Names',
+  //
+  //     importance: Importance.max,
+  //     priority: Priority.high,
+  //     ticker: 'ticker',
+  //     icon: "logo_rs",
+  //     playSound: true,
+  //     sound: RawResourceAndroidNotificationSound("notification")
+  // );
+  // const iOSDetails = IOSNotificationDetails();
+  // const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails, iOS: iOSDetails);
+  //
+  // await flutterLocalNotificationsPlugin.show(0,title,body, platformChannelSpecifics);
+
+}
+Future _showNotificationWithDefaultSound(flip,int notifyid,String? title,String? body) async {
+
+  // Show a notification after every 15 minute with the first
+  // appearance happening a minute after invoking the method
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'your channel id',
+      'your channel name',
+      channelDescription:'your channel description',
+      importance: Importance.max,
+      priority: Priority.high
+  );
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+  // initialise channel platform for both Android and iOS device.
+  var platformChannelSpecifics = new NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics
+  );
+  await flip.show(notifyid, '$title',
+      '$body',
+      platformChannelSpecifics, payload: 'Default_Sound'
+  );
+}
+
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
    // systemNavigationBarColor: Colors.white, // navigation bar color
     statusBarColor:  ColorConstants.verdigris,  // status bar color
@@ -50,9 +309,11 @@ void main() async{
     statusBarBrightness: Brightness.light,
   ));
   await Firebase.initializeApp();
+
   _msgService.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+   FirebaseMessaging.onMessage.listen(_registerForegroundMessageHandler);
+  FirebaseMessaging.instance.getInitialMessage();
   // if (kIsWeb) {
   //   // initialiaze the facebook javascript SDK
   //   await FacebookAuth.i.webInitialize(
@@ -75,6 +336,7 @@ void main() async{
   ));
 }
 
+
 class MyApp extends StatefulWidget {
 
   var link;
@@ -84,7 +346,7 @@ class MyApp extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<MyApp> with WidgetsBindingObserver{
+class _State extends State<MyApp> {
   late int _totalNotifications;
   late final FirebaseMessaging _messaging;
   PushNotification? _notificationInfo;
@@ -102,7 +364,7 @@ class _State extends State<MyApp> with WidgetsBindingObserver{
       link = value;
     }));
 
-    WidgetsBinding.instance.addObserver(this);
+  //  WidgetsBinding.instance.addObserver(this);
     super.initState();
 
     autoLogIn();
@@ -120,6 +382,7 @@ class _State extends State<MyApp> with WidgetsBindingObserver{
     }
 
   }
+
   void autoLogIn() async {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -146,30 +409,33 @@ class _State extends State<MyApp> with WidgetsBindingObserver{
   }
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+   // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-
-    switch (state) {
-      case AppLifecycleState.resumed:
-        print("resume");
-        _msgService.init();
-        onResumed();
-        break;
-      case AppLifecycleState.inactive:
-        onPaused();
-        break;
-      case AppLifecycleState.paused:
-        onInactive();
-        break;
-      case AppLifecycleState.detached:
-        onDetached();
-        break;
-    }
-    super.didChangeAppLifecycleState(state);
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       print("main resume");
+  //
+  //       onResumed();
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       print("main inactive");
+  //       onPaused();
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       print("main paused");
+  //       onInactive();
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       print("main detached");
+  //       onDetached();
+  //       break;
+  //   }
+  //   super.didChangeAppLifecycleState(state);
+  // }
 
   Future<void> onResumed()  async {
     print(link == null ? "" : "mainlink 1: $link");
@@ -211,4 +477,23 @@ class _State extends State<MyApp> with WidgetsBindingObserver{
       ),
     );
   }
+  Future<void> setupInteractedMessage() async {
+    //Terminated State
+    //Comes in from terminated app's notification
+    FirebaseMessaging.instance.getInitialMessage().then((value) => {
+      if (value != null)
+        {print("ContentAvailable : " + value.contentAvailable.toString())}
+    });
+
+    //Foreground state
+
+
+    //Opened from background notification trigger and handler
+    //It does not work if the app is detached only works in paused state
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      _msgService.init();
+      print("Received in background while the app is paused and not detached");
+    });
+  }
+
 }

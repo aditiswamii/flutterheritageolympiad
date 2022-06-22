@@ -28,9 +28,15 @@ class MySideMenuDrawer extends StatefulWidget{
 class _State extends State<MySideMenuDrawer> {
   bool isLoggedIn = false;
   String name = '';
+  String token="";
+  bool isregister=false;
   Future<Null> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('loggedin');
+    token= prefs.getString("fcmtoken")!;
+    prefs.clear();
+    prefs.setString("fcmtoken", token);
+    prefs.setBool("IsRegistered", isregister);
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
