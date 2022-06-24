@@ -11,6 +11,7 @@ class StringConstants {
   static const sessionProfilePictureUrl = 'sessionProfilePictureUrl';
 
   static const configDarkMode = 'configDarkMode';
+
 // static String downloadsDirPath;
 // static String cacheDirPath;
 }

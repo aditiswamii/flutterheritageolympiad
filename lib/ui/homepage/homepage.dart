@@ -78,6 +78,7 @@ GetUserLeagueResponse? userLeagueR;
  userdata() async {
   // messageHandler();
    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
    setState(() {
      username = prefs.getString("username");
      country =prefs.getString("country");

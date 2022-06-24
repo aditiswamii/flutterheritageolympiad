@@ -59,7 +59,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
   var username;
   var email;
   var country;
-  String? profilepic;
+  String? profilepic="";
   var userid;
   var snackBar;
   var prodata;
@@ -195,25 +195,26 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       }
 
   }
-  onsuccess(GetProfileResponse? getprofileresponse){
-    if(getprofileresponse!.data!=null){
-      setState(() {
-        profileresdata=getprofileresponse;
-        firstname="${profileresdata!.data!.firstName![0].toUpperCase() + profileresdata!.data!.firstName!.substring(1)}";
-        lastname=profileresdata!.data!.lastName!.toString();
-        dobdate=profileresdata!.data!.dob!.toString();
-        mobileno=profileresdata!.data!.mobile!.toString();
-        profilepic=profileresdata!.data!.image!.toString();
-        gendername=profileresdata!.data!.gender!.toString();
-        cityid=profileresdata!.data!.cityId!.toString();
-        cityname=profileresdata!.data!.city!.toString();
-        stateid=profileresdata!.data!.stateId!.toString();
-        statename=profileresdata!.data!.state!.toString();
-        countryid=profileresdata!.data!.countryId!.toString();
-        countryname=profileresdata!.data!.country!.toString();
-      });
-
-
+  onsuccess(GetProfileResponse? getprofileresponse) {
+    if (getprofileresponse != null) {
+      if (getprofileresponse.data != null) {
+        setState(() {
+          profileresdata = getprofileresponse;
+          firstname = "${profileresdata!.data!.firstName![0].toUpperCase() +
+              profileresdata!.data!.firstName!.substring(1)}";
+          lastname = profileresdata!.data!.lastName!.toString();
+          dobdate = profileresdata!.data!.dob!.toString();
+          mobileno = profileresdata!.data!.mobile!.toString();
+          profilepic = profileresdata!.data!.image!.toString();
+          gendername = profileresdata!.data!.gender!.toString();
+          cityid = profileresdata!.data!.cityId!.toString();
+          cityname = profileresdata!.data!.city!.toString();
+          stateid = profileresdata!.data!.stateId!.toString();
+          statename = profileresdata!.data!.state!.toString();
+          countryid = profileresdata!.data!.countryId!.toString();
+          countryname = profileresdata!.data!.country!.toString();
+        });
+      }
     }
   }
 
@@ -225,10 +226,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       firstDate: DateTime(selectedDate.year-99),
       lastDate: DateTime(selectedDate.year-1),
     );
-    if (selected != null && selected != selectedDate)
+    if (selected != null && selected != selectedDate) {
       setState(() {
         selectedDate = selected;
       });
+    }
   }
   uploadFile(String userid,String mobile,String first_name,String dob,String state_id,String city_id,
   String gender,String last_name, File image) async {
@@ -324,10 +326,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
    successdialog(context, "You have successfully updated your profile");
   }
   validateName(String value) {
-    if (value.length > 3)
+    if (value.length > 3) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
   validateMobile(String value) {
@@ -486,7 +489,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                 fontSize: 24, color: ColorConstants.txt))),
 
 
-            prodata==null?Container():  ListBody(
+            prodata==null?Container(): profileresdata==null?Container(): ListBody(
                 children: [
 
               Padding(
@@ -561,10 +564,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                     builder: (BuildContext context) => errorDialog);
                   },
                   child: Container(
-                width: MediaQuery.of(context).size.width,
+                width: 100,
                 height: 100.0,
                 child:profilepic!.isEmpty?CircleAvatar(
                   radius: 30.0,
+                  child: Image.asset("assets/images/placeholder.png",fit: BoxFit.cover,),
                   backgroundImage:AssetImage("assets/images/placeholder.png"),
                   backgroundColor: Colors.transparent,
                 ): CircleAvatar(

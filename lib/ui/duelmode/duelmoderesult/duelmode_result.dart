@@ -638,7 +638,17 @@ class _DuelModeResultState extends State<DuelModeResult> {
                                                               .centerLeft,
                                                           height: 30,
                                                           width: 30,
-                                                          child: CircleAvatar(
+                                                          child:  duelresultr['result']
+                                                          [
+                                                          index]
+                                                          ['image']
+                                                              .toString().isEmpty?CircleAvatar(
+                                                            radius: 30.0,
+                                                            child: Image.asset("assets/images/placeholder.png",fit: BoxFit.cover,),
+                                                            backgroundColor:
+                                                            Colors
+                                                                .transparent,
+                                                          ): CircleAvatar(
                                                             radius: 30.0,
                                                             backgroundImage: NetworkImage(
                                                                 duelresultr['result']

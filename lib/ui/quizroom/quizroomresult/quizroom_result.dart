@@ -659,7 +659,17 @@ class _QuizroomResultState extends State<QuizroomResult> {
                                                               .centerLeft,
                                                           height: 30,
                                                           width: 30,
-                                                          child: CircleAvatar(
+                                                          child: roomresultr['result']
+                                                          [
+                                                          index]
+                                                          ['image']
+                                                              .toString().isEmpty?CircleAvatar(
+                                                            radius: 30.0,
+                                                            child: Image.asset("assets/images/placeholder.png",fit: BoxFit.cover,),
+                                                            backgroundColor:
+                                                            Colors
+                                                                .transparent,
+                                                          ):CircleAvatar(
                                                             radius: 30.0,
                                                             backgroundImage: NetworkImage(
                                                                 roomresultr['result']

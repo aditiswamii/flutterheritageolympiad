@@ -63,9 +63,10 @@ Future<void> _handleMessage(RemoteMessage message) async{
   log(message.toString());
   var notificationType = message.data["type"];
   log("notificationType: $notificationType");
-  if(notificationType=='tournament'){
+  if(notificationType=="tournament"){
     var title=message.data["title"];
-    var body=message.data['body'];
+    var body=message.data["body"];
+    showNotification(1,title,body);
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       Navigator.push(
           navigatorKey.currentContext!,
@@ -76,14 +77,14 @@ Future<void> _handleMessage(RemoteMessage message) async{
     //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
     //       background: ColorConstants.verdigris);
     // }
-    showNotification(1,title,body);
+
     Navigator.push(
         navigatorKey.currentContext!,
         MaterialPageRoute(
             builder: (context) => MyApp()));
-  }else if(notificationType=='contact'){
+  }else if(notificationType=="contact"){
     var  title=message.data["title"];
-    var   body=message.data['body'];
+    var   body=message.data["body"];
     // if( body!=null) {
     //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
     //       background: ColorConstants.verdigris);
@@ -357,6 +358,7 @@ class _State extends State<MyApp> {
   var title ;
   @override
   void initState() {
+
     _totalNotifications = 0;
 
     link="";
@@ -386,6 +388,7 @@ class _State extends State<MyApp> {
   void autoLogIn() async {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("IsRegistered", false);
     final bool? loggedin = prefs.getBool('loggedin');
     // print(loggedin.toString());
     if (loggedin != true) {

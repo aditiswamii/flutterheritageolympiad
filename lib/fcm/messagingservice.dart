@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/main.dart';
@@ -34,23 +35,30 @@ class MessagingService{
     }else{
       log("permission denied");
     }
-
+    if(Platform.isIOS){
+      await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+        alert: true, // Required to display a heads up notification
+        badge: true,
+        sound: true,
+      );
+    }
   }
 
   Future _getToken() async {
-
-    _token = await _firebaseMessaging.getToken();
-
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _token = await _firebaseMessaging.getToken();
+    prefs.setString("fcmtoken", "$_token");
+
+
     _firebaseMessaging.onTokenRefresh.listen((token) {
       _token = token;
       prefs.setString("fcmtoken", "$_token");
       prefs.setBool("IsRegistered", false);
+      print("FCM: $_token");
+      log("FCM: $_token");
     });
 
-    print("FCM: $_token");
-    log("FCM: $_token");
+
     _firebaseMessaging.getInitialMessage();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (kDebugMode) {
@@ -77,6 +85,7 @@ class MessagingService{
         criticalAlert: false,
         provisional: false,
         announcement: false);
+
   }
   Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     log(" --- background message received in service---");
@@ -289,7 +298,9 @@ class MessagingService{
     // app_icon needs to be a added as a drawable
     // resource to the Android head project.
     var android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    var IOS = IOSInitializationSettings();
+    var IOS = IOSInitializationSettings(requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,);
 
     // initialise settings for both Android and iOS device.
     var settings = InitializationSettings(android: android, iOS: IOS);
