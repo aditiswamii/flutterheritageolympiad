@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
@@ -77,6 +78,13 @@ class _State extends State<AboutUsPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+
+          leading:Platform.isIOS? GestureDetector(onTap: (){
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) =>MyAccountPage()));
+          },
+              child: Container(child:Center(child: Image.asset("assets/images/leftarrow.png",height: 22,width: 22,)))):Container()
+        ,
           title: Text(widget.title,style: TextStyle(color: Colors.black,fontSize: 22),),
         ),
         body:  Container(

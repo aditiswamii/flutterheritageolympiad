@@ -72,7 +72,7 @@ class _State extends State<ImageviewFeed> {
             children: [
               Center(
                 child: Container(
-                  height:MediaQuery.of(context).size.height-50,
+                  height:MediaQuery.of(context).size.height-60,
                   //  height: 200,
                     child: PhotoViewGallery.builder(
                       backgroundDecoration: BoxDecoration(
@@ -99,6 +99,7 @@ class _State extends State<ImageviewFeed> {
               ),
               Container(
                 height: 50,
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: (){

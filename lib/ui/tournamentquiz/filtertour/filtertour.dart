@@ -34,13 +34,9 @@ class FilterTour extends StatefulWidget {
 }
 
 class _FilterTourState extends State<FilterTour> with ChangeNotifier {
-  TextEditingController controller = TextEditingController();
-  PageController _pageController = PageController();
-  // TextEditingController controller = TextEditingController();
-  // List<Data> _searchResult = [];
-  // List<Data> _userDetails = [];
 
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   var username;
   var email;
   var country;
@@ -53,7 +49,7 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
   String seldomain="";
   String domain = "";
   var selectedIndexes = [];
-  static int _len = 11;
+  static const int _len = 11;
   var domainname;
   bool allselect = false;
   List<bool> isChecked = List.generate(_len, (index) => false);
@@ -61,12 +57,7 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
   var tangible = 1;
   var intangible = 0;
   var natural = 0;
-  // var single = 0;
-  // var modules = 0;
-  // var collection = 0;
-  // var singleb = false;
-  // var modulesb = false;
-  // var collectionb = false;
+
  int qsellall = 0;
  int weekly = 0;
  int monthly = 0;
@@ -180,26 +171,7 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
 
   }
 
-  // showLoaderDialog(BuildContext context) {
-  //   AlertDialog alert = AlertDialog(
-  //     content: new Row(
-  //       children: [
-  //         CircularProgressIndicator(),
-  //         Container(
-  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-  //       ],
-  //     ),
-  //   );
-  //   showDialog(
-  //     barrierDismissible: false,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
 
-  onsuccessfeed() {}
   @override
   void initState() {
     super.initState();
@@ -210,7 +182,6 @@ class _FilterTourState extends State<FilterTour> with ChangeNotifier {
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
-    cleanData();
     super.dispose();
   }
 

@@ -1625,12 +1625,13 @@ String link="";
 
   }
   getuserleagueresponse(GetUserLeagueResponse userLeagueResponse){
-    if(userLeagueResponse.data!=null){
-      setState(() {
-        userLeagueR=userLeagueResponse;
-      });
+    if(userLeagueResponse != null) {
+      if (userLeagueResponse.data != null) {
+        setState(() {
+          userLeagueR = userLeagueResponse;
+        });
+      }
     }
-
   }
 
 
