@@ -127,23 +127,28 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
 
   void getCountry(GetCountryList) async {
     http.Response response =
-    await http.get(Uri.parse('http://3.108.183.42/api/country'));
+    await http.get(Uri.parse(StringConstants.BASE_URL+'country'));
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      datacoun = response.body; //store response as string
-      setState(() {
-        datacoun = response.body;
-        countlength = getCountryListFromJson(
-            datacoun!); //get all the data from json string superheros
-        jsonDecode(datacoun!)['countries'];
-      });
-      //getState(GetStateResponse);
-      var venam = jsonDecode(datacoun!)['countries'].toString();
-      var venamid = jsonDecode(datacoun!)['countries'][4]['id'].toString();
-      print(venam);
+      datacoun = response.body;
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          datacoun = response.body;
+          countlength = getCountryListFromJson(
+              datacoun!); //get all the data from json string superheros
+          jsonDecode(datacoun!)['countries'];
+        });
+        //getState(GetStateResponse);
+        var venam = jsonDecode(datacoun!)['countries'].toString();
+        var venamid = jsonDecode(datacoun!)['countries'][4]['id'].toString();
+        print(venam);
 
-      print(getCountryListFromJson(datacoun!).countries.toString());
-      print(venamid);
-    } else {
+        print(getCountryListFromJson(datacoun!).countries.toString());
+        print(venamid);
+      }else{
+
+      }
+    }else {
       print(response.statusCode);
     }
   }
@@ -232,19 +237,19 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       });
     }
   }
-  uploadFile(String userid,String mobile,String first_name,String dob,String state_id,String city_id,
-  String gender,String last_name, File image) async {
+  uploadFile(String userid,String mobile,String firstName,String dob,String stateId,String cityId,
+  String gender,String lastName, File image) async {
 
     var postUri = Uri.parse(StringConstants.BASE_URL+'update-profile');
     var request = http.MultipartRequest("POST", postUri);
     request.fields['user_id'] = userid.toString();
     request.fields['mobile'] =  mobile.toString();
-    request.fields['first_name'] = first_name.toString();
+    request.fields['first_name'] = firstName.toString();
     request.fields['dob'] = dob.toString();
-    request.fields['state_id'] = state_id.toString();
-    request.fields['city_id'] = city_id.toString();
+    request.fields['state_id'] = stateId.toString();
+    request.fields['city_id'] = cityId.toString();
     request.fields['gender'] = gender.toString();
-    request.fields['last_name'] = last_name.toString();
+    request.fields['last_name'] = lastName.toString();
     print(request.toString());
     print(_image!.path);
     request.files.add(await http.MultipartFile.fromPath(
@@ -253,12 +258,12 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     request.send().then((response) {
  log('userid : '+userid.toString());
  log('mobile : '+mobile.toString());
- log('first_name : '+first_name.toString());
+ log('first_name : '+firstName.toString());
  log('dob : '+dob.toString());
- log('state_id : '+state_id.toString());
- log('city_id : '+city_id.toString());
+ log('state_id : '+stateId.toString());
+ log('city_id : '+cityId.toString());
  log('gender : '+gender.toString());
- log('last_name : '+last_name.toString());
+ log('last_name : '+lastName.toString());
  log('image : '+image.toString());
       //print("rrrrr=>"+response.statusCode.toString());
 
@@ -276,28 +281,28 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       }
     });
   }
-  profileupdateapi(String userid,String mobile,String first_name,String dob,String state_id,String city_id,
-      String gender,String last_name) async {
+  profileupdateapi(String userid,String mobile,String firstName,String dob,String stateId,String cityId,
+      String gender,String lastName) async {
     http.Response response = await http
         .post(Uri.parse(StringConstants.BASE_URL+'update-profile'),
         body: {
           'user_id' : userid.toString(),
           'mobile': mobile.toString(),
-          'first_name': first_name.toString(),
+          'first_name': firstName.toString(),
           'dob': dob.toString(),
-          'state_id': state_id.toString(),
-          'city_id': city_id.toString(),
+          'state_id': stateId.toString(),
+          'city_id': cityId.toString(),
           'gender': gender.toString(),
-          'last_name': last_name.toString()
+          'last_name': lastName.toString()
         });
     log('userid : '+userid.toString());
     log('mobile : '+mobile.toString());
-    log('first_name : '+first_name.toString());
+    log('first_name : '+firstName.toString());
     log('dob : '+dob.toString());
-    log('state_id : '+state_id.toString());
-    log('city_id : '+city_id.toString());
+    log('state_id : '+stateId.toString());
+    log('city_id : '+cityId.toString());
     log('gender : '+gender.toString());
-    log('last_name : '+last_name.toString());
+    log('last_name : '+lastName.toString());
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       log(jsonResponse.toString());
@@ -678,7 +683,9 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           // width: 100,
                           // alignment: Alignment.center,
                           child: Container(
-                            height: 500,
+                            height: MediaQuery.of(context).size.height-200,
+                            width: MediaQuery.of(context).size.width-20,
+
                             child: ListView.builder(
                                 physics: ClampingScrollPhysics(
                                     parent: BouncingScrollPhysics()),
@@ -769,7 +776,9 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                         contentPadding: EdgeInsets.all(5), //this right here
                         title: SingleChildScrollView(
                           child: Container(
-                            height: 300,
+                            height: MediaQuery.of(context).size.height-200,
+                            width: MediaQuery.of(context).size.width-20,
+
                             child: ListView.builder(
                                 physics: ClampingScrollPhysics(
                                     parent: BouncingScrollPhysics()),
@@ -857,7 +866,9 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                         contentPadding: EdgeInsets.all(5), //this right here
                         title: SingleChildScrollView(
                           child: Container(
-                            height: 300,
+                            height: MediaQuery.of(context).size.height-200,
+                            width: MediaQuery.of(context).size.width-20,
+
                             child: ListView.builder(
                                 physics: ClampingScrollPhysics(
                                     parent: BouncingScrollPhysics()),

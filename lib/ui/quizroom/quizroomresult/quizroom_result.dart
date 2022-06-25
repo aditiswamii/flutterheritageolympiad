@@ -98,13 +98,15 @@ class _QuizroomResultState extends State<QuizroomResult> {
       data = response.body;
       if (jsonResponse['status'] == 200) {
         //final responseJson = json.decode(response.body);//store response as string
-        resultdata = jsonResponse[
-            'result']; //get all the data from json string superheros
+        resultdata = jsonResponse;
+        setState(() {
+          resultdata = jsonResponse;
+        });//get all the data from json string superheros
         print("length" + resultdata.length.toString());
         print("resdata" + jsonResponse['result'].toString());
         print("resdata" + jsonResponse['result'][0].toString());
 
-        onsuccess(jsonResponse);
+        onsuccess(resultdata);
 
 
 
@@ -118,14 +120,25 @@ class _QuizroomResultState extends State<QuizroomResult> {
     }
   }
 
-  onsuccess(jsonResponse) {
-    log("log" + jsonResponse.toString());
-    if (jsonResponse != null) {
-      setState(() {
-        roomresultr = jsonResponse;
-      });
-      print("getdueljsonsuccess" + roomresultr.toString());
-      print("getdueljsonsuccessuser" + roomresultr['user_data'].toString());
+  onsuccess(resultdata) {
+    log("log" + resultdata.toString());
+    if (resultdata != null) {
+      if (resultdata['result'][1]['xp'] != null) {
+        setState(() {
+          roomresultr = resultdata;
+        });
+        print("getdueljsonsuccess" + roomresultr.toString());
+        print("getdueljsonsuccessuser" + roomresultr['user_data'].toString());
+      }else{
+        Future.delayed(
+          const Duration(seconds: 30),
+              () {
+                getRoomResult(userid.toString(), widget.quizid.toString());
+          },
+        );
+      }
+    }else{
+      getRoomResult(userid.toString(), widget.quizid.toString());
     }
   }
 
@@ -259,11 +272,18 @@ class _QuizroomResultState extends State<QuizroomResult> {
 
         String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
         log(atimenew);
-        String atime=atimenew.substring(11);
-        String ranktime=rankdata['time'].toString().substring(11);
-        var newatime= (int.parse(atime.substring(0,2)) * 3600) +(int.parse(atime.substring(6,8)) * 60 )+(int.parse(atime.substring(6,8)) * 1);
-        var newranktime=(int.parse(ranktime.substring(0,2)) * 3600) +(int.parse(ranktime.substring(6,8)) * 60 )+(int.parse(ranktime.substring(6,8)) * 1);
-
+        // String atime=atimenew.substring(11);
+        // String ranktime=rankdata['time'].toString().substring(11);
+        // var newatime= (int.parse(atime.substring(0,2)) * 3600) +(int.parse(atime.substring(6,8)) * 60 )+(int.parse(atime.substring(6,8)) * 1);
+        // var newranktime=(int.parse(ranktime.substring(0,2)) * 3600) +(int.parse(ranktime.substring(6,8)) * 60 )+(int.parse(ranktime.substring(6,8)) * 1);
+        String atime=atimenew;
+        String ranktime=rankdata['time'].toString();
+        var newatime= (DateTime.parse(atime).hour * 3600) +(DateTime.parse(atime).minute * 60 )+(DateTime.parse(atime).second * 1);
+        var newranktime=(DateTime.parse(ranktime).hour * 3600) +(DateTime.parse(ranktime).minute * 60 )+(DateTime.parse(ranktime).second * 1);
+        log(atime);
+        log(ranktime);
+        log(newatime.toString());
+        log(newranktime.toString());
         if(newatime > newranktime){
           getRoomResult(userid.toString(), widget.quizid.toString());
         }else{

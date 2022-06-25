@@ -297,6 +297,7 @@ var creatorid =0;
   onsuccess(Getroomuserlist? Roomlistn) {
     log(Roomlistn.toString());
     if (Roomlistn != null) {
+
       setState(() {
         getroomuserlist = Roomlistn;
         creatorid=Roomlistn.creatorId!;
@@ -304,6 +305,13 @@ var creatorid =0;
       });
       print("getroomlistjsonsuccess" + Roomlistn.toString());
     }
+    Future.delayed(
+      const Duration(seconds: 10),
+          () {
+            getroomstatus(widget.quizid.toString(),userid.toString());
+            getWaitRoom(widget.quizid.toString());
+      },
+    );
     final stream =
     Stream<int>.periodic(const Duration(
         seconds: 5), (count) => count).take(100);
