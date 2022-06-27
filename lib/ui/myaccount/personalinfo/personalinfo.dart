@@ -6,16 +6,16 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
-import 'package:CultreApp/modal/getprivacy/GetPrivacyResponse.dart';
+
 import 'package:CultreApp/modal/getprofileresponse/GetProfileResponse.dart';
-import 'package:CultreApp/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
+
 import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -77,16 +77,16 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       country =prefs.getString("country");
       userid= prefs.getString("userid");
     });
-
+    getCountry(GetCountryList);
     getProfile(userid.toString());
   }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: const EdgeInsets.only(left: 7), child: const Text("Loading...")),
         ],
       ),
     );
@@ -175,27 +175,26 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     }
   }
   getProfile(String userid) async {
-
-
       http.Response response =
       await http.get(
           Uri.parse(StringConstants.BASE_URL + "get-profile?user_id=$userid"));
-
+      var jsonResponse = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
         data = response.body;
-        //final responseJson = json.decode(response.body);//store response as string
-        setState(() {
-          data = response.body;
-          prodata = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(prodata.length);
-          getCountry(GetCountryList);
+        if (jsonResponse['status'] == 200) {
+          //final responseJson = json.decode(response.body);//store response as string
+          setState(() {
+            prodata = jsonDecode(
+                data!)['data']; //get all the data from json string superheros
+            print(prodata.length);
+          });
           onsuccess(getProfileResponseFromJson(data!));
-        });
-
-        var venam = jsonDecode(data!)['data'];
-        print(venam);
-      } else {
+          var venam = jsonDecode(data!)['data'];
+          print(venam);
+        }else{
+          log(jsonResponse['message']);
+        }
+      }else {
         print(response.statusCode);
       }
 
@@ -205,8 +204,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       if (getprofileresponse.data != null) {
         setState(() {
           profileresdata = getprofileresponse;
-          firstname = "${profileresdata!.data!.firstName![0].toUpperCase() +
-              profileresdata!.data!.firstName!.substring(1)}";
+          firstname = profileresdata!.data!.firstName![0].toUpperCase() +
+              profileresdata!.data!.firstName!.substring(1);
           lastname = profileresdata!.data!.lastName!.toString();
           dobdate = profileresdata!.data!.dob!.toString();
           mobileno = profileresdata!.data!.mobile!.toString();
@@ -354,7 +353,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       content: Container(
           child: Text(
             "${text}",
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: const TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           )),
 
@@ -364,7 +363,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       context: context,
       builder: (BuildContext context) {
         Future.delayed(
-          Duration(seconds: 2),
+          const Duration(seconds: 2),
               () {
             Navigator.of(context).pop(true);
           },
@@ -388,7 +387,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => MyAccountPage()));
+        MaterialPageRoute(builder: (BuildContext context) => const MyAccountPage()));
     // Do some stuff.
     return true;
   }
@@ -410,6 +409,10 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
     });
     Navigator.of(context).pop();
   }
+  Future<Future> _refreshdata(BuildContext context) async {
+
+    return getProfile(userid.toString());
+  }
   @override
   Widget build(BuildContext context) {
     bool click = false;
@@ -420,8 +423,11 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
       key: _scaffoldKey,
      // resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
-      body: Container(
+      endDrawer: const MySideMenuDrawer(),
+      body:RefreshIndicator(
+      color: Colors.transparent,
+      onRefresh: () => _refreshdata(context),
+    child:Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/debackground.jpg"),
@@ -430,23 +436,23 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         ),
         child: Container(
           color: Colors.white.withAlpha(200),
-          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Stack(
             children: [
               Align(
                 alignment: Alignment.topLeft,
                 child: Container(
                   color: Colors.white,
-                  margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                   height: 80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         alignment: Alignment.centerLeft,
 
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: Center(
                           child: Card(
                             elevation: 3,
@@ -466,9 +472,9 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 5.0),
+                        padding: const EdgeInsets.only(right: 5.0),
                         child: GestureDetector(
                           onTap: () {
                             _scaffoldKey.currentState!.openEndDrawer();
@@ -481,7 +487,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                 ),
               ),
               Container(
-                alignment: Alignment(0,100),
+                alignment: const Alignment(0,100),
                 // height: MediaQuery.of(context).size.height-120,
                 margin: const EdgeInsets.fromLTRB(0, 90, 0, 10),
                 child: ListView(
@@ -494,7 +500,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                 fontSize: 24, color: ColorConstants.txt))),
 
 
-            prodata==null?Container(): profileresdata==null?Container(): ListBody(
+            // prodata==null?Container():
+            profileresdata==null?Container(): ListBody(
                 children: [
 
               Padding(
@@ -502,8 +509,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                 child: GestureDetector(
                   onTap: (){
                 AlertDialog errorDialog = AlertDialog(
-                  insetPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                  titlePadding:EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                  titlePadding:const EdgeInsets.fromLTRB(10, 20, 10, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             20.0)), //this right here
@@ -522,7 +529,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                   primary: ColorConstants.red,
                                   onPrimary: Colors.white,
                                   elevation: 3,
-                                  shape: CircleBorder(
+                                  shape: const CircleBorder(
                                   ),
                                   //alignment: Alignment.center,
                                   // shape: RoundedRectangleBorder(
@@ -532,7 +539,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                 ),
                                 onPressed: getImagefromcamera,
 
-                                child: Icon(Icons.add_a_photo,size: 22,color: Colors.white,),
+                                child: const Icon(Icons.add_a_photo,size: 22,color: Colors.white,),
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -540,24 +547,24 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                   onPrimary: Colors.white,
                                   elevation: 3,
                                   //alignment: Alignment.center,
-                                  shape: CircleBorder(
+                                  shape: const CircleBorder(
                                   ),
                                   fixedSize: const Size(50, 50),
                                   //////// HERE
                                 ),
                                 onPressed:
                                 getImagefromGallery,
-                                child: Icon(Icons.broken_image_outlined,size: 22,color:Colors.white,),
+                                child: const Icon(Icons.broken_image_outlined,size: 22,color:Colors.white,),
                               ),
                             ],
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                Text("Pick Image\nfrom camera",style: TextStyle(fontSize: 12)),
-                                Text("Pick Image\nform gallery",style: TextStyle(fontSize: 12),),
+                                const Text("Pick Image\nfrom camera",style: TextStyle(fontSize: 12)),
+                                const Text("Pick Image\nform gallery",style: TextStyle(fontSize: 12),),
                               ],
                             ),
                           ),
@@ -574,7 +581,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                 child:profilepic!.isEmpty?CircleAvatar(
                   radius: 30.0,
                   child: Image.asset("assets/images/placeholder.png",fit: BoxFit.cover,),
-                  backgroundImage:AssetImage("assets/images/placeholder.png"),
+                  backgroundImage:const AssetImage("assets/images/placeholder.png"),
                   backgroundColor: Colors.transparent,
                 ): CircleAvatar(
                   backgroundColor: Colors.white,
@@ -663,7 +670,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                 ],
                   ),
                 ),
-                  Container(  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  Container(  margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                   height: 50,
                   alignment: Alignment.centerLeft,
                   //color: Colors.white,
@@ -677,7 +684,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       AlertDialog errorDialog = AlertDialog(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
-                        contentPadding: EdgeInsets.all(5), //this right here
+                        contentPadding: const EdgeInsets.all(5), //this right here
                         title: SingleChildScrollView(
                           // height: 300,
                           // width: 100,
@@ -687,7 +694,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                             width: MediaQuery.of(context).size.width-20,
 
                             child: ListView.builder(
-                                physics: ClampingScrollPhysics(
+                                physics: const ClampingScrollPhysics(
                                     parent: BouncingScrollPhysics()),
                                 shrinkWrap: true,
                                 itemCount:
@@ -698,8 +705,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                     children: [
                                       Container(
                                         //height: 50,
-                                        padding: EdgeInsets.all(8),
-                                        margin: EdgeInsets.all(4),
+                                        padding: const EdgeInsets.all(8),
+                                        margin: const EdgeInsets.all(4),
                                         child: GestureDetector(
                                           onTap: () {
                                             setState(() {
@@ -718,7 +725,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                           child: Text(
                                             jsonDecode(datacoun!)['countries']
                                             [index]['name'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 14,
                                                 color: ColorConstants.txt),
                                           ),
@@ -735,22 +742,22 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           builder: (BuildContext context) => errorDialog);
                     },
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: countryname == null
-                                ? Text("Select Country",
-                                style: TextStyle(
+                                ? const Text("Select Country",
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14))
                                 : Text(countryname.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14)),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_drop_down_outlined,
                             size: 22,
                           )
@@ -759,7 +766,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                     ),
                   )),
                   Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                   height: 50,
                   alignment: Alignment.centerLeft,
                   //color: Colors.white,
@@ -773,15 +780,15 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       AlertDialog errorDialog = AlertDialog(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
-                        contentPadding: EdgeInsets.all(5), //this right here
+                        contentPadding: const EdgeInsets.all(5), //this right here
                         title: SingleChildScrollView(
                           child: Container(
                             height: MediaQuery.of(context).size.height-200,
                             width: MediaQuery.of(context).size.width-20,
 
                             child: ListView.builder(
-                                physics: ClampingScrollPhysics(
-                                    parent: BouncingScrollPhysics()),
+                                physics: const ClampingScrollPhysics(
+                                    parent: const BouncingScrollPhysics()),
                                 shrinkWrap: true,
                                 itemCount:
                                 jsonDecode(datastate!)['states'].length,
@@ -790,8 +797,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                     children: [
                                       Container(
                                         //height: 50,
-                                        padding: EdgeInsets.all(8),
-                                        margin: EdgeInsets.all(4),
+                                        padding: const EdgeInsets.all(8),
+                                        margin: const EdgeInsets.all(4),
                                         child: GestureDetector(
                                           onTap: () {
                                             setState(() {
@@ -810,7 +817,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                           child: Text(
                                             jsonDecode(datastate!)['states']
                                             [index]['name'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 14,
                                                 color: ColorConstants.txt),
                                           ),
@@ -826,22 +833,22 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           context: context,
                           builder: (BuildContext context) => errorDialog);
                     },
-                    child: Container( margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Container( margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: statename == null
-                                ? Text("Select State",
+                                ? const Text("Select State",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14))
                                 : Text(statename.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14)),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_drop_down_outlined,
                             size: 22,
                           )
@@ -849,7 +856,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       ),
                     ),
                   )),
-                  Container(margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  Container(margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                   height: 50,
                   alignment: Alignment.centerLeft,
                   //color: Colors.white,
@@ -863,14 +870,14 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       AlertDialog errorDialog = AlertDialog(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
-                        contentPadding: EdgeInsets.all(5), //this right here
+                        contentPadding: const EdgeInsets.all(5), //this right here
                         title: SingleChildScrollView(
-                          child: Container(
+                          child: SizedBox(
                             height: MediaQuery.of(context).size.height-200,
                             width: MediaQuery.of(context).size.width-20,
 
                             child: ListView.builder(
-                                physics: ClampingScrollPhysics(
+                                physics: const ClampingScrollPhysics(
                                     parent: BouncingScrollPhysics()),
                                 shrinkWrap: true,
                                 itemCount: jsonDecode(citydata!)['cities'].length,
@@ -879,8 +886,8 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                     children: [
                                       Container(
                                         //height: 50,
-                                        padding: EdgeInsets.all(8),
-                                        margin: EdgeInsets.all(4),
+                                        padding: const EdgeInsets.all(8),
+                                        margin: const EdgeInsets.all(4),
                                         child: GestureDetector(
                                           onTap: () {
                                             setState(() {
@@ -899,7 +906,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                           child: Text(
                                             jsonDecode(citydata!)['cities'][index]
                                             ['name'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 14,
                                                 color: ColorConstants.txt),
                                           ),
@@ -915,22 +922,22 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           context: context,
                           builder: (BuildContext context) => errorDialog);
                     },
-                    child: Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Container(margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: cityname == null
-                                ? Text("Select City",
-                                style: TextStyle(
+                                ? const Text("Select City",
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14))
                                 : Text(cityname.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14)),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_drop_down_outlined,
                             size: 22,
                           )
@@ -938,7 +945,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       ),
                     ),
                   )),
-                  Container(margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  Container(margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 height: 50,
                 alignment: Alignment.centerLeft,
                 //color: Colors.white,
@@ -955,14 +962,14 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       _selectDate(context);
                     },
                     child: dobdate == null
-                        ? Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Text("Select DOB",
+                        ? Container(margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: const Text("Select DOB",
                           style: TextStyle(
                               color: Colors.black, fontSize: 14)),
                         )
-                        : Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        : Container(margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: Text("${dobdate}",
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black, fontSize: 14)),
                         )),
                 // margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -975,7 +982,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(5)),
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: GestureDetector(
                     onTap: () {
                       AlertDialog errorDialog = AlertDialog(
@@ -985,10 +992,10 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                         title: Container(
                           height: 100,
                           width: 100,
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           alignment: Alignment.center,
                           child: ListView.builder(
-                              physics: ClampingScrollPhysics(
+                              physics: const ClampingScrollPhysics(
                                   parent: BouncingScrollPhysics()),
                               shrinkWrap: true,
                               itemCount: genderlist.length,
@@ -997,7 +1004,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                   children: [
                                     Container(
                                       //height: 50,
-                                      padding: EdgeInsets.all(4),
+                                      padding: const EdgeInsets.all(4),
                                       child: GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -1007,13 +1014,13 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                                         },
                                         child: Text(
                                           '${genderlist[index]}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 18,
                                               color: ColorConstants.txt),
                                         ),
                                       ),
                                     ),
-                                    Divider(
+                                    const Divider(
                                       color: Colors.black12,
                                     )
                                   ],
@@ -1025,22 +1032,22 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
                           context: context,
                           builder: (BuildContext context) => errorDialog);
                     },
-                    child: Container(margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Container(margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: gendername == null
-                                ? Text("Select Gender",
-                                style: TextStyle(
+                                ? const Text("Select Gender",
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14))
                                 : Text("${gendername}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14)),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_drop_down_outlined,
                             size: 22,
                           )
@@ -1051,7 +1058,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
 
                 Center(
                   child: Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: ColorConstants.verdigris,
@@ -1148,6 +1155,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
           ),
         ),
       ),
+      )
     );
   }
 }

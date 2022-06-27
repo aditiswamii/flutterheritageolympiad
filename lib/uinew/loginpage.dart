@@ -1,19 +1,11 @@
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-
-
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
-
-
-
-
 
 import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/ui/forgetpassword/forgetpassword.dart';
@@ -27,24 +19,19 @@ import 'package:CultreApp/uinew/signuppage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:twitter_login/twitter_login.dart';
 
-
-import '../fcm/fcm.dart';
-import '../modal/getloginresponse/GetLoginResponse.dart';
 import '../utils/StringConstants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-
-class LoginScreen extends StatefulWidget{
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   @override
   State createState() => _State();
 }
 
-
 class _State extends State<LoginScreen> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _passwordVisible = true;
   bool value = false;
   TextEditingController emailController = TextEditingController();
@@ -54,7 +41,7 @@ class _State extends State<LoginScreen> {
   //bool isLoggedIn = false;
   String emailadd = '';
   // GoogleSignInAccount? _currentUser;
-   String _contactText = '';
+  String _contactText = '';
   // Map _userObj = {};
   // bool _isLoggedIn = false;
   // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -62,7 +49,9 @@ class _State extends State<LoginScreen> {
   //   print(message.notification!.title);
   //   print(message.notification!.body);
   // }
-
+  void showInSnackBar(String value) {
+    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(value)));
+  }
   @override
   void initState() {
     super.initState();
@@ -80,7 +69,6 @@ class _State extends State<LoginScreen> {
     //   }
     // });
     // _googleSignIn.signInSilently();
-
   }
   // GoogleSignIn _googleSignIn = GoogleSignIn(
   //   // Optional clientId
@@ -154,12 +142,9 @@ class _State extends State<LoginScreen> {
   // Future<void> handleSignOut() => _googleSignIn.disconnect();
 
   void loginapi(String email, password) async {
-    http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL+'login'),
-        body: {
-          'email': email.toString(),
-          'password': password.toString()
-        });
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + 'login'),
+        body: {'email': email.toString(), 'password': password.toString()});
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (response.statusCode == 200) {
       Navigator.pop(context);
@@ -167,13 +152,12 @@ class _State extends State<LoginScreen> {
       // print(jsonDecode(data!)['data'].toString());
       // print(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
-      if(jsonResponse['status']==200) {
-
+      if (jsonResponse['status'] == 200) {
         prefs.setBool("loggedin", true);
         //  String logindata = jsonEncode(getLoginResponseFromJson(data!).data.toString());
         //prefs.setString('logindata', logindata);
-        prefs.setString('issocial',
-            jsonDecode(data!)['data']["isSocial"].toString());
+        prefs.setString(
+            'issocial', jsonDecode(data!)['data']["isSocial"].toString());
         prefs.setString(
             "username", jsonDecode(data!)['data']["name"].toString());
         prefs.setString("profileComplete",
@@ -190,56 +174,54 @@ class _State extends State<LoginScreen> {
         prefs.setString("age", jsonDecode(data!)['data']["age"].toString());
         prefs.setString(
             "country", jsonDecode(data!)['data']["country"].toString());
-        prefs.setString(
-            "flagicon", jsonDecode(data!)["flag"].toString());
-        prefs.setString(
-            "agegroup", jsonDecode(data!)["age_group"].toString());
+        prefs.setString("flagicon", jsonDecode(data!)["flag"].toString());
+        prefs.setString("agegroup", jsonDecode(data!)["age_group"].toString());
         Loginuser(jsonDecode(data!)['data']);
         print(jsonDecode(data!)['data'].toString());
-      }else if(jsonDecode(data!)['data'].toString().isNotEmpty){
-          prefs.setString("userid", jsonDecode(data!)['data']["id"].toString());
-          prefs.setString(
-              "name", jsonDecode(data!)['data']["username"].toString());
-          prefs.setString('issocial',
-              jsonDecode(data!)['data']["isSocial"].toString());
-          prefs.setString(
-              "gender", jsonDecode(data!)['data']["gender"].toString());
-          OpenProfile(jsonDecode(data!)['data']);
-        }else{
-
+      } else if (jsonDecode(data!)['data'].toString().isNotEmpty) {
+        prefs.setString("userid", jsonDecode(data!)['data']["id"].toString());
+        prefs.setString(
+            "name", jsonDecode(data!)['data']["username"].toString());
+        prefs.setString(
+            'issocial', jsonDecode(data!)['data']["isSocial"].toString());
+        prefs.setString(
+            "gender", jsonDecode(data!)['data']["gender"].toString());
+        OpenProfile(jsonDecode(data!)['data']);
+      } else {
         const snackBar = SnackBar(
           content: Text(
-            'Invalid Login Credentials',textAlign: TextAlign.center,),
+            'Invalid Login Credentials',
+            textAlign: TextAlign.center,
+          ),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       Navigator.pop(context);
       const snackBar = SnackBar(
-        content: Text(
-            'Login Failed'),
+        content: Text('Login Failed'),
       );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(response.statusCode);
     }
   }
-  OpenProfile(jsonDecode){
+
+  OpenProfile(jsonDecode) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => RegisterPage(userid: jsonDecode(data!)['data']["id"].toString(),)));
+        builder: (BuildContext context) => RegisterPage(
+              userid: jsonDecode(data!)['data']["id"].toString(),
+            )));
   }
-  Loginuser(jsonDecode){
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => HomePage()));
+
+  Loginuser(jsonDecode) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
   }
-  void socialloginapi(String email,int type) async {
-    http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL+'login'),
-        body: {
-          'email': email.toString(),
-          'is_social': type.toString()
-        });
+
+  void socialloginapi(String email, int type) async {
+    http.Response response = await http.post(
+        Uri.parse(StringConstants.BASE_URL + 'login'),
+        body: {'email': email.toString(), 'is_social': type.toString()});
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (response.statusCode == 200) {
       // Navigator.pop(context);
@@ -247,8 +229,9 @@ class _State extends State<LoginScreen> {
       print(jsonDecode(data!)['data'].toString());
       print(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
-      if(jsonResponse['status']==200) {
-        prefs.setString("userid", jsonDecode(data!)['data']["user_id"].toString());
+      if (jsonResponse['status'] == 200) {
+        prefs.setString(
+            "userid", jsonDecode(data!)['data']["user_id"].toString());
         if (prefs.getString("profileComplete") == "1") {
           prefs.setBool("loggedin", true);
           prefs.setString('issocial', '1');
@@ -264,8 +247,7 @@ class _State extends State<LoginScreen> {
           prefs.setString("age", jsonDecode(data!)['data']["age"].toString());
           prefs.setString(
               "country", jsonDecode(data!)['data']["country"].toString());
-          prefs.setString(
-              "flagicon", jsonDecode(data!)["flag"].toString());
+          prefs.setString("flagicon", jsonDecode(data!)["flag"].toString());
           prefs.setString(
               "agegroup", jsonDecode(data!)["age_group"].toString());
           prefs.setBool('setProfileComplete', true);
@@ -276,34 +258,35 @@ class _State extends State<LoginScreen> {
           prefs.setBool('setProfileComplete', false);
           OpenProfile(jsonDecode(data!)['data']);
         }
-      }else {
+      } else {
         // Navigator.pop(context);
         const snackBar = SnackBar(
           content: Text(
-            'Invalid Login Credentials', textAlign: TextAlign.center,),
+            'Invalid Login Credentials',
+            textAlign: TextAlign.center,
+          ),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       // Navigator.pop(context);
       const snackBar = SnackBar(
-        content: Text(
-            'Login Failed'),
+        content: Text('Login Failed'),
       );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
-      print(response.statusCode);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
-  void twitterloginapi(String twitterid,String username) async {
-    http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL+'login'),
-        body: {
-          'social_id': twitterid.toString(),
-          'is_social': "3",
-          'username':username.toString()
-        });
+
+  void twitterloginapi(String twitterid, String username) async {
+    http.Response response =
+        await http.post(Uri.parse(StringConstants.BASE_URL + 'login'), body: {
+      'social_id': twitterid.toString(),
+      'is_social': "3",
+      'username': username.toString()
+    });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (response.statusCode == 200) {
       // Navigator.pop(context);
@@ -311,7 +294,7 @@ class _State extends State<LoginScreen> {
       log(jsonDecode(data!)['data'].toString());
       log(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
-      if(jsonResponse['status']==200) {
+      if (jsonResponse['status'] == 200) {
         if (prefs.getString("profileComplete") == "1") {
           prefs.setBool("loggedin", true);
           prefs.setString('issocial', '1');
@@ -327,8 +310,7 @@ class _State extends State<LoginScreen> {
           prefs.setString("age", jsonDecode(data!)['data']["age"].toString());
           prefs.setString(
               "country", jsonDecode(data!)['data']["country"].toString());
-          prefs.setString(
-              "flagicon", jsonDecode(data!)["flag"].toString());
+          prefs.setString("flagicon", jsonDecode(data!)["flag"].toString());
           prefs.setString(
               "agegroup", jsonDecode(data!)["age_group"].toString());
           prefs.setBool('setProfileComplete', true);
@@ -339,34 +321,33 @@ class _State extends State<LoginScreen> {
           prefs.setBool('setProfileComplete', false);
           OpenProfile(jsonDecode(data!)['data']);
         }
-      }else {
+      } else {
         // Navigator.pop(context);
         const snackBar = SnackBar(
           content: Text(
-            'Invalid Login Credentials', textAlign: TextAlign.center,),
+            'Invalid Login Credentials',
+            textAlign: TextAlign.center,
+          ),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       // Navigator.pop(context);
       const snackBar = SnackBar(
-        content: Text(
-            'Login Failed'),
+        content: Text('Login Failed'),
       );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(response.statusCode);
     }
   }
-  void facebookloginapi(String facebookid,String username) async {
-    http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL+'login'),
-        body: {
-          'social_id': facebookid.toString(),
-          'is_social': "2",
-          'username':username.toString()
-        });
+
+  void facebookloginapi(String facebookid, String username) async {
+    http.Response response =
+        await http.post(Uri.parse(StringConstants.BASE_URL + 'login'), body: {
+      'social_id': facebookid.toString(),
+      'is_social': "2",
+      'username': username.toString()
+    });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (response.statusCode == 200) {
       // Navigator.pop(context);
@@ -374,7 +355,7 @@ class _State extends State<LoginScreen> {
       print(jsonDecode(data!)['data'].toString());
       print(jsonDecode(data!)['data']["id"].toString());
       var jsonResponse = convert.jsonDecode(response.body);
-      if(jsonResponse['status']==200) {
+      if (jsonResponse['status'] == 200) {
         if (prefs.getString("profileComplete") == "1") {
           prefs.setBool("loggedin", true);
           prefs.setString('issocial', '1');
@@ -390,8 +371,7 @@ class _State extends State<LoginScreen> {
           prefs.setString("age", jsonDecode(data!)['data']["age"].toString());
           prefs.setString(
               "country", jsonDecode(data!)['data']["country"].toString());
-          prefs.setString(
-              "flagicon", jsonDecode(data!)["flag"].toString());
+          prefs.setString("flagicon", jsonDecode(data!)["flag"].toString());
           prefs.setString(
               "agegroup", jsonDecode(data!)["age_group"].toString());
           prefs.setBool('setProfileComplete', true);
@@ -402,47 +382,49 @@ class _State extends State<LoginScreen> {
           prefs.setBool('setProfileComplete', false);
           OpenProfile(jsonDecode(data!)['data']);
         }
-      }else {
+      } else {
         // Navigator.pop(context);
         const snackBar = SnackBar(
           content: Text(
-            'Invalid Login Credentials', textAlign: TextAlign.center,),
+            'Invalid Login Credentials',
+            textAlign: TextAlign.center,
+          ),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       // Navigator.pop(context);
       const snackBar = SnackBar(
-        content: Text(
-            'Login Failed'),
+        content: Text('Login Failed'),
       );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(response.statusCode);
     }
   }
-  showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
-      content: new Row(
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
         children: [
-          CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
-        ],),
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7), child: const Text("Loading...")),
+        ],
+      ),
     );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
         return alert;
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -453,18 +435,19 @@ class _State extends State<LoginScreen> {
           ),
         ),
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 120, 20, 10),
+          margin: const EdgeInsets.fromLTRB(20, 120, 20, 10),
           child: ListView(
             children: [
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: const Text("LOG IN", style: TextStyle(
-                      fontSize: 24, color: ColorConstants.txt))),
+                  child: const Text("LOG IN",
+                      style:
+                          TextStyle(fontSize: 24, color: ColorConstants.txt))),
               Container(
                 height: 60,
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:TextFormField(
+                child: TextFormField(
                   controller: emailController,
                   obscureText: false,
                   keyboardType: TextInputType.text,
@@ -476,7 +459,7 @@ class _State extends State<LoginScreen> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.singleLineFormatter
                   ],
-                ) ,
+                ),
               ),
               Container(
                 height: 60,
@@ -492,8 +475,9 @@ class _State extends State<LoginScreen> {
                     // labelText: "Password",
                     hintText: "Password",
                     suffixIcon: IconButton(
-                        icon: Icon(
-                            _passwordVisible ?  Icons.visibility_off:Icons.visibility ),
+                        icon: Icon(_passwordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility),
                         onPressed: () {
                           setState(() {
                             _passwordVisible = !_passwordVisible;
@@ -508,8 +492,8 @@ class _State extends State<LoginScreen> {
                   // onSaved: (value) {
                   // _setPassword(value);
                   // },
-                ),),
-
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Row(
@@ -527,20 +511,21 @@ class _State extends State<LoginScreen> {
                         //////// HERE
                       ),
                       onPressed: () {
-
-                        if(emailController.text.isNotEmpty) {
+                        if (emailController.text.isNotEmpty) {
                           if (passwordController.text.isNotEmpty) {
                             showLoaderDialog(context);
-                            loginapi(emailController.text.toString(), passwordController.text.toString());
+                            loginapi(emailController.text.toString(),
+                                passwordController.text.toString());
                             // _presenter.login(emailController.text.toString(),
                             //     passwordController.text.toString());
-                          }else{
+                          } else {
                             const snackBar = SnackBar(
                               content: Text('Please fill password'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
-                        }else{
+                        } else {
                           const snackBar = SnackBar(
                             content: Text('Please fill email'),
                           );
@@ -549,8 +534,8 @@ class _State extends State<LoginScreen> {
                       },
                       child: const Text(
                         "LET'S GO",
-                        style: TextStyle(color: ColorConstants.txt,
-                            fontSize: 16),
+                        style:
+                            TextStyle(color: ColorConstants.txt, fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -561,9 +546,10 @@ class _State extends State<LoginScreen> {
                             MaterialPageRoute(
                                 builder: (context) => const ForgetPassword()));
                       },
-                      child: Text(_contactText,style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: ColorConstants.txt)),
+                      child: Text(_contactText,
+                          style: const TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: ColorConstants.txt)),
                     ),
                   ],
                 ),
@@ -573,26 +559,29 @@ class _State extends State<LoginScreen> {
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>  Stepone()));
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => Stepone()));
                     },
                     child: Row(
                       children: [
-                        Text("I don't have an account", style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: ColorConstants.txt),textAlign: TextAlign.center,),
+                        const Text(
+                          "I don't have an account",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: ColorConstants.txt),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   )),
-              if(Platform.isAndroid)
-                Container(margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              if (Platform.isAndroid)
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Card(
                     child: Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.all(4),
-                        padding: EdgeInsets.all(4),
+                        margin: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: GestureDetector(
                           onTap: () {
                             //_handleSignIn();
@@ -600,47 +589,65 @@ class _State extends State<LoginScreen> {
                           },
                           child: Row(
                             children: [
-                              Image.asset("assets/images/google_512.png",height: 20,width: 20,),
-                              Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text("Sign in with Google", style: TextStyle(
-                                  fontSize: 16,
-                                    color: Colors.black),textAlign: TextAlign.center,),
+                              Image.asset(
+                                "assets/images/google_512.png",
+                                height: 20,
+                                width: 20,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: const Text(
+                                  "Sign in with Google",
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ],
                           ),
                         )),
                   ),
                 ),
-              if(Platform.isIOS)
-                Container(margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              if (Platform.isIOS)
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Card(
                     child: Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.all(4),
-                        padding: EdgeInsets.all(4),
+                        margin: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: GestureDetector(
                           onTap: () {
                             // signupgoogle(context);
                           },
                           child: Row(
                             children: [
-                              Image.asset("assets/images/applelogo.png",height: 20,width: 20,),
-                              Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text("Sign in with Apple", style: TextStyle(
-                                   fontSize: 16,
-                                    color: Colors.black),textAlign: TextAlign.center,),
+                              Image.asset(
+                                "assets/images/applelogo.png",
+                                height: 20,
+                                width: 20,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: const Text(
+                                  "Sign in with Apple",
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ],
                           ),
                         )),
                   ),
                 ),
-              Container(margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
                   child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(4),
-                      padding: EdgeInsets.all(4),
+                      margin: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: GestureDetector(
                         onTap: () {
                           // fbLogin();
@@ -648,45 +655,61 @@ class _State extends State<LoginScreen> {
                         },
                         child: Row(
                           children: [
-                            Image.asset("assets/images/facebook_512.png",height: 20,width: 20,),
-                            Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text("Sign in with Facebook", style: TextStyle(
-                                 fontSize: 16,
-                                  color: Colors.black),textAlign: TextAlign.center,),
+                            Image.asset(
+                              "assets/images/facebook_512.png",
+                              height: 20,
+                              width: 20,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: const Text(
+                                "Sign in with Facebook",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ],
                         ),
                       )),
                 ),
               ),
-              Container(margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
                   child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(4),
-                      padding: EdgeInsets.all(4),
+                      margin: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: GestureDetector(
                         onTap: () {
                           // twitterlogin();
-
                         },
                         child: Row(
                           children: [
-                            Image.asset("assets/images/twitter_icon.png",height: 20,width: 20,),
-                            Container(margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text("Sign in with twitter", style: TextStyle(
-                                fontSize: 16,
-                                  color: Colors.black),textAlign: TextAlign.center,),
+                            Image.asset(
+                              "assets/images/twitter_icon.png",
+                              height: 20,
+                              width: 20,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: const Text(
+                                "Sign in with twitter",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ],
                         ),
                       )),
                 ),
               ),
-
             ],
           ),
-        ),),
+        ),
+      ),
     );
   }
 
@@ -788,8 +811,4 @@ class _State extends State<LoginScreen> {
 //     }
 //   }
 
-
 }
-
-
-

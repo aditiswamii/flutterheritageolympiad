@@ -96,7 +96,9 @@ class _State extends State<ClassicQuizMain> with ChangeNotifier {
     // Do some stuff.
     return true;
   }
-
+  void showInSnackBar(String value) {
+    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(value)));
+  }
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {

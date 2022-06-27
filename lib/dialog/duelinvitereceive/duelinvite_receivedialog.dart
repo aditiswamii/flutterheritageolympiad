@@ -72,7 +72,7 @@ class _State extends State<DialogDuelInviteReceive> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: widget.id.toString(), type: "2", tourid: 0, sessionid: 0 ,)));
+                builder: (context) =>  RulesPage(quizspeedid:"", quiztypeid:"", quizid: jsonResponse['data'].toString(), type: "2", tourid: 0, sessionid: 0 ,)));
 
         //  widget.view!.setDData(type,index,widget.id.toString());
        // Navigator.pop(context);

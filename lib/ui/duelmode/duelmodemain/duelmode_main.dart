@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:CultreApp/main.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:CultreApp/ui/myaccount/invitecontact/invitecontactlink/invitecontact_link.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
@@ -30,20 +31,17 @@ class DuelModeMain extends StatefulWidget {
  DuelModeMain({Key? key,required this.type}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _DuelModeMainState createState() => _DuelModeMainState();
 }
 
-class _State extends State<DuelModeMain> with ChangeNotifier {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _DuelModeMainState extends State<DuelModeMain> with ChangeNotifier {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   // late ClassicQuizPresenter _presenter;
   var data;
   var domaindata;
   var createdata;
   bool value = false;
   static int _len = 100;
-  bool _expanded5 = false;
-  bool _expanded6 = false;
-  bool _expanded7 = false;
   bool click1 = true;
   bool click2 = false;
   bool click3 = false;
@@ -91,14 +89,19 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+    // ChangeNotifier().dispose();
+    // navigatorKey.currentState!.dispose();
     super.dispose();
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
+        MaterialPageRoute(builder: (BuildContext context) => const QuizPage()));
     // Do some stuff.
     return true;
+  }
+  void showInSnackBar(String value) {
+    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(value)));
   }
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -110,7 +113,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
   }
   void getDomains() async {
     http.Response response =
-    await http.get(Uri.parse(StringConstants.BASE_URL+"domains"));
+    await http.get(Uri.parse("${StringConstants.BASE_URL}domains"));
 
     if (response.statusCode == 200) {
       data = response.body;
@@ -119,7 +122,9 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
         //store response as string
         setState(() {
           domaindata = jsonResponse;
-          print(domaindata['data'].length); // just printed length of data
+          if (kDebugMode) {
+            print(domaindata['data'].length);
+          } // just printed length of data
         });
         List? jsarray = List.from(domaindata['data']);
         setState(() {
@@ -143,7 +148,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
           }
           setDomain(clist);
         } else {
-          snackbar = SnackBar(
+          snackbar = const SnackBar(
               content: Text(
                 "domain data is not available",
                 textAlign: TextAlign.center,
@@ -159,7 +164,9 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
             .showSnackBar(snackbar);
       }
     }else {
-      print(response.statusCode);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
   setDomain(List<Domain>? clist) {
@@ -170,14 +177,14 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
     }
   }
 
-  void createquiz(String userid,String  difficulty_level_id,
-      String  quiz_speed_id,String  domains) async {
+  void createquiz(String userid,String  difficultyLevelId,
+      String  quizSpeedId,String  domains) async {
 
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL+"create_duel"), body: {
+    await http.post(Uri.parse("${StringConstants.BASE_URL}create_duel"), body: {
       'user_id': userid.toString(),
-      'difficulty_level_id': difficulty_level_id.toString(),
-      'quiz_speed_id': quiz_speed_id.toString(),
+      'difficulty_level_id': difficultyLevelId.toString(),
+      'quiz_speed_id': quizSpeedId.toString(),
       'domains': domains.toString()
     });
 
@@ -190,9 +197,13 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
       //store response as string
         setState(() {
           createdata = jsonResponse; //get all the data from json string superheros
-          print("domiaindata: "+createdata['data'].toString()); // just printed length of data
+          if (kDebugMode) {
+            print("domiaindata: ${createdata['data']}");
+          } // just printed length of data
         });
-        print(createdata['data'].toString());
+        if (kDebugMode) {
+          print(createdata['data'].toString());
+        }
         onsuccess(createdata);
       } else {
 
@@ -205,7 +216,9 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
       }
     } else {
 
-      print(response.statusCode);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
 
@@ -226,11 +239,11 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
    for (i ; i < domain.length; i++) {
 
        if(seldomain.isNotEmpty){
-         seldomain = seldomain + "," + domain[i]['id'].toString();
-         seldomainName = seldomainName + "\n" + domain[i]['name'].toString();
+         seldomain = "$seldomain,${domain[i]['id']}";
+         seldomainName = "$seldomainName\n${domain[i]['name']}";
        } else {
-         seldomain = seldomain + "" + domain[i]['id'].toString();
-         seldomainName = seldomainName + "" + domain[i]['name'].toString();
+         seldomain = "$seldomain${domain[i]['id']}";
+         seldomainName = "$seldomainName${domain[i]['name']}";
        }
 
 
@@ -254,9 +267,9 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: const EdgeInsets.only(left: 7), child: const Text("Loading...")),
         ],),
     );
     showDialog(barrierDismissible: false,
@@ -272,13 +285,13 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
           borderRadius: BorderRadius.circular(
               20.0)),
       content: Container(
-          child: Text("${text}"
-            ,style:TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
+          child: Text(text
+            ,style:const TextStyle(color: ColorConstants.txt,fontSize: 18),textAlign: TextAlign.center ,)
       ),
       actions: [
         TextButton(onPressed: (){
           Navigator.pop(context);
-        }, child: Text("OK"))
+        }, child: const Text("OK"))
       ],
     );
     showDialog(
@@ -297,7 +310,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -306,7 +319,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
           ),
         ),
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             // physics: const BouncingScrollPhysics(
             //     parent: AlwaysScrollableScrollPhysics()),
@@ -315,10 +328,10 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
 
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: Center(
                       child: Card(
                         elevation: 3,
@@ -338,9 +351,9 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 5.0),
+                    padding: const EdgeInsets.only(right: 5.0),
                     child: GestureDetector(
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
@@ -369,11 +382,11 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                                 fontSize: 15, color: ColorConstants.txt))),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "DOMAINS",
                             style: TextStyle(
                                 color: Colors.black, fontSize: 16),
@@ -383,7 +396,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                               hintdialog(context, "Domain: Choose a domain or more to get quizzes on just those themes.");
 
                             },
-                            child: Container(
+                            child: SizedBox(
                               width: 20,
                               height: 20,
                               child: Image.asset(
@@ -400,21 +413,18 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
 
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "DIFFICULTY",
                             style: TextStyle(
                                 color: Colors.black, fontSize: 16),
                           ),
                           GestureDetector(
                             onTap: (){
-                              hintdialog(context, "The difficulty level is an adjustable setting that controls how challenging the quiz is. Increasing the difficulty level makes the quiz more challenging. Decreasing the difficulty level makes the quiz easier and less challenging. Scores for each question also vary according to the difficulty level\n" +
-                                  "Hard: 3 \n" +
-                                  "Intermediate: 2 \n" +
-                                  "Easy: 1");
+                              hintdialog(context, "The difficulty level is an adjustable setting that controls how challenging the quiz is. Increasing the difficulty level makes the quiz more challenging. Decreasing the difficulty level makes the quiz easier and less challenging. Scores for each question also vary according to the difficulty level\nHard: 3 \nIntermediate: 2 \nEasy: 1");
 
                             },
                             child: Image.asset(
@@ -431,7 +441,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                       alignment: Alignment.centerLeft,
                       height: 30,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
+                          gradient: const LinearGradient(colors: [
                             ColorConstants.quiz_grad1,
                             ColorConstants.quiz_grad2,
                             ColorConstants.quiz_grad3
@@ -441,13 +451,13 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click1==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
+                            child: click1==false?const VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click2==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
+                            child: click2==false?const VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container(width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click3==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
+                            child: click3==false?const VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
 
                         ],
@@ -507,20 +517,18 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                      margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "QUIZ SPEED",
                             style: TextStyle(
                                 color: Colors.black, fontSize: 16),
                           ),
                           GestureDetector(
                             onTap: (){
-                              hintdialog(context, "Quickfire: Each question is timed; 30 seconds; Questions: 20\n" +
-                                  "Regular: Each question is timed: 60 seconds; Questions: 15\n" +
-                                  "Olympiad: Over-all timer: 20 minutes; questions: 100");
+                              hintdialog(context, "Quickfire: Each question is timed; 30 seconds; Questions: 20\nRegular: Each question is timed: 60 seconds; Questions: 15\nOlympiad: Over-all timer: 20 minutes; questions: 100");
 
                             },
                             child: Image.asset(
@@ -537,7 +545,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                       alignment: Alignment.centerLeft,
                       height: 30,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
+                          gradient: const LinearGradient(colors: [
                             ColorConstants.quiz_grad1,
                             ColorConstants.quiz_grad2,
                             ColorConstants.quiz_grad3
@@ -548,14 +556,14 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                         children: [
                           Container( width:  MediaQuery.of(context).size.width/3-20,
                             alignment: Alignment.center,
-                            child: click6==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
+                            child: click6==false?const VerticalDivider(thickness: 1,width: 1,color: Colors.white,)
                                 :Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container( width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click7==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
+                            child: click7==false?const VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
                           Container( width:  MediaQuery.of(context).size.width/3-20,alignment: Alignment.center,
-                            child: click8==false?VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
+                            child: click8==false?const VerticalDivider(thickness: 1,width: 1,color: Colors.white,):Image.asset("assets/images/trianglewhite.png"),
                           ),
 
                         ],
@@ -634,7 +642,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>  QuizPage()));
+                                      builder: (context) =>  const QuizPage()));
                             },
                             child: const Text(
                               "GO BACK",
@@ -681,12 +689,14 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                                   speedid="3";
                                 });
                               }
-                              print(domainnamelist.toString());
+                              if (kDebugMode) {
+                                print(domainnamelist.toString());
+                              }
                               log("hi");
                               log(difficultylevelid);
-                              log("speedid"+speedid);
+                              log("speedid$speedid");
                               log(domainnamelist.toString());
-                              log("${domainnamelist.toString().replaceAll("[", "").replaceAll("]", "")}");
+                              log(domainnamelist.toString().replaceAll("[", "").replaceAll("]", ""));
                               log(_getTitle());
                               seldomain = "";
                               for (int i = 0; i < databean!.length; i++) {
@@ -694,15 +704,11 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                                   if (databean![i].id != 0) {
                                     if (seldomain.isNotEmpty) {
                                       setState(() {
-                                        seldomain = seldomain +
-                                            "," +
-                                            databean![i].id.toString();
+                                        seldomain = "$seldomain,${databean![i].id}";
                                       });
                                     } else {
                                       setState(() {
-                                        seldomain = seldomain +
-                                            "" +
-                                            databean![i].id.toString();
+                                        seldomain = "$seldomain${databean![i].id}";
                                       });
                                     }
                                   }
@@ -718,6 +724,8 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                                   }
                                 }
 
+                              }else{
+                                showInSnackBar("Please select domain");
                               }
 
                             },
@@ -759,7 +767,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
         ),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height:click==false?MediaQuery.of(context).size.height/6:MediaQuery.of(context).size.height/2,
               child: ListView.builder(
                   physics:
@@ -779,7 +787,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                   click = !click;
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context)
                     .size
                     .width,
@@ -818,14 +826,14 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
             children: [
               Text(
                 databean![index].name!,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               GestureDetector(
                 onTap: () {
                   accept(index);
                 },
                 child: databean![index].issel == false
-                    ? Container(
+                    ? SizedBox(
                   width: 20,
                   height: 20,
                   child: Image.asset(
@@ -834,7 +842,7 @@ class _State extends State<DuelModeMain> with ChangeNotifier {
                     width: 20,
                   ),
                 )
-                    : Container(
+                    : SizedBox(
                   width: 20,
                   height: 20,
                   child: Image.asset(

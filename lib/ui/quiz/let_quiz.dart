@@ -86,7 +86,7 @@ class _State extends State<QuizPage> {
   getuserleague(String userid) async {
 
     http.Response response = await http.get(
-        Uri.parse(StringConstants.BASE_URL+"userleague?user_id=$userid")
+        Uri.parse("${StringConstants.BASE_URL}userleague?user_id=$userid")
     );
 
     var jsonResponse = convert.jsonDecode(response.body);
@@ -95,11 +95,11 @@ class _State extends State<QuizPage> {
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
-        setState(() {
-          userleagdata = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(userleagdata.length);
-        });
+        // userleagdata = jsonResponse['data'];
+        // setState(() {
+        //   userleagdata = jsonResponse['data']; //get all the data from json string superheros
+        //   print(userleagdata.length);
+        // });
         getuserleagueresponse(getUserLeagueResponseFromJson(data!));
         // var venam = userleagdata(data!)['data'];
         // print(venam.toString());
@@ -169,7 +169,7 @@ var datalink;
   }
   linkshare(String link){
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>DuelModeInvite(seldomain: [], quizspeedid: "", type: "", quiztypeid: "", quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
+        builder: (BuildContext context) =>DuelModeInvite(seldomain: [], quizspeedid: "", type: "2", quiztypeid: "", quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
   }
   createnew(){
     Navigator.pushReplacement(
@@ -180,7 +180,8 @@ var datalink;
   checkquizoom(String userid,String type) async {
 
     http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL+"checkquiz"),body: {
+        Uri.parse("${StringConstants.BASE_URL}checkquiz"),
+        body: {
       'user_id':userid.toString(),
       'type':type.toString()
     }
@@ -192,13 +193,13 @@ var datalink;
       data = response.body;
 
       if (jsonResponse['status'] == 200) {
+        datalink = jsonResponse;
         setState(() {
-          datalink = jsonDecode(
-              data!)['data']; //get all the data from json string superheros
-          print(datalink.length);
-        });
-        roomlinkshare(datalink.toString());
+          datalink = jsonResponse;
 
+        });
+        roomlinkshare(datalink);
+        print(datalink.length.toString());
       } else if(jsonResponse['status'] == 201 || jsonResponse['status'] == 204){
 
         createnewroom();
@@ -218,11 +219,15 @@ var datalink;
     }
 
   }
-  roomlinkshare(String link){
-    log(link);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>QuizroomInvite(seldomain: [], quizspeedid: "", type: "", quiztypeid: "",
-          quizid: "", difficultylevelid: "", link: link, typeq: 1,)));
+  roomlinkshare(datalink){
+    log(datalink.toString());
+    if(datalink != null) {
+      if(datalink['data'] != null) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) =>QuizroomInvite(seldomain: [], quizspeedid: "", type: "3", quiztypeid: "",
+          quizid: datalink['quizroom_id'], difficultylevelid: "", link: datalink['data'], typeq: 1,)));
+      }
+    }
   }
   createnewroom(){
     Navigator.pushReplacement(

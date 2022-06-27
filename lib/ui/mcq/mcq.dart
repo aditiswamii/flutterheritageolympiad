@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'dart:developer';
 import 'dart:math';
+
+
 import 'dart:ui';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -13,15 +15,18 @@ import 'package:CultreApp/ui/classicquiz/result/result.dart';
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/utils/stringconstants.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'dart:convert' as convert;
 
 
 
+import '../../main.dart';
 import '../duelmode/duelmoderesult/duelmode_result.dart';
 import '../homepage/homepage.dart';
 import '../quizroom/quizroomresult/quizroom_result.dart';
@@ -41,10 +46,10 @@ class Mcq extends StatefulWidget {
       : super(key: key);
 
   @override
-  _State createState() => _State();
+  McqState createState() => McqState();
 }
 
-class _State extends State<Mcq> {
+class McqState extends State<Mcq> {
   var username;
   var email;
   var country;
@@ -101,6 +106,7 @@ class _State extends State<Mcq> {
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
+    Wakelock.enable();
    userdata();
   }
   userdata() async {
@@ -113,6 +119,8 @@ class _State extends State<Mcq> {
       userid = prefs.getString("userid");
       // packagename=packageInfo.packageName.toString();
     });
+    print("quizid"+widget.quizid.toString());
+
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         visibilityanimation = true;
@@ -373,14 +381,14 @@ class _State extends State<Mcq> {
 
   void submitquiz(String quizId, String quizAnswer) async {
     http.Response response = await http
-        .post(Uri.parse(StringConstants.BASE_URL + "save_result"), body: {
+        .post(Uri.parse("${StringConstants.BASE_URL}save_result"), body: {
       'quiz_id': quizId.toString(),
       'quiz_answer': quizAnswer.toString(),
     });
-    showLoaderDialog(context);
+
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+
       resultdata = response.body;
       if (jsonResponse['status'] == 200) {
         resultres = jsonDecode(response.body);
@@ -395,9 +403,11 @@ class _State extends State<Mcq> {
         print(jsonDecode(resultdata!)['data']['quiz_id']);
         print(jsonDecode(resultdata!)['data']['xp']);
         print(jsonDecode(resultdata!)['data']['per']);
+      }else{
+        print(jsonResponse['status']);
       }
     } else {
-      Navigator.pop(context);
+
       print(response.statusCode);
     }
   }
@@ -499,7 +509,7 @@ print("hi");
           context,
           MaterialPageRoute(
               builder: (context) => DuelModeResult(
-                    quizid: widget.quizid,
+                    quizid:savedata['quiz_id'],
                     type: widget.type,
                   )));
     } else if (widget.type == "3") {
@@ -583,7 +593,7 @@ print("hi");
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.of(context).pushReplacement(
+    Navigator.of(navigatorKey.currentContext!).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     print(BackButtonInterceptor.describe()); // Do some stuff.
     return true;
@@ -601,9 +611,11 @@ print("hi");
 
   @override
   Widget build(BuildContext context) {
+
     String strDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = strDigits(myDuration!.inMinutes.remainder(60));
     final seconds = strDigits(myDuration!.inSeconds.remainder(60));
+
     return Visibility(
       visible: visibilityanimation,
       replacement: Scaffold(

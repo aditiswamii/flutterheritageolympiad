@@ -105,9 +105,10 @@ class _QuizroomInviteState extends State<QuizroomInvite> {
         //store response as string
         setState(() {
           gendata = jsonResponse; //get all the data from json string superheros
-          print("domiaindata: "+gendata['data']['link'].toString()); // just printed length of data
+
         });
         onsuccess(gendata);
+        print("domiaindata: ${gendata['data']['link']}"); // just printed length of data
       } else {
 
         snackBar = SnackBar(
@@ -138,10 +139,10 @@ var roomdata;
       'user_id': userid.toString(),
       'dual_link': duallink.toString()
     });
-   showLoaderDialog(context);
+   //showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+   //   Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
         setState(() {
@@ -159,7 +160,7 @@ var roomdata;
             .showSnackBar(snackBar);
       }
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -178,6 +179,7 @@ var roomdata;
       log("linkresponse: "+difficulty);
       log("linkresponse: "+speed);
       log("linkresponse: "+link);
+      log("linkresponse: "+roomid);
     }
   }
 
@@ -358,7 +360,7 @@ var roomdata;
               GestureDetector(
                 onTap: (){
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: widget.quizid.toString(),)));
+                      MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: roomid,)));
                 },
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),

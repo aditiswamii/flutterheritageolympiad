@@ -53,6 +53,7 @@ class _QuizroomResultState extends State<QuizroomResult> {
   var jsonuser;
   String packagename="";
   PackageInfo? packageInfo;
+  var congrats=false;
   //GetDuelResultResponse? duelresultr;
   var roomresultr;
   var rankdata;
@@ -133,12 +134,17 @@ class _QuizroomResultState extends State<QuizroomResult> {
         Future.delayed(
           const Duration(seconds: 30),
               () {
-                getRoomResult(userid.toString(), widget.quizid.toString());
+                getRoomRank(userid.toString(), widget.quizid.toString());
           },
         );
       }
     }else{
-      getRoomResult(userid.toString(), widget.quizid.toString());
+      Future.delayed(
+        const Duration(seconds: 30),
+            () {
+          getRoomRank(userid.toString(), widget.quizid.toString());
+        },
+      );
     }
   }
 
@@ -146,12 +152,12 @@ class _QuizroomResultState extends State<QuizroomResult> {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "roomrank"),
         body: {'user_id': userid.toString(), 'room_id': roomid.toString()});
-    showLoaderDialog(context);
+    // showLoaderDialog(context);
 
     print("getRoomRankapi");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       data = response.body;
       if(jsonResponse!=null){
         rankdata = jsonResponse;
@@ -161,7 +167,7 @@ class _QuizroomResultState extends State<QuizroomResult> {
         log(jsonResponse['message']);
       }
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       print(response.statusCode);
     }
   }
@@ -171,8 +177,11 @@ class _QuizroomResultState extends State<QuizroomResult> {
       if (rankdata['status'] == 200) {
         if (rankdata['data'] != null) {
           if (rankdata['data']['name']
-              .toString()
-              .isNotEmpty) {
+              .toString().isNotEmpty && congrats != true) {
+            setState(() {
+              congrats=true;
+            });
+
             AlertDialog alert = AlertDialog(
               backgroundColor: Colors.white,
               shape: const RoundedRectangleBorder(
@@ -304,6 +313,12 @@ class _QuizroomResultState extends State<QuizroomResult> {
         },
       );
     }
+    Future.delayed(
+      const Duration(seconds: 30),
+          () {
+        getRoomRank(userid.toString(), widget.quizid.toString());
+      },
+    );
   }
 
 

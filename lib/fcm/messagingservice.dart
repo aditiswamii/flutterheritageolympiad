@@ -116,21 +116,21 @@ class MessagingService{
     if(notificationType=='tournament'){
       var title=message.data["title"];
       var body=message.data['body'];
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        Navigator.push(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(
-                builder: (context) => MyApp()));
-      });
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      //   Navigator.push(
+      //       navigatorKey.currentContext!,
+      //       MaterialPageRoute(
+      //           builder: (context) => MyApp()));
+      // });
       // if( body!=null) {
       //   showSimpleNotification(  Text("${body}",style: TextStyle(color: Colors.white),),duration: Duration(minutes: 1),autoDismiss: true,slideDismiss: true,
       //       background: ColorConstants.verdigris);
       // }
       showNotification(1,title,body);
-      Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (context) => MyApp()));
+      // Navigator.push(
+      //     navigatorKey.currentContext!,
+      //     MaterialPageRoute(
+      //         builder: (context) => MyApp()));
     }else if(notificationType=='contact'){
       var  title=message.data["title"];
       var   body=message.data['body'];
@@ -139,16 +139,16 @@ class MessagingService{
       //       background: ColorConstants.verdigris);
       // }
       showNotification(1,title,body);
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        Navigator.push(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(
-                builder: (context) => MyApp()));
-      });
-      Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (context) => MyApp()));
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      //   Navigator.push(
+      //       navigatorKey.currentContext!,
+      //       MaterialPageRoute(
+      //           builder: (context) => MyApp()));
+      // });
+      // Navigator.push(
+      //     navigatorKey.currentContext!,
+      //     MaterialPageRoute(
+      //         builder: (context) => MyApp()));
 
     }else if(notificationType=='dual'){
       var  title=message.data["title"];
@@ -159,16 +159,16 @@ class MessagingService{
       //       background: ColorConstants.verdigris);
       // }
       showNotification(2,title,body);
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        Navigator.push(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(
-                builder: (context) => MyApp()));
-      });
-      Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (context) => MyApp(link: link,)));
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      //   Navigator.push(
+      //       navigatorKey.currentContext!,
+      //       MaterialPageRoute(
+      //           builder: (context) => MyApp()));
+      // });
+      // Navigator.push(
+      //     navigatorKey.currentContext!,
+      //     MaterialPageRoute(
+      //         builder: (context) => MyApp(link: link,)));
 
     }else if(notificationType=='quizroom'){
       var  title=message.data["title"];
@@ -179,16 +179,16 @@ class MessagingService{
       //       background: ColorConstants.verdigris);
       // }
       showNotification(2,title,body);
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        Navigator.push(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(
-                builder: (context) => MyApp()));
-      });
-      Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (context) => MyApp(link: link,)));
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      //   Navigator.push(
+      //       navigatorKey.currentContext!,
+      //       MaterialPageRoute(
+      //           builder: (context) => MyApp(link: link,)));
+      // });
+      // Navigator.push(
+      //     navigatorKey.currentContext!,
+      //     MaterialPageRoute(
+      //         builder: (context) => MyApp(link: link,)));
 
     }else if(notificationType=='product'){
       var title=message.data["title"];
@@ -272,16 +272,16 @@ class MessagingService{
       //       background: ColorConstants.verdigris);
       // }
       showNotification(2,title,body);
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        Navigator.push(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(
-                builder: (context) => MyApp()));
-      });
-      Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (context) => MyApp()));
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      //   Navigator.push(
+      //       navigatorKey.currentContext!,
+      //       MaterialPageRoute(
+      //           builder: (context) => MyApp()));
+      // });
+      // Navigator.push(
+      //     navigatorKey.currentContext!,
+      //     MaterialPageRoute(
+      //         builder: (context) => MyApp()));
     }
   }
 

@@ -835,15 +835,14 @@ String link="";
       if (jsonResponse['status'] == 200) {
         data = response.body;
         //final responseJson = json.decode(response.body);//store response as string
+        myinvdata = jsonResponse; //get all the data from json string superheros
         setState(() {
-          myinvdata = jsonResponse; //get all the data from json string superheros
-          print(myinvdata.length);
-          print(myinvdata.toString());
+          myinvdata = jsonResponse;
         });
         onsuccess(myinvdata);
-        // var venam = jsonDecode(data!)['data'];
-        // print(venam);
-        //last_id
+        print(myinvdata.length);
+        print(myinvdata.toString());
+
 
       } else {
         snackBar = SnackBar(

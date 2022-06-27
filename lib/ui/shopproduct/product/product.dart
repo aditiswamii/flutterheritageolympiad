@@ -207,6 +207,7 @@ class _State extends State<ProductList>{
                           child: ListView.builder(
                               physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
                               shrinkWrap: true,
+                              reverse: true,
                               itemCount: jsonDecode(data!)['data'].length,
                               itemBuilder: (BuildContext context, int index) {
                                 return

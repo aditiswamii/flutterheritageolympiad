@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:CultreApp/colors/colors.dart';
@@ -67,11 +69,12 @@ class _State extends State<DialogQuizRoomInviteReceive> {
     if (response.statusCode == 200) {
 
       if (jsonResponse['status'] == 200) {
+        log(jsonResponse.toString());
        // _view!.setRData(type,index,widget.id.toString());
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  Waitroom(quizid: widget.id.toString(),)));
+                builder: (context) =>  Waitroom(quizid:jsonResponse['data'].toString(),)));
       }
       else {
         snackBar = SnackBar(

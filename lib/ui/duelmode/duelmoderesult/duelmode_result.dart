@@ -27,12 +27,12 @@ class DuelModeResult extends StatefulWidget {
   DuelModeResult({Key? key, required this.quizid,required this.type}) : super(key: key);
 
   @override
-  _DuelModeResultState createState() => _DuelModeResultState();
+  DuelModeResultState createState() => DuelModeResultState();
 }
 
-const TWO_PI = 3.14 * 2;
+const twoPi = 3.14 * 2;
 
-class _DuelModeResultState extends State<DuelModeResult> {
+class DuelModeResultState extends State<DuelModeResult> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
   late double progressValue;
@@ -51,7 +51,7 @@ class _DuelModeResultState extends State<DuelModeResult> {
   PackageInfo? packageInfo;
   //GetDuelResultResponse? duelresultr;
   var duelresultr;
-
+  var congrats=false;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -125,7 +125,7 @@ class _DuelModeResultState extends State<DuelModeResult> {
   onsuccess(resultdata) {
     log("log" + resultdata.toString());
     if (resultdata != null) {
-      if (resultdata['result'][1]['xp'] != null) {
+      if (resultdata['result'] != null) {
         setState(() {
           duelresultr = resultdata;
         });
@@ -139,6 +139,13 @@ class _DuelModeResultState extends State<DuelModeResult> {
           },
         );
       }
+    }else{
+      Future.delayed(
+        const Duration(seconds: 30),
+            () {
+          getDuelResult(userid.toString(), widget.quizid.toString());
+        },
+      );
     }
   }
   getDuelRank(String userid, String dualId) async {
@@ -171,7 +178,10 @@ class _DuelModeResultState extends State<DuelModeResult> {
         if (rankdata['data'] != null) {
           if (rankdata['data']['name']
               .toString()
-              .isNotEmpty) {
+              .isNotEmpty  && congrats != true) {
+            setState(() {
+              congrats=true;
+            });
             AlertDialog alert = AlertDialog(
               backgroundColor: Colors.white,
               shape: const RoundedRectangleBorder(
@@ -267,9 +277,11 @@ class _DuelModeResultState extends State<DuelModeResult> {
 
         String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}:${now.minute.toString().padLeft(2,'0')}:${now.second.toString().padLeft(2,'0')}";
 
-        log(atimenew);
+
         String atime=atimenew;
         String ranktime=rankdata['time'].toString();
+        log(atimenew);
+        log(ranktime);
         var newatime= (DateTime.parse(atime).hour * 3600) +(DateTime.parse(atime).minute * 60 )+(DateTime.parse(atime).second * 1);
         var newranktime=(DateTime.parse(ranktime).hour * 3600) +(DateTime.parse(ranktime).minute * 60 )+(DateTime.parse(ranktime).second * 1);
 log(atime);
@@ -301,6 +313,12 @@ log(ranktime);
         },
       );
     }
+    Future.delayed(
+      const Duration(seconds: 30),
+          () {
+        getDuelRank(userid.toString(), widget.quizid.toString());
+      },
+    );
   }
 
   showLoaderDialog(BuildContext context) {

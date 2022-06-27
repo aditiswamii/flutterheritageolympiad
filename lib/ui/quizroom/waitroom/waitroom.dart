@@ -31,10 +31,10 @@ class Waitroom extends StatefulWidget {
   Waitroom({Key? key, required this.quizid}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _WaitroomState createState() => _WaitroomState();
 }
 
-class _State extends State<Waitroom> {
+class _WaitroomState extends State<Waitroom> {
   var username;
   var email;
   var country;
@@ -46,6 +46,7 @@ class _State extends State<Waitroom> {
   Getroomuserlist? getroomuserlist;
   var snackBar;
   int addeduser=0;
+  var creatorid =0;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -55,7 +56,7 @@ class _State extends State<Waitroom> {
     });
     print("userdata");
 
-   // getWaitRoom(widget.quizid.toString());
+   print("roomid: ${widget.quizid}");
     getWaitRoom(widget.quizid.toString());
   }
 
@@ -68,7 +69,8 @@ class _State extends State<Waitroom> {
   deleteuserapi(String roomid,String id) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "delete_user_room"),
-        body: {'room_id': roomid.toString(),
+        body: {
+          'room_id': roomid.toString(),
           'user_id': id.toString(),
         });
     // showLoaderDialog(context);
@@ -99,7 +101,8 @@ class _State extends State<Waitroom> {
   startroom(String roomid) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "start_room"),
-        body: {'room_id': roomid.toString()
+        body: {
+          'room_id': roomid.toString()
         });
     // showLoaderDialog(context);
 
@@ -176,7 +179,8 @@ class _State extends State<Waitroom> {
   disbandapi(String roomid) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "disband_quiz"),
-        body: {'quiz_room_id': roomid.toString()
+        body: {
+          'quiz_room_id': roomid.toString()
         });
     // showLoaderDialog(context);
 
@@ -208,10 +212,12 @@ class _State extends State<Waitroom> {
         MaterialPageRoute(
             builder: (context) =>  HomePage()));
   }
+  var roomstatusata;
   getroomstatus(String roomid,String userid) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "room_status"),
-        body: {'room_id': roomid.toString(),
+        body: {
+          'room_id': roomid.toString(),
           'user_id': userid.toString(),
         });
 
@@ -222,7 +228,7 @@ class _State extends State<Waitroom> {
 
       data = response.body;
       if (jsonResponse['status'] == 200) {
-        var roomstatusata=jsonResponse['data'];
+      roomstatusata=jsonResponse['data'];
         setState(() {
           roomstatusata=jsonResponse['data'];
         });
@@ -264,84 +270,80 @@ class _State extends State<Waitroom> {
   getWaitRoom(String roomid) async {
     http.Response response = await http.post(
         Uri.parse(StringConstants.BASE_URL + "room_user"),
-        body: {'room_id': roomid.toString()});
+        body: {
+          'room_id': roomid.toString()
+        });
     // showLoaderDialog(context);
 
     print("getWaitRoomapi");
+    print("getWaitRoomapi id: $roomid");
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       // Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
 
-        roomdata =
-            jsonResponse['data']; //get all the data from json string superheros
-        print("length" + roomdata.length.toString());
+        roomdata = jsonResponse; //get all the data from json string superheros
+        print("length: ${roomdata.length}");
         // onsuccess(jsonResponse);
-        onsuccess(getroomuserlistFromJson(data!));
+        onsuccess(getroomuserlistFromJson(data));
       } else {
         snackBar = SnackBar(
           content: Text(
             jsonResponse['message'].toString(),textAlign: TextAlign.center,),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-        log(jsonResponse['message']);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       }
     } else {
       // Navigator.pop(context);
       print(response.statusCode);
     }
   }
-var creatorid =0;
+
   onsuccess(Getroomuserlist? Roomlistn) {
-    log(Roomlistn.toString());
+
     if (Roomlistn != null) {
-
-      setState(() {
-        getroomuserlist = Roomlistn;
-        creatorid=Roomlistn.creatorId!;
-        addeduser=Roomlistn.data!.length;
-      });
-      print("getroomlistjsonsuccess" + Roomlistn.toString());
-    }
-    Future.delayed(
-      const Duration(seconds: 10),
-          () {
-            getroomstatus(widget.quizid.toString(),userid.toString());
+      log(Roomlistn.toString());
+      if (Roomlistn.data != null) {
+        log(Roomlistn.data.toString());
+        setState(() {
+          getroomuserlist = Roomlistn;
+          creatorid = Roomlistn.creatorId!;
+          addeduser = Roomlistn.data!.length;
+        });
+        print("getroomlistjsonsuccess: " +Roomlistn.data.toString());
+      }else{
+        Future.delayed(
+          const Duration(seconds: 10),
+              () {
+            getroomstatus(widget.quizid.toString(), userid.toString());
             getWaitRoom(widget.quizid.toString());
-      },
-    );
-    final stream =
-    Stream<int>.periodic(const Duration(
-        seconds: 5), (count) => count).take(100);
-
-    stream.forEach(getroomstatus(widget.quizid.toString(),userid.toString()));
-    final stream1 =
-    Stream<int>.periodic(const Duration(
-        seconds: 5), (count) => count).take(100);
-
-    stream1.forEach(getWaitRoom(widget.quizid.toString()));
+          },
+        );
+      }
+    }else {
+      Future.delayed(
+        const Duration(seconds: 10),
+            () {
+          getroomstatus(widget.quizid.toString(), userid.toString());
+          getWaitRoom(widget.quizid.toString());
+        },
+      );
+      // final stream =
+      // Stream<int>.periodic(const Duration(
+      //     seconds: 5), (count) => count).take(100);
+      //
+      // stream.forEach(getroomstatus(widget.quizid.toString(),userid.toString()));
+      // final stream1 =
+      // Stream<int>.periodic(const Duration(
+      //     seconds: 5), (count) => count).take(100);
+      //
+      // stream1.forEach(getWaitRoom(widget.quizid.toString()));
+    }
   }
 
-  // showLoaderDialog(BuildContext context) {
-  //   AlertDialog alert = AlertDialog(
-  //     content: new Row(
-  //       children: [
-  //         CircularProgressIndicator(),
-  //         Container(
-  //             margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-  //       ],
-  //     ),
-  //   );
-  //   showDialog(
-  //     barrierDismissible: false,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
+
 
   @override
   void dispose() {

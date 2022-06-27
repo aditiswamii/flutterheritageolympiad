@@ -359,7 +359,7 @@ class _State extends State<RulesPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const QuizPage()));
+                                  builder: (context) =>  QuizPage()));
                         },
                         child: const Text(
                           "GO BACK",

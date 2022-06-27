@@ -79,6 +79,7 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+    ChangeNotifier().dispose();
     super.dispose();
   }
 
@@ -87,6 +88,9 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
         MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
     // Do some stuff.
     return true;
+  }
+  void showInSnackBar(String value) {
+    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(value)));
   }
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -705,6 +709,8 @@ class _State extends State<QuizRoomMain> with ChangeNotifier{
                                   }
                                 }
 
+                              }else{
+                                showInSnackBar("Please select domain");
                               }
 
                             },
