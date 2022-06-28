@@ -1,17 +1,12 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
-import 'package:CultreApp/ui/myaccount/myaccount_page.dart';
-import 'package:CultreApp/ui/quiz/let_quiz.dart';
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/shopproduct/product/product.dart';
-import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
-import 'package:CultreApp/utils/apppreference.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:CultreApp/ui/homepage/homepage.dart';
@@ -21,11 +16,11 @@ class ShopPage extends StatefulWidget {
   ShopPage({Key? key}) : super(key: key);
 
   @override
-  _ShopState createState() => _ShopState();
+  ShopState createState() => ShopState();
 }
 
-class _ShopState extends State<ShopPage> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class ShopState extends State<ShopPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool clickproduct = false;
   bool clickexprerience = false;
@@ -74,7 +69,7 @@ class _ShopState extends State<ShopPage> {
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -83,38 +78,40 @@ class _ShopState extends State<ShopPage> {
           ),
         ),
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
           child: ListView(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerLeft,
-
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Center(
                     child: Card(
                       elevation: 3,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                      ),
+                          borderRadius: BorderRadius.circular(20)),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  HomePage()));
+                                  builder: (context) => HomePage()));
                         },
-                        child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                        child: Image.asset(
+                          "assets/images/home_1.png",
+                          height: 40,
+                          width: 40,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 5.0),
+                  padding: const EdgeInsets.only(right: 5.0),
                   child: GestureDetector(
                     onTap: () {
                       _scaffoldKey.currentState!.openEndDrawer();
@@ -139,11 +136,18 @@ class _ShopState extends State<ShopPage> {
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: username==null?Text(""):Text("${username[0].toUpperCase()+username.substring(1)}",style: TextStyle(fontSize: 24,color: ColorConstants.txt,fontFamily: "Nunito"))),
+                    child: username == null
+                        ? const Text("")
+                        : Text(
+                            "${username[0].toUpperCase() + username.substring(1)}",
+                            style: const TextStyle(
+                                fontSize: 24,
+                                color: ColorConstants.txt,
+                                fontFamily: "Nunito"))),
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  child: Text(
+                  child: const Text(
                       "You deserve to treat yourself. Find the most unique product and experience here.",
                       style:
                           TextStyle(fontSize: 14, color: ColorConstants.txt)),
@@ -152,13 +156,14 @@ class _ShopState extends State<ShopPage> {
             ),
             Container(
                 child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10),
                     shrinkWrap: true,
-                    physics:
-                        ClampingScrollPhysics(parent: BouncingScrollPhysics()),
+                    physics: const ClampingScrollPhysics(
+                        parent: BouncingScrollPhysics()),
                     children: [
                   GestureDetector(
                     onTap: () {
@@ -171,7 +176,7 @@ class _ShopState extends State<ShopPage> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                       height: 150,
                       // width: 150,
                       decoration: BoxDecoration(
@@ -182,7 +187,7 @@ class _ShopState extends State<ShopPage> {
                         alignment: Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text(
                               "PRODUCTS",
                               style: TextStyle(
@@ -215,7 +220,7 @@ class _ShopState extends State<ShopPage> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                       // padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                       height: 150,
                       //  width: 150,
@@ -225,7 +230,7 @@ class _ShopState extends State<ShopPage> {
                               : ColorConstants.lightgrey200.withAlpha(150)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             "EXPERIENCE",
                             style: TextStyle(
@@ -257,7 +262,7 @@ class _ShopState extends State<ShopPage> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
+                      margin: const EdgeInsets.fromLTRB(0, 10, 5, 0),
                       // // padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                       height: 150,
                       //   width: 100,
@@ -267,7 +272,7 @@ class _ShopState extends State<ShopPage> {
                               : ColorConstants.red200.withAlpha(150)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             "GIFT CARDS",
                             style: TextStyle(
@@ -299,8 +304,8 @@ class _ShopState extends State<ShopPage> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      padding: EdgeInsets.all(5),
+                      margin: const EdgeInsets.fromLTRB(5, 10, 0, 0),
+                      padding: const EdgeInsets.all(5),
                       height: 150,
                       //  width: 100,
                       decoration: BoxDecoration(
@@ -309,7 +314,7 @@ class _ShopState extends State<ShopPage> {
                               : ColorConstants.blue200.withAlpha(150)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             "PLANS",
                             style: TextStyle(
@@ -333,7 +338,7 @@ class _ShopState extends State<ShopPage> {
                 ])),
             Center(
               child: Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -355,34 +360,55 @@ class _ShopState extends State<ShopPage> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ExperiencePage()));
-                    }else if(clickgift==true||clickplans==true){
-                      AlertDialog alert=AlertDialog(
-                         alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                        contentPadding: EdgeInsets.only(top: 10.0),
-                        title: Text("COMING SOON",style: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                              builder: (context) => const ExperiencePage()));
+                    } else if (clickgift == true || clickplans == true) {
+                      AlertDialog alert = AlertDialog(
+                        alignment: Alignment.center,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(const Radius.circular(32.0))),
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        title: const Text(
+                          "COMING SOON",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.center,
+                        ),
                         actions: [
                           Container(
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700)),
-                                Text("",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700)),
-                                TextButton(onPressed: (){
-                                  Navigator.pop(context);
-
-                                }, child: Text("OK",style: TextStyle(color: Colors.blue,fontSize: 16,fontWeight: FontWeight.w700))),
+                                const Text("",
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700)),
+                                const Text("",
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700)),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("OK",
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700))),
                               ],
                             ),
                           ),
                         ],
                       );
                       showDialog(
-                        context:context,
-                        builder:(BuildContext context){
+                        context: context,
+                        builder: (BuildContext context) {
                           return alert;
                         },
                       );

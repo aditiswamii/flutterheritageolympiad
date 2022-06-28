@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,16 +9,18 @@ import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/modal/getcitylist/GetCityResponse.dart';
 import 'package:CultreApp/modal/getstate/GetStateResponse.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
-import 'package:CultreApp/uinew/loginpage.dart';
-import 'package:CultreApp/uinew/signuppage.dart';
+import 'package:CultreApp/ui/authentication/loginpage.dart';
+import 'package:CultreApp/ui/authentication/signuppage.dart';
 import 'package:CultreApp/utils/apppreference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../modal/getcountry/GetCountryList.dart';
-import '../modal/getregisterresponse/GetRegisterResponse.dart';
-import '../utils/StringConstants.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import '../../modal/getcountry/GetCountryList.dart';
+import '../../modal/getregisterresponse/GetRegisterResponse.dart';
+import '../../utils/StringConstants.dart';
 
 // void main() {
 //   runApp(MaterialApp(
@@ -90,23 +93,29 @@ class _State extends State<RegisterPage> {
 
   void getCountry(GetCountryList) async {
     http.Response response =
-        await http.get(Uri.parse('http://3.108.183.42/api/country'));
+    await http.get(Uri.parse('${StringConstants.BASE_URL}country'));
+    var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-      datacoun = response.body; //store response as string
-      setState(() {
-        countlength = getCountryListFromJson(
-            datacoun!); //get all the data from json string superheros
-        // just printed length of data
-      });
-      //getState(GetStateResponse);
-      var venam = jsonDecode(datacoun!)['countries'].toString();
-      var venamid = jsonDecode(datacoun!)['countries'][4]['id'].toString();
-      print(venam);
-      print(countlength.length);
-      print(getCountryListFromJson(datacoun!).countries.toString());
-      print(venamid);
+      datacoun = response.body;
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          datacoun = response.body;
+          countlength = getCountryListFromJson(
+              datacoun!); //get all the data from json string superheros
+          jsonDecode(datacoun!)['countries'];
+        });
+        //getState(GetStateResponse);
+        var venam = jsonDecode(datacoun!)['countries'].toString();
+        var venamid = jsonDecode(datacoun!)['countries'][4]['id'].toString();
+        print(venam);
+
+        print(getCountryListFromJson(datacoun!).countries.toString());
+        print(venamid);
+      } else {}
     } else {
-      print(response.statusCode);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
 
@@ -318,7 +327,14 @@ class _State extends State<RegisterPage> {
                         // width: 100,
                         // alignment: Alignment.center,
                         child: Container(
-                          height: 500,
+                          height: MediaQuery.of(context)
+                              .size
+                              .height -
+                              200,
+                          width: MediaQuery.of(context)
+                              .size
+                              .width -
+                              20,
                           child: ListView.builder(
                               physics: ClampingScrollPhysics(
                                   parent: BouncingScrollPhysics()),
@@ -415,7 +431,14 @@ class _State extends State<RegisterPage> {
                       contentPadding: EdgeInsets.all(5), //this right here
                       title: SingleChildScrollView(
                         child: Container(
-                          height: 300,
+                          height: MediaQuery.of(context)
+                              .size
+                              .height -
+                              200,
+                          width: MediaQuery.of(context)
+                              .size
+                              .width -
+                              20,
                           child: ListView.builder(
                               physics: ClampingScrollPhysics(
                                   parent: BouncingScrollPhysics()),
@@ -512,7 +535,14 @@ class _State extends State<RegisterPage> {
                       contentPadding: EdgeInsets.all(5), //this right here
                       title: SingleChildScrollView(
                         child: Container(
-                          height: 300,
+                          height: MediaQuery.of(context)
+                              .size
+                              .height -
+                              200,
+                          width: MediaQuery.of(context)
+                              .size
+                              .width -
+                              20,
                           child: ListView.builder(
                               physics: ClampingScrollPhysics(
                                   parent: BouncingScrollPhysics()),

@@ -2,22 +2,17 @@ import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
 
 import 'package:CultreApp/modal/roomlinkdetailresponse/GetRoomLinkdetailsResponse.dart';
-import 'package:CultreApp/ui/duelmode/duelmodelink/duelmodelink.dart';
-import 'package:CultreApp/ui/duelmode/duelmodemain/duelmode_main.dart';
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
 
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +23,6 @@ import '../quizroomcontactlist/quizroomcontactlist.dart';
 import '../quizroomlink/quizroomlink.dart';
 import '../waitroom/waitroom.dart';
 
-
 class QuizroomInvite extends StatefulWidget {
   var quiztypeid;
   var quizspeedid;
@@ -36,17 +30,26 @@ class QuizroomInvite extends StatefulWidget {
   var quizid;
   var type;
   var link;
- var seldomain;
- int typeq;
-   QuizroomInvite({Key? key,required this.quizspeedid,required this.quiztypeid,
-     required this.quizid,required this.type,required this.difficultylevelid,required this.seldomain,required this.link,required this.typeq}) : super(key: key);
+  var seldomain;
+  int typeq;
+  QuizroomInvite(
+      {Key? key,
+      required this.quizspeedid,
+      required this.quiztypeid,
+      required this.quizid,
+      required this.type,
+      required this.difficultylevelid,
+      required this.seldomain,
+      required this.link,
+      required this.typeq})
+      : super(key: key);
 
   @override
   _QuizroomInviteState createState() => _QuizroomInviteState();
 }
 
 class _QuizroomInviteState extends State<QuizroomInvite> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
   var username;
   var email;
@@ -61,39 +64,37 @@ class _QuizroomInviteState extends State<QuizroomInvite> {
   var difficulty;
   var seldomain;
   var roomid;
-  int select=1;
+  int select = 1;
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString("username");
-      country =prefs.getString("country");
-      userid= prefs.getString("userid");
+      country = prefs.getString("country");
+      userid = prefs.getString("userid");
     });
-   if(widget.typeq==0){
-     setState(() {
-       speed=widget.quizspeedid.toString();
-       difficulty=widget.difficultylevelid.toString();
-       seldomain=widget.seldomain.toString();
-       roomid=widget.quizid.toString();
-       link=widget.link;
-     });
-     log(speed.toString());
-     log(widget.typeq.toString());
-     log(widget.quizspeedid.toString());
-     log(widget.difficultylevelid.toString());
-     log(widget.seldomain.toString());
-    generatelink(userid.toString(), widget.quizid.toString());
-   }else if(widget.typeq==1){
-    roomdetails(userid.toString(), widget.link.toString());
-   }
-
+    if (widget.typeq == 0) {
+      setState(() {
+        speed = widget.quizspeedid.toString();
+        difficulty = widget.difficultylevelid.toString();
+        seldomain = widget.seldomain.toString();
+        roomid = widget.quizid.toString();
+        link = widget.link;
+      });
+      log(speed.toString());
+      log(widget.typeq.toString());
+      log(widget.quizspeedid.toString());
+      log(widget.difficultylevelid.toString());
+      log(widget.seldomain.toString());
+      generatelink(userid.toString(), widget.quizid.toString());
+    } else if (widget.typeq == 1) {
+      roomdetails(userid.toString(), widget.link.toString());
+    }
   }
-  void generatelink(String userid,String room_id) async {
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL+"generate_link_quiz_room"), body: {
-      'user_id': userid.toString(),
-      'room_id': room_id.toString()
-    });
+
+  void generatelink(String userid, String roomId) async {
+    http.Response response = await http.post(
+        Uri.parse("${StringConstants.BASE_URL}generate_link_quiz_room"),
+        body: {'user_id': userid.toString(), 'room_id': roomId.toString()});
     showLoaderDialog(context);
 
     var jsonResponse = convert.jsonDecode(response.body);
@@ -101,69 +102,90 @@ class _QuizroomInviteState extends State<QuizroomInvite> {
       Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
-
         //store response as string
         setState(() {
           gendata = jsonResponse; //get all the data from json string superheros
-
         });
         onsuccess(gendata);
-        print("domiaindata: ${gendata['data']['link']}"); // just printed length of data
+        if (kDebugMode) {
+          if (kDebugMode) {
+            if (kDebugMode) {
+              if (kDebugMode) {
+                if (kDebugMode) {
+                  if (kDebugMode) {
+                    if (kDebugMode) {
+                      if (kDebugMode) {
+                        if (kDebugMode) {
+                          if (kDebugMode) {
+                            print("domiaindata: ${gendata['data']['link']}");
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } // just printed length of data
       } else {
-
         snackBar = SnackBar(
             content: Text(
-              jsonResponse['message'].toString(),
-              textAlign: TextAlign.center,));
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+          jsonResponse['message'].toString(),
+          textAlign: TextAlign.center,
+        ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       Navigator.pop(context);
-      print(response.statusCode);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
-  onsuccess(gendata){
-    if(gendata['data']!=null) {
+
+  onsuccess(gendata) {
+    if (gendata['data'] != null) {
       setState(() {
-        link=gendata['data']['link'].toString();
+        link = gendata['data']['link'].toString();
       });
     }
-
-
   }
-var roomdata;
-  void roomdetails(String userid,String duallink) async {
-    http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL+"dualdetails"), body: {
-      'user_id': userid.toString(),
-      'dual_link': duallink.toString()
-    });
-   //showLoaderDialog(context);
+
+  var roomdata;
+  void roomdetails(String userid, String duallink) async {
+    http.Response response = await http.post(
+        Uri.parse("${StringConstants.BASE_URL}dualdetails"),
+        body: {'user_id': userid.toString(), 'dual_link': duallink.toString()});
+    //showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
-   //   Navigator.pop(context);
+      //   Navigator.pop(context);
       data = response.body;
       if (jsonResponse['status'] == 200) {
         setState(() {
-          roomdata = jsonResponse; //get all the data from json string superheros
-
+          roomdata =
+              jsonResponse; //get all the data from json string superheros
         });
         setroomlinkdetail(getRoomLinkdetailsResponseFromJson(data!));
       } else {
-
         snackBar = SnackBar(
             content: Text(
-              jsonResponse['message'].toString(),
-              textAlign: TextAlign.center,));
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+          jsonResponse['message'].toString(),
+          textAlign: TextAlign.center,
+        ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-     // Navigator.pop(context);
-      print(response.statusCode);
+      // Navigator.pop(context);
+      if (kDebugMode) {
+        if (kDebugMode) {
+          print(response.statusCode);
+        }
+      }
     }
   }
+
   setroomlinkdetail(GetRoomLinkdetailsResponse? obj) {
     if (obj != null) {
       if (obj.data != null) {
@@ -172,42 +194,48 @@ var roomdata;
           difficulty = obj.data!.difficulty.toString();
           speed = obj.data!.quizSpeed.toString();
           link = obj.data!.link.toString();
-          roomid=obj.data!.quizRoomId.toString();
+          roomid = obj.data!.quizRoomId.toString();
         });
       }
-      log("linkresponse: "+seldomain);
-      log("linkresponse: "+difficulty);
-      log("linkresponse: "+speed);
-      log("linkresponse: "+link);
-      log("linkresponse: "+roomid);
+      log("linkresponse: " + seldomain);
+      log("linkresponse: " + difficulty);
+      log("linkresponse: " + speed);
+      log("linkresponse: " + link);
+      log("linkresponse: " + roomid);
     }
   }
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
-      content: new Row(
+      content: Row(
         children: [
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],),
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("Loading...")),
+        ],
+      ),
     );
-    showDialog(barrierDismissible: false,
+    showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
       },
     );
   }
+
   @override
   void initState() {
     super.initState();
     // _locations ;
     BackButtonInterceptor.add(myInterceptor);
-    print(widget.seldomain);
+    if (kDebugMode) {
+      print(widget.seldomain);
+    }
     userdata();
-
   }
+
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
@@ -216,11 +244,10 @@ var roomdata;
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
+        MaterialPageRoute(builder: (BuildContext context) => const QuizPage()));
     // Do some stuff.
     return true;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -230,14 +257,14 @@ var roomdata;
     log(widget.seldomain.toString());
     log(speed.toString());
 
-   // print(widget.seldomain[0]['name'].toString());
+    // print(widget.seldomain[0]['name'].toString());
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -245,45 +272,49 @@ var roomdata;
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Container(
+          color: Colors.white.withAlpha(100),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
-            children:<Widget> [
+            children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
-
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: Center(
                       child: Card(
                         elevation: 3,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                        ),
+                            borderRadius: BorderRadius.circular(20)),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  HomePage()));
+                                    builder: (context) => HomePage()));
                           },
-                          child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                          child: Image.asset(
+                            "assets/images/home_1.png",
+                            height: 40,
+                            width: 40,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 5.0),
+                    padding: const EdgeInsets.only(right: 5.0),
                     child: GestureDetector(
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       },
-                      child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
+                      child: Image.asset("assets/images/side_menu_2.png",
+                          height: 40, width: 40),
                     ),
                   ),
                 ],
@@ -292,75 +323,96 @@ var roomdata;
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                   child: const Text("QUIZ ROOM",
-                      style: TextStyle(
-                          fontSize: 24, color: ColorConstants.txt))),
+                      style:
+                          TextStyle(fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "Step 2: Invite minimum 2 other players to quiz with",
-                      style: TextStyle(
-                          fontSize: 15, color: ColorConstants.txt))),
-    Container(
-      margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-    child:GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
-    shrinkWrap: true,
-    physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
+                      style:
+                          TextStyle(fontSize: 15, color: ColorConstants.txt))),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                child: GridView(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10),
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(
+                        parent: BouncingScrollPhysics()),
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            select = 1;
+                          });
 
-    children: [
-      GestureDetector(
-        onTap: () {
-          setState(() {
-            select=1;
-          });
+                          //ColorConstants.myfeed;
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: select == 1
+                                  ? ColorConstants.verdigris
+                                  : ColorConstants.lightgrey200),
+                          child: Center(
+                              child: Text(
+                            "INVITE",
+                            style: TextStyle(
+                                color:
+                                    select == 1 ? Colors.white : Colors.black,
+                                fontSize: 20),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            select = 2;
+                          });
 
-          //ColorConstants.myfeed;
-        },
-      child: Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-
-      height: 150,
-      width: 150,
-      decoration:  BoxDecoration(
-      shape: BoxShape.rectangle,
-      color: select==1?ColorConstants.verdigris:ColorConstants.lightgrey200
-      ),
-      child: Center(child: Text("INVITE",style: TextStyle(color:select==1?Colors.white: Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
-      ),
-    ),
-      GestureDetector(
-        onTap: () {
-          setState(() {
-            select=2;
-          });
-
-          // Navigator.pushReplacement(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => const AlmostTherePage()));
-        },
-      child: Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-
-      height: 150,
-      width: 150,
-      decoration: BoxDecoration(
-      shape: BoxShape.rectangle,
-      color: select==2?ColorConstants.verdigris:ColorConstants.lightgrey200
-      ),
-      child: Center(child: Text("GET A LINK",style: TextStyle(color: select==2?Colors.white:Colors.black,fontSize: 20),textAlign: TextAlign.center,)),
-      ),
-    )
-    ]
-  ),
-        ),
-
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const AlmostTherePage()));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: select == 2
+                                  ? ColorConstants.verdigris
+                                  : ColorConstants.lightgrey200),
+                          child: Center(
+                              child: Text(
+                            "GET A LINK",
+                            style: TextStyle(
+                                color:
+                                    select == 2 ? Colors.white : Colors.black,
+                                fontSize: 20),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      )
+                    ]),
+              ),
               GestureDetector(
-                onTap: (){
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (BuildContext context) => Waitroom(quizid: roomid,)));
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => Waitroom(
+                            quizid: roomid,
+                          )));
                 },
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -376,27 +428,25 @@ var roomdata;
                         ),
                       ),
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: const Text(
                           "RETURN TO WAITROOM",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15),
+                          style: TextStyle(color: Colors.white, fontSize: 15),
                         ),
                       ),
                     ),
                   ),
-
                 ),
               ),
-              Container(
-                child: Text(
-                  "QUIZ SUMMARY",
-                  style: TextStyle(
-                      color: ColorConstants.txt, fontSize: 15),
-                ),
+              const Text(
+                "QUIZ SUMMARY",
+                style: TextStyle(color: ColorConstants.txt, fontSize: 15),
               ),
-              Divider(thickness: 1,height: 1,color: Colors.black,),
+              const Divider(
+                thickness: 1,
+                height: 1,
+                color: Colors.black,
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 decoration: const BoxDecoration(color: Colors.white),
@@ -409,97 +459,89 @@ var roomdata;
                       width: 1,
                     ),
                   ),
-                  child:
-                  Column(
+                  child: Column(
                     children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: Column(
                           children: [
                             Row(
-                                 children: [
-                                Text(
+                              children: [
+                                const Text(
                                   "DIFFICULTY: ",
                                   style: TextStyle(
-                                      color: ColorConstants.txt,
-                                      fontSize: 15),
+                                      color: ColorConstants.txt, fontSize: 15),
                                 ),
-
-                               Text(
+                                Text(
                                   difficulty.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15),
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                 ),
-
                               ],
                             ),
-                            Divider(thickness: 1,height: 1,color: Colors.black,)
+                            const Divider(
+                              thickness: 1,
+                              height: 1,
+                              color: Colors.black,
+                            )
                           ],
                         ),
-
                       ),
                       Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                         child: Column(
                           children: [
                             Row(
-
                               children: [
-                                Text(
+                                const Text(
                                   "SPEED: ",
                                   style: TextStyle(
-                                      color: ColorConstants.txt,
-                                      fontSize: 15),
+                                      color: ColorConstants.txt, fontSize: 15),
                                 ),
-                                 Text(
-                                 speed.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15),
+                                Text(
+                                  speed.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                 ),
                               ],
                             ),
-                            Divider(thickness: 1,height: 1,color: Colors.black,)
+                            const Divider(
+                              thickness: 1,
+                              height: 1,
+                              color: Colors.black,
+                            )
                           ],
                         ),
-
                       ),
-
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                         child: Column(
-                            children: [
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                "DOMAINS SELECTED:",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: ColorConstants.txt, fontSize: 15),
+                              ),
+                            ),
                             Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "DOMAINS SELECTED:",textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: ColorConstants.txt,
-                                    fontSize: 15),
+                                seldomain.toString(),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 15),
                               ),
                             ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                 seldomain.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15),
-                                ),
-                              ),
-
                           ],
                         ),
-
                       ),
                     ],
                   ),
                 ),
               ),
-
-
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Row(
@@ -520,7 +562,7 @@ var roomdata;
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => QuizPage()));
+                                builder: (context) => const QuizPage()));
                       },
                       child: const Text(
                         "GO BACK",
@@ -542,27 +584,37 @@ var roomdata;
                       ),
                       onPressed: () {
                         log(seldomain);
-                       if(select==1){
-                         Navigator.pushReplacement(
-                             context,
-                             MaterialPageRoute(
-                                 builder: (context) =>  QuizRoomContactList(type: widget.type, quizid: roomid, difficultylevelid: difficulty,
-                                   quiztypeid: widget.quiztypeid, seldomain: seldomain, quizspeedid: speed, link:link,)));
-
-                       }else{
-                         Navigator.pushReplacement(
-                             context,
-                             MaterialPageRoute(
-                                 builder: (context) =>  QuizroomLink(type: widget.type, quizid: roomid, difficultylevelid:difficulty,
-                                   quiztypeid: widget.quiztypeid, seldomain: seldomain, quizspeedid: speed, link: link,)));
-
-                       }
-
+                        if (select == 1) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuizRoomContactList(
+                                        type: widget.type,
+                                        quizid: roomid,
+                                        difficultylevelid: difficulty,
+                                        quiztypeid: widget.quiztypeid,
+                                        seldomain: seldomain,
+                                        quizspeedid: speed,
+                                        link: link,
+                                      )));
+                        } else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuizroomLink(
+                                        type: widget.type,
+                                        quizid: roomid,
+                                        difficultylevelid: difficulty,
+                                        quiztypeid: widget.quiztypeid,
+                                        seldomain: seldomain,
+                                        quizspeedid: speed,
+                                        link: link,
+                                      )));
+                        }
                       },
                       child: const Text(
                         "LET'S GO!",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 14),
+                        style: TextStyle(color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -575,8 +627,4 @@ var roomdata;
       ),
     );
   }
-
-
-
 }
-

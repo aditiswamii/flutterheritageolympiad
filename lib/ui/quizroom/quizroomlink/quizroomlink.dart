@@ -1,25 +1,14 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:CultreApp/colors/colors.dart';
-import 'package:CultreApp/ui/duelmode/duelmodemain/duelmode_main.dart';
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
 
-import 'package:getwidget/colors/gf_color.dart';
-import 'package:getwidget/components/dropdown/gf_multiselect.dart';
-import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../quizroominvite/quizroominvitepage.dart';
-
-
-
-
 
 class QuizroomLink extends StatefulWidget {
   var quiztypeid;
@@ -30,25 +19,33 @@ class QuizroomLink extends StatefulWidget {
   var seldomain;
   var link;
 
- QuizroomLink({Key? key,required this.quizspeedid,required this.quiztypeid,
-   required this.quizid,required this.type,required this.difficultylevelid,required this.link,required this.seldomain}) : super(key: key);
+  QuizroomLink(
+      {Key? key,
+      required this.quizspeedid,
+      required this.quiztypeid,
+      required this.quizid,
+      required this.type,
+      required this.difficultylevelid,
+      required this.link,
+      required this.seldomain})
+      : super(key: key);
 
   @override
-  _State createState() => _State();
+  QuizroomLinkState createState() => QuizroomLinkState();
 }
 
-class _State extends State<QuizroomLink> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class QuizroomLinkState extends State<QuizroomLink> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool value = false;
-  String link="cul.tre/ejojkx";
+  String link = "cul.tre/ejojkx";
   @override
   void initState() {
     super.initState();
     // _locations ;
     BackButtonInterceptor.add(myInterceptor);
     // _presenter = ClassicQuizPresenter(this);
-
   }
+
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
@@ -56,9 +53,17 @@ class _State extends State<QuizroomLink> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => QuizroomInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-          quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link, typeq: 0,)));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) => QuizroomInvite(
+              type: widget.type,
+              quizid: widget.quizid,
+              difficultylevelid: widget.difficultylevelid,
+              quiztypeid: widget.quiztypeid,
+              seldomain: widget.seldomain,
+              quizspeedid: widget.quizspeedid,
+              link: link,
+              typeq: 0,
+            )));
     // Do some stuff.
     return true;
   }
@@ -71,7 +76,7 @@ class _State extends State<QuizroomLink> {
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -79,32 +84,33 @@ class _State extends State<QuizroomLink> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Container(
+          color: Colors.white.withAlpha(100),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
-            children:<Widget> [
+            children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 5.0),
+                    padding: const EdgeInsets.only(left: 5.0),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>  HomePage()));
+                                builder: (context) => HomePage()));
                       },
                       child: Image.asset("assets/images/home_1.png",
                           height: 40, width: 40),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 5.0),
+                    padding: const EdgeInsets.only(right: 5.0),
                     child: GestureDetector(
                       onTap: () {
                         _scaffoldKey.currentState!.openEndDrawer();
@@ -119,30 +125,27 @@ class _State extends State<QuizroomLink> {
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 60, 0, 10),
                   child: const Text("DUEL MODE",
-                      style: TextStyle(
-                          fontSize: 24, color: ColorConstants.txt))),
+                      style:
+                          TextStyle(fontSize: 24, color: ColorConstants.txt))),
               Container(
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: const Text(
                       "You may invite minimum 2 other player in\nyour contact list to quiz with.",
-                      style: TextStyle(
-                          fontSize: 15, color: ColorConstants.txt))),
+                      style:
+                          TextStyle(fontSize: 15, color: ColorConstants.txt))),
               Container(
-                height: 100,
-                alignment: Alignment.center,
-                margin: EdgeInsets.fromLTRB(10, 50, 10, 10),
-                decoration: BoxDecoration(
-                  color:  ColorConstants.lightgrey200,
-                  borderRadius: BorderRadius.circular(30)
-                ),
-                  child:  Text(
+                  height: 100,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(10, 50, 10, 10),
+                  decoration: BoxDecoration(
+                      color: ColorConstants.lightgrey200,
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Text(
                     "${widget.link}",
-                    style: TextStyle(
-                        color: ColorConstants.txt, fontSize:24),
+                    style: const TextStyle(color: ColorConstants.txt, fontSize: 24),
                     textAlign: TextAlign.center,
-              )
-              ),
+                  )),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Column(
@@ -159,14 +162,14 @@ class _State extends State<QuizroomLink> {
                         //////// HERE
                       ),
                       onPressed: () {
-                        Clipboard.setData(ClipboardData(text: "http://cultre.app/$link"));
+                        Clipboard.setData(
+                            ClipboardData(text: "http://cultre.app/$link"));
                         Clipboard.kTextPlain;
                         Clipboard.getData("http://cultre.app/$link");
                       },
                       child: const Text(
                         "COPY LINK",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 18),
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -185,7 +188,8 @@ class _State extends State<QuizroomLink> {
                         ),
                         onPressed: () {
                           //share;
-                          Share.share('http://cultre.app/${widget.link}', subject: 'Share link');
+                          Share.share('http://cultre.app/${widget.link}',
+                              subject: 'Share link');
                           // Navigator.pushReplacement(
                           //     context,
                           //     MaterialPageRoute(
@@ -193,8 +197,7 @@ class _State extends State<QuizroomLink> {
                         },
                         child: const Text(
                           "SHARE LINK",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 18),
+                          style: TextStyle(color: Colors.white, fontSize: 18),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -202,7 +205,6 @@ class _State extends State<QuizroomLink> {
                   ],
                 ),
               ),
-
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 120, 0, 10),
                 child: Row(
@@ -224,8 +226,17 @@ class _State extends State<QuizroomLink> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => QuizroomInvite(type: widget.type, quizid: widget.quizid, difficultylevelid: widget.difficultylevelid,
-                                  quiztypeid: widget.quiztypeid, seldomain: widget.seldomain, quizspeedid: widget.quizspeedid, link: link, typeq: 0,)));
+                                builder: (context) => QuizroomInvite(
+                                      type: widget.type,
+                                      quizid: widget.quizid,
+                                      difficultylevelid:
+                                          widget.difficultylevelid,
+                                      quiztypeid: widget.quiztypeid,
+                                      seldomain: widget.seldomain,
+                                      quizspeedid: widget.quizspeedid,
+                                      link: link,
+                                      typeq: 0,
+                                    )));
                       },
                       child: const Text(
                         "GO BACK",
@@ -267,8 +278,4 @@ class _State extends State<QuizroomLink> {
       ),
     );
   }
-
-
-
 }
-

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,11 +21,11 @@ class ProductList extends StatefulWidget{
   ProductList({Key? key}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  ProductListState createState() => ProductListState();
 }
 
-class _State extends State<ProductList>{
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class ProductListState extends State<ProductList>{
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   var data;
   var username;
   var email;
@@ -45,7 +46,7 @@ class _State extends State<ProductList>{
   getproduct(String userid ,String searchkey) async {
     try {
       http.Response response = await http.get(
-        Uri.parse(StringConstants.BASE_URL+"get_all_products")
+        Uri.parse("${StringConstants.BASE_URL}get_all_products")
       );
 
       if (response.statusCode == 200) {
@@ -53,13 +54,19 @@ class _State extends State<ProductList>{
         setState(() {
           productdata = jsonDecode(
               data!)['data']; //get all the data from json string superheros
-          print(productdata.length); // just printed length of data
+          if (kDebugMode) {
+            print(productdata.length);
+          } // just printed length of data
         });
 
         var venam = jsonDecode(data!)['data'];
-        print(venam);
+        if (kDebugMode) {
+          print(venam);
+        }
       } else {
-        print(response.statusCode);
+        if (kDebugMode) {
+          print(response.statusCode);
+        }
       }
     } catch (e) {
 
@@ -113,7 +120,7 @@ class _State extends State<ProductList>{
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body:Container(
 
         decoration: const BoxDecoration(
@@ -123,7 +130,7 @@ class _State extends State<ProductList>{
           ),
         ),
         child:Container( color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+          margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
           child: Stack(
               children: [
 
@@ -131,16 +138,16 @@ class _State extends State<ProductList>{
                   alignment: Alignment.topLeft,
                   child: Container(
                     color: Colors.white,
-                    margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                     height: 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                          margin: const EdgeInsets.fromLTRB(20, 10, 0, 10),
                           alignment: Alignment.centerLeft,
 
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
                           child: Center(
                             child: Card(
                               elevation: 3,
@@ -160,9 +167,9 @@ class _State extends State<ProductList>{
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 20, 10),
+                          margin: const EdgeInsets.fromLTRB(0, 10, 20, 10),
                           alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(right: 5.0),
+                          padding: const EdgeInsets.only(right: 5.0),
                           child: GestureDetector(
                             onTap: () {
                               _scaffoldKey.currentState!.openEndDrawer();
@@ -177,7 +184,7 @@ class _State extends State<ProductList>{
                   ),
                 ),
                 Container(
-                  alignment: Alignment(0,100),
+                  alignment: const Alignment(0,100),
                   // height: MediaQuery.of(context).size.height-120,
                   margin: const EdgeInsets.fromLTRB(20, 90, 20, 10),
                   child: ListView(
@@ -189,11 +196,11 @@ class _State extends State<ProductList>{
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child:  Text("PRODUCT",style: TextStyle(fontSize: 18,color: Colors.black,fontFamily: "Nunito"))),
+                            child:  const Text("PRODUCT",style: TextStyle(fontSize: 18,color: Colors.black,fontFamily: "Nunito"))),
                         Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Text(
+                          child: const Text(
                               "Scroll down see all updates, search by keywords, or filter update by type.",
                               style: TextStyle(fontSize: 14,
                                   color: ColorConstants.txt)
@@ -205,7 +212,7 @@ class _State extends State<ProductList>{
                             : Container(
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: ListView.builder(
-                              physics: ClampingScrollPhysics(parent: BouncingScrollPhysics()),
+                              physics: const ClampingScrollPhysics(parent: BouncingScrollPhysics()),
                               shrinkWrap: true,
                               reverse: true,
                               itemCount: jsonDecode(data!)['data'].length,
@@ -234,30 +241,30 @@ class _State extends State<ProductList>{
 
                                               Container(
                                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                                child: Text(jsonDecode(data!)['data'][index]['name'],style: TextStyle(fontSize: 16,color: Colors.black,fontFamily: "Nunito")),
+                                                child: Text(jsonDecode(data!)['data'][index]['name'],style: const TextStyle(fontSize: 16,color: Colors.black,fontFamily: "Nunito")),
                                               ),
                                               Container(
                                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                                child: Text(jsonDecode(data!)['data'][index]['description'],style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
+                                                child: Text(jsonDecode(data!)['data'][index]['description'],style: const TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
                                               ),
                                               Container(
                                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Text(jsonDecode(data!)['data'][index]['price'],style: TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
+                                                    Text(jsonDecode(data!)['data'][index]['price'],style: const TextStyle(fontSize: 14,color: Colors.black,fontFamily: "Nunito")),
                                                     GestureDetector(
                                                         onTap: (){
                                                           Share.share(jsonDecode(data!)['data'][index]['link'], subject: 'Share link');
                                                         },
                                                         child: Container(
-                                                          padding: EdgeInsets.all(5),
+                                                          padding: const EdgeInsets.all(5),
                                                           decoration: BoxDecoration(
                                                             color:  Colors.orange,
                                                             borderRadius: BorderRadius.circular(20),
                                                           ),
 
-                                                            child: Text("PURCHASE",style: TextStyle(fontSize: 14,color: Colors.white,fontFamily: "Nunito")))),
+                                                            child: const Text("PURCHASE",style: TextStyle(fontSize: 14,color: Colors.white,fontFamily: "Nunito")))),
                                                   ],
                                                 ),
                                               ),

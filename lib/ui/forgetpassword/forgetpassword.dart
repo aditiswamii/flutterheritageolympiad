@@ -8,7 +8,7 @@ import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/ui/forgetpassword/forget_viewmodal.dart';
 
 
-import 'package:CultreApp/uinew/loginpage.dart';
+import 'package:CultreApp/ui/authentication/loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/StringConstants.dart';

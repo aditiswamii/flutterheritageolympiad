@@ -1,18 +1,14 @@
-
 import 'dart:developer';
-
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
 
 import 'package:CultreApp/ui/classicquiz/answerkey/answerkey.dart';
-
-
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
@@ -29,7 +25,8 @@ import 'package:http/http.dart' as http;
 class QuizroomResult extends StatefulWidget {
   var quizid;
   String? type;
-  QuizroomResult({Key? key, required this.quizid,required this.type}) : super(key: key);
+  QuizroomResult({Key? key, required this.quizid, required this.type})
+      : super(key: key);
 
   @override
   _QuizroomResultState createState() => _QuizroomResultState();
@@ -51,9 +48,9 @@ class _QuizroomResultState extends State<QuizroomResult> {
   var resultdata;
   var jsonres;
   var jsonuser;
-  String packagename="";
+  String packagename = "";
   PackageInfo? packageInfo;
-  var congrats=false;
+  var congrats = false;
   //GetDuelResultResponse? duelresultr;
   var roomresultr;
   var rankdata;
@@ -64,13 +61,16 @@ class _QuizroomResultState extends State<QuizroomResult> {
       country = prefs.getString("country");
       userid = prefs.getString("userid");
     });
-    print("userdata");
+    if (kDebugMode) {
+      print("userdata");
+    }
     //calTheme();
 
     getRoomRank(userid.toString(), widget.quizid.toString());
 
     // getFeed(userid.toString(), "0", "", "", "");
   }
+
   void getPackage() async {
     packageInfo = await PackageInfo.fromPlatform();
     setState(() {
@@ -83,16 +83,21 @@ class _QuizroomResultState extends State<QuizroomResult> {
     setState(() {
       packagename = packageInfo!.packageName;
     });
-    print("App Name : $appName, App Package Name: $packagename ,App Version: $version, App build Number: $buildNumber");
+    if (kDebugMode) {
+      print(
+          "App Name : $appName, App Package Name: $packagename ,App Version: $version, App build Number: $buildNumber");
+    }
   }
 
   getRoomResult(String userid, String roomId) async {
     http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "get_room_result"),
+        Uri.parse("${StringConstants.BASE_URL}get_room_result"),
         body: {'user_id': userid.toString(), 'room_id': roomId.toString()});
     showLoaderDialog(context);
 
-    print("getroomResultapi");
+    if (kDebugMode) {
+      print("getroomResultapi");
+    }
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
@@ -102,46 +107,55 @@ class _QuizroomResultState extends State<QuizroomResult> {
         resultdata = jsonResponse;
         setState(() {
           resultdata = jsonResponse;
-        });//get all the data from json string superheros
-        print("length" + resultdata.length.toString());
-        print("resdata" + jsonResponse['result'].toString());
-        print("resdata" + jsonResponse['result'][0].toString());
+        }); //get all the data from json string superheros
+        if (kDebugMode) {
+          print("length${resultdata.length}");
+        }
+        if (kDebugMode) {
+          print("resdata${jsonResponse['result']}");
+        }
+        if (kDebugMode) {
+          print("resdata${jsonResponse['result'][0]}");
+        }
 
         onsuccess(resultdata);
-
-
-
       } else {
         onsuccess(null);
         log(jsonResponse['message']);
       }
     } else {
       Navigator.pop(context);
-      print(response.statusCode);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
 
   onsuccess(resultdata) {
-    log("log" + resultdata.toString());
+    log("log$resultdata");
     if (resultdata != null) {
       if (resultdata['result'][1]['xp'] != null) {
         setState(() {
           roomresultr = resultdata;
         });
-        print("getdueljsonsuccess" + roomresultr.toString());
-        print("getdueljsonsuccessuser" + roomresultr['user_data'].toString());
-      }else{
+        if (kDebugMode) {
+          print("getdueljsonsuccess$roomresultr");
+        }
+        if (kDebugMode) {
+          print("getdueljsonsuccessuser${roomresultr['user_data']}");
+        }
+      } else {
         Future.delayed(
           const Duration(seconds: 30),
-              () {
-                getRoomRank(userid.toString(), widget.quizid.toString());
+          () {
+            getRoomRank(userid.toString(), widget.quizid.toString());
           },
         );
       }
-    }else{
+    } else {
       Future.delayed(
         const Duration(seconds: 30),
-            () {
+        () {
           getRoomRank(userid.toString(), widget.quizid.toString());
         },
       );
@@ -150,36 +164,39 @@ class _QuizroomResultState extends State<QuizroomResult> {
 
   getRoomRank(String userid, String roomid) async {
     http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "roomrank"),
+        Uri.parse("${StringConstants.BASE_URL}roomrank"),
         body: {'user_id': userid.toString(), 'room_id': roomid.toString()});
     // showLoaderDialog(context);
 
-    print("getRoomRankapi");
+    if (kDebugMode) {
+      print("getRoomRankapi");
+    }
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       // Navigator.pop(context);
       data = response.body;
-      if(jsonResponse!=null){
+      if (jsonResponse != null) {
         rankdata = jsonResponse;
         onrank(rankdata);
       } else {
-
         log(jsonResponse['message']);
       }
     } else {
       // Navigator.pop(context);
-      print(response.statusCode);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
     }
   }
 
-  onrank(rankdata){
-    if(rankdata!=null) {
+  onrank(rankdata) {
+    if (rankdata != null) {
       if (rankdata['status'] == 200) {
         if (rankdata['data'] != null) {
-          if (rankdata['data']['name']
-              .toString().isNotEmpty && congrats != true) {
+          if (rankdata['data']['name'].toString().isNotEmpty &&
+              congrats != true) {
             setState(() {
-              congrats=true;
+              congrats = true;
             });
 
             AlertDialog alert = AlertDialog(
@@ -187,78 +204,99 @@ class _QuizroomResultState extends State<QuizroomResult> {
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0))),
               contentPadding: const EdgeInsets.only(top: 10.0),
-              title: Container(child: Column(
+              title: Column(
                 children: [
-                  Text("${rankdata['data']['message']}", style: const TextStyle(
+                  Text(
+                    "${rankdata['data']['message']}",
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      ),
-                    textAlign: TextAlign.center,),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     height: 150,
                     width: 150,
                     decoration: BoxDecoration(
-                        image: DecorationImage(image: rankdata['data']['rank']==1?const AssetImage("assets/images/artwork1.png"):
-                        rankdata['data']['rank']==2?const AssetImage("assets/images/artwork2.png"):rankdata['data']['rank']==3?const AssetImage("assets/images/artwork3.png"):const AssetImage("assets/images/artwork1.png"))
-                    ),
-                    child:rankdata['data']['image'] != ""
+                        image: DecorationImage(
+                            image: rankdata['data']['rank'] == 1
+                                ? const AssetImage("assets/images/artwork1.png")
+                                : rankdata['data']['rank'] == 2
+                                    ? const AssetImage(
+                                        "assets/images/artwork2.png")
+                                    : rankdata['data']['rank'] == 3
+                                        ? const AssetImage(
+                                            "assets/images/artwork3.png")
+                                        : const AssetImage(
+                                            "assets/images/artwork1.png"))),
+                    child: rankdata['data']['image'] != ""
                         ? Center(
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 80,
-                        width: 80,
-                        child: CircleAvatar(
-                          radius: 30.0,
-                          backgroundImage: NetworkImage("${rankdata['data']['image']}"),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                    )
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              child: CircleAvatar(
+                                radius: 30.0,
+                                backgroundImage: NetworkImage(
+                                    "${rankdata['data']['image']}"),
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ),
+                          )
                         : Center(
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 80,
-                        width: 80,
-                        child: const CircleAvatar(
-                          radius: 30.0,
-                          backgroundImage:
-                          AssetImage("assets/images/placeholder.png"),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                    ),
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              child: const CircleAvatar(
+                                radius: 30.0,
+                                backgroundImage:
+                                    AssetImage("assets/images/placeholder.png"),
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ),
+                          ),
                   ),
                   // Container(
                   //   child: Image.network(
                   //     "${rankdata['data']['image']}", height: 80, width: 80,),
                   // ),
-                  const Text("Congratulations!\nKeep it up!", style: TextStyle(
+                  const Text(
+                    "Congratulations!\nKeep it up!",
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      ),
-                    textAlign: TextAlign.center,)
+                    ),
+                    textAlign: TextAlign.center,
+                  )
                 ],
-              )),
+              ),
               actions: [
                 Container(
                   padding: const EdgeInsets.all(4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("", style: TextStyle(color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700)),
-                      const Text("", style: TextStyle(color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700)),
-                      TextButton(onPressed: () {
-                        Navigator.pop(context);
-                      },
-                          child: const Text("CLOSE", style: TextStyle(
-                              color: Colors.red,
+                      const Text("",
+                          style: TextStyle(
+                              color: Colors.black,
                               fontSize: 16,
-                              fontWeight: FontWeight.w700))),
+                              fontWeight: FontWeight.w700)),
+                      const Text("",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700)),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("CLOSE",
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700))),
                     ],
                   ),
                 ),
@@ -272,56 +310,57 @@ class _QuizroomResultState extends State<QuizroomResult> {
             );
             getRoomResult(userid.toString(), widget.quizid.toString());
           }
-
-        }else{
+        } else {
           getRoomResult(userid.toString(), widget.quizid.toString());
         }
-      }else{
+      } else {
         DateTime now = DateTime.now();
 
-        String atimenew = "${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
+        String atimenew =
+            "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
         log(atimenew);
         // String atime=atimenew.substring(11);
         // String ranktime=rankdata['time'].toString().substring(11);
         // var newatime= (int.parse(atime.substring(0,2)) * 3600) +(int.parse(atime.substring(6,8)) * 60 )+(int.parse(atime.substring(6,8)) * 1);
         // var newranktime=(int.parse(ranktime.substring(0,2)) * 3600) +(int.parse(ranktime.substring(6,8)) * 60 )+(int.parse(ranktime.substring(6,8)) * 1);
-        String atime=atimenew;
-        String ranktime=rankdata['time'].toString();
-        var newatime= (DateTime.parse(atime).hour * 3600) +(DateTime.parse(atime).minute * 60 )+(DateTime.parse(atime).second * 1);
-        var newranktime=(DateTime.parse(ranktime).hour * 3600) +(DateTime.parse(ranktime).minute * 60 )+(DateTime.parse(ranktime).second * 1);
+        String atime = atimenew;
+        String ranktime = rankdata['time'].toString();
+        var newatime = (DateTime.parse(atime).hour * 3600) +
+            (DateTime.parse(atime).minute * 60) +
+            (DateTime.parse(atime).second * 1);
+        var newranktime = (DateTime.parse(ranktime).hour * 3600) +
+            (DateTime.parse(ranktime).minute * 60) +
+            (DateTime.parse(ranktime).second * 1);
         log(atime);
         log(ranktime);
         log(newatime.toString());
         log(newranktime.toString());
-        if(newatime > newranktime){
+        if (newatime > newranktime) {
           getRoomResult(userid.toString(), widget.quizid.toString());
-        }else{
+        } else {
           Future.delayed(
             const Duration(seconds: 30),
-                () {
+            () {
               getRoomRank(userid.toString(), widget.quizid.toString());
             },
           );
         }
       }
-
-    }else {
+    } else {
       Future.delayed(
         const Duration(seconds: 30),
-            () {
+        () {
           getRoomRank(userid.toString(), widget.quizid.toString());
         },
       );
     }
     Future.delayed(
       const Duration(seconds: 30),
-          () {
+      () {
         getRoomRank(userid.toString(), widget.quizid.toString());
       },
     );
   }
-
-
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -329,7 +368,8 @@ class _QuizroomResultState extends State<QuizroomResult> {
         children: [
           const CircularProgressIndicator(),
           Container(
-              margin: const EdgeInsets.only(left: 7), child: const Text("Loading...")),
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("Loading...")),
         ],
       ),
     );
@@ -362,10 +402,12 @@ class _QuizroomResultState extends State<QuizroomResult> {
     // Do some stuff.
     return true;
   }
+
   Future<Future> _refreshdata(BuildContext context) async {
     log(widget.quizid.toString());
     return getRoomRank(userid.toString(), widget.quizid.toString());
   }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -377,447 +419,487 @@ class _QuizroomResultState extends State<QuizroomResult> {
       endDrawer: const MySideMenuDrawer(),
       body: Container(
         color: Colors.white,
-        // decoration: const BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage("assets/images/login_bg.jpg"),
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
         child: Container(
           color: Colors.white.withAlpha(100),
           margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child:  RefreshIndicator(
+          child: RefreshIndicator(
             color: Colors.transparent,
             onRefresh: () => _refreshdata(context),
             child: ListView(
               children: <Widget>[
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Container(
-                //       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                //       alignment: Alignment.centerLeft,
-                //
-                //       padding: EdgeInsets.all(5),
-                //       child: Center(
-                //         child: Card(
-                //           elevation: 3,
-                //           shape: RoundedRectangleBorder(
-                //               borderRadius: BorderRadius.circular(20)
-                //           ),
-                //           child: GestureDetector(
-                //             onTap: () {
-                //               Navigator.pushReplacement(
-                //                   context,
-                //                   MaterialPageRoute(
-                //                       builder: (context) =>  HomePage()));
-                //             },
-                //             child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                //       alignment: Alignment.centerRight,
-                //       padding: EdgeInsets.only(right: 5.0),
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           _scaffoldKey.currentState!.openEndDrawer();
-                //         },
-                //         child:  Image.asset("assets/images/side_menu_2.png",height: 40,width: 40),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                roomresultr==null?Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/debackground.jpg"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: ListBody(
-
-                    children: [
-                      Container(
-                          color:Colors.white.withAlpha(100),
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-                          child: const Text(
-                            "AND\n THAT'S A\nWRAP...",
-                            style: TextStyle(fontSize: 22, color: Colors.black),
-                            textAlign: TextAlign.center,
-                          )),
-                      Container(
-                        height: 300,
-                        width: 300,
-                        margin: const EdgeInsets.only(top: 40),
-                        child: Lottie.asset("assets/lottie/lottieanim.json"),
-                      ),
-                      Container(   color:Colors.white.withAlpha(100),
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: const Text("Generating Result...",
-                          style: TextStyle(fontSize: 18, color:Colors.black),
-                          textAlign: TextAlign.center,
+                roomresultr == null
+                    ? Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/debackground.jpg"),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-                          child: const Text(
-                            "Pull to refresh",
-                            style: TextStyle(fontSize: 14, color: Colors.black),
-                            textAlign: TextAlign.center,
-                          )),
-                    ],
-                  ),
-                ):ListBody(
-                  children: [
-
-
-                Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                    child: const Text(
-                      "YOU\nSCORED....",
-                      style: TextStyle(fontSize: 24, color: ColorConstants.txt),
-                      textAlign: TextAlign.center,
-                    )),
-               Container(
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          height: 170,
-                          width: 170,
-                          child: Stack(
-                            children: <Widget>[
-                              SizedBox(
-                                child: Center(
-                                  child: SizedBox(
-                                    height: 170,
-                                    width: 170,
-                                    child: CircularProgressIndicator(
-                                      value: (double.parse(roomresultr['user_data']
-                                      ['percentage']
-                                          .toString())/(100)),
-                                      valueColor: const AlwaysStoppedAnimation<Color>(
-                                        Colors.orange,
+                        child: ListBody(
+                          children: [
+                            Container(
+                                color: Colors.white.withAlpha(100),
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                                child: const Text(
+                                  "AND\n THAT'S A\nWRAP...",
+                                  style: TextStyle(
+                                      fontSize: 22, color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Container(
+                              height: 300,
+                              width: 300,
+                              margin: const EdgeInsets.only(top: 40),
+                              child:
+                                  Lottie.asset("assets/lottie/lottieanim.json"),
+                            ),
+                            Container(
+                              color: Colors.white.withAlpha(100),
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: const Text(
+                                "Generating Result...",
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Container(
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+                                child: const Text(
+                                  "Pull to refresh",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ],
+                        ),
+                      )
+                    : ListBody(
+                        children: [
+                          Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                              child: const Text(
+                                "YOU\nSCORED....",
+                                style: TextStyle(
+                                    fontSize: 24, color: ColorConstants.txt),
+                                textAlign: TextAlign.center,
+                              )),
+                          Container(
+                              decoration:
+                                  const BoxDecoration(shape: BoxShape.circle),
+                              margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                              alignment: Alignment.topCenter,
+                              child: SizedBox(
+                                height: 170,
+                                width: 170,
+                                child: Stack(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      child: Center(
+                                        child: SizedBox(
+                                          height: 170,
+                                          width: 170,
+                                          child: CircularProgressIndicator(
+                                            value: (double.parse(
+                                                    roomresultr['user_data']
+                                                            ['percentage']
+                                                        .toString()) /
+                                                (100)),
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                    Color>(
+                                              Colors.orange,
+                                            ),
+                                            color: Colors.red,
+                                            backgroundColor: Colors.red,
+                                            strokeWidth: 20,
+                                          ),
+                                        ),
                                       ),
-                                      color: Colors.red,
-                                      backgroundColor: Colors.red,
-                                      strokeWidth: 20,
+                                    ),
+                                    FlipCard(
+                                      controller: FlipCardController(),
+                                      direction: FlipDirection.HORIZONTAL,
+                                      front: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Center(
+                                              child: Text(
+                                            "${roomresultr['user_data']['xp'].toString()} XP",
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
+                                          )),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  0.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <
+                                                  10.0)
+                                            const Center(
+                                                child: Text("oh boy!")),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  10.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <
+                                                  50.0)
+                                            const Center(
+                                                child: Text("Don't give up!")),
+                                          if (double.parse(
+                                                  roomresultr['user_data']
+                                                          ['percentage']
+                                                      .toString()) ==
+                                              50.0)
+                                            const Center(
+                                                child: Text(
+                                                    "Practice makes perfect!")),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  50.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <=
+                                                  90.0)
+                                            const Center(
+                                                child: Text("Almost there!")),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  90.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <=
+                                                  100.0)
+                                            const Center(
+                                                child: Text("Keep it up!")),
+                                        ],
+                                      ),
+                                      back: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Center(
+                                              child: Text(
+                                                  "${roomresultr['user_data']['percentage'].toString()} %",
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w600))),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  0.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <
+                                                  10.0)
+                                            const Center(
+                                                child: Text("oh boy!")),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  10.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <
+                                                  50.0)
+                                            const Center(
+                                                child: Text("Don't give up!")),
+                                          if (double.parse(
+                                                  roomresultr['user_data']
+                                                          ['percentage']
+                                                      .toString()) ==
+                                              50.0)
+                                            const Center(
+                                                child: Text(
+                                                    "Practice makes perfect!")),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  50.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <=
+                                                  90.0)
+                                            const Center(
+                                                child: Text("Almost there!")),
+                                          if (double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) >
+                                                  90.0 &&
+                                              double.parse(
+                                                      roomresultr['user_data']
+                                                              ['percentage']
+                                                          .toString()) <=
+                                                  100.0)
+                                            const Center(
+                                                child: Text("Keep it up!")),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                // if you need this
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        10, 20, 10, 0),
+                                    child: const Text(
+                                      "YOU SCORED...",
+                                      style:
+                                          TextStyle(color: ColorConstants.txt),
+                                    ),
+                                  ),
+                                  roomresultr == null
+                                      ? Center(
+                                          child: Container(),
+                                        )
+                                      : Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 10),
+                                          child: ListView.builder(
+                                              physics: const ClampingScrollPhysics(
+                                                  parent:
+                                                      BouncingScrollPhysics()),
+                                              shrinkWrap: true,
+                                              itemCount:
+                                                  roomresultr['result'].length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Container(
+                                                    margin: const EdgeInsets
+                                                            .fromLTRB(
+                                                        10, 10, 10, 10),
+                                                    child: GFProgressBar(
+
+                                                      percentage: double.parse(
+                                                          (int.parse(roomresultr['result']
+                                                                              [
+                                                                              index]
+                                                                          [
+                                                                          'percentage']
+                                                                      .toString()) /
+                                                                  100)
+                                                              .toString()),
+                                                      lineHeight: 30,
+                                                      backgroundColor:
+                                                          ColorConstants
+                                                              .lightgrey200,
+
+                                                      progressBarColor: int.parse(
+                                                                  roomresultr['result']
+                                                                              [index]
+                                                                          [
+                                                                          'percentage']
+                                                                      .toString()) <
+                                                              10
+                                                          ? ColorConstants
+                                                              .stage1color
+                                                          : int.parse(roomresultr['result'][index]['percentage'].toString()) <
+                                                                  49
+                                                              ? ColorConstants
+                                                                  .stage2color
+                                                              : int.parse(roomresultr['result'][index]['percentage'].toString()) ==
+                                                                      50
+                                                                  ? ColorConstants
+                                                                      .stage2color
+                                                                  : int.parse(roomresultr['result'][index]['percentage'].toString()) <
+                                                                          50
+                                                                      ? ColorConstants
+                                                                          .stage3color
+                                                                      : int.parse(roomresultr['result'][index]['percentage'].toString()) <
+                                                                              90
+                                                                          ? ColorConstants.stage3color
+                                                                          : int.parse(roomresultr['result'][index]['percentage'].toString()) <= 100
+                                                                              ? ColorConstants.stage4color
+                                                                              : ColorConstants.stage5color,
+                                                      // alignment: MainAxisAlignment.spaceBetween,
+                                                      child: Stack(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            height: 30,
+                                                            width: 30,
+                                                            child: roomresultr['result']
+                                                                            [
+                                                                            index]
+                                                                        [
+                                                                        'image']
+                                                                    .toString()
+                                                                    .isEmpty
+                                                                ? CircleAvatar(
+                                                                    radius:
+                                                                        30.0,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    child: Image
+                                                                        .asset(
+                                                                      "assets/images/placeholder.png",
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  )
+                                                                : CircleAvatar(
+                                                                    radius:
+                                                                        30.0,
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                            roomresultr['result'][index]['image'].toString()),
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                  ),
+                                                          ),
+                                                          Center(
+                                                            child: Text(
+                                                              roomresultr['result']
+                                                                          [
+                                                                          index]
+                                                                      ['name']
+                                                                  .toString(),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: const TextStyle(
+                                                                  fontSize: 16,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ));
+                                              })),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Share.share(
+                                      "I got "
+                                      "${roomresultr['user_data']['xp'].toString()} XP"
+                                      " on Cultre App. you can play on "
+                                      "https://play.google.com/store/apps/details?id=$packagename",
+                                      subject: 'Share link');
+                                },
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                                    child: const Text(
+                                      "SHARE PERFORMANCE",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.black,
+                                          decoration: TextDecoration.underline),
+                                      textAlign: TextAlign.center,
+                                    )),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AnswerkeyPage(
+                                                quizid: widget.quizid,
+                                                saveddata: "",
+                                                type: widget.type,
+                                                tourid: 0,
+                                                sessionid: 0,
+                                              )));
+                                },
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                                    child: const Text(
+                                      "ANSWER KEY",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.black,
+                                          decoration: TextDecoration.underline),
+                                      textAlign: TextAlign.center,
+                                    )),
+                              ),
+                              Center(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.white,
+                                      onPrimary: Colors.white,
+                                      elevation: 3,
+                                      alignment: Alignment.center,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      fixedSize: const Size(170, 30),
+                                      //////// HERE
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomePage()));
+                                    },
+                                    child: const Text(
+                                      "BACK TO HOME",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
                                 ),
                               ),
-                              FlipCard(
-                                controller: FlipCardController(),
-                                direction: FlipDirection.HORIZONTAL,
-                                front: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                        child: Text(
-                                      "${roomresultr['user_data']['xp'].toString()} XP",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            0.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <
-                                            10.0)
-                                      const Center(child: Text("oh boy!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            10.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <
-                                            50.0)
-                                      const Center(child: Text("Don't give up!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                ['percentage']
-                                            .toString()) ==
-                                        50.0)
-                                      const Center(
-                                          child: Text("Practice makes perfect!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            50.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <=
-                                            90.0)
-                                      const Center(child: Text("Almost there!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            90.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <=
-                                            100.0)
-                                      const Center(child: Text("Keep it up!")),
-                                  ],
-                                ),
-                                back: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                        child: Text(
-                                            "${roomresultr['user_data']['percentage'].toString()} %",
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600))),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            0.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <
-                                            10.0)
-                                      const Center(child: Text("oh boy!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            10.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <
-                                            50.0)
-                                      const Center(child: Text("Don't give up!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                ['percentage']
-                                            .toString()) ==
-                                        50.0)
-                                      const Center(
-                                          child: Text("Practice makes perfect!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            50.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <=
-                                            90.0)
-                                      const Center(child: Text("Almost there!")),
-                                    if (double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) >
-                                            90.0 &&
-                                        double.parse(roomresultr['user_data']
-                                                    ['percentage']
-                                                .toString()) <=
-                                            100.0)
-                                      const Center(child: Text("Keep it up!")),
-                                  ],
-                                ),
-                              ),
                             ],
-                          ),
-                        )),
-
-                Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        decoration: const BoxDecoration(color: Colors.white),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            // if you need this
-
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                                child: const Text(
-                                  "YOU SCORED...",
-                                  style: TextStyle(color: ColorConstants.txt),
-                                ),
-                              ),
-                              roomresultr == null
-                                  ? Center(
-                                      child: Container(),
-                                    )
-                                  : Container(
-
-                                      margin:
-                                          const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                      child: ListView.builder(
-                                          physics: const ClampingScrollPhysics(
-                                              parent: BouncingScrollPhysics()),
-                                          shrinkWrap: true,
-                                          itemCount: roomresultr['result'].length,
-                                          itemBuilder:
-                                              (BuildContext context, int index) {
-                                            return Container(
-                                                margin: const EdgeInsets.fromLTRB(
-                                                    10, 10, 10, 10),
-                                                child: GFProgressBar(
-                                                  // leading: Container(
-                                                  //   // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                                  //   height: 30,
-                                                  //   width: 30,
-                                                  //   child: CircleAvatar(
-                                                  //     radius: 30.0,
-                                                  //     backgroundImage:
-                                                  //     NetworkImage(duelresultr['result'][index]['image'].toString()),
-                                                  //     backgroundColor: Colors.transparent,
-                                                  //   ),
-                                                  // ),
-                                                  percentage: double.parse(
-                                                      (int.parse(roomresultr['result']
-                                                                          [index][
-                                                                      'percentage']
-                                                                  .toString()) /
-                                                              100)
-                                                          .toString()),
-                                                  lineHeight: 30,
-                                                  // alignment: MainAxisAlignment.spaceBetween,
-                                                  child: Container(
-                                                    child: Stack(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          height: 30,
-                                                          width: 30,
-                                                          child: roomresultr['result']
-                                                          [
-                                                          index]
-                                                          ['image']
-                                                              .toString().isEmpty?CircleAvatar(
-                                                            radius: 30.0,
-                                                            child: Image.asset("assets/images/placeholder.png",fit: BoxFit.cover,),
-                                                            backgroundColor:
-                                                            Colors
-                                                                .transparent,
-                                                          ):CircleAvatar(
-                                                            radius: 30.0,
-                                                            backgroundImage: NetworkImage(
-                                                                roomresultr['result']
-                                                                            [
-                                                                            index]
-                                                                        ['image']
-                                                                    .toString()),
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                          ),
-                                                        ),
-                                                        Center(
-                                                          child: Text(
-                                                            roomresultr['result']
-                                                                        [index]
-                                                                    ['name']
-                                                                .toString(),
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: const TextStyle(
-                                                                fontSize: 16,
-                                                                color:
-                                                                    Colors.black),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  backgroundColor: ColorConstants.lightgrey200,
-
-
-                                                  progressBarColor:int.parse(roomresultr['result'][index]['percentage'].toString())<10?ColorConstants.stage1color: int.parse(roomresultr['result'][index]['percentage'].toString())<49?ColorConstants.stage2color:int.parse(roomresultr['result'][index]['percentage'].toString())==50?ColorConstants.stage2color:int.parse(roomresultr['result'][index]['percentage'].toString())<50?ColorConstants.stage3color:int.parse(roomresultr['result'][index]['percentage'].toString())<90?ColorConstants.stage3color:int.parse(roomresultr['result'][index]['percentage'].toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
-                                                ));
-                                          })),
-                            ],
-                          ),
-                        ),
-                      ),
-
-               Column(
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Share.share("I got " "${roomresultr['user_data']['xp'].toString()} XP"" on Cultre App. you can play on "
-                            "https://play.google.com/store/apps/details?id=$packagename", subject: 'Share link');
-
-                      },
-                      child: Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                          child: const Text(
-                            "SHARE PERFORMANCE",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                decoration: TextDecoration.underline),
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AnswerkeyPage(quizid: widget.quizid, saveddata: "", type: widget.type, tourid: 0, sessionid: 0,)));
-                      },
-                      child: Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                          child: const Text(
-                            "ANSWER KEY",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                decoration: TextDecoration.underline),
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-
-                    Center(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            onPrimary: Colors.white,
-                            elevation: 3,
-                            alignment: Alignment.center,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            fixedSize: const Size(170, 30),
-                            //////// HERE
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()));
-                          },
-                          child: const Text(
-                            "BACK TO HOME",
-                            style: TextStyle(color: Colors.black, fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-                  ],
-                )
-
+                          )
+                        ],
+                      )
               ],
             ),
           ),

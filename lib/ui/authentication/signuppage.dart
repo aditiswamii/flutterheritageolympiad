@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
 
-import 'package:CultreApp/uinew/alldonepage.dart';
-import 'package:CultreApp/uinew/loginpage.dart';
-import 'package:CultreApp/uinew/registerpage.dart';
+import 'package:CultreApp/ui/authentication/alldonepage.dart';
+import 'package:CultreApp/ui/authentication/loginpage.dart';
+import 'package:CultreApp/ui/authentication/registerpage.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../modal/steponeresponse/GetStepOneResponse.dart';
 import '../../utils/SharedObjects.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../modal/steponeresponse/GetStepOneResponse.dart';
-import '../utils/StringConstants.dart';
+import '../../utils/StringConstants.dart';
+
+
 class Stepone extends StatefulWidget {
    Stepone({Key? key}) : super(key: key);
 

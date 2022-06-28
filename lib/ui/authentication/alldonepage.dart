@@ -8,12 +8,13 @@ import 'package:CultreApp/dialog/emailresend/emailresend_dialog.dart';
 
 
 
-import 'package:CultreApp/uinew/registerpage.dart';
-import 'package:CultreApp/uinew/signuppage.dart';
+import 'package:CultreApp/ui/authentication/registerpage.dart';
+import 'package:CultreApp/ui/authentication/signuppage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../modal/getemailverify/GetEmailVerifyResponse.dart';
-import '../utils/StringConstants.dart';
+
+import '../../modal/getemailverify/GetEmailVerifyResponse.dart';
+import '../../utils/StringConstants.dart';
 import 'loginpage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;

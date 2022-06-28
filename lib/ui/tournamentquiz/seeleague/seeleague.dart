@@ -1,23 +1,15 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart';
 import 'package:CultreApp/colors/colors.dart';
-import 'package:CultreApp/modal/gettournament/GetTournamentResponse.dart';
 import 'package:CultreApp/modal/leaguerank/GetLeagueRankResponse.dart';
-import 'package:CultreApp/modal/xprewards/GetXPRewardsResponse.dart';
-import 'package:CultreApp/ui/feed/filterpage/filterpage.dart';
 
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
-import 'package:CultreApp/ui/tournamentquiz/tournament_quiz.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,11 +25,11 @@ class SeeLeague extends StatefulWidget {
   SeeLeague({Key? key}) : super(key: key);
 
   @override
-  _SeeLeagueState createState() => _SeeLeagueState();
+  SeeLeagueState createState() => SeeLeagueState();
 }
 
-class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
+class SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   var username;
   var email;
   var country;
@@ -46,7 +38,6 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
   var xprewarddata;
   var data;
   var snackBar;
-  var _expanded = false;
   GetLeagueRankResponse? leaguerankR;
 
   userdata() async {
@@ -90,7 +81,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
     }
   }
 
-  onsuccess(GetLeagueRankResponse leaguerankResponse) {
+  onsuccess(GetLeagueRankResponse? leaguerankResponse) {
     if (leaguerankResponse != null) {
       if (leaguerankResponse.data != null) {
         setState(() {
@@ -140,14 +131,13 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: MySideMenuDrawer(),
+      endDrawer: const MySideMenuDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -157,18 +147,18 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
         ),
         child: Container(
           color: Colors.white.withAlpha(100),
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 5.0),
+                  padding: const EdgeInsets.only(left: 5.0),
                   height: 40,
                   width: 40,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
                   ),
@@ -182,9 +172,9 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 5.0),
+                  padding: const EdgeInsets.only(right: 5.0),
                   child: GestureDetector(
                     onTap: () {
                       _scaffoldKey.currentState!.openEndDrawer();
@@ -209,13 +199,13 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                    child: Text(
+                    child: const Text(
                         "Compete with other players! Your result will be ranked in your current league. Increase your rank to reach progress through next leagues",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.black54,
                             fontFamily: "Nunito"))),
-                Divider(
+                const Divider(
                   thickness: 1,
                   height: 1,
                   color: Colors.black,
@@ -236,7 +226,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                             Container(
                               margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
 
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(color: Colors.white),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -247,62 +237,60 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: ListBody(
                                     children: [
                                       Center(
-                                        child: Text("${leaguerankR!.data!.yourLeage!.leagueName}", style: TextStyle(
+                                        child: Text("${leaguerankR!.data!.yourLeage!.leagueName}", style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.black,
                                             fontFamily: "Nunito")),
                                       ),
-                                      Center(
+                                      const Center(
                                         child: Text("Top 5 will be move to next league next week", style: TextStyle(
                                             fontSize: 12,
                                             color: Colors.black,
                                             fontFamily: "Nunito")),
 
                                       ),
-                                      Container(
-                                          child:
-                                          ListView.builder(
-                                              physics: ClampingScrollPhysics(
-                                                  parent: BouncingScrollPhysics()),
-                                              shrinkWrap: true,
-                                              itemCount: leaguerankR!.data!.yourLeage!.top!.length,
-                                              itemBuilder:
-                                                  (BuildContext context, int index) {
-                                                return Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        10, 10, 10, 10),
-                                                    child: GFProgressBar(
+                                      ListView.builder(
+                                          physics: const ClampingScrollPhysics(
+                                              parent: BouncingScrollPhysics()),
+                                          shrinkWrap: true,
+                                          itemCount: leaguerankR!.data!.yourLeage!.top!.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Container(
+                                                margin: const EdgeInsets.fromLTRB(
+                                                    10, 10, 10, 10),
+                                                child: GFProgressBar(
 
-                                                      percentage: double.parse(
-                                                          (int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString()) /
-                                                              100).toString()),
-                                                      lineHeight: 30,
-                                                      // alignment: MainAxisAlignment.spaceBetween,
+                                                  percentage: double.parse(
+                                                      (int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString()) /
+                                                          100).toString()),
+                                                  lineHeight: 30,
+                                                  // alignment: MainAxisAlignment.spaceBetween,
 
-                                                      backgroundColor: ColorConstants.lightgrey200,
-                                                      child: Container(child: Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text("${leaguerankR!.data!.yourLeage!.top![index].rank}", style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: Colors.white,
-                                                            fontFamily: "Nunito",fontWeight: FontWeight.w600)),
-                                                      )),
+                                                  backgroundColor: ColorConstants.lightgrey200,
 
-                                                      progressBarColor:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
-                                                    ));
-                                              })),
+                                                  progressBarColor:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.yourLeage!.top![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+                                                  child: Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text("${leaguerankR!.data!.yourLeage!.top![index].rank}", style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.white,
+                                                        fontFamily: "Nunito",fontWeight: FontWeight.w600)),
+                                                  ),
+                                                ));
+                                          }),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Divider(
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: const Divider(
                                 thickness: 1,
                                 height: 1,
                                 color: Colors.black,
@@ -319,7 +307,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                             Container(
                               margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
 
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(color: Colors.white),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -330,17 +318,17 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: ListBody(
                                     children: [
                                       Center(
-                                        child: Text("${leaguerankR!.data!.oleague1!.leagueName}", style: TextStyle(
+                                        child: Text("${leaguerankR!.data!.oleague1!.leagueName}", style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.black,
                                             fontFamily: "Nunito")),
                                       ),
                                       if(leaguerankR!.data!.oleague1!.data==null)
-                                      Center(
+                                      const Center(
                                         child: Text("Top 5 will be move to next league next week", style: TextStyle(
                                             fontSize: 12,
                                             color: Colors.black,
@@ -348,38 +336,36 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
 
                                       ),
                                       if(leaguerankR!.data!.oleague1!.data!=null)
-                                      Container(
-                                          child:
-                                          ListView.builder(
-                                              physics: ClampingScrollPhysics(
-                                                  parent: BouncingScrollPhysics()),
-                                              shrinkWrap: true,
-                                              itemCount: leaguerankR!.data!.oleague1!.data!.length,
-                                              itemBuilder:
-                                                  (BuildContext context, int index) {
-                                                return Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        10, 10, 10, 10),
-                                                    child: GFProgressBar(
+                                      ListView.builder(
+                                          physics: const ClampingScrollPhysics(
+                                              parent: BouncingScrollPhysics()),
+                                          shrinkWrap: true,
+                                          itemCount: leaguerankR!.data!.oleague1!.data!.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Container(
+                                                margin: const EdgeInsets.fromLTRB(
+                                                    10, 10, 10, 10),
+                                                child: GFProgressBar(
 
-                                                      percentage: double.parse(
-                                                          (int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString()) /
-                                                              100).toString()),
-                                                      lineHeight: 30,
-                                                      // alignment: MainAxisAlignment.spaceBetween,
+                                                  percentage: double.parse(
+                                                      (int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString()) /
+                                                          100).toString()),
+                                                  lineHeight: 30,
+                                                  // alignment: MainAxisAlignment.spaceBetween,
 
-                                                      backgroundColor: ColorConstants.lightgrey200,
-                                                      child: Container(child: Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text("${leaguerankR!.data!.oleague1!.data![index].rank}", style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: Colors.white,
-                                                            fontFamily: "Nunito",fontWeight: FontWeight.w600)),
-                                                      )),
+                                                  backgroundColor: ColorConstants.lightgrey200,
 
-                                                      progressBarColor:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
-                                                    ));
-                                              })),
+                                                  progressBarColor:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague1!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+                                                  child: Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text("${leaguerankR!.data!.oleague1!.data![index].rank}", style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.white,
+                                                        fontFamily: "Nunito",fontWeight: FontWeight.w600)),
+                                                  ),
+                                                ));
+                                          }),
                                     ],
                                   ),
 
@@ -391,7 +377,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
     Container(
     margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
 
-    decoration: BoxDecoration(color: Colors.white),
+    decoration: const BoxDecoration(color: Colors.white),
     child: Card(
     shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(10),
@@ -402,17 +388,17 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
     ),
     ),
     child: Container(
-    padding: EdgeInsets.all(10),
+    padding: const EdgeInsets.all(10),
     child: ListBody(
     children: [
     Center(
-    child: Text("${leaguerankR!.data!.oleague2!.leagueName}", style: TextStyle(
+    child: Text("${leaguerankR!.data!.oleague2!.leagueName}", style: const TextStyle(
     fontSize: 14,
     color: Colors.black,
     fontFamily: "Nunito")),
     ),
     if(leaguerankR!.data!.oleague2!.data==null)
-    Center(
+    const Center(
     child: Text("Top 5 will be move to next league next week", style: TextStyle(
     fontSize: 12,
     color: Colors.black,
@@ -420,17 +406,15 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
 
     ),
     if(leaguerankR!.data!.oleague2!.data!=null)
-    Container(
-    child:
     ListView.builder(
-    physics: ClampingScrollPhysics(
+    physics: const ClampingScrollPhysics(
     parent: BouncingScrollPhysics()),
     shrinkWrap: true,
     itemCount: leaguerankR!.data!.oleague2!.data!.length,
     itemBuilder:
     (BuildContext context, int index) {
     return Container(
-    margin: EdgeInsets.fromLTRB(
+    margin: const EdgeInsets.fromLTRB(
     10, 10, 10, 10),
     child: GFProgressBar(
 
@@ -441,17 +425,17 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
     // alignment: MainAxisAlignment.spaceBetween,
 
     backgroundColor: ColorConstants.lightgrey200,
-    child: Container(child: Align(
+
+    progressBarColor:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+    child: Align(
     alignment: Alignment.centerLeft,
-    child: Text("${leaguerankR!.data!.oleague2!.data![index].rank}", style: TextStyle(
+    child: Text("${leaguerankR!.data!.oleague2!.data![index].rank}", style: const TextStyle(
     fontSize: 12,
     color: Colors.white,
     fontFamily: "Nunito",fontWeight: FontWeight.w600)),
-    )),
-
-    progressBarColor:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague2!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+    ),
     ));
-    })),
+    }),
     ],
     ),
 
@@ -461,7 +445,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                             Container(
                               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
 
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(color: Colors.white),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -472,17 +456,17 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: ListBody(
                                     children: [
                                       Center(
-                                        child: Text("${leaguerankR!.data!.oleague3!.leagueName}", style: TextStyle(
+                                        child: Text("${leaguerankR!.data!.oleague3!.leagueName}", style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.black,
                                             fontFamily: "Nunito")),
                                       ),
                                       if(leaguerankR!.data!.oleague3!.data==null)
-                                        Center(
+                                        const Center(
                                           child: Text("Top 5 will be move to next league next week", style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.black,
@@ -490,38 +474,36 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
 
                                         ),
                                       if(leaguerankR!.data!.oleague3!.data!=null)
-                                        Container(
-                                            child:
-                                            ListView.builder(
-                                                physics: ClampingScrollPhysics(
-                                                    parent: BouncingScrollPhysics()),
-                                                shrinkWrap: true,
-                                                itemCount: leaguerankR!.data!.oleague3!.data!.length,
-                                                itemBuilder:
-                                                    (BuildContext context, int index) {
-                                                  return Container(
-                                                      margin: EdgeInsets.fromLTRB(
-                                                          10, 10, 10, 10),
-                                                      child: GFProgressBar(
+                                        ListView.builder(
+                                            physics: const ClampingScrollPhysics(
+                                                parent: BouncingScrollPhysics()),
+                                            shrinkWrap: true,
+                                            itemCount: leaguerankR!.data!.oleague3!.data!.length,
+                                            itemBuilder:
+                                                (BuildContext context, int index) {
+                                              return Container(
+                                                  margin: const EdgeInsets.fromLTRB(
+                                                      10, 10, 10, 10),
+                                                  child: GFProgressBar(
 
-                                                        percentage: double.parse(
-                                                            (int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString()) /
-                                                                100).toString()),
-                                                        lineHeight: 30,
-                                                        // alignment: MainAxisAlignment.spaceBetween,
+                                                    percentage: double.parse(
+                                                        (int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString()) /
+                                                            100).toString()),
+                                                    lineHeight: 30,
+                                                    // alignment: MainAxisAlignment.spaceBetween,
 
-                                                        backgroundColor: ColorConstants.lightgrey200,
-                                                        child: Container(child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Text("${leaguerankR!.data!.oleague3!.data![index].rank}", style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.white,
-                                                              fontFamily: "Nunito",fontWeight: FontWeight.w600)),
-                                                        )),
+                                                    backgroundColor: ColorConstants.lightgrey200,
 
-                                                        progressBarColor:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
-                                                      ));
-                                                })),
+                                                    progressBarColor:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague3!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text("${leaguerankR!.data!.oleague3!.data![index].rank}", style: const TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.white,
+                                                          fontFamily: "Nunito",fontWeight: FontWeight.w600)),
+                                                    ),
+                                                  ));
+                                            }),
                                     ],
                                   ),
 
@@ -531,7 +513,7 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                             Container(
                               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
 
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(color: Colors.white),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -542,17 +524,17 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: ListBody(
                                     children: [
                                       Center(
-                                        child: Text("${leaguerankR!.data!.oleague4!.leagueName}", style: TextStyle(
+                                        child: Text("${leaguerankR!.data!.oleague4!.leagueName}", style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.black,
                                             fontFamily: "Nunito")),
                                       ),
                                       if(leaguerankR!.data!.oleague4!.data==null)
-                                        Center(
+                                        const Center(
                                           child: Text("Top 5 will be move to next league next week", style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.black,
@@ -560,38 +542,36 @@ class _SeeLeagueState extends State<SeeLeague> with TickerProviderStateMixin {
 
                                         ),
                                       if(leaguerankR!.data!.oleague4!.data!=null)
-                                        Container(
-                                            child:
-                                            ListView.builder(
-                                                physics: ClampingScrollPhysics(
-                                                    parent: BouncingScrollPhysics()),
-                                                shrinkWrap: true,
-                                                itemCount: leaguerankR!.data!.oleague4!.data!.length,
-                                                itemBuilder:
-                                                    (BuildContext context, int index) {
-                                                  return Container(
-                                                      margin: EdgeInsets.fromLTRB(
-                                                          10, 10, 10, 10),
-                                                      child: GFProgressBar(
+                                        ListView.builder(
+                                            physics: const ClampingScrollPhysics(
+                                                parent: BouncingScrollPhysics()),
+                                            shrinkWrap: true,
+                                            itemCount: leaguerankR!.data!.oleague4!.data!.length,
+                                            itemBuilder:
+                                                (BuildContext context, int index) {
+                                              return Container(
+                                                  margin: const EdgeInsets.fromLTRB(
+                                                      10, 10, 10, 10),
+                                                  child: GFProgressBar(
 
-                                                        percentage: double.parse(
-                                                            (int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString()) /
-                                                                100).toString()),
-                                                        lineHeight: 30,
-                                                        // alignment: MainAxisAlignment.spaceBetween,
+                                                    percentage: double.parse(
+                                                        (int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString()) /
+                                                            100).toString()),
+                                                    lineHeight: 30,
+                                                    // alignment: MainAxisAlignment.spaceBetween,
 
-                                                        backgroundColor: ColorConstants.lightgrey200,
-                                                        child: Container(child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Text("${leaguerankR!.data!.oleague4!.data![index].rank}", style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.white,
-                                                              fontFamily: "Nunito",fontWeight: FontWeight.w600)),
-                                                        )),
+                                                    backgroundColor: ColorConstants.lightgrey200,
 
-                                                        progressBarColor:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
-                                                      ));
-                                                })),
+                                                    progressBarColor:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<10?ColorConstants.stage1color: int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<49?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())==50?ColorConstants.stage2color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<50?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<90?ColorConstants.stage3color:int.parse(leaguerankR!.data!.oleague4!.data![index].percentage.toString())<=100?ColorConstants.stage4color:ColorConstants.stage5color,
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text("${leaguerankR!.data!.oleague4!.data![index].rank}", style: const TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.white,
+                                                          fontFamily: "Nunito",fontWeight: FontWeight.w600)),
+                                                    ),
+                                                  ));
+                                            }),
                                     ],
                                   ),
 

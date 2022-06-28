@@ -11,17 +11,19 @@ import 'package:CultreApp/colors/colors.dart';
 import 'package:CultreApp/ui/forgetpassword/forgetpassword.dart';
 
 import 'package:CultreApp/ui/homepage/homepage.dart';
-import 'package:CultreApp/uinew/registerpage.dart';
-import 'package:CultreApp/uinew/signuppage.dart';
+import 'package:CultreApp/ui/authentication/registerpage.dart';
+import 'package:CultreApp/ui/authentication/signuppage.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 //
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:twitter_login/twitter_login.dart';
 
-import '../utils/StringConstants.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import '../../utils/StringConstants.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
