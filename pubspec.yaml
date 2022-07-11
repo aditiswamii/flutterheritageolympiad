@@ -80,6 +80,7 @@ dependencies:
   firebase_messaging: ^11.2.11
   overlay_support: ^1.2.1
   wakelock: ^0.6.1+2
+  flutter_svg:
 #  workmanager:
 
 #  firebase_messaging: ^11.2.6

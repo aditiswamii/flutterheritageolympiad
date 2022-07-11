@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="22" viewBox="0 0 21 22">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="21" height="22" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Setting_icon" data-name="Setting icon" clip-path="url(#clip-path)">
+    <rect id="Rectangle_193" data-name="Rectangle 193" width="22" height="22" transform="translate(0 0)" fill="none"/>
+    <path id="Path_104" data-name="Path 104" d="M269.916,13.221a2.644,2.644,0,1,0-2.644-2.644A2.652,2.652,0,0,0,269.916,13.221ZM264.5,4.76a7.456,7.456,0,0,1,3.173-1.719L268.726,0h2.644l1.058,3.041A9.232,9.232,0,0,1,275.6,4.76l3.173-.661,1.322,2.38-2.115,2.38a7.536,7.536,0,0,1,.132,1.719c0,.529-.132,1.19-.132,1.719l2.115,2.38-1.322,2.38-3.173-.661a7.456,7.456,0,0,1-3.173,1.719l-1.058,3.041h-2.644l-1.058-3.041a9.232,9.232,0,0,1-3.173-1.719l-3.173.661L260,14.675l2.115-2.38a7.537,7.537,0,0,1-.132-1.719c0-.529.132-1.19.132-1.719L260,6.478l1.322-2.38Z" transform="translate(-260)" fill="#a0a0a0" fill-rule="evenodd"/>
+  </g>
+</svg>

@@ -32,7 +32,7 @@ class PersonalInfoScreen extends StatefulWidget {
 }
 
 class _PersonalinfoState extends State<PersonalInfoScreen> {
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   Color textcolor = ColorConstants.txt;
   Color textcolor1 = ColorConstants.txt;
   var selected = '';
@@ -109,8 +109,7 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
         await http.get(Uri.parse("http://3.108.183.42/api/city/$statid"));
     if (response.statusCode == 200) {
       citydata = response.body;
-      var jsonResponse =
-          convert.jsonDecode(response.body); //store response as string
+//store response as string
       setState(() {
         citydata = response.body;
         citylength = getCityResponseFromJson(citydata!);
@@ -443,7 +442,6 @@ class _PersonalinfoState extends State<PersonalInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool click = false;
     bool click1 = false;
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

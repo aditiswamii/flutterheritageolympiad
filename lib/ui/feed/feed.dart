@@ -20,8 +20,10 @@ import 'package:CultreApp/ui/feed/filterpage/filterpage.dart';
 import 'package:CultreApp/ui/feed/imageview.dart';
 import 'package:CultreApp/ui/feed/savedpost/savedpost.dart';
 
-import 'package:CultreApp/modal/feedresponse/GetFeedResponse.dart' as Feedresponse;
-import 'package:CultreApp/modal/feedtagfilter/GetTagFilterResponse.dart' as TagFilterResponse;
+import 'package:CultreApp/modal/feedresponse/GetFeedResponse.dart'
+    as Feedresponse;
+import 'package:CultreApp/modal/feedtagfilter/GetTagFilterResponse.dart'
+    as TagFilterResponse;
 import 'package:CultreApp/ui/rightdrawer/right_drawer.dart';
 import 'package:CultreApp/ui/shopproduct/shopproducts_page.dart';
 import 'package:CultreApp/utils/apppreference.dart';
@@ -34,19 +36,25 @@ import '../../../utils/StringConstants.dart';
 import '../../modal/feedtagfilter/GetTagFilterResponse.dart';
 import 'package:CultreApp/ui/homepage/homepage.dart';
 import 'dart:convert' as convert;
+
 class FeedPage extends StatefulWidget {
   var contents;
   String? themes;
   String? seldomain;
   List<Feedresponse.Data>? feeddata;
-  FeedPage({Key? key,required this.seldomain,this.contents,required  this.themes,this.feeddata}) : super(key: key);
+  FeedPage(
+      {Key? key,
+      required this.seldomain,
+      this.contents,
+      required this.themes,
+      this.feeddata})
+      : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
-class _FeedPageState extends State<FeedPage> with ChangeNotifier{
-
+class _FeedPageState extends State<FeedPage> with ChangeNotifier {
   TextEditingController controller = TextEditingController();
   PageController _pageController = PageController();
   // TextEditingController controller = TextEditingController();
@@ -64,15 +72,15 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
   var tagdata;
   var moduledata;
   var modulefdata;
-  bool rlshow=true;
+  bool rlshow = true;
   int activePage = 0;
-  int feed_page_id  = 0;
-  List<Feedresponse.Data>? tagfilterd = [].cast<Feedresponse.Data>().toList(
-      growable: true);
-  List<Feedresponse.Data>? moduled = [].cast<Feedresponse.Data>().toList(
-      growable: true);
-  List<Feedresponse.Data>? databean = [].cast<Feedresponse.Data>().toList(
-      growable: true);
+  int feed_page_id = 0;
+  List<Feedresponse.Data>? tagfilterd =
+      [].cast<Feedresponse.Data>().toList(growable: true);
+  List<Feedresponse.Data>? moduled =
+      [].cast<Feedresponse.Data>().toList(growable: true);
+  List<Feedresponse.Data>? databean =
+      [].cast<Feedresponse.Data>().toList(growable: true);
   userdata() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -80,115 +88,115 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
       country = prefs.getString("country");
       userid = prefs.getString("userid");
     });
-    if(widget.feeddata!=null){
+    if (widget.feeddata != null) {
       setState(() {
-        databean=widget.feeddata;
+        databean = widget.feeddata;
       });
-
-    }else {
-      getFeed(userid.toString(), "0", "",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty?widget.themes!:"");
+    } else {
+      getFeed(
+          userid.toString(),
+          "0",
+          "",
+          widget.seldomain!.isNotEmpty ? widget.seldomain! : "",
+          widget.themes!.isNotEmpty ? widget.themes! : "");
     }
-
-
   }
+
   Future<Future> _refreshdata(BuildContext context) async {
     // NotificationService(_fcm1,context).initialize();
     // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     //   log("$message");
     //   NotificationService.showNotification(message.data['title'],message.data['body']);
     // });
-    return  getFeed(userid.toString(), "0", "",widget.seldomain!.isNotEmpty ?widget.seldomain!:"",widget.themes!.isNotEmpty?widget.themes!:"");
-
+    return getFeed(
+        userid.toString(),
+        "0",
+        "",
+        widget.seldomain!.isNotEmpty ? widget.seldomain! : "",
+        widget.themes!.isNotEmpty ? widget.themes! : "");
   }
-  getFeed(String userid, String feedPageId, String feedTypeId,
-      String domainId, String themeId) async {
-     // showLoaderDialog(context);
-      http.Response response =
-          await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
-        'user_id': userid.toString(),
-        'feed_page_id': feedPageId.toString(),
-        'feed_type_id': feedTypeId.toString(),
-        'domain_id': domainId.toString(),
-        'theme_id': themeId.toString()
-      });
+
+  getFeed(String userid, String feedPageId, String feedTypeId, String domainId,
+      String themeId) async {
+    // showLoaderDialog(context);
+    http.Response response =
+        await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
+      'user_id': userid.toString(),
+      'feed_page_id': feedPageId.toString(),
+      'feed_type_id': feedTypeId.toString(),
+      'domain_id': domainId.toString(),
+      'theme_id': themeId.toString()
+    });
     var jsonResponse = convert.jsonDecode(response.body);
-      if (response.statusCode == 200) {
-         // Navigator.pop(context);
-        data = response.body;
-        if (jsonResponse['status'] == 200) {
-          //final responseJson = json.decode(response.body);//store response as string
-          setState(() {
-            feeddata = jsonDecode(
-                data!)['data']; //get all the data from json string superheros
-            print(feeddata.length);
-            onsuccessfeed(Feedresponse.getFeedResponseFromJson(data));
-          });
+    if (response.statusCode == 200) {
+      // Navigator.pop(context);
+      data = response.body;
+      if (jsonResponse['status'] == 200) {
+        //final responseJson = json.decode(response.body);//store response as string
+        setState(() {
+          feeddata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(feeddata.length);
+          onsuccessfeed(Feedresponse.getFeedResponseFromJson(data));
+        });
 
-          var venam = jsonDecode(data!)['data'];
-          print(venam);
-          print(jsonDecode(data!)['last_id']);
-          //last_id
-          print(jsonDecode(data!)['data'][0]['id']);
-          print(jsonDecode(data!)['data'][0]['type']);
-          print(jsonDecode(data!)['data'][0]['tags']);
-          print(jsonDecode(data!)['data'][0]['title']);
-          print(jsonDecode(data!)['data'][0]['description']);
-          print(jsonDecode(data!)['data'][0]['external_link']);
-          print(jsonDecode(data!)['data'][0]['video_link']);
-          print(jsonDecode(data!)['data'][0]['placeholder_image']);
-          print(jsonDecode(data!)['data'][0]['savepost']);
-          print(jsonDecode(data!)['data'][0]['is_saved']);
-          print(jsonDecode(data!)['data'][0]['share']);
-          print(jsonDecode(data!)['data'][0]['media_type']);
-          print(jsonDecode(data!)['data'][0]['media']);
-          print(jsonDecode(data!)['data'][0]['media_type']);
-          print(jsonDecode(data!)['data'][0]['media_type']);
-        }else{
-          snackBar = SnackBar(
-            content: Text(
-                jsonResponse['message']),
-          );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(snackBar);
-        }
-      }else {
-         // Navigator.pop(context);
-        print(response.statusCode);
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
+        print(jsonDecode(data!)['last_id']);
+        //last_id
+        print(jsonDecode(data!)['data'][0]['id']);
+        print(jsonDecode(data!)['data'][0]['type']);
+        print(jsonDecode(data!)['data'][0]['tags']);
+        print(jsonDecode(data!)['data'][0]['title']);
+        print(jsonDecode(data!)['data'][0]['description']);
+        print(jsonDecode(data!)['data'][0]['external_link']);
+        print(jsonDecode(data!)['data'][0]['video_link']);
+        print(jsonDecode(data!)['data'][0]['placeholder_image']);
+        print(jsonDecode(data!)['data'][0]['savepost']);
+        print(jsonDecode(data!)['data'][0]['is_saved']);
+        print(jsonDecode(data!)['data'][0]['share']);
+        print(jsonDecode(data!)['data'][0]['media_type']);
+        print(jsonDecode(data!)['data'][0]['media']);
+        print(jsonDecode(data!)['data'][0]['media_type']);
+        print(jsonDecode(data!)['data'][0]['media_type']);
+      } else {
+        snackBar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-
+    } else {
+      // Navigator.pop(context);
+      print(response.statusCode);
+    }
   }
-
 
   onsuccessfeed(Feedresponse.GetFeedResponse feedResponse) {
-    if(feedResponse!=null){
-      if(feedResponse.data!=null) {
+    if (feedResponse != null) {
+      if (feedResponse.data != null) {
         if (feedResponse.data!.length > 0) {
-          rlshow=true;
+          rlshow = true;
           setState(() {
             feed_page_id =
-            feedResponse.data![feedResponse.data!.length - 1].id!;
+                feedResponse.data![feedResponse.data!.length - 1].id!;
             databean = feedResponse.data;
           });
-        }else{
-          rlshow=false;
+        } else {
+          rlshow = false;
           snackBar = const SnackBar(
-            content: Text(
-                "There is no more feed"),
+            content: Text("There is no more feed"),
           );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(snackBar);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       }
-
-
     }
-
   }
+
   loadmoreapi(String userid, String feed_page_id, String feed_type_id,
       String domain_id, String theme_id) async {
     // showLoaderDialog(context);
     http.Response response =
-    await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
+        await http.post(Uri.parse(StringConstants.BASE_URL + "feed"), body: {
       'user_id': userid.toString(),
       'feed_page_id': feed_page_id.toString(),
       'feed_type_id': feed_type_id.toString(),
@@ -227,117 +235,109 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
         print(jsonDecode(data!)['data'][0]['media']);
         print(jsonDecode(data!)['data'][0]['media_type']);
         print(jsonDecode(data!)['data'][0]['media_type']);
-      }else{
+      } else {
         snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
+          content: Text(jsonResponse['message']),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-    }else {
+    } else {
       // Navigator.pop(context);
       if (kDebugMode) {
         print(response.statusCode);
       }
     }
-
   }
-  onloadsuccess(Feedresponse.GetFeedResponse obj){
-    if(obj!=null){
-      if(obj.data!=null){
-        if(obj.data!.length>0){
-          rlshow=true;
-          if(obj.lastId.toString()!="") {
 
+  onloadsuccess(Feedresponse.GetFeedResponse obj) {
+    if (obj != null) {
+      if (obj.data != null) {
+        if (obj.data!.length > 0) {
+          rlshow = true;
+          if (obj.lastId.toString() != "") {
             setState(() {
-            feed_page_id= obj.data![obj.data!.length-1].id!;
-          });
+              feed_page_id = obj.data![obj.data!.length - 1].id!;
+            });
           }
 
           updateData(obj.data!);
-        }else{
-          rlshow=false;
+        } else {
+          rlshow = false;
           snackBar = const SnackBar(
-            content: Text(
-               "There is no more feed"),
+            content: Text("There is no more feed"),
           );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(snackBar);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       }
     }
-
   }
-  gettagfilter(String userid ,String searchkey,String type) async {
 
-      http.Response response = await http.get(
-          Uri.parse(StringConstants.BASE_URL + "tagfilter?searchkey=$searchkey&type=$type&user_id=$userid")
-      );
-       // showLoaderDialog(context);
-      var jsonResponse = convert.jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        data = response.body;
-         // Navigator.pop(context);
-        if (jsonResponse['status'] == 200) {
-          setState(() {
-            tagdata = jsonDecode(
-                data!)['data']; //get all the data from json string superheros
-            print(tagdata.length);
-          });
-          onsuccess(Feedresponse.getFeedResponseFromJson(data).data,searchkey);
-          var venam = jsonDecode(data!)['data'];
-          print(venam);
-        } else {
-          onsuccess(null,"");
-          snackBar = SnackBar(
-            content: Text(
-                jsonResponse['message']),
-          );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(snackBar);
-        }
+  gettagfilter(String userid, String searchkey, String type) async {
+    http.Response response = await http.get(Uri.parse(StringConstants.BASE_URL +
+        "tagfilter?searchkey=$searchkey&type=$type&user_id=$userid"));
+    // showLoaderDialog(context);
+    var jsonResponse = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      data = response.body;
+      // Navigator.pop(context);
+      if (jsonResponse['status'] == 200) {
+        setState(() {
+          tagdata = jsonDecode(
+              data!)['data']; //get all the data from json string superheros
+          print(tagdata.length);
+        });
+        onsuccess(Feedresponse.getFeedResponseFromJson(data).data, searchkey);
+        var venam = jsonDecode(data!)['data'];
+        print(venam);
       } else {
-         // Navigator.pop(context);
-        // onsuccess(null);
-        if (kDebugMode) {
-          print(response.statusCode);
-        }
+        onsuccess(null, "");
+        snackBar = SnackBar(
+          content: Text(jsonResponse['message']),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-
+    } else {
+      // Navigator.pop(context);
+      // onsuccess(null);
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
+    }
   }
-  onsuccess(List<Feedresponse.Data>? list, String searchkey){
-   if(list!=null) {
-     if (list.length > 0) {
-       rlshow=true;
-       setState(() {
-         feed_page_id = list[list.length - 1].id!;
-         tagfilterd = list;
-       });
-       Navigator.of(context).pushReplacement(
-           MaterialPageRoute(builder: (BuildContext context) => TagFeed(tags: tagfilterd,seachkey:searchkey, feeddata: databean,)));
-     }else{
-       rlshow=false;
-       snackBar = const SnackBar(
-         content: Text(
-             "There is no more feed"),
-       );
-       ScaffoldMessenger.of(context)
-           .showSnackBar(snackBar);
-     }
-   }
+
+  onsuccess(List<Feedresponse.Data>? list, String searchkey) {
+    if (list != null) {
+      if (list.length > 0) {
+        rlshow = true;
+        setState(() {
+          feed_page_id = list[list.length - 1].id!;
+          tagfilterd = list;
+        });
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => TagFeed(
+                  tags: tagfilterd,
+                  seachkey: searchkey,
+                  feeddata: databean,
+                )));
+      } else {
+        rlshow = false;
+        snackBar = const SnackBar(
+          content: Text("There is no more feed"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
 
     print(databean.toString());
   }
-  getmodule(String userid ,String moduleId,String type) async {
 
-    http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "module"),body: {
+  getmodule(String userid, String moduleId, String type) async {
+    http.Response response =
+        await http.post(Uri.parse(StringConstants.BASE_URL + "module"), body: {
       'module_id': moduleId.toString(),
       'user_id': userid.toString(),
-      'type':type.toString()
-    }
-    );
+      'type': type.toString()
+    });
     // showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -349,17 +349,15 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
               data!)['data']; //get all the data from json string superheros
           print(moduledata.length);
         });
-        setmodule(Feedresponse.getFeedResponseFromJson(data).data,type);
+        setmodule(Feedresponse.getFeedResponseFromJson(data).data, type);
         var venam = jsonDecode(data!)['data'];
         print(venam);
       } else {
-        setmodule(null,"");
+        setmodule(null, "");
         snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
+          content: Text(jsonResponse['message']),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       // Navigator.pop(context);
@@ -368,30 +366,29 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
         print(response.statusCode);
       }
     }
-
   }
-  setmodule(List<Feedresponse.Data>? list, String type){
-  if(data!=null){
-    if(data.length>0) {
-      setState(() {
-        feed_page_id = list![list.length - 1].id!;
-        moduled = list;
-      });
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => CallModules( module: moduled, feeddata: databean,type:type)));
+
+  setmodule(List<Feedresponse.Data>? list, String type) {
+    if (data != null) {
+      if (data.length > 0) {
+        setState(() {
+          feed_page_id = list![list.length - 1].id!;
+          moduled = list;
+        });
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                CallModules(module: moduled, feeddata: databean, type: type)));
+      }
     }
   }
-  }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       backgroundColor: Colors.transparent,
-      content:
-          Container(
-            height: 80,width: 80,
-              child: const Center(child: CircularProgressIndicator())),
-
-
-
+      content: Container(
+          height: 80,
+          width: 80,
+          child: const Center(child: CircularProgressIndicator())),
     );
     showDialog(
       barrierDismissible: false,
@@ -403,16 +400,14 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
   }
 
 //0 unsave 1 save
-  savepost(String userid ,String feed_id,int  type,int pos) async {
-
-    http.Response response = await http.post(
-        Uri.parse(StringConstants.BASE_URL + "savefeed"),body: {
-          'user_id':userid.toString(),
-            'feed_id':feed_id.toString(),
-             'type':type.toString()
-    }
-    );
-     //showLoaderDialog(context);
+  savepost(String userid, String feed_id, int type, int pos) async {
+    http.Response response = await http
+        .post(Uri.parse(StringConstants.BASE_URL + "savefeed"), body: {
+      'user_id': userid.toString(),
+      'feed_id': feed_id.toString(),
+      'type': type.toString()
+    });
+    //showLoaderDialog(context);
     var jsonResponse = convert.jsonDecode(response.body);
     if (response.statusCode == 200) {
       data = response.body;
@@ -420,27 +415,21 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
       if (jsonResponse['status'] == 200) {
         updateItem(type, pos);
         snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
+          content: Text(jsonResponse['message']),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
-
         snackBar = SnackBar(
-          content: Text(
-              jsonResponse['message']),
+          content: Text(jsonResponse['message']),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-
       print(response.statusCode);
     }
-
   }
-  Event buildEvent({Recurrence? recurrence,String? title, String? desc}) {
+
+  Event buildEvent({Recurrence? recurrence, String? title, String? desc}) {
     return Event(
       title: title!,
       description: desc!,
@@ -457,6 +446,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
       recurrence: recurrence,
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -481,7 +471,6 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
@@ -515,23 +504,24 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                       Container(
                         margin: const EdgeInsets.fromLTRB(20, 10, 0, 10),
                         alignment: Alignment.centerLeft,
-
                         padding: const EdgeInsets.all(5),
                         child: Center(
                           child: Card(
                             elevation: 3,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>  HomePage()));
-
+                                        builder: (context) => HomePage()));
                               },
-                              child:  Image.asset("assets/images/home_1.png",height: 40,width: 40,),
+                              child: Image.asset(
+                                "assets/images/home_1.png",
+                                height: 40,
+                                width: 40,
+                              ),
                             ),
                           ),
                         ),
@@ -553,11 +543,10 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                 ),
               ),
               Container(
-                alignment: Alignment(0,100),
+                alignment: Alignment(0, 100),
                 // height: MediaQuery.of(context).size.height-120,
                 margin: const EdgeInsets.fromLTRB(20, 80, 20, 10),
-                child: ListView(
-                    children: [
+                child: ListView(children: [
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -569,7 +558,7 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                      child: Text(username==null?"":username,
+                      child: Text(username == null ? "" : username,
                           style: const TextStyle(
                               fontSize: 18,
                               color: Colors.black,
@@ -578,18 +567,19 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                     height: 50,
                     child: Card(
                       child: ListTile(
-                       tileColor: ColorConstants.bggrey,
+                        tileColor: ColorConstants.bggrey,
                         title: TextFormField(
                           controller: controller,
                           textInputAction: TextInputAction.search,
                           onFieldSubmitted: onSearchTextChanged,
                           decoration: const InputDecoration(
-                              hintText: 'Enter one or more keywords', border: InputBorder.none),
+                              hintText: 'Enter one or more keywords',
+                              border: InputBorder.none),
                         ),
                         trailing: GestureDetector(
-                          onTap:(){
-                            onSearchTextChanged(controller.text);
-                          },
+                            onTap: () {
+                              onSearchTextChanged(controller.text);
+                            },
                             child: Icon(Icons.search)),
                         // trailing: controller.text.isNotEmpty
                         //     ? IconButton(
@@ -609,76 +599,78 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                       ),
                     ),
                   ),
-                Container(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FilterPage()));
-                        },
-                        child: Card(
-                          child: Container(
-                            color: ColorConstants.bggrey,
-                            padding: EdgeInsets.all(4),
-                            width: 150,
-                            child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("SET FILTER",
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    fontFamily: "Nunito")),
-                                Image.asset("assets/images/right_arrow.png",
-                                    height: 20, width: 20),
-                              ],
+                  Container(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FilterPage()));
+                          },
+                          child: Card(
+                            child: Container(
+                              color: ColorConstants.bggrey,
+                              padding: EdgeInsets.all(4),
+                              width: 150,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("SET FILTER",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                          fontFamily: "Nunito")),
+                                  Image.asset("assets/images/right_arrow.png",
+                                      height: 20, width: 20),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                     GestureDetector(
-                       onTap: (){
-                         Navigator.pushReplacement(
-                             context,
-                             MaterialPageRoute(
-                                 builder: (context) => SavedPost()));
-                       },
-                        child: Card(
-                          child: Container(
-                            color: ColorConstants.bggrey,
-                            padding: EdgeInsets.all(4),
-                            width: 150,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("SAVED POST",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontFamily: "Nunito")),
-                                Image.asset("assets/images/right_arrow.png",
-                                    height: 20, width: 20),
-                              ],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SavedPost()));
+                          },
+                          child: Card(
+                            child: Container(
+                              color: ColorConstants.bggrey,
+                              padding: EdgeInsets.all(4),
+                              width: 150,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("SAVED POST",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                          fontFamily: "Nunito")),
+                                  Image.asset("assets/images/right_arrow.png",
+                                      height: 20, width: 20),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-
-                   databean!.isEmpty ? Container(
-                     height: 300,
-                     child: const Center(
-                      child: CircularProgressIndicator(),
-                  ),
-                   )
-
-                      :  Container(
+                  databean!.isEmpty
+                      ? Container(
+                          height: 300,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Container(
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: ListView.builder(
                               physics: const ClampingScrollPhysics(
@@ -686,8 +678,8 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                               shrinkWrap: true,
                               itemCount: databean!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                var ischecked=databean![index].isSaved;
-                                var check= ischecked==1?true:false;
+                                var ischecked = databean![index].isSaved;
+                                var check = ischecked == 1 ? true : false;
                                 return Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
@@ -699,118 +691,184 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                   ),
                                   child: ListBody(
                                     children: [
-                                      if(databean![index].mediaType
-                                      .toString().isNotEmpty)
-                                      Container(
-                                        height: 300,
-                                        child: Stack(
-                                          children: [
-                                            PageView.builder(
-                                                itemCount: databean![index].media!
-                                                    .length,
-                                                pageSnapping: true,
-                                                controller: _pageController,
-                                                onPageChanged: (page) {
-                                                  setState(() {
-                                                    activePage = page;
-                                                  });
-                                                },
-                                                itemBuilder: (context, pagePosition) {
-                                                  return GestureDetector(
-                                                    onTap:(){
-                                                      Navigator.of(context).pushReplacement(
-                                                          MaterialPageRoute(builder: (BuildContext context) =>
-                                                              ImageviewFeed(gallery: databean![index].media!, index: pagePosition , contents: widget.contents, themes: widget.themes,
-                                                                seldomain: widget.seldomain, image:databean![index].media![pagePosition], typef: 1, feeddata: databean,)));
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                  databean![index].media!
-
-                                                                      [pagePosition]),
-                                                              fit: BoxFit.cover)),
-
-                                                    ),
-                                                  );
-                                                }),
-                                            Container(
-                                              height: 50,
-                                              padding:EdgeInsets.all(8),
-                                              alignment: Alignment.topLeft,
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap:(){
-                                                      if(databean![index].type=="Modules") {
-                                                        getmodule(userid
-                                                            .toString(),
-                                                            databean![index]
-                                                                .id
-                                                                .toString(),
-                                                            "2");
-                                                      }else if(databean![index].type=="Collections"){
-                                                        getmodule(userid
-                                                            .toString(),
-                                                            databean![index]
-                                                                .id
-                                                                .toString(),
-                                                            "3");
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(left: 5,right: 5),
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(20)
+                                      if (databean![index]
+                                          .mediaType
+                                          .toString()
+                                          .isNotEmpty)
+                                        Container(
+                                          height: 300,
+                                          child: Stack(
+                                            children: [
+                                              PageView.builder(
+                                                  itemCount: databean![index]
+                                                      .media!
+                                                      .length,
+                                                  pageSnapping: databean![index]
+                                                      .media!
+                                                      .length>1?true:false,
+                                                  controller: _pageController,
+                                                  onPageChanged: (page) {
+                                                    setState(() {
+                                                      activePage = page;
+                                                    });
+                                                  },
+                                                  itemBuilder:
+                                                      (context, pagePosition) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .pushReplacement(
+                                                                MaterialPageRoute(
+                                                                    builder: (BuildContext
+                                                                            context) =>
+                                                                        ImageviewFeed(
+                                                                          gallery:
+                                                                              databean![index].media!,
+                                                                          index:
+                                                                              pagePosition,
+                                                                          contents:
+                                                                              widget.contents,
+                                                                          themes:
+                                                                              widget.themes,
+                                                                          seldomain:
+                                                                              widget.seldomain,
+                                                                          image:
+                                                                              databean![index].media![pagePosition],
+                                                                          typef:
+                                                                              1,
+                                                                          feeddata:
+                                                                              databean,
+                                                                        )));
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    databean![index]
+                                                                            .media![
+                                                                        pagePosition]),
+                                                                fit: BoxFit
+                                                                    .cover)),
                                                       ),
-                                                      padding:  EdgeInsets.all(3),height: 30, width: 30,
-                                                      child: Center(
-                                                        child: Card(
-                                                          elevation: 3,
-                                                          child: databean![index].type=="Modules"?Image.asset("assets/images/modules.png",fit: BoxFit.cover,
-                                                          ):databean![index].type=="Single Posts"?Image.asset("assets/images/single_posts.png",fit: BoxFit.cover,
-                                                          ):Image.asset("assets/images/collections.png",fit: BoxFit.cover,
+                                                    );
+                                                  }),
+                                              Container(
+                                                height: 50,
+                                                padding: EdgeInsets.all(8),
+                                                alignment: Alignment.topLeft,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        if (databean![index]
+                                                                .type ==
+                                                            "Modules") {
+                                                          getmodule(
+                                                              userid.toString(),
+                                                              databean![index]
+                                                                  .id
+                                                                  .toString(),
+                                                              "2");
+                                                        } else if (databean![
+                                                                    index]
+                                                                .type ==
+                                                            "Collections") {
+                                                          getmodule(
+                                                              userid.toString(),
+                                                              databean![index]
+                                                                  .id
+                                                                  .toString(),
+                                                              "3");
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 5, right: 5),
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                        padding:
+                                                            EdgeInsets.all(3),
+                                                        height: 30,
+                                                        width: 30,
+                                                        child: Center(
+                                                          child: Card(
+                                                            elevation: 3,
+                                                            child: databean![
+                                                                            index]
+                                                                        .type ==
+                                                                    "Modules"
+                                                                ? Image.asset(
+                                                                    "assets/images/modules.png",
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  )
+                                                                : databean![index]
+                                                                            .type ==
+                                                                        "Single Posts"
+                                                                    ? Image
+                                                                        .asset(
+                                                                        "assets/images/single_posts.png",
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      )
+                                                                    : Image
+                                                                        .asset(
+                                                                        "assets/images/collections.png",
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
                                                           ),
                                                         ),
-                                                      ),),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: (){
-                                                      Share.share("${databean![index].title! +"\n"+
-                                                          databean![index].description! +"\n"+ databean![index].media!.toString()}", subject: 'share');
-
-                                                    },
-                                                    child: Container(height: 30, width: 30,
-                                                      child: Image.asset("assets/images/share_feed.png",fit: BoxFit.cover,
-                                                      ),),
-                                                  ),
-                                                ],
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Share.share(
+                                                            "${databean![index].title! + "\n" + databean![index].description! + "\n" + databean![index].media!.toString()}",
+                                                            subject: 'share');
+                                                      },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        child: Image.asset(
+                                                          "assets/images/share_feed.png",
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Container(
-                                                margin: const EdgeInsets.all(10),
+                                              Align(
                                                 alignment:
-                                                Alignment.bottomCenter,
-                                                height: 40,
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .center,
-                                                    children: indicators(
-                                                        databean![index].media!
-
-                                                            .length,
-                                                        activePage)),
+                                                    Alignment.bottomCenter,
+                                                child: Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  height: 40,
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: indicators(
+                                                          databean![index]
+                                                              .media!
+                                                              .length,
+                                                          activePage)),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                       Container(
                                         margin: const EdgeInsets.fromLTRB(
                                             10, 10, 10, 10),
@@ -824,74 +882,102 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                   style: const TextStyle(
                                                       fontSize: 16,
                                                       color: Colors.black,
-                                                      fontFamily: "Nunito",fontStyle: FontStyle.normal)),
+                                                      fontFamily: "Nunito",
+                                                      fontStyle:
+                                                          FontStyle.normal)),
                                             ),
                                             Container(
                                               margin: const EdgeInsets.fromLTRB(
                                                   0, 10, 0, 10),
                                               child: ReadMoreText(
-                                                databean![index].description!
-                                                ,
+                                                databean![index].description!,
                                                 trimLines: 5,
                                                 textAlign: TextAlign.justify,
-                                                style: const TextStyle(fontSize: 14,color:Colors.black,fontStyle: FontStyle.normal,),
-                                                colorClickableText: Colors.black,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                  fontStyle: FontStyle.normal,
+                                                ),
+                                                colorClickableText:
+                                                    Colors.black,
                                                 trimMode: TrimMode.Line,
                                                 trimCollapsedText: 'Read more',
                                                 trimExpandedText: 'Read less',
                                                 lessStyle: const TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.blue,
-                                                    fontFamily: "Nunito",fontStyle: FontStyle.normal),
-                                                moreStyle:const TextStyle(
+                                                    fontFamily: "Nunito",
+                                                    fontStyle:
+                                                        FontStyle.normal),
+                                                moreStyle: const TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.blue,
-                                                    fontFamily: "Nunito",fontStyle: FontStyle.normal),
+                                                    fontFamily: "Nunito",
+                                                    fontStyle:
+                                                        FontStyle.normal),
                                               ),
                                             ),
                                             Container(
                                               height: 42,
-
                                               child: ListView.builder(
-                                                scrollDirection: Axis.horizontal,
-                                                  physics: const ClampingScrollPhysics(
-                                                      parent:
-                                                          BouncingScrollPhysics()),
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  physics:
+                                                      const ClampingScrollPhysics(
+                                                          parent:
+                                                              BouncingScrollPhysics()),
                                                   shrinkWrap: true,
-                                                  itemCount:
-                                                  databean![index].tags!
-
-                                                          .length,
+                                                  itemCount: databean![index]
+                                                      .tags!
+                                                      .length,
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index1) {
-
                                                     return GestureDetector(
-                                                      onTap: (){
-
-
-                                                        gettagfilter(userid.toString(),databean![index].tags!
-                                                        [index1].toString(), "0");
-                                                                },
+                                                      onTap: () {
+                                                        gettagfilter(
+                                                            userid.toString(),
+                                                            databean![index]
+                                                                .tags![index1]
+                                                                .toString(),
+                                                            "0");
+                                                      },
                                                       child: Card(
                                                         elevation: 2,
-                                                        color: Colors.deepOrange,
-                                                        shape: RoundedRectangleBorder(
+                                                        color:
+                                                            Colors.deepOrange,
+                                                        shape:
+                                                            RoundedRectangleBorder(
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  20),
+                                                              BorderRadius
+                                                                  .circular(20),
                                                           // if you need this
                                                           side: BorderSide(
                                                             color: Colors.grey
-                                                                .withOpacity(0.2),
+                                                                .withOpacity(
+                                                                    0.2),
                                                             width: 1,
                                                           ),
                                                         ),
                                                         child: Container(
-                                                          padding: const EdgeInsets.all(8),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8),
                                                           child: Center(
-                                                            child: Text(databean![index].tags!
-                                                                [index1],style: const TextStyle(color: Colors.white,fontStyle: FontStyle.normal),textAlign: TextAlign.center,),
+                                                            child: Text(
+                                                              databean![index]
+                                                                      .tags![
+                                                                  index1],
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontStyle:
+                                                                      FontStyle
+                                                                          .normal),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -906,47 +992,67 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-
                                                   Container(
                                                     child: Row(
                                                       children: [
                                                         GestureDetector(
                                                           onTap: () {
                                                             setState(() {
-                                                              check=!check;
-                                                              check==true?ischecked=1:ischecked=0;
+                                                              check = !check;
+                                                              check == true
+                                                                  ? ischecked =
+                                                                      1
+                                                                  : ischecked =
+                                                                      0;
                                                             });
-                                                            check=!check;
-                                                            check==true?ischecked=1:ischecked=0;
-                                                            savepost(userid.toString(), databean![index].id.toString(),
-                                                                ischecked==1?0:1,index );
+                                                            check = !check;
+                                                            check == true
+                                                                ? ischecked = 1
+                                                                : ischecked = 0;
+                                                            savepost(
+                                                                userid
+                                                                    .toString(),
+                                                                databean![index]
+                                                                    .id
+                                                                    .toString(),
+                                                                ischecked == 1
+                                                                    ? 0
+                                                                    : 1,
+                                                                index);
                                                           },
                                                           child: Container(
-                                                              child: ischecked != 1
+                                                              child: ischecked !=
+                                                                      1
                                                                   ? Image.asset(
                                                                       "assets/images/folder_2.png",
-                                                                      height: 25,
+                                                                      height:
+                                                                          25,
                                                                       width: 25,
-                                                                      color: Colors.grey,
+                                                                      color: Colors
+                                                                          .grey,
                                                                     )
                                                                   : Image.asset(
                                                                       "assets/images/folder.png",
-                                                                      height: 25,
+                                                                      height:
+                                                                          25,
                                                                       width: 25,
                                                                       color: Colors
                                                                           .deepOrange,
                                                                     )),
                                                         ),
                                                         Container(
-                                                          margin: const EdgeInsets
-                                                                  .fromLTRB(
-                                                              5, 0, 0, 0),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  5, 0, 0, 0),
                                                           child: Text(
-                                                              databean![index].savepost
+                                                              databean![index]
+                                                                  .savepost
                                                                   .toString(),
                                                               style: TextStyle(
                                                                   fontSize: 14,
-                                                                  color: databean![index].isSaved!=
+                                                                  color: databean![index]
+                                                                              .isSaved !=
                                                                           1
                                                                       ? Colors
                                                                           .black54
@@ -961,13 +1067,22 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                   Container(
                                                     width: 60,
                                                     child: Row(
-                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         GestureDetector(
                                                             onTap: () {
                                                               log("cal click");
-                                                              Add2Calendar.addEvent2Cal(
-                                                                buildEvent(title:databean![index].title!,desc:  databean![index].description! ),
+                                                              Add2Calendar
+                                                                  .addEvent2Cal(
+                                                                buildEvent(
+                                                                    title: databean![
+                                                                            index]
+                                                                        .title!,
+                                                                    desc: databean![
+                                                                            index]
+                                                                        .description!),
                                                               );
                                                               // buildEvent( databean![index].title!, databean![index].description!);
                                                             },
@@ -979,7 +1094,9 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                                         GestureDetector(
                                                             onTap: () {
                                                               Share.share(
-                                                                  databean![index].externalLink!,
+                                                                  databean![
+                                                                          index]
+                                                                      .externalLink!,
                                                                   subject:
                                                                       'Share link');
                                                             },
@@ -1007,9 +1124,12 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
                                 );
                               }),
                         ),
-                  if(feeddata!=null)
-                    Visibility(child:showmore(context),visible: rlshow,replacement: const SizedBox.shrink(),)
-
+                  if (feeddata != null)
+                    Visibility(
+                      child: showmore(context),
+                      visible: rlshow,
+                      replacement: const SizedBox.shrink(),
+                    )
                 ]),
               ),
             ]),
@@ -1018,29 +1138,31 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
       ),
     );
   }
-  Widget showmore(BuildContext context){
 
-    return
-      Column(
-        children: [
-          if(feed_page_id!=databean![0].id)
+  Widget showmore(BuildContext context) {
+    return Column(
+      children: [
+        if (feed_page_id != databean![0].id)
           GestureDetector(
-          onTap: (){
-            loadmoreapi(userid.toString(), feed_page_id.toString(), "", "", "");
-          },
-          child: Container(
-
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
-            child: const Center(child: Text("Show More",
-              style: TextStyle(color: Colors.black,fontSize: 18),textAlign: TextAlign.center,)),
+            onTap: () {
+              loadmoreapi(
+                  userid.toString(), feed_page_id.toString(), "", "", "");
+            },
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+              child: const Center(
+                  child: Text(
+                "Show More",
+                style: TextStyle(color: Colors.black, fontSize: 18),
+                textAlign: TextAlign.center,
+              )),
+            ),
           ),
-    ),
-    if(feed_page_id==databean![0].id)
-    Container()
-        ],
-      );
-
+        if (feed_page_id == databean![0].id) Container()
+      ],
+    );
   }
+
   List<Widget> indicators(imagesLength, currentIndex) {
     return List<Widget>.generate(imagesLength, (index) {
       return Container(
@@ -1055,15 +1177,12 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
   }
 
   onSearchTextChanged(String text) {
-    tagdata=null;
-    feeddata=null;
+    tagdata = null;
+    feeddata = null;
     if (text.isNotEmpty) {
-
-
       // showLoaderDialog(context);
-      gettagfilter(userid.toString(), text,"1");
+      gettagfilter(userid.toString(), text, "1");
     } else {
-
       // showLoaderDialog(context);
       getFeed(userid.toString(), "0", "", "", "");
     }
@@ -1073,23 +1192,18 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
     setState(() {});
   }
 
-
-
   void updateData(List<Feedresponse.Data> list) {
     setState(() {
       databean!.addAll(list);
     });
 
-
     notifyListeners(); // To rebuild the Widget
   }
-
 
   void cleanData() {
     setState(() {
       databean!.clear();
     });
-
 
     notifyListeners();
   }
@@ -1099,14 +1213,12 @@ class _FeedPageState extends State<FeedPage> with ChangeNotifier{
     data.isSaved = type;
     if (type == 1) {
       setState(() {
-        data.savepost= (data.savepost!) + 1;
+        data.savepost = (data.savepost!) + 1;
       });
-
     } else {
       setState(() {
-        data.savepost= (data.savepost!) - 1;
+        data.savepost = (data.savepost!) - 1;
       });
-
     }
     setState(() {
       databean![pos] = data;

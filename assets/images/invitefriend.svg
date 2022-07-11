@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="20" height="20" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Invite_friend_icon" data-name="Invite friend icon" clip-path="url(#clip-path)">
+    <path id="Union_1" data-name="Union 1" d="M0,22V19.25c0-3.026,4.95-5.5,11-5.5s11,2.475,11,5.5V22ZM5.5,5.5A5.5,5.5,0,1,1,11,11,5.5,5.5,0,0,1,5.5,5.5Z" transform="translate(0 0)" fill="#a0a0a0"/>
+  </g>
+</svg>

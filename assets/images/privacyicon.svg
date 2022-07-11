@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="21" viewBox="0 0 21 21">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="21" height="21" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Privacy_icon" data-name="Privacy icon" clip-path="url(#clip-path)">
+    <rect id="Rectangle_118" data-name="Rectangle 118" width="22" height="22" transform="translate(0 0)" fill="none"/>
+    <path id="Path_49" data-name="Path 49" d="M9.255,10.577a2.644,2.644,0,1,1-2.644,2.644A2.652,2.652,0,0,1,9.255,10.577Zm0-7.933A2.652,2.652,0,0,0,6.611,5.288H11.9A2.652,2.652,0,0,0,9.255,2.644Zm6.611,18.51H2.644A2.652,2.652,0,0,1,0,18.51V7.933A2.652,2.652,0,0,1,2.644,5.288H3.966a5.288,5.288,0,1,1,10.577,0h1.322A2.652,2.652,0,0,1,18.51,7.933V18.51A2.652,2.652,0,0,1,15.865,21.154Z" transform="translate(1.322)" fill="#a0a0a0" fill-rule="evenodd"/>
+  </g>
+</svg>
